@@ -1,38 +1,41 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from 'vue-router';
 import { Home } from '@/views/home';
 import { Signin } from '@/views/access';
+import type { DynamicNavEntity } from '@/types';
+import { dynamicRouteMap, genDynamicComponent } from '@/views-dynamic';
 import { Error404 } from '@/views/system';
-import type { DynamicNavEntity } from '@/types/system';
-import { getToken, identity } from '@/utils';
+import { Base } from '@/views/base';
 
 // @/store/user signin()
-export const dynmicRouteMap = new Map<DynamicNavEntity['value'], [string, string]>([
-    ['1', ['/dashboard', '@/views-dynamic/dashboard/index.vue']],
-    ['3', ['/demo-table', '@/views-dynamic/demo-table/index.vue']],
-    ['4', ['/demo-permission', '@/views-dynamic/demo-permission/index.vue']],
-]);
+export const SIGNIN_PATH = '/signin';
+export const ROOT_PATH = '/';
+export const ERROR_404_PATH = '/error-404';
+export const ROOT_NAME = 'base';
+export enum RoutePermission {
+    read = 1,
+    exec = 2,
+    update = 4,
+    add = 8,
+    delete = 16,
+}
 
-const SIGNIN_PATH = '/signin';
-const ROOT_PATH = '/';
-const ERROR_404_PATH = '/error-404';
-const routes = [
+const routes: RouteRecordRaw[] = [
     {
         path: ROOT_PATH,
-        name: 'home',
-        component: Home,
-        // children: [{
-        //     path: '/dashboard',
-        //     name: 'dashboard',
-        //     component: () => import('@/views-dynamic/dashboard/index.vue')
-        // }]
+        name: ROOT_NAME,
+        // redirect: ROOT_PATH,
+        component: Base,
+        children: [
+            {
+                path: '/home',
+                name: 'homepage',
+                component: Home,
+            }
+        ],
     },{
         path: SIGNIN_PATH,
         name: 'signin',
         component: Signin
-    },{
-        path: ERROR_404_PATH,
-        name: 'error404',
-        component: Error404,
     }
 ];
 
@@ -43,43 +46,29 @@ export const router = createRouter({
 });
 
 
-export function addDynamicRoutes(navs: DynamicNavEntity[]) {
+export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
     navs
-        .map((nav) => dynmicRouteMap.get(nav.value))
-        .filter(identity)
-        .forEach((routePair) => {
+        .map((nav) => ({ nav, routePair: dynamicRouteMap.get(nav.value) }))
+        .filter(navSource => !!navSource.routePair)
+        .forEach(({ nav, routePair }) => {
             const [routePath, filePath] = routePair as [string, string];
-            router.addRoute('home', {
+            nav.defaultPath = routePath.replace(/\/:\w+/g, '/0');
+            router.addRoute(ROOT_NAME, {
                 path: routePath,
-                component: () => {
-                    console.log('&&&&', filePath);
-                    return import(filePath);
-                },
+                component: genDynamicComponent(filePath),
+                meta: {
+                    title: nav.name,
+                    permission: nav.permission || RoutePermission.read
+                }
             });
         });
+
+    router.addRoute(ROOT_NAME, {
+        path: ERROR_404_PATH,
+        component: Error404,
+        meta: {
+            title: 'Not Found',
+            permission: RoutePermission.read
+        }
+    });
 }
-
-router.beforeEach((to, from, next) => {
-    if (getToken()) {
-        if (to.path === SIGNIN_PATH) {
-            next(ROOT_PATH);
-        }
-        else {
-            if (to.matched.length === 0) {
-                next(ERROR_404_PATH);
-            }
-            else {
-                next();
-            }
-        }
-    }
-    else {
-        if (to.path === SIGNIN_PATH) {
-            next();
-        }
-        else {
-            next(SIGNIN_PATH);
-        }
-    }
-});
-

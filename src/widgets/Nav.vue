@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const { state, signout } = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
 function handleSignout() {
     signout().then(() => {
@@ -15,7 +16,9 @@ function handleSignout() {
 <template>
     <div class="nav">
         <!-- -->
-        im nav
+        <div class="nav-content">
+            {{ route.meta.title }}
+        </div>
         <div>
             {{ state.user?.username }}
             <button @click="handleSignout">sign out</button>
@@ -26,5 +29,9 @@ function handleSignout() {
 <style lang="postcss">
 .nav {
     @apply bg-indigo-500 py-4 px-6 flex items-center justify-between;
+}
+
+.nav-content {
+    @apply flex-1;
 }
 </style>

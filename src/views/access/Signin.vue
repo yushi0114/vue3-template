@@ -6,20 +6,16 @@ import { useUserStore } from '@/stores';
 const { signin } = useUserStore();
 const router = useRouter();
 const state = reactive({
-    username: '',
+    username: '123',
     password: '',
 });
 
 
 function handleSignin() {
     signin({ username: state.username, password: state.password })
-        .then((res) => {
-            console.log(res.username);
+        .then(() => {
             router.replace('/');
         });
-
-    console.log('sign in');
-
 }
 </script>
 
@@ -32,7 +28,7 @@ function handleSignin() {
         <br>
         password: <input type="text" v-model="state.password">
         <br>
-        <button @click="handleSignin">sign in</button>
+        <button @keypress.enter="handleSignin" @click="handleSignin">sign in</button>
     </div>
 </template>
 

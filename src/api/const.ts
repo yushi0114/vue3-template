@@ -1,1 +1,1 @@
-export const SYS_DOMAIN = '/';
+export const SYS_DOMAIN = '/clib-service';

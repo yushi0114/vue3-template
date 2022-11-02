@@ -9,9 +9,9 @@ import {
 } from '@/api';
 import type { DynamicNavEntity, UserEntity } from '@/types';
 import { toTree } from '@/utils/tree';
-import { removeToken, setToken } from '@/utils';
 import { addDynamicRoutes } from '@/router';
 import { useRouter } from 'vue-router';
+import { useToken } from '@/composables';
 export const useUserStore = defineStore('user', () => {
 
     const state = reactive<{
@@ -28,37 +28,40 @@ export const useUserStore = defineStore('user', () => {
                 id: '',
                 defaultPath: '/home',
                 permission: 1,
-                name: 'Homepage',
-                value: ''
+                label: 'Homepage',
+                parentId: '',
+                sort: 0,
             }
         ]
     });
 
     const router = useRouter();
+    const token = useToken();
+
     function signin(user: SigninPayload) {
-        return signinApi(user).then(({ data: user }) => {
-            state.user = user;
-            setToken(user.token);
-            localStorage.setItem('dms', user.uid);
+        return signinApi(user).then((user) => {
+            token.set(user.token);
+            localStorage.setItem('dms', user.id);
             return getUserInfo();
         });
     }
 
     function signout() {
         return signoutApi().then(() => {
-            removeToken();
+            token.remove();
             localStorage.removeItem('dms');
             state.user = null;
         });
     }
 
     function getUserInfo() {
-        const uid = state.user?.uid || localStorage.getItem('dms');
+        const uid = state.user?.id || localStorage.getItem('dms');
         if (!uid) return Promise.reject();
-        return getUserInfoApi(uid).then(({ data: user }) => {
+        return getUserInfoApi(uid).then((user) => {
+            console.log('useruser', user);
             state.user = user;
-            return dynamicNavs(user.uid);
-        }).then(({ data: navs }) => {
+            return dynamicNavs(user.roleId);
+        }).then((navs) => {
             state.navs = navs;
             addDynamicRoutes(router, navs);
             state.navTree = toTree({}, navs);

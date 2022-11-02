@@ -1,9 +1,28 @@
 
-import { identity, isString, curry } from './func';
+import { identity, isString, curry, not } from './func';
 import { ID, PID, CHILDREN, PARENT } from './const';
+
+export type ExistValidFunc<T = any> = undefined | ((oItem: T, item: T) => boolean);
 
 export function toArray<T = any>(o: T | T[], ...args: any[]): T[] {
     return Array.isArray(o) ? o.slice() : [o, ...args];
+}
+
+export function arrayAdd<T = any>(
+    existValid: ExistValidFunc<T>,
+    o: T[],
+    item: T | T[]
+): T[] {
+
+    const valid = existValid || not;
+    const items = toArray(item)
+        .filter(function remainItem(item) {
+            return o.every(function validate(oItem) {
+                return valid(oItem, item);
+            });
+        });
+
+    return o.concat(items);
 }
 
 export function arrayRemove<T = any>(

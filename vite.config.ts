@@ -44,10 +44,11 @@ export default defineConfig({
         }
     },
     server: {
+        host: 'localhost',
         port: 8088,
         proxy: {
-            '/melib-sys-service': {
-                target: `http://${proxyHost}:10205`,
+            '/clib-service': {
+                target: `http://${proxyHost}:10209`,
                 changeOrigin: true
             },
         }

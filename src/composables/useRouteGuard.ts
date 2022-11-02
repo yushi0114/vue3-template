@@ -1,7 +1,7 @@
 import { ERROR_404_PATH, ROOT_PATH, SIGNIN_PATH } from '@/router';
 import { useUserStore } from '@/stores';
-import { getToken } from '@/utils';
 import { useRouter, type RouteLocationNormalized, type Router } from 'vue-router';
+import { useToken } from './useToken';
 
 function hasNecessaryRoute(router: Router, to: RouteLocationNormalized) {
     return router.getRoutes().some(r => {
@@ -13,8 +13,9 @@ function hasNecessaryRoute(router: Router, to: RouteLocationNormalized) {
 export function useRouteGuard() {
     const { getUserInfo } = useUserStore();
     const router = useRouter();
+    const token = useToken();
     router.beforeEach((to, from, next) => {
-        if (getToken()) {
+        if (token.get()) {
             if (!hasNecessaryRoute(router, to)) {
                 getUserInfo()
                     .then(() => {

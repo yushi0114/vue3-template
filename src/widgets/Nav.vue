@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores';
 import { useRoute, useRouter } from 'vue-router';
+import { Button } from '@/components';
 
 const { state, signout } = useUserStore();
 const router = useRouter();
@@ -20,8 +21,8 @@ function handleSignout() {
             {{ route.meta.title }}
         </div>
         <div>
-            {{ state.user?.username }}
-            <button @click="handleSignout">sign out</button>
+            {{ state.user?.name }}
+            <Button type="ghost" color="gray" @click="handleSignout">sign out</Button>
         </div>
     </div>
 </template>

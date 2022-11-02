@@ -1,9 +1,13 @@
-import type { PlainOption } from './util';
-
-export interface DynamicNavEntity extends PlainOption<string> {
+export interface NavEntity {
     id: string,
-    pid?: DynamicNavEntity['id'],
-    children?: DynamicNavEntity[],
+    parentId: NavEntity['id'],
+    sort: number,
+    label: string,
+    children?: NavEntity[],
+}
+
+export interface DynamicNavEntity extends NavEntity {
     defaultPath?: string,
     permission?: number
 }
+

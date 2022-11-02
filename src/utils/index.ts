@@ -1,4 +1,3 @@
-export * from './token';
 export * from './crypto';
 export * from './tree';
 export * from './const';

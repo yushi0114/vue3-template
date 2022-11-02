@@ -1,90 +1,53 @@
-import type { DynamicNavEntity, UserEntity } from '@/types';
-import type { AxiosResponse } from 'axios';
+import type { UserEntity } from '@/types';
+// import type { AxiosResponse } from 'axios';
 import { SYS_DOMAIN } from './const';
 import { api } from './http';
 
 export type SigninPayload = {
-    username: string,
+    account: string,
     password: string,
+    captcha: string,
 }
 
-export type SigninResponse = UserEntity & {
-    token: string
+export type SigninResponse = {
+    id: string,
+    token: string,
 }
 
-export function signin(p: SigninPayload) {
-    return api.post<SigninResponse>(`${SYS_DOMAIN}/v1/signin`, p, {
+export function signin(p: SigninPayload): Promise<SigninResponse> {
+    return api.post(`${SYS_DOMAIN}/v1/login/pwd`, p, {
         // mock
-        adapter: (conf) => {
-            if (p.username !== '123') return Promise.reject();
+        // adapter: (conf) => {
+        //     if (p.username !== '123') return Promise.reject();
 
-            return Promise.resolve<AxiosResponse<SigninResponse, any>>({
-                data: { username: p.username, uid: '1', token: 'abc', roleId: '55' },
-                status: 200,
-                statusText: 'OK',
-                config: conf,
-                headers: {},
-            });
-        }
+        //     return Promise.resolve<AxiosResponse<SigninResponse, any>>({
+        //         data: { username: p.username, uid: '1', token: 'abc', roleId: '55' },
+        //         status: 200,
+        //         statusText: 'OK',
+        //         config: conf,
+        //         headers: {},
+        //     });
+        // }
     });
 }
 
 export function signout() {
-    return api.post(`${SYS_DOMAIN}/v1/signout`, null, {
-        // mock
-        adapter: (conf) => {
-            return Promise.resolve({
-                data: null,
-                status: 200,
-                statusText: 'OK',
-                config: conf,
-                headers: {},
-            });
-        }
-    });
+    return api.post(`${SYS_DOMAIN}/v1/logout`);
 }
 
-export type GetUserInfoPayload = string
+export type GetUserInfoPayload = string;
 export type GetUserInfoResponse = UserEntity & {
     token: string
 }
-export function getUserInfo(uid: GetUserInfoPayload) {
-    return api.get<GetUserInfoResponse>(`${SYS_DOMAIN}/v1/user`, {
-        // mock
-        adapter: (conf) => {
-            return Promise.resolve({
-                data: { username: '123', uid: uid, token: 'abc', roleId: '55' },
-                status: 200,
-                statusText: 'OK',
-                config: conf,
-                headers: {},
-            });
-        }
-    });
+
+export function getUserInfo(uid: GetUserInfoPayload): Promise<GetUserInfoResponse> {
+    return api.get(`${SYS_DOMAIN}/v1/user?id=${uid}`);
 }
 
-export type DynamicNavsPayload = string
+export type GetCaptchaResponse = {
+    captcha: string
+}
 
-export type DynamicNavsResponse = DynamicNavEntity[]
-
-export function dynamicNavs(uid: DynamicNavsPayload) {
-    return api.get<DynamicNavsResponse>(`${SYS_DOMAIN}/v1/signout`, {
-        // mock
-        adapter: (conf) => {
-            if (!uid) return Promise.reject();
-
-            return Promise.resolve({
-                data: [
-                    { id: '1', name: 'Dashboard', value: '1', permisson: 1 },
-                    { id: '2', name: 'Demo', value: '2', },
-                    { id: '3', name: 'Demo Table', pid: '2', value: '3', permisson: 7 },
-                    { id: '4', name: 'Demo Permission', pid: '2', value: '4', permisson: 3 },
-                ],
-                status: 200,
-                statusText: 'OK',
-                config: conf,
-                headers: {},
-            });
-        }
-    });
+export function getCaptcha(): Promise<GetCaptchaResponse> {
+    return api.get(`${SYS_DOMAIN}/v1/captcha`);
 }

@@ -1,6 +1,53 @@
+export function equal(
+    f: undefined | ((a: any, b: any) => boolean),
+    a: any,
+    b: any
+) {
+    return isFunction(f) ? f!(a, b) : Object.is(a, b);
+}
+
+
+export const is: <T = any>(a: T, b: T) => boolean = curry(equal, Object.is);
+export const not: <T = any>(a: T, b: T) => boolean = curry(equal, function([v1, v2]: [any, any]) {
+    return !Object.is.apply(null, [v1, v2]);
+});
+
+export function deepEqual(a: any, b: any): boolean {
+    if (a === b) return true;
+    const isObjectA = isObject(a);
+    const isObjectB = isObject(b);
+    if (isObjectA && isObjectB) {
+        try {
+            const isArrayA = Array.isArray(a);
+            const isArrayB = Array.isArray(b);
+            if (isArrayA && isArrayB) {
+                return a.length === b.length && a.every((e: any, i: number) => {
+                    return deepEqual(e, b[i]);
+                });
+            } else if (a instanceof Date && b instanceof Date) {
+                return a.getTime() === b.getTime();
+            } else if (!isArrayA && !isArrayB) {
+                const keysA = Object.keys(a);
+                const keysB = Object.keys(b);
+                return keysA.length === keysB.length && keysA.every(key => {
+                    return deepEqual(a[key], b[key]);
+                });
+            }
+
+            return false;
+
+        } catch (e) {
+            return false;
+        }
+    } else if (!isObjectA && !isObjectB) {
+        return String(a) === String(b);
+    }
+
+    return false;
+}
 
 /* eslint-disable */
-export const noop = (..._: any[]) => {};
+export const noop = (..._: any[]) => { };
 export const no = (..._: any[]) => false;
 /* eslint-enable */
 

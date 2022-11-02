@@ -30,6 +30,9 @@ const routes: RouteRecordRaw[] = [
                 path: '/home',
                 name: 'homepage',
                 component: Home,
+                meta: {
+                    title: 'Home'
+                }
             }
         ],
     },{
@@ -48,7 +51,7 @@ export const router = createRouter({
 
 export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
     navs
-        .map((nav) => ({ nav, routePair: dynamicRouteMap.get(nav.value) }))
+        .map((nav) => ({ nav, routePair: dynamicRouteMap.get(nav.id) }))
         .filter(navSource => !!navSource.routePair)
         .forEach(({ nav, routePair }) => {
             const [routePath, filePath] = routePair as [string, string];
@@ -57,7 +60,7 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
                 path: routePath,
                 component: genDynamicComponent(filePath),
                 meta: {
-                    title: nav.name,
+                    title: nav.label,
                     permission: nav.permission || RoutePermission.read
                 }
             });

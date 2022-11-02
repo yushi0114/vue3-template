@@ -15,9 +15,9 @@
 
 ## Features
 
-- [] 明暗主题
+- [ ] 明暗主题
 - [x] 动态路由
-- [] 动态权限
+- [ ] 动态权限
 
 
 ## Demo 参考
@@ -28,6 +28,34 @@
   - [x]
 
 
+
+## Vue3+TypeScript+VSCode User Snippet
+
+``` json
+{
+  "insert vue sfc": {
+		"prefix": "$sfc",
+		"body": [
+			"<script lang=\"ts\" setup>",
+			"",
+			"</script>",
+			"",
+			"<template>",
+  			"  <div class=\"$1\">",
+			"    <!-- -->",
+  			"  </div>",
+			"</template>",
+			"",
+			"<style lang=\"postcss\">",
+			".$1 {",
+  			"  @apply;",
+			"}",
+			"</style>",
+			""
+		]
+	}
+}
+```
 
 
 ## 动态路由 Ref

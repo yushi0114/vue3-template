@@ -39,7 +39,7 @@ module.exports = {
         'keyword-spacing': 'error',
         'quotes': ['error', 'single'],
         'no-multi-spaces': 'error',
-        'func-call-spacing': ['error', 'never'],
+        '@typescript-eslint/func-call-spacing': ['error', 'never'],
         'array-bracket-spacing': 'error',
         'comma-style': 'error',
         'no-irregular-whitespace': 'error',

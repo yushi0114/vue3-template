@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { encrypt, encryptHexMd5 } from '@/utils';
-import { uuid, jsonReplacer } from './utils';
+import { genUUID, jsonReplacer } from './utils';
 import { useToken } from '@/composables';
 import { router } from '@/router';
 const service = axios.create({
@@ -19,12 +19,18 @@ service.interceptors.request.use(config => {
         if (token) {
             config.headers['Authorization'] = token;
         }
-        config.headers['uuid'] = uuid();
+        const uuid = genUUID();
+        config.headers['uuid'] = uuid;
         // 添加sign
-        const stringifyParams = config.method === 'get'
-            ? JSON.stringify(config.params || {}, jsonReplacer)
-            : JSON.stringify(config.data || {});
-        config.headers['Sign'] = encrypt(`_t=${_t}&uuid=${uuid}&token=${config.headers['Authorization'] || ''}&params=${encryptHexMd5(stringifyParams)}`);
+        const stringifyParams = encryptHexMd5(
+            config.method === 'get'
+                ? JSON.stringify(config.params || {}, jsonReplacer)
+                : JSON.stringify(config.data || {})
+        );
+
+        config.headers['Sign'] = encrypt(
+            `_t=${_t}&uuid=${uuid}&token=${config.headers['Authorization'] || ''}&params=${stringifyParams}`
+        );
     }
 
     // 添加时间戳，防止缓存

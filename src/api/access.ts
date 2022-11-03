@@ -41,7 +41,9 @@ export type GetUserInfoResponse = UserEntity & {
 }
 
 export function getUserInfo(uid: GetUserInfoPayload): Promise<GetUserInfoResponse> {
-    return api.get(`${SYS_DOMAIN}/v1/user?id=${uid}`);
+    return api.get(`${SYS_DOMAIN}/v1/user`, {
+        params: { id: uid }
+    });
 }
 
 export type GetCaptchaResponse = {

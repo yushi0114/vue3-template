@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Layout } from '@/components';
+import { Layout, Nav, Sidebar } from '@/components';
 import { useUserStore } from '@/stores';
-import { Nav, Sidebar } from '@/widgets';
 import { computed, onBeforeMount } from 'vue';
 
 const { state, getUserInfo } = useUserStore();

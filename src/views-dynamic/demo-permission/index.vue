@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useApi } from '@/composables';
-import { PagePanel, SelectTree } from '@/widgets';
+import { PagePanel, SelectTree } from '@/components';
 import { allNavs } from '@/api';
 import { onBeforeMount, ref } from 'vue';
 import type { NavEntity } from '@/types';

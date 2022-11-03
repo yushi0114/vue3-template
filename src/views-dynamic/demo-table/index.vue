@@ -2,7 +2,7 @@
 import { useApi, useQueryParams } from '@/composables';
 import type { PlainOption } from '@/types';
 import { onBeforeMount, ref, watch } from 'vue';
-import { PagePanel } from '@/widgets';
+import { PagePanel } from '@/components';
 
 // 这里是示例, 类型应该放到types文件夹中
 // #region

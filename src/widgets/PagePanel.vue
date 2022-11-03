@@ -10,7 +10,7 @@ withDefaults(
 const route = useRoute();
 
 onMounted(() => {
-    console.log('page', route.meta.permission);
+    console.log('page permission', route.meta.permission);
 });
 </script>
 

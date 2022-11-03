@@ -1,8 +1,11 @@
 <script lang="ts" setup>
+
 withDefaults(
     defineProps<{ title: string }>(),
     { title: '' }
-)
+);
+
+
 </script>
 <template>
     <div class="i-card">

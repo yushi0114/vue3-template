@@ -12,6 +12,8 @@ import { toTree } from '@/utils/tree';
 import { addDynamicRoutes } from '@/router';
 import { useRouter } from 'vue-router';
 import { useToken } from '@/composables';
+import { noop } from '@vueuse/core';
+
 export const useUserStore = defineStore('user', () => {
 
     const state = reactive<{
@@ -58,7 +60,6 @@ export const useUserStore = defineStore('user', () => {
         const uid = state.user?.id || localStorage.getItem('dms');
         if (!uid) return Promise.reject();
         return getUserInfoApi(uid).then((user) => {
-            console.log('useruser', user);
             state.user = user;
             return dynamicNavs(user.roleId);
         }).then((navs) => {
@@ -66,7 +67,7 @@ export const useUserStore = defineStore('user', () => {
             addDynamicRoutes(router, navs);
             state.navTree = toTree({}, navs);
             return state.user as UserEntity;
-        });
+        }).catch(noop);
     }
 
     const isLogin = computed(() => state.user !== null);

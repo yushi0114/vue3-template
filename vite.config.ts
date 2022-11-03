@@ -10,7 +10,7 @@ import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
 
 
-let proxyHost = '127.0.0.1';
+let proxyHost = '10.0.30.5';
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {

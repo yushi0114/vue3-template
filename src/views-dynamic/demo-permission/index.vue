@@ -8,19 +8,25 @@ const { load } = useApi(allNavs);
 
 const navs = ref<NavEntity[]>([]);
 
+const permission = ref<string[]>([]);
+
 onBeforeMount(() => {
     load(undefined).then((navsRes) => {
         console.log('222', navsRes);
         navs.value = navsRes;
+        permission.value = ['74318957089311eda4fbf68f808f7977', '74701ef0089311eda4fbf68f808f7977'];
     });
 });
 </script>
 <template>
     <PagePanel class="demo-permission">
         <!-- -->
-        permission
+        permission: {{ permission }}
 
-        <SelectTree :options="navs" />
+        <SelectTree
+            :options="navs"
+            :selected-ids="permission"
+        />
     </PagePanel>
 </template>
 

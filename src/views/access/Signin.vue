@@ -6,8 +6,8 @@ import { encrypt } from '@/utils';
 const { signin } = useUserStore();
 const router = useRouter();
 const state = reactive({
-    username: '17600119652',
-    password: 'As41224122#',
+    username: '',
+    password: '',
     captcha: '',
 });
 const captchaSvgStr = ref('');

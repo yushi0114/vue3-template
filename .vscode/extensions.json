@@ -3,6 +3,7 @@
         "Vue.volar",
         // 最好选择 workspace enable 否则用之前的项目会有语法提示
         "Vue.vscode-typescript-vue-plugin", 
+        "antfu.goto-alias",
         "cpylua.language-postcss",
         "antfu.unocss",
     ]

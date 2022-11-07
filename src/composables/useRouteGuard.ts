@@ -1,7 +1,9 @@
+
 import { ERROR_404_PATH, ROOT_PATH, SIGNIN_PATH } from '@/router';
 import { useUserStore } from '@/stores';
 import { useRouter, type RouteLocationNormalized, type Router } from 'vue-router';
 import { useToken } from './useToken';
+import { useNProgress } from './useNProgress';
 
 function hasNecessaryRoute(router: Router, to: RouteLocationNormalized) {
     return router.getRoutes().some(r => {
@@ -14,7 +16,11 @@ export function useRouteGuard() {
     const { getUserInfo } = useUserStore();
     const router = useRouter();
     const token = useToken();
+    const progress = useNProgress({ color: 'red' });
+
     router.beforeEach((to, from, next) => {
+        progress.start();
+
         if (token.get()) {
             if (!hasNecessaryRoute(router, to)) {
                 getUserInfo()
@@ -47,5 +53,9 @@ export function useRouteGuard() {
                 next(SIGNIN_PATH);
             }
         }
+    });
+
+    router.afterEach(() => {
+        progress.done();
     });
 }

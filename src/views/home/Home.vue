@@ -5,11 +5,9 @@
     home
 </template>
 <style lang="postcss">
-.main-container {
+.home {
     @apply;
 }
 
-.page-container {
-    @apply bg-gray-200 p-2 box-border;
-}
+
 </style>

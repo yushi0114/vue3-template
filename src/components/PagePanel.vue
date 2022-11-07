@@ -15,29 +15,29 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="page-panel" v-bind="$attrs">
+  <Layout class="page-panel" v-bind="$attrs">
     <!-- -->
     <header class="page-panel-header" v-if="title">
-        <div>{{ title }}</div>
+        <Title>{{ title }}</Title>
         <div class="page-panel-header__rest">
             <button>delete</button>
             <button>edit</button>
             <button>edit</button>
         </div>
     </header>
-    <div class="page-panel-content">
+    <Layout class="page-panel-content">
         <slot />
-    </div>
-  </div>
+    </Layout>
+  </Layout>
 </template>
 
 <style lang="postcss">
 .page-panel {
-  @apply bg-white rounded p-4 flex-1;
+  @apply flex-1;
 }
 
 .page-panel-header {
-  @apply border-b border-gray-600 flex;
+  @apply flex mb-2;
 }
 
 .page-panel-header__rest {

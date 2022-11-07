@@ -22,7 +22,7 @@ function handleSignout() {
         </div>
         <div>
             {{ state.user?.name }}
-            <Button type="ghost" color="gray" @click="handleSignout">sign out</Button>
+            <Button type="ghost" color="gray" @click="handleSignout">退出</Button>
         </div>
     </div>
 </template>

@@ -1,16 +1,13 @@
 <script lang="ts" setup>
-import { onBeforeMount, reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores';
-import { Button } from '@/components';
 import { getCaptcha } from '@/api';
 import { encrypt } from '@/utils';
 
 const { signin } = useUserStore();
 const router = useRouter();
 const state = reactive({
-    username: '17600119652',
-    password: 'As41224122#',
+    username: '',
+    password: '',
     captcha: '',
 });
 const captchaSvgStr = ref('');
@@ -28,6 +25,9 @@ function handleSignin() {
     signin({ account: state.username, password, captcha: state.captcha })
         .then(() => {
             router.replace('/home');
+            ElNotification.success({
+                title: '登录成功'
+            });
         });
 }
 
@@ -48,7 +48,7 @@ onBeforeMount(() => {
         captcha: <input type="text" v-model="state.captcha">
         <br>
         <div v-html="captchaSvgStr"></div>
-        <Button @keypress.enter="handleSignin" @click="handleSignin">sign in</Button>
+        <el-button type="primary" @keypress.enter="handleSignin" @click="handleSignin">sign in</el-button>
     </div>
 </template>
 

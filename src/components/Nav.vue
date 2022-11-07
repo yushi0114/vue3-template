@@ -19,6 +19,8 @@ function handleSignout() {
         <!-- -->
         <div class="nav-content">
             {{ route.meta.title }}
+        <i-ep-add-location />
+        <i-ep-aim />
         </div>
         <div>
             {{ state.user?.name }}

@@ -1,1 +1,15 @@
+// global 只能通过配置 vite 导入，不能通过 @use 引入到其他模块再导入
+
+
+/* custom global var */
 $template: red;
+
+
+/* override element plus */
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': green,
+    ),
+  ),
+);

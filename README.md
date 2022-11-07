@@ -76,6 +76,12 @@ $ npm run start:local
 	- presetUno: css 预设字段
 	- transformerDirectives: 支持在css中使用 `@apply` -->
 
+### 添加动态路由流程 
+
+1. 修改mock 数据：`src/api/system.ts`  `dynamicNavs()`  现在只有 id name 字段有用。 value permission 随便填
+2. 在 `src/views/index.ts` `dynamicRouteMap<id, [前端url路径，组件的文件路径]`> 中设置映射关系
+3. 按照 步骤2的 组件文件路径 创建组件
+
 
 ## 关于 VSCode 
 

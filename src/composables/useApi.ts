@@ -1,17 +1,23 @@
 import { ref } from 'vue';
+import { useNProgress } from './useNProgress';
 
-export function useApi<T, K>(apiFunc: (payload: T) => Promise<K>) {
+export function useApi<T extends ((...args: any[]) => Promise<any>)>(apiFunc: T) {
     const loading = ref(false);
-
-    function load(payload: T) {
+    const progress = useNProgress();
+    const request: T = ((...args) => {
+        progress.start();
         loading.value = true;
         // TODO: PREVENT or CANCEL
-        return apiFunc(payload)
+        return apiFunc(...args)
             .then(res => {
-                loading.value = false;
+                progress.done();
                 return res;
+            })
+            .finally(() => {
+                loading.value = false;
+                progress.remove();
             });
-    }
+    }) as T;
 
-    return { loading, load };
+    return { loading, request };
 }

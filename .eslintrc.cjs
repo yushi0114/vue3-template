@@ -21,7 +21,7 @@ module.exports = {
         'new-cap': 'error',
         'no-duplicate-imports': 'error',
         'indent': ['error', 4, { 'SwitchCase': 1 }],
-        'space-before-function-paren': ['error', 'never'],
+        '@typescript-eslint/space-before-function-paren': ['error', 'never'],
         'semi-spacing': 'error',
         'no-trailing-spaces': 'error',
         'key-spacing': 'error',

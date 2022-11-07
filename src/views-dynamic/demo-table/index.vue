@@ -20,7 +20,7 @@ enum EntityState {
     on = 2,
 }
 
-const entityStateMap = Object.freeze({
+const entityStateMap: Readonly<Record<EntityState, string>> = Object.freeze({
     [EntityState.off]: '下架中',
     [EntityState.soldout]: '售罄',
     [EntityState.on]: '上架中',
@@ -84,7 +84,7 @@ const { queryParams, goQuery } = useQueryParams<EntityParams>({
 });
 const list = ref<Entity[]>([]);
 
-const { loading, load } = useApi(fetchEntities);
+const { loading, request } = useApi(fetchEntities);
 
 function getList(queryParams: EntityParams) {
     const payload: EntitiesPayload = {
@@ -92,7 +92,7 @@ function getList(queryParams: EntityParams) {
         page: Number(queryParams.page),
     };
 
-    return load(payload)
+    return request(payload)
         .then((res) => {
             list.value = res;
         });

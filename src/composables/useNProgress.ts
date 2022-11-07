@@ -2,21 +2,22 @@ import { useStyleTag } from '@vueuse/core';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 
-function initNProgress() {
-    NProgress.configure({
-        showSpinner: false,
-    });
-}
+const cacheOption = {
+    color: '#FFAF36',
+    spinner: false
+};
 
 export function useNProgress(option?: {
-    color?: string
+    color?: string,
+    spinner?: boolean,
 }) {
 
-    const opt = Object.assign({
-        color: '#FFAF36',
-    }, option);
+    const opt = Object.assign(cacheOption, option);
 
-    initNProgress();
+    NProgress.configure({
+        showSpinner: opt.spinner,
+    });
+
     const { load } = useStyleTag(`
 #nprogress {
     pointer-events: none;

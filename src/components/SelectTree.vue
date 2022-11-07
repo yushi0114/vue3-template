@@ -37,7 +37,7 @@ watch(() => props.selectedIds, () => {
             return opt.id;
         });
 
-    console.log('@@@', props.deep);
+    // console.log('@@@', props.deep);
     selfSltIds.value = ids;
 }, { immediate: true });
 

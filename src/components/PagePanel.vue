@@ -33,7 +33,7 @@ onMounted(() => {
 
 <style lang="postcss">
 .page-panel {
-  @apply flex-1;
+  @apply flex-1 bg-green;
 }
 
 .page-panel-header {

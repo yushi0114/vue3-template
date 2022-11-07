@@ -2,6 +2,8 @@ html, body, #app {
     height: 100%;
 }
 
+
+
 @font-face {
     font-family: 'sans-regular';
     src: url('@/assets/fonts/SourceHanSansCN-Regular.otf');
@@ -12,4 +14,13 @@ html, body, #app {
 
 * {
     font-family: sans-regular, "Microsoft YaHei", "黑体", sans-serif !important;
+}
+
+
+:root {
+    --el-color-primary: #cd164e;
+}
+
+html.dark {
+    --el-color-primary: red;
 }

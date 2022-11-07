@@ -9,6 +9,8 @@ import transformerDirectives from '@unocss/transformer-directives';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
 import autoImport from 'unplugin-auto-import/vite';
+import icons from 'unplugin-icons/vite';
+import iconsResolver from 'unplugin-icons/resolver';
 import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
@@ -50,13 +52,28 @@ export default defineConfig({
                 './common',
                 './stores',
             ],
-            resolvers: [elementPlusResolver()],
+            resolvers: [
+                elementPlusResolver({
+                    importStyle: 'sass',
+                }),
+                iconsResolver({ prefix: 'Icon' })
+            ],
             eslintrc: {
                 enabled: true,
             }
         }),
         components({
-            resolvers: [elementPlusResolver()],
+            resolvers: [
+                iconsResolver({
+                    enabledCollections: ['ep'],
+                }),
+                elementPlusResolver({
+                    importStyle: 'sass',
+                }),
+            ],
+        }),
+        icons({
+            autoInstall: true,
         }),
     ],
     resolve: {
@@ -72,7 +89,7 @@ export default defineConfig({
         },
         preprocessorOptions: {
             scss: {
-                additionalData: '@import "@/style/global.scss"; \n',
+                additionalData: '@use "@/style/global.scss" as *; \n',
             }
         }
     },

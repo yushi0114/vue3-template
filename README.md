@@ -11,27 +11,42 @@ $ npm run start:local
 ## Structure
 
 ``` bash
-- 
-|- api/ # http 接口
-|- assets/ # 图片及字体资源
-|- common/ # 业务相关集合
-|- components/ # 组件库
-|- componsables/ # composition api
-|- router/ # 静态路由定义
-|- stores/  # 状态管理
-|- style/ # 全局样式
-|- types/ # 业务类型定义
-|- utils/ # 全局通用函数
-|- views/ # 静态路由视图
-|- views-dynamic/ # 动态路由视图
-	|- index.ts # 添加动态视图时需要在此文件中添加映射关系
-|- App.vue # 根组件
-|- main.ts # 软件入口文件
+- .vscode/ # 推荐插件安装
+- public/ # 静态文件目录
+- src/
+	|- api/ # http 接口
+	|- assets/ # 图片及字体资源
+		|- fonts/
+		|- images/
+	|- common/ # 业务相关集合
+	|- components/ # 组件库
+	|- componsables/ # composition api
+	|- router/ # 静态路由定义
+	|- stores/  # 状态管理
+	|- style/ # 全局样式
+	|- types/ # 业务类型定义
+	|- utils/ # 全局通用函数
+	|- views/ # 路由视图
+		|- index.ts # 添加动态视图时需要在此文件中添加映射关系
+	|- App.vue # 根组件
+	|- main.ts # 软件入口文件
+
+|- .eslintrc-auto-import # vite自动导入插件生成的全局eslint 规则，需要在.eslintrc.cjs 中配置 `extends`
+|- .eslintrc.cjs # eslintrc 配置文件
+|- .gitignore
+|- auto-imports.d.ts # vite自动导入插件生成的TS全局规则，需要在 tsconfig.app.json 中配置 `include`
+- components.d.ts # vite vue组件生成 TS全局规则，需要在 tsconfig.app.json 中配置 `include`
+- env.d.ts 
+- index.html # app 的 html 入口
+- package-lock.json
+- package.json
+- README.md
+- tsconfig.app.json
+- tsconfig.config.json
+- tsconfig.json # tsconfig 主文件
+- tsconfig.vitest.json
+- vite.config.ts # vite 配置文件
 ```
-
-## 外部依赖
-
-- [axios]()
 
 ### Denpendencies
 
@@ -42,18 +57,24 @@ $ npm run start:local
 - [vue-router]()
 - [pinia](https://pinia.vuejs.org/): Vue3 状态管理库
 - [@vueuse/core](https://vueuse.org/guide/) 常用 composition-api
+- [element-plus](https://element-plus.org/zh-CN/) 组件库
 
 ### DevDependencies
 
 - vite
 - [eslint]() 如果受到TS影响，需要修改配置. e.g. `'@typescript-eslint/no-unused-vars': 'error',`
+- scss:
 - postcss: Vite 自身支持此配置
 	- autoprefixer
 	- postcss-nesting: css 标准嵌套语法
-- [unocss](https://uno.antfu.me/): 更快的 tailwindcss 实现
-	- presetUno: css 预设字段
-	- transformerDirectives: 支持在css中使用 `@apply`
 - [vitest](https://vitest.dev/): 单元测试框架
+
+
+
+
+<!-- - [unocss](https://uno.antfu.me/): 更快的 tailwindcss 实现
+	- presetUno: css 预设字段
+	- transformerDirectives: 支持在css中使用 `@apply` -->
 
 
 ## 关于 VSCode 
@@ -70,6 +91,8 @@ $ npm run start:local
 		// Vue TypeScript 支持
         // 最好选择 workspace enable 否则用之前的项目会有语法提示
         "Vue.vscode-typescript-vue-plugin", 
+		// 支持 Vue 文件的跳转
+		"antfu.goto-alias",
 		// postcss 语法高亮
         "cpylua.language-postcss",
 		// tailwindcss 语法提示

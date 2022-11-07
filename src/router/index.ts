@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from
 import { Home } from '@/views/home';
 import { Signin } from '@/views/access';
 import type { DynamicNavEntity } from '@/types';
-import { dynamicRouteMap, genDynamicComponent } from '@/views-dynamic';
+import { dynamicRouteMap, genDynamicComponent } from '@/views';
 import { Error404 } from '@/views/system';
 import { Base } from '@/views/base';
 

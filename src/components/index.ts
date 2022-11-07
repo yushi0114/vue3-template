@@ -1,4 +1,4 @@
-export { default as Card } from './Card.vue';
+export { default as Board } from './Board.vue';
 export { default as Layout } from './Layout.vue';
 export { default as Button } from './Button.vue';
 export { default as Switch } from './Switch.vue';
@@ -9,3 +9,5 @@ export { default as Nav } from './Nav.vue';
 export { default as Sidebar } from './Sidebar.vue';
 export { default as PagePanel } from './PagePanel.vue';
 export { default as SelectTree } from './SelectTree.vue';
+export { default as Title } from './Title.vue';
+export { default as Panel } from './Panel.vue';

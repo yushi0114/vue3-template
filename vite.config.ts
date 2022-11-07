@@ -8,7 +8,9 @@ import { presetUno } from 'unocss';
 import transformerDirectives from '@unocss/transformer-directives';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
-
+import autoImport from 'unplugin-auto-import/vite';
+import components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 let proxyHost = '10.0.30.5';
 
@@ -29,7 +31,33 @@ export default defineConfig({
             transformers: [
                 transformerDirectives(),
             ]
-        })
+        }),
+        autoImport({
+            include: [
+                /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+                /\.vue$/, /\.vue\?vue/, // .vue
+            ],
+            imports: [
+                'vue',
+                'vue-router',
+                'pinia',
+            ],
+            dirs: [
+                './composables',
+                './components',
+                './types',
+                './utils',
+                './common',
+                './stores',
+            ],
+            resolvers: [elementPlusResolver()],
+            eslintrc: {
+                enabled: true,
+            }
+        }),
+        components({
+            resolvers: [elementPlusResolver()],
+        }),
     ],
     resolve: {
         alias: {
@@ -41,6 +69,11 @@ export default defineConfig({
             plugins: [
                 autoprefixer, postcssNesting,
             ]
+        },
+        preprocessorOptions: {
+            scss: {
+                additionalData: '@import "@/style/global.scss"; \n',
+            }
         }
     },
     server: {

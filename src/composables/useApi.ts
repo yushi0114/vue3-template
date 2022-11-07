@@ -10,12 +10,11 @@ export function useApi<T extends ((...args: any[]) => Promise<any>)>(apiFunc: T)
         // TODO: PREVENT or CANCEL
         return apiFunc(...args)
             .then(res => {
-                progress.done();
                 return res;
             })
             .finally(() => {
                 loading.value = false;
-                progress.remove();
+                progress.done();
             });
     }) as T;
 

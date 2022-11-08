@@ -2,10 +2,10 @@
     "name": "dms-web",
     "version": "0.0.0",
     "scripts": {
-        "start": "vite",
+        "start": "vite --host 0.0.0.0",
         "start:local": "vite -- --env local",
         "build": "run-p type-check build-only",
-        "preview": "vite preview --port 4173",
+        "preview": "vite preview --host 0.0.0.0 --port 4173",
         "test:unit": "vitest --environment jsdom",
         "build-only": "vite build",
         "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",

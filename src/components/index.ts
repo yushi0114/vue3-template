@@ -14,6 +14,8 @@ export { default as SelectTree } from './SelectTree.vue';
 export { default as Title } from './Title.vue';
 export { default as Panel } from './Panel.vue';
 export * from './sidebar';
+import SjsForm from './form/index.vue';
+import SjcTable from './table/index.vue';
 
 export function registerElementIcons(app: App) {
     Object.keys(iconCollection).forEach((iconName: string) => {
@@ -22,3 +24,19 @@ export function registerElementIcons(app: App) {
         app.component(icon.name, icon);
     });
 }
+
+type IKeys = keyof typeof components;
+// 注册公共组件
+const components = { SjsForm, SjcTable };
+
+const withInstall = (app: App<Element>) => {
+    Object.keys(components).forEach((key: any) => {
+        const component = components[key as IKeys];
+        component.install = function(Vue: App<Element>) {
+            Vue.component(component.name, component);
+        };
+        app.use(component as any);
+    });
+};
+
+export default withInstall;

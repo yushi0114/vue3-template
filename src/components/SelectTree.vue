@@ -24,7 +24,8 @@ const emits = defineEmits<{
 }>();
 
 function handleChildrenChange(sltIds: string[]) {
-    console.log(sltIds);
+    sltIds;
+    // console.log(sltIds);
     // emits('change', updateSltId(selfSltIds.value, sltIds));
 }
 

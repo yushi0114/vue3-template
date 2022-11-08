@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { PagePanel } from '@/components';
-import { columns, SEARCH_FORM } from './constants';
+import { COLUMNS, SEARCH_FORM } from './constants';
 import { useTable } from './hooks/useTable';
 import AddRoleDialog from './dialog/AddRoleDialog.vue';
 
@@ -36,11 +36,9 @@ const {
             ref="sjcTableRef"
             :table-data="state.data"
             :loading="state.loading"
-            :columns="columns"
+            :columns="COLUMNS"
             :table-config="tableConfig"
             :pagination-config="pageConfig"
-            stripe
-            border
             show-selection
             @index-method="indexMethod"
             @page-change="pageSizeChange"

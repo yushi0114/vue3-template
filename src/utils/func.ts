@@ -1,11 +1,6 @@
-export function equal(
-    f: undefined | ((a: any, b: any) => boolean),
-    a: any,
-    b: any
-) {
+export function equal(f: undefined | ((a: any, b: any) => boolean), a: any, b: any) {
     return isFunction(f) ? f!(a, b) : Object.is(a, b);
 }
-
 
 export const is: <T = any>(a: T, b: T) => boolean = curry(equal, Object.is);
 export const not: <T = any>(a: T, b: T) => boolean = curry(equal, function([v1, v2]: [any, any]) {
@@ -21,21 +16,26 @@ export function deepEqual(a: any, b: any): boolean {
             const isArrayA = Array.isArray(a);
             const isArrayB = Array.isArray(b);
             if (isArrayA && isArrayB) {
-                return a.length === b.length && a.every((e: any, i: number) => {
-                    return deepEqual(e, b[i]);
-                });
+                return (
+                    a.length === b.length &&
+                    a.every((e: any, i: number) => {
+                        return deepEqual(e, b[i]);
+                    })
+                );
             } else if (a instanceof Date && b instanceof Date) {
                 return a.getTime() === b.getTime();
             } else if (!isArrayA && !isArrayB) {
                 const keysA = Object.keys(a);
                 const keysB = Object.keys(b);
-                return keysA.length === keysB.length && keysA.every(key => {
-                    return deepEqual(a[key], b[key]);
-                });
+                return (
+                    keysA.length === keysB.length &&
+                    keysA.every((key) => {
+                        return deepEqual(a[key], b[key]);
+                    })
+                );
             }
 
             return false;
-
         } catch (e) {
             return false;
         }
@@ -47,7 +47,7 @@ export function deepEqual(a: any, b: any): boolean {
 }
 
 /* eslint-disable */
-export const noop = (..._: any[]) => { };
+export const noop = (..._: any[]) => {};
 export const no = (..._: any[]) => false;
 /* eslint-enable */
 
@@ -55,10 +55,7 @@ export const identity = <T = any>(value: T) => value;
 
 export function curry(fn: Function, ...args: any[]) {
     return (..._args: any[]) =>
-        (rest => rest.length >= fn.length
-            ? fn(...rest)
-            : curry(fn, rest)
-        )([...args, ..._args]);
+        ((rest) => (rest.length >= fn.length ? fn(...rest) : curry(fn, rest)))([...args, ..._args]);
 }
 
 const _toString = Object.prototype.toString;
@@ -92,7 +89,6 @@ export const isRegExp = (o: any) => toRawType(o) === 'RegExp';
 
 export const isNumberLike = (o: any) => isNumber(Number(o));
 
-
 export function isPrimitive(o: any): boolean {
     return isString(o) || isNumber(o) || isSymbol(o) || isBoolean(o);
 }
@@ -106,13 +102,12 @@ export function isIE(): boolean {
 }
 
 export function isFalsy(o: any): boolean {
-    return !isDefind(o) || ['', 0, false, NaN,/* 0n */].includes(o);
+    return !isDefind(o) || ['', 0, false, NaN/* 0n */].includes(o);
 }
 
 export function isTruthy(o: any): boolean {
     return !isFalsy(o);
 }
-
 
 export function isEmptyArray(o: any): boolean {
     return Array.isArray(o) ? o.length === 0 : false;
@@ -133,4 +128,51 @@ export const omit = (obj: Recordable, uselessKeys: string[]) => {
         return uselessKeys.includes(key) ? acc : { ...acc, [key]: obj[key] };
     }, {});
     return resolveObject;
+};
+
+export const deepFreeze = (obj: Recordable, ignoreKeyList: string[] = []) => {
+    // 取出属性
+    const propNames = Object.getOwnPropertyNames(obj);
+    propNames.forEach((name) => {
+        const prop = obj[name];
+
+        // 如果prop是个对象，冻结它
+        if (typeof prop === 'object' && prop !== null) obj[name] = deepFreeze(prop, ignoreKeyList);
+    });
+    return new Proxy(obj, {
+        deleteProperty(target, key: string) {
+            throw new Error(`不能删除 ${key}`);
+        },
+        preventExtensions() {
+            return false;
+        },
+        getOwnPropertyDescriptor(target, key: string) {
+            if (ignoreKeyList.includes(key)) {
+                return {
+                    enumerable: true,
+                    configurable: true,
+                    writable: true,
+                };
+            }
+            return {
+                enumerable: true,
+                configurable: false,
+                writable: false,
+                /* ...其他标志，可能是 "value:..." */
+            };
+        },
+        get(target, key: string) {
+            if (!Object.prototype.hasOwnProperty.call(target, key)) {
+                throw new Error(`${key} 不存在`);
+            } else {
+                return Reflect.get(target, key);
+            }
+        },
+        set(target, key: string, value) {
+            if (ignoreKeyList.includes(key)) {
+                return Reflect.set(target, key, value);
+            }
+            throw new Error(`${key} 不允许改变`);
+        },
+    });
 };

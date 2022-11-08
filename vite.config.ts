@@ -46,19 +46,8 @@ export default defineConfig({
                     '/src/composables/index.ts': ['useApi'],
                 },
             ],
-            dirs: [
-                './composables',
-                './components',
-                './types',
-                './utils',
-                './common',
-                './stores',
-            ],
-            resolvers: [
-                elementPlusResolver({
-                }),
-                iconsResolver({ prefix: 'Icon' })
-            ],
+            dirs: ['./composables', './components', './types', './utils', './common', './stores'],
+            resolvers: [elementPlusResolver({}), iconsResolver({ prefix: 'Icon' })],
             eslintrc: {
                 enabled: true,
             },
@@ -68,8 +57,7 @@ export default defineConfig({
                 iconsResolver({
                     enabledCollections: ['ep'],
                 }),
-                elementPlusResolver({
-                }),
+                elementPlusResolver({}),
             ],
         }),
         icons({
@@ -88,11 +76,11 @@ export default defineConfig({
         preprocessorOptions: {
             scss: {
                 additionalData: '@use "@/style/global.scss" as *; \n',
-            }
-        }
+            },
+        },
     },
     server: {
-        host: 'localhost',
+        // host: 'localhost',
         port: 8088,
         proxy: {
             '/clib-service': {

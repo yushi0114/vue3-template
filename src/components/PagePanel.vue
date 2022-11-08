@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Layout class="page-panel" v-bind="$attrs">
+    <div class="page-panel" v-bind="$attrs">
         <!-- -->
         <header class="page-panel-header" v-if="title">
             <Title>{{ title }}</Title>
@@ -26,22 +26,31 @@ onMounted(() => {
                 <button>edit</button>
             </div>
         </header>
-        <Layout class="page-panel-content">
+        <div class="page-panel-content">
             <slot />
-        </Layout>
-    </Layout>
+        </div>
+    </div>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .page-panel {
-    @apply flex-1;
+    box-sizing: border-box;
+    padding: $gap-lg;
+    min-height: calc(100vh - $nav-height);
 }
 
 .page-panel-header {
-    @apply flex mb-2;
+    display: flex;
+    padding-bottom: $gap-lg;
 }
 
 .page-panel-header__rest {
-    @apply flex-1 flex justify-end;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.page-panel-content {
+    box-sizing: border-box;
 }
 </style>

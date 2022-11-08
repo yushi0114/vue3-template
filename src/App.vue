@@ -6,7 +6,7 @@ const config = reactive({
     autoInsertSpace: true,
 });
 
-useRouteGuard();
+// useRouteGuard();
 </script>
 
 <template>

@@ -39,6 +39,11 @@ const routes: RouteRecordRaw[] = [
         path: SIGNIN_PATH,
         name: 'signin',
         component: Signin
+    },
+    {
+        path: '/routerList',
+        name: 'routerList',
+        component: () => import('@/views/system-manage/router-list.vue')
     }
 ];
 

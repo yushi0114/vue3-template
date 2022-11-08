@@ -15,7 +15,6 @@ const captchaSvgStr = ref('');
 function handleCaptchaFetch() {
     getCaptcha()
         .then(res => {
-            console.log('res', res);
             captchaSvgStr.value = res.captcha;
         });
 }

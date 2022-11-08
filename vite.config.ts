@@ -54,7 +54,6 @@ export default defineConfig({
             ],
             resolvers: [
                 elementPlusResolver({
-                    importStyle: 'sass',
                 }),
                 iconsResolver({ prefix: 'Icon' })
             ],
@@ -68,7 +67,6 @@ export default defineConfig({
                     enabledCollections: ['ep'],
                 }),
                 elementPlusResolver({
-                    importStyle: 'sass',
                 }),
             ],
         }),

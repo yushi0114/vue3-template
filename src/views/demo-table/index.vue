@@ -183,6 +183,6 @@ onBeforeMount(() => {
 
 <style lang="scss">
 .entity-table {
-    background-color: $template;
+    background-color: $color-primary;
 }
 </style>

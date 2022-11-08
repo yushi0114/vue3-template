@@ -20,7 +20,6 @@ import SjcTable from './table/index.vue';
 export function registerElementIcons(app: App) {
     Object.keys(iconCollection).forEach((iconName: string) => {
         const icon = iconCollection[iconName as keyof typeof iconCollection];
-        console.log(icon);
         app.component(icon.name, icon);
     });
 }

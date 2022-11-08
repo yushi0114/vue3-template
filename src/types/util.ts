@@ -1,7 +1,7 @@
 export interface PlainObject<T = any> {
-    [key: string]: T
+    [key: string]: T;
 }
 export interface PlainOption<T = any> {
-    name: string,
-    value: T,
+    name: string;
+    value: T;
 }

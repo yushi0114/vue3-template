@@ -121,3 +121,16 @@ export function isEmptyArray(o: any): boolean {
 export function isEmptyPlainObject(o: any): boolean {
     return isPlainObject(o) ? Object.keys(o).length === 0 : false;
 }
+
+/**
+ * @desc 在对象中剔除指定的属性
+ * @param {*} obj 对象
+ * @param {*} uselessKeys 剔除的属性
+ * @returns
+ */
+export const omit = (obj: Recordable, uselessKeys: string[]) => {
+    const resolveObject = Object.keys(obj).reduce((acc, key) => {
+        return uselessKeys.includes(key) ? acc : { ...acc, [key]: obj[key] };
+    }, {});
+    return resolveObject;
+};

@@ -16,17 +16,19 @@ export function dynamicNavs(roleId: DynamicNavsPayload): Promise<DynamicNavsResp
                 data: {
                     data: [
                         { id: '1', name: 'Dashboard', value: '1', permisson: 1 },
-                        { id: '2', name: 'Demo', value: '2', },
+                        { id: '2', name: 'Demo', value: '2' },
                         { id: '3', name: 'Demo Table', pid: '2', value: '3', permisson: 7 },
                         { id: '4', name: 'Demo Permission', pid: '2', value: '4', permisson: 3 },
-                    ]
+                        { id: '5', name: 'Example', value: '5' },
+                        { id: '6', name: 'Example Table', pid: '5', value: '6', permisson: 5 },
+                    ],
                 },
                 status: 200,
                 statusText: 'OK',
                 config: conf,
                 headers: {},
             });
-        }
+        },
     });
 }
 

@@ -1,58 +1,47 @@
 <script lang="ts" setup>
-import { useUserStore } from '@/stores';
-import { getCaptcha } from '@/api';
-import { encrypt } from '@/utils';
-
-const { signin } = useUserStore();
-const router = useRouter();
-const state = reactive({
-    username: '',
-    password: '',
-    captcha: '',
-});
-const captchaSvgStr = ref('');
-
-function handleCaptchaFetch() {
-    getCaptcha()
-        .then(res => {
-            captchaSvgStr.value = res.captcha;
-        });
-}
-
-function handleSignin() {
-    const password = encrypt(state.password);
-    signin({ account: state.username, password, captcha: state.captcha })
-        .then(() => {
-            router.replace('/home');
-            ElNotification.success({
-                title: '登录成功'
-            });
-        });
-}
-
-onBeforeMount(() => {
-    handleCaptchaFetch();
-});
+import AccountPasswordLogin from './components/account-password/index.vue';
+import LoginFooter from './components/footer/index.vue';
 </script>
 
 <template>
-    <div class="sign-in">
-        <!-- -->
-        signin
-        <br>
-        username: <input type="text" v-model="state.username">
-        <br>
-        password: <input type="text" v-model="state.password">
-        <br>
-        captcha: <input type="text" v-model="state.captcha">
-        <br>
-        <div v-html="captchaSvgStr"></div>
-        <el-button type="primary" @keypress.enter="handleSignin" @click="handleSignin">sign in</el-button>
+    <div class="login">
+        <div class="form">
+            <account-password-login></account-password-login>
+        </div>
+        <div class="footer">
+            <login-footer />
+        </div>
     </div>
 </template>
 
-<style lang="postcss">
-.sign-in {
-    @apply;
+<style lang="css">
+.login {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 1280px;
+    box-sizing: border-box;
+    background: url('@/assets/images/login.png') no-repeat left;
+    background-size: 70% 80%;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.form {
+    position: absolute;
+    right: 120px;
+    width: 340px;
+    height: auto;
+    min-width: 340px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    height: 37px;
 }
 </style>

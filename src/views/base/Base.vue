@@ -10,6 +10,10 @@ onBeforeMount(() => {
     getUserInfo();
 });
 
+// watch(sidebarOptions, () => {
+//     console.log(sidebarOptions.value);
+// });
+
 </script>
 
 <template>
@@ -29,6 +33,6 @@ onBeforeMount(() => {
 }
 
 .page-container {
-    @apply bg-gray-200 p-2 box-border;
+    @apply bg-gray-200 p-5 box-border;
 }
 </style>

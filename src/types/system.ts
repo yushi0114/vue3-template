@@ -8,6 +8,7 @@ export interface NavEntity {
 
 export interface DynamicNavEntity extends NavEntity {
     defaultPath?: string,
-    permission?: number
+    permission?: number,
+    children?: DynamicNavEntity[]
 }
 

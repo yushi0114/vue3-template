@@ -1,7 +1,7 @@
 :root {
     --el-color-white: #ffffff;
     --el-color-black: #000000;
-    --el-color-primary: #cd164e;
+    --el-color-primary: #1B5CFF;
     --el-color-primary-light-3: #79bbff;
     --el-color-primary-light-5: #a0cfff;
     --el-color-primary-light-7: #c6e2ff;
@@ -88,7 +88,7 @@
 html.dark {
     --el-color-white: #ffffff;
     --el-color-black: #000000;
-    --el-color-primary: red;
+    --el-color-primary: #1B5CFF;
     --el-color-primary-light-3: #79bbff;
     --el-color-primary-light-5: #a0cfff;
     --el-color-primary-light-7: #c6e2ff;

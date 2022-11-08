@@ -25,35 +25,30 @@ export default defineConfig({
         vue(),
         vueJsx(),
         unocss({
-            presets: [
-                presetUno(),
-            ],
-            transformers: [
-                transformerDirectives(),
-            ]
+            presets: [presetUno()],
+            transformers: [transformerDirectives()],
         }),
         autoImport({
             include: [
                 /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-                /\.vue$/, /\.vue\?vue/, // .vue
+                /\.vue$/,
+                /\.vue\?vue/, // .vue
             ],
             imports: [
                 'vue',
                 'vue-router',
                 'pinia',
+                {
+                    '@vueuse/core': ['onKeyStroke', 'useFocus'],
+                    '/src/utils/func.ts': ['omit'],
+                    '/src/composables/index.ts': ['useApi'],
+                },
             ],
-            dirs: [
-                './composables',
-                './components',
-                './types',
-                './utils',
-                './common',
-                './stores',
-            ],
+            dirs: ['./composables', './components', './types', './utils', './common', './stores'],
             resolvers: [elementPlusResolver()],
             eslintrc: {
                 enabled: true,
-            }
+            },
         }),
         components({
             resolvers: [elementPlusResolver()],
@@ -61,20 +56,18 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+        },
     },
     css: {
         postcss: {
-            plugins: [
-                autoprefixer, postcssNesting,
-            ]
+            plugins: [autoprefixer, postcssNesting],
         },
         preprocessorOptions: {
             scss: {
                 additionalData: '@import "@/style/global.scss"; \n',
-            }
-        }
+            },
+        },
     },
     server: {
         host: 'localhost',
@@ -82,8 +75,12 @@ export default defineConfig({
         proxy: {
             '/clib-service': {
                 target: `http://${proxyHost}:10209`,
-                changeOrigin: true
+                changeOrigin: true,
             },
-        }
-    }
+            '/dms-service': {
+                target: `http://${proxyHost}:10208`,
+                changeOrigin: true,
+            },
+        },
+    },
 });

@@ -9,13 +9,10 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Board: typeof import('./src/components/Board.vue')['default']
     Button: typeof import('./src/components/Button.vue')['default']
-    Card: typeof import('./src/components/Board.vue')['default']
     Checkbox: typeof import('./src/components/Checkbox.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
-    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSpace: typeof import('element-plus/es')['ElSpace']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     IEpAddLocation: typeof import('~icons/ep/add-location')['default']

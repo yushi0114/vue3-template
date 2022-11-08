@@ -2,10 +2,13 @@
 import { useUserStore } from '@/stores';
 import { useRoute, useRouter } from 'vue-router';
 import { Button } from '@/components';
+import { useDark } from '@vueuse/core';
 
 const { state, signout } = useUserStore();
 const router = useRouter();
 const route = useRoute();
+
+const isDark = useDark();
 
 function handleSignout() {
     signout().then(() => {
@@ -21,6 +24,14 @@ function handleSignout() {
             {{ route.meta.title }}
         <i-ep-add-location />
         <i-ep-aim />
+
+        <el-switch
+            v-model="isDark"
+            class="ml-2"
+            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+        />
+
+        <el-button type="primary">Hi~</el-button>
         </div>
         <div>
             {{ state.user?.name }}

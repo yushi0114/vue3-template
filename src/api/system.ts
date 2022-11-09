@@ -21,6 +21,8 @@ export function dynamicNavs(roleId: DynamicNavsPayload): Promise<DynamicNavsResp
                         { id: '4', label: 'Demo Permission', pid: '2', value: '4', permisson: 3 },
                         { id: '5', label: 'Example', value: '5' },
                         { id: '6', label: 'Example Table', pid: '5', value: '6', permisson: 5 },
+                        { id: '7', label: '金融机构', value: '7' },
+                        { id: '8', label: '城市管理', pid: '6', value: '8', permisson: 6}
                     ],
                 },
                 status: 200,

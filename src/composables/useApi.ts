@@ -16,7 +16,6 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
     const opt: UseApiOption<Awaited<ReturnType<T>>> = Object.assign({ cache: false }, option);
 
     const loading = ref(false);
-    const progress = useNProgress();
     const cache = ref<Awaited<ReturnType<T>>>();
     let timer: ReturnType<typeof setTimeout>;
 

@@ -146,7 +146,7 @@ const doLoginHandle = () => {
             push('/home');
         })
         .catch(() => {
-            // getVerifyCode();
+            getVerifyCode();
         });
 };
 const changePass = (params: string) => {

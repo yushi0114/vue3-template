@@ -3,7 +3,12 @@ import type { DynamicNavEntity } from '@/types';
 import { useLocalStorage } from '@vueuse/core';
 import SidebarLinkGroup from './SidebarLinkGroup.vue';
 
-const props = withDefaults(
+/**
+ * expand: 用来控制sidebar 在 pc 上的伸缩隐藏
+ * open: 用于控制菜单在移动端的显隐，当菜单隐藏是需要行为外部打开
+ */
+
+withDefaults(
     defineProps<{
         options?: DynamicNavEntity[],
         open?: boolean,
@@ -14,19 +19,19 @@ const props = withDefaults(
     }
 );
 
-const emits = defineEmits<{
-    (e: 'close'): void,
-    (e: 'change', opt: DynamicNavEntity, parent: DynamicNavEntity): void,
-}>();
+// const emits = defineEmits<{
+//     (e: 'close'): void,
+//     (e: 'change', opt: DynamicNavEntity, parent: DynamicNavEntity): void,
+// }>();
 
 const expand = useLocalStorage('SJZX_DMS_SIDEBAR_EXPAND', false);
 const sidebar = ref<HTMLDivElement>();
 const router = useRouter();
 const currentRoute = router.currentRoute;
 
-function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
-    emits('change', opt, parent);
-}
+// function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
+//     emits('change', opt, parent);
+// }
 </script>
 
 <template>
@@ -38,7 +43,7 @@ function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
         :class="{ expand }"
     >
         <FlexRow horizontal="center" class="logo-container">
-            <RouterLink to="/home">Im Logo {{ expand }}</RouterLink>
+            <slot name="logo"></slot>
         </FlexRow>
         <div class="sidebar-content">
             <!-- <button ref="trigger" class="lg:hidden text-gray-500 hover:text-gray-400" @click.stop="emits('close')"
@@ -56,10 +61,13 @@ function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
                         v-slot="parentLink"
                         :activeCondition="currentRoute.fullPath.includes('ecommerce')">
                         <!-- 子菜单Header -->
-                        <FlexRow class="sidebar-root-block" @click.prevent="expand ? parentLink.handleClick() : expand = true">
-                            <component class="el-icon sidebar-root-icon sidebar-root-icon" :is="'ForkSpoon'" />
+                        <FlexRow
+                            class="sidebar-root-block"
+                            @click.prevent="expand ? parentLink.handleClick() : expand = true">
+                            <component class="el-icon sidebar-root-icon" :is="'ForkSpoon'" />
                             <a class="sidebar-root-link"
-                                :class="currentRoute.fullPath.includes('ecommerce') && 'hover:text-gray-200'" href="#0"
+                                :class="currentRoute.fullPath.includes('ecommerce') && 'TODO'"
+                                href="#0"
                                 >
                                 <FlexRow horizontal="between"
                                     class="sidebar-root-label">
@@ -81,8 +89,7 @@ function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
                                         :class="{ active: isExactActive }"
                                         :href="href"
                                         @click="navigate">
-                                        <span class="sidebar-sub-label"
-                                            >{{ optChild.label }}</span>
+                                        <span class="sidebar-sub-label">{{ optChild.label }}</span>
                                     </a>
                                 </FlexRow>
                             </RouterLink>
@@ -102,7 +109,9 @@ function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
                 </template>
             </div>
         </div>
-        <FlexRow :horizontal="expand ? 'end' : 'center'" class="sidebar-footer">
+        <FlexRow
+            :horizontal="expand ? 'end' : 'center'"
+            class="sidebar-footer">
             <i-ep-fold v-if="expand" @click="expand = false" />
             <i-ep-expand v-else @click="expand = true" />
         </FlexRow>
@@ -145,7 +154,7 @@ function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
     color: #5E5E5E;
     &.active {
         color: var(--el-color-primary);
-        background: #E9F2FF;
+        background: var(--el-color-primary-light-9);
     }
     &:hover {
         color: var(--el-color-primary);
@@ -202,7 +211,7 @@ function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
 .sidebar-mobile-shadow {
     @apply fixed inset-0 bg-gray-900 bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 opacity-0 pointer-events-none;
 
-    &.expand {
+    &.open {
         @apply opacity-100;
     }
 }

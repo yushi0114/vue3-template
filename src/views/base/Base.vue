@@ -18,7 +18,11 @@ onBeforeMount(() => {
 
 <template>
     <main class="app-container">
-        <Sidebar :options="sidebarOptions" />
+        <Sidebar :options="sidebarOptions">
+            <template v-slot:logo>
+                <RouterLink to="/home">DMS</RouterLink>
+            </template>
+        </Sidebar>
         <Layout class="main-container">
             <Nav />
             <Layout class="page-container">

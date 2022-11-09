@@ -3,7 +3,7 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 
 const cacheOption = {
-    color: '#FFAF36',
+    color: 'var(--el-color-primary)',
     spinner: false
 };
 

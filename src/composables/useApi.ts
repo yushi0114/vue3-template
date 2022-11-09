@@ -1,6 +1,5 @@
 import { isNumber } from '@/utils';
 import { ref } from 'vue';
-import { useNProgress } from './useNProgress';
 
 export type UseApiOption = {
     cache?: boolean | number,
@@ -13,7 +12,6 @@ export function useApi<T extends ((...args: any[]) => Promise<any>)>(
     const opt: UseApiOption = Object.assign({ cache: false }, option);
 
     const loading = ref(false);
-    const progress = useNProgress();
     const cache = ref<Awaited<ReturnType<T>>>();
     let timer: ReturnType<typeof setTimeout>;
 
@@ -23,7 +21,6 @@ export function useApi<T extends ((...args: any[]) => Promise<any>)>(
     }
     const request: T = ((...args) => {
 
-        progress.start();
         loading.value = true;
 
         const requestResponse = cache.value
@@ -43,7 +40,6 @@ export function useApi<T extends ((...args: any[]) => Promise<any>)>(
 
         return requestResponse.finally(() => {
             loading.value = false;
-            progress.done();
         });
     }) as T;
 

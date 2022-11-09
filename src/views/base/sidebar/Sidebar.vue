@@ -154,7 +154,7 @@ const currentRoute = router.currentRoute;
     color: #5E5E5E;
     &.active {
         color: var(--el-color-primary);
-        background: #E9F2FF;
+        background: var(--el-color-primary-light-9);
     }
     &:hover {
         color: var(--el-color-primary);

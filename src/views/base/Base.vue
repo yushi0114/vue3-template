@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Layout, Nav, Sidebar } from '@/components';
+import Sidebar from './sidebar/Sidebar.vue';
+import Nav from './nav/Nav.vue';
+import { Layout } from '@/components';
 import { useUserStore } from '@/stores';
 import { computed, onBeforeMount } from 'vue';
 

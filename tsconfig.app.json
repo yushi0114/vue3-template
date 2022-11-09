@@ -5,6 +5,7 @@
         "auto-imports.d.ts",
         "components.d.ts",
         "src/**/*",
+        "src/**/*.ts",
         "src/**/*.vue"
     ],
     "exclude": [

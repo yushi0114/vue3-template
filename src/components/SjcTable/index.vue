@@ -1,11 +1,7 @@
 <template>
     <div v-loading="loading" class="common-table">
         <!--批量操作栏，勾选行时显示-->
-        <el-row
-            v-if="$tableConfig.showSelection && state.selection.length"
-            justify="space-between"
-            align="middle"
-            style="margin: 10px 0">
+        <el-row v-if="$tableConfig.showSelection && state.selection.length" justify="space-between" align="middle">
             <div class="multi-menu">
                 <span style="font-size: 12px">已选中{{ state.selection.length }}项</span>
                 <el-divider direction="vertical" />
@@ -75,6 +71,7 @@
 <script lang="ts">
 export default {
     name: 'SjcTable',
+    inheritAttrs: false,
 };
 </script>
 
@@ -85,12 +82,12 @@ import type { ITableConfig, IColumn, ITableData, IPaginationConfig } from './typ
 import { INIT_PAGINATION_CONFIG, INIT_TABLE_CONFIG } from './constants';
 
 type IProps = {
-    tableData: ITableData[];
-    tableConfig?: Partial<ITableConfig<ITableData>>;
-    columns: IColumn<ITableData>[];
+    tableData: ITableData;
+    tableConfig?: Partial<ITableConfig>;
+    columns: IColumn[];
     loading?: boolean;
     showPagination?: boolean;
-    paginationConfig?: IPaginationConfig;
+    paginationConfig?: Partial<IPaginationConfig>;
 };
 // 定义组件接收的prop属性
 const prop = withDefaults(defineProps<IProps>(), {
@@ -102,13 +99,14 @@ const prop = withDefaults(defineProps<IProps>(), {
     paginationConfig: () => reactive({}),
 });
 const emit = defineEmits(['page-change', 'multi-selection']); // 声明emit
-const state: { selection: ITableData[] } = reactive({
+
+const state: { selection: ITableData } = reactive({
     selection: [],
 });
 const commonTableRef = ref<HTMLElement | null>(null); // 表格ref
 // 合并表格配置项
 const $tableConfig = computed(() => {
-    let result: Partial<ITableConfig<ITableData>> = {};
+    let result: Partial<ITableConfig> = {};
     const $tableConfig: IColumn = { label: '操作', minWidth: 100, width: 120, fixed: 'right', align: 'center' };
     // eslint-disable-next-line no-unused-expressions
     prop.tableConfig.handlerConfig && Object.assign($tableConfig, prop.tableConfig.handlerConfig);

@@ -19,7 +19,9 @@
 
 <script lang="ts" setup>
 import { useModal } from '@/composables';
+import type { IColumnTypes, IColumnKeys } from '../types';
 import { ROLE_FORM } from '../constants';
+import type { IFormValues } from '@/components/SjcForm/types';
 // import { addUser, updateUser } from '@/api/user';
 // import { OPERATION_TYPES } from '@/constants/index';
 
@@ -27,13 +29,13 @@ const updateSubmit = ref(new Date().getTime());
 const updateReset = ref(new Date().getTime());
 const isEdit = ref('ADD');
 const id = ref('');
-const openCallback = (row) => {
+const openCallback = (row: IColumnTypes) => {
     console.log('isEdit: ', row);
     if (row?.id) {
         isEdit.value = 'EDIT';
         id.value = row.id;
         ROLE_FORM.forEach((user) => {
-            user.defaultValue = row[user.keyName];
+            user.defaultValue = row[user.keyName as IColumnKeys];
         });
     } else {
         isEdit.value = 'ADD';
@@ -44,7 +46,7 @@ const openCallback = (row) => {
     }
 };
 const { visible, open, close } = useModal(openCallback);
-const emit = defineEmits<{
+defineEmits<{
     (e: 'success', value: boolean): void;
 }>();
 
@@ -56,14 +58,16 @@ const onClose = () => {
     close();
 };
 
-const handleSubmit = async (values) => {
+const handleSubmit = async(values: IFormValues) => {
     let request = null;
     let params = {};
     if (isEdit.value === 'EDIT') {
         params = { ...values, id: id.value };
+        // TODO: 编辑请求
         request = handleUpdateUser;
     } else {
         params = values;
+        // TODO: 新建请求
         request = handleAddUser;
     }
     request(params);

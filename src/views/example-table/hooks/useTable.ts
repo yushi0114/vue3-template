@@ -3,12 +3,15 @@
  * @FilePath: \dms-web\src\views\example-table\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-11-08 15:28:31
+ * @LastEditTime: 2022-11-09 16:58:04
  * @LastEditors: zys
  * @Reference:
  */
-import type { IColumnTypes } from '../constants';
+import type { IColumnTypes } from '../types';
 import type { Ref } from 'vue';
+import type { IFormValues } from '@/components/SjcForm/types';
+import type { IPaginationConfig } from '@/components/SjcTable/types';
+import { ElMessageBox } from 'element-plus';
 
 export const useTable = (sjcTableRef: Ref, addDialog: Ref) => {
     // 表格配置项
@@ -40,22 +43,30 @@ export const useTable = (sjcTableRef: Ref, addDialog: Ref) => {
         addDialog.value?.open({});
     };
     // 编辑操作
-    function handlerEdit({ row }: { row: IColumnTypes}) {
+    function handlerEdit({ row }: { row: IColumnTypes }) {
         console.log(row);
         addDialog?.value.open(row);
     }
     // 删除操作
-    function handleDelete(row: IColumnTypes) {
+    function handleDelete({ row }: { row: IColumnTypes }) {
         console.log(row);
+        ElMessageBox.confirm(`确认删除${row.name}?`, '删除', {
+            type: 'warning',
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+        });
     }
     // 自定义索引
     function indexMethod(index: number) {
         return index * 5;
     }
     // 切换分页
-    function pageSizeChange({ currentPage, pageSize }) {
-        pageConfig.currentPage = currentPage;
-        pageConfig.pageSize = pageSize;
+    function pageSizeChange({ currentPage, pageSize }: IPaginationConfig) {
+        pageConfig.currentPage = currentPage ?? 1;
+        pageConfig.pageSize = pageSize ?? 10;
         initData();
     }
     // 批量删除
@@ -111,7 +122,7 @@ export const useTable = (sjcTableRef: Ref, addDialog: Ref) => {
         console.log(row);
     }
 
-    const handleSearch = (values) => {
+    const handleSearch = (values: IFormValues) => {
         console.log('values: ', values);
     };
     return {

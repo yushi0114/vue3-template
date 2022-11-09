@@ -22,10 +22,7 @@ onBeforeMount(() => {
         <!-- -->
         permission: {{ permission }}
 
-        <SelectTree
-            :options="navs"
-            :selected-ids="permission"
-        />
+        <SelectTree :options="navs" :selected-ids="permission" />
     </PagePanel>
 </template>
 

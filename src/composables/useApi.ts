@@ -9,7 +9,10 @@ export type UseApiOption<T> = {
     onSuccess?: (data: T) => void;
     onError?: (error: HttpError) => void;
 };
-export function useApi<T extends (...args: any[]) => Promise<any>>(apiFunc: T, option?: UseApiOption<Awaited<ReturnType<T>>>) {
+export function useApi<T extends (...args: any[]) => Promise<any>>(
+    apiFunc: T,
+    option?: UseApiOption<Awaited<ReturnType<T>>>
+) {
     const opt: UseApiOption<Awaited<ReturnType<T>>> = Object.assign({ cache: false }, option);
 
     const loading = ref(false);
@@ -40,15 +43,19 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(apiFunc: T, o
             return Promise.resolve(cache.value);
         }
 
-        return requestResponse.then((res: Awaited<ReturnType<T>>) => {
-            if (opt.onSuccess && isFunction(opt.onSuccess)) {
-                opt.onSuccess(res);
-            }
-        }).catch((error: HttpError) => {
-            if (opt.onError && isFunction(opt.onError)) {
-                opt.onError(error);
-            }
-        })
+        return requestResponse
+            .then((res: Awaited<ReturnType<T>>) => {
+                if (opt.onSuccess && isFunction(opt.onSuccess)) {
+                    opt.onSuccess(res);
+                }
+                return Promise.resolve(res);
+            })
+            .catch((error: HttpError) => {
+                if (opt.onError && isFunction(opt.onError)) {
+                    opt.onError(error);
+                }
+                return Promise.reject(error);
+            })
             .finally(() => {
                 loading.value = false;
                 progress.done();

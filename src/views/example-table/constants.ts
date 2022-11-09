@@ -1,6 +1,6 @@
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
-import type { IColumn } from '@/components/table/types';
-import type { DefItem } from '@/components/form/types';
+import type { IColumn } from '@/components/SjcTable/types';
+import type { DefItem } from '@/components/SjcForm/types';
 import { STATUS_LABEL_MAP, STATUS } from '@/enums';
 
 export interface IColumnTypes {
@@ -13,7 +13,7 @@ export interface IColumnTypes {
 }
 type IColumnKeys = keyof IColumnTypes;
 // 表格列配置
-export const columns: IColumn<IColumnTypes>[] = [
+export const COLUMNS: Readonly<IColumn<IColumnTypes>[]> = readonly([
     // 自定义索引
     {
         label: '排名',
@@ -70,7 +70,7 @@ export const columns: IColumn<IColumnTypes>[] = [
         label: '金额',
         sortable: true,
     },
-];
+]);
 
 export const SEARCH_FORM: DefItem[] = [
     {

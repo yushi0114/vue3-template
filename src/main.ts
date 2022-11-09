@@ -3,10 +3,9 @@ import { createPinia } from 'pinia';
 
 import App from './App.vue';
 import { router } from './router';
-import withInstall from './components';
+import { registerElementIcons } from './components';
 
 const app = createApp(App);
-withInstall(app);
 
 // main.ts
 
@@ -19,6 +18,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.use(createPinia());
 app.use(router);
+registerElementIcons(app);
 
 app.mount('#app');
 import '@/style';

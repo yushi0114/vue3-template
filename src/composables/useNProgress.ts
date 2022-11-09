@@ -24,6 +24,8 @@ export function useNProgress(option?: {
 }
 
 #nprogress .bar {
+    z-index: 1000;
+    position: fixed;
     background: ${opt.color} !important;
 }
     `);

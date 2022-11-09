@@ -63,7 +63,10 @@ export const useUserStore = defineStore('user', () => {
             state.user = user;
             return dynamicNavs(user.roleId);
         }).then((navs) => {
+
+            console.log('eeeeeeeeeeeee', navs);
             state.navs = navs;
+            console.log(navs);
             addDynamicRoutes(router, navs);
             state.navTree = toTree({}, navs);
             return state.user as UserEntity;

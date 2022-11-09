@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { PagePanel } from '@/components';
-import { columns, SEARCH_FORM } from './constants';
+import { COLUMNS, SEARCH_FORM } from './constants';
 import { useTable } from './hooks/useTable';
 import AddRoleDialog from './dialog/AddRoleDialog.vue';
 
@@ -32,15 +32,15 @@ const {
             <el-button @click="handleAddRole">新增</el-button>
             <!-- <el-button type="danger" @click="handleAddRole">删除</el-button> -->
         </el-space>
+        <div class="i-carbon-sun dark:i-carbon-moon"></div>
+        <div class="i-iwwa-add-1m"></div>
         <sjc-table
             ref="sjcTableRef"
             :table-data="state.data"
             :loading="state.loading"
-            :columns="columns"
+            :columns="COLUMNS"
             :table-config="tableConfig"
             :pagination-config="pageConfig"
-            stripe
-            border
             show-selection
             @index-method="indexMethod"
             @page-change="pageSizeChange"

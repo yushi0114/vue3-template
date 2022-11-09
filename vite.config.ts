@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import unocss from 'unocss/vite';
-import { presetUno } from 'unocss';
+import { presetUno, presetAttributify, presetIcons } from 'unocss';
 import transformerDirectives from '@unocss/transformer-directives';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
@@ -14,7 +14,7 @@ import iconsResolver from 'unplugin-icons/resolver';
 import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-let proxyHost = '10.0.30.5';
+let proxyHost = '192.168.31.198';
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {
@@ -27,7 +27,13 @@ export default defineConfig({
         vue(),
         vueJsx(),
         unocss({
-            presets: [presetUno()],
+            presets: [
+                presetUno(),
+                presetAttributify(),
+                presetIcons({
+                    cdn: 'https://esm.sh/',
+                }),
+            ],
             transformers: [transformerDirectives()],
         }),
         autoImport({
@@ -46,19 +52,8 @@ export default defineConfig({
                     '/src/composables/index.ts': ['useApi'],
                 },
             ],
-            dirs: [
-                './composables',
-                './components',
-                './types',
-                './utils',
-                './common',
-                './stores',
-            ],
-            resolvers: [
-                elementPlusResolver({
-                }),
-                iconsResolver({ prefix: 'Icon' })
-            ],
+            dirs: ['./composables', './components', './types', './utils', './common', './stores'],
+            resolvers: [elementPlusResolver({}), iconsResolver({ prefix: 'Icon' })],
             eslintrc: {
                 enabled: true,
             },
@@ -68,8 +63,7 @@ export default defineConfig({
                 iconsResolver({
                     enabledCollections: ['ep'],
                 }),
-                elementPlusResolver({
-                }),
+                elementPlusResolver({}),
             ],
         }),
         icons({
@@ -88,11 +82,11 @@ export default defineConfig({
         preprocessorOptions: {
             scss: {
                 additionalData: '@use "@/style/global.scss" as *; \n',
-            }
-        }
+            },
+        },
     },
     server: {
-        host: 'localhost',
+        // host: 'localhost',
         port: 8088,
         proxy: {
             '/clib-service': {

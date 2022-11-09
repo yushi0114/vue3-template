@@ -91,7 +91,7 @@ import { useUserStore } from '@/stores';
 import { getCaptcha } from '@/api/access';
 import { encrypt } from '@/utils/crypto';
 import { COUNT_PASSWORD_FORM_RULES } from '../../constants';
-
+import { MENU_TAB } from '@/enums';
 const { push } = useRouter();
 const { signin } = useUserStore();
 const { loading, request: login } = useApi(signin);
@@ -138,6 +138,7 @@ const doLoginHandle = () => {
         account: countAndPasswordForm.phoneNumber,
         password: encrypt(countAndPasswordForm.password),
         captcha: countAndPasswordForm.inputVerifyCode,
+        tab: MENU_TAB.MENU_TAB_DMS,
     };
     return login(reqData)
         .then(() => {
@@ -145,7 +146,7 @@ const doLoginHandle = () => {
             push('/home');
         })
         .catch(() => {
-            // getVerifyCode();
+            getVerifyCode();
         });
 };
 const changePass = (params: string) => {

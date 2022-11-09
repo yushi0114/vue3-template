@@ -13,20 +13,21 @@
         default-expand-all
         @node-click="handleNodeClick"
         :expand-on-click-node="false">
-      <template #default="{ node, data }">
-        <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave">
-          <span style="font-size:14px;" :class="{'line-through':  data.status }">{{ node.label }} </span>
+      <template #default="{ node }">
+        <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
+          <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ node.label }} </span>
           <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start" trigger="hover" :width="100">
             <div class="popover-list">
               <el-button
+                  @click="handleOperateTreeItem(node, 'create')"
                   text
                   :icon="Plus"
-                  @click="append"
                   class="custom-btn"
                   size="small">
                 新建
               </el-button>
               <el-button
+                  @click="handleOperateTreeItem(node, 'edit')"
                   text
                   :icon="Edit"
                   size="small"
@@ -34,73 +35,72 @@
                 编辑
               </el-button>
               <el-button
+                  @click="handleOperateTreeItem(node, 'remove')"
                   text
                   :icon="Delete"
-                  @click="remove"
                   class="custom-btn"
                   size="small">
                 删除
               </el-button>
             </div>
             <template #reference>
-              <el-icon><More /></el-icon>
+              <el-button text :icon="More"></el-button>
             </template>
           </el-popover>
         </div>
       </template>
     </el-tree>
-
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref} from 'vue';
 import type { PropType } from 'vue';
-import { Delete, Edit, Plus } from '@element-plus/icons-vue';
+import { Delete, Edit, Plus, More } from '@element-plus/icons-vue';
 import type Node from 'element-plus/es/components/tree/src/model/node';
+import type {TreeItemType} from '@/views/system-manage/type/route-list.type';
 
-interface Tree {
-  id: number
-  label: string
-  children?: Tree[]
-}
 
 const props = defineProps({
     dataSource: {
-        type: Array as PropType<Tree[]>,
+        type: Array as PropType<TreeItemType[]>,
         default: () => []
     }
 });
+const emit = defineEmits(['nodeClickHandle', 'operateTreeItem', 'create']);
+
 
 const activeId = ref();
 
 const filterText = ref('');
-const currentNodeLevel = ref();
-const currentKey = ref();
-function addNewRoute(){
 
+function addNewRoute(){
+emit('create')
 }
 
-function handleNodeClick(data) {
+function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'create'){
+    emit('operateTreeItem', {
+        id: item.id,
+        type
+    });
+}
 
+
+function handleNodeClick(data: TreeItemType) {
+    emit('operateTreeItem', {
+        id: data.id,
+        type: 'edit'
+    });
 }
 
 function handleMouseEnter(event: string){
     activeId.value = event;
 }
 
-function handleMouseLeave(){
-    activeId.value = undefined;
+function handleMouseLeave(event: string){
+    activeId.value = event;
 }
 
-
-const append = (data: Tree) => {
-    // todo
-};
-
-const remove = (node: Node, data: Tree) => {
-    // todo
-};
 </script>
 
 <style scoped lang="scss">
@@ -133,6 +133,7 @@ const remove = (node: Node, data: Tree) => {
 
     &::v-deep( .el-tree-node.is-current > .el-tree-node__content) {
       background-color: transparent !important;
+      color: blue;
       //color: $--link-hover-color;
     }
     &::v-deep(.el-tree-node__label) {

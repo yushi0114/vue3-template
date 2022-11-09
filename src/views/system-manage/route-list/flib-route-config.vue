@@ -1,159 +1,129 @@
 <template>
   <div class="route-container">
-    <div class="route-tree">
-      <route-tree :data-source="dataSource"></route-tree>
+    <div class="route-tree" v-if="formType !== 'create'">
+      <RouteTree
+        :data-source="dataSource"
+        @create="handleCreateRoute"
+        @operateTreeItem="handleOperateTreeItem($event)"></RouteTree>
     </div>
-   <div class="route-content">
-     <el-form :model="form" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
-       <el-form-item label="菜单名称:" required prop="name">
-         <el-input v-model="form.name" placeholder="请输入菜单名称"/>
-       </el-form-item>
-       <el-form-item label="菜单标题:"  required prop="title">
-         <el-input v-model="form.title" placeholder="请输入菜单标题" />
-       </el-form-item>
-       <el-form-item label="菜单路径:"  required prop="path">
-         <el-input v-model="form.path" placeholder="请输入菜单路径" />
-       </el-form-item>
-       <el-form-item label="菜单描述:"  required prop="desc">
-         <el-input v-model="form.desc" placeholder="请输入菜单描述" />
-       </el-form-item>
-       <el-form-item label="排序字段:"  required prop="sort">
-         <el-input v-model.number="form.sort" placeholder="请输入排序字段" />
-       </el-form-item>
-       <el-form-item label="组件名称:" required prop="component">
-         <el-input v-model="form.component" placeholder="请输入菜组件称" />
-       </el-form-item>
-       <el-form-item label="是否启用:" required prop="status">
-         <el-switch v-model="form.status" />
-       </el-form-item>
-       <el-form-item>
-         <el-button type="primary" @click="submitForm(ruleFormRef)"
-         >创建</el-button
-         >
-         <el-button @click="resetForm(ruleFormRef)">重置</el-button>
-       </el-form-item>
-     </el-form>
-   </div>
+     <div class="route-content">
+       <route-form @save="handleSaveForm($event)" :type="formType" :form="form"></route-form>
+     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import RouteTree from './route-tree.vue';
-import {ref, reactive} from 'vue';
-import type { FormInstance, FormRules } from 'element-plus';
-interface Tree {
-  id: number
-  label: string
-  children?: Tree[]
+import {ref} from 'vue';
+import {routeTree} from '@/views/system-manage/mock/route-tree';
+import type {RouteFormType, TreeItemType} from '@/views/system-manage/type/route-list.type';
+import RouteForm from '@/views/system-manage/route-list/route-form.vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
+const dataSource = ref<TreeItemType[]>();
+
+const form = ref<RouteFormType>();
+const formType = ref<'create' | 'edit'>('edit');
+const parentId = ref();
+async function getTreeData(): Promise<void> {
+    dataSource.value = routeTree;
 }
 
-const dataSource = ref<Tree[]>([
-    {
-        id: 1,
-        label: 'Level one 1',
-        children: [
-            {
-                id: 4,
-                label: 'Level two 1-1',
-                children: [
-                    {
-                        id: 9,
-                        label: 'Level three 1-1-1',
-                    },
-                    {
-                        id: 10,
-                        label: 'Level three 1-1-2',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: 2,
-        label: 'Level one 2',
-        children: [
-            {
-                id: 5,
-                label: 'Level two 2-1',
-            },
-            {
-                id: 6,
-                label: 'Level two 2-2',
-            },
-        ],
-    },
-    {
-        id: 3,
-        label: 'Level one 3',
-        children: [
-            {
-                id: 7,
-                label: 'Level two 3-1',
-            },
-            {
-                id: 8,
-                label: 'Level two 3-2',
-            },
-        ],
-    },
-]);
+async function getRouteData(id?: string): Promise<void>{
+    if (id){
+        form.value = {
+            name: '123' + Math.random(),
+            title: '123',
+            path: '12',
+            desc: '123',
+            sort: 1,
+            component: '123',
+            status: false
+        };
+    } else {
+        form.value = undefined;
+    }
+}
 
-const form = reactive({
-    name: '',
-    title: '',
-    path: '',
-    desc: '',
-    sort: '',
-    component: '',
-    status: false
+async function handleOperateTreeItem(params: {id: string, type: 'edit' | 'remove' | 'create'}) {
+    if (params.type === 'edit'){
+        await getRouteData(params.id);
+    } else if (params.type === 'remove') {
+        ElMessageBox.confirm(
+            '确定要删除当前菜单吗？',
+            '警告',
+            {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        )
+            .then(() => {
+                ElMessage({
+                    type: 'success',
+                    message: '删除成功',
+                });
+            })
+            .catch(() => {
+                ElMessage({
+                    type: 'info',
+                    message: '取消删除',
+                });
+            });
+    } else if (params.type === 'create'){
+        formType.value = 'create';
+        parentId.value = params.id;
+        form.value = {
+            name: '',
+            title: '',
+            path: '',
+            desc: '',
+            sort: 0,
+            component: '',
+            status: false
+        };
+    }
+}
+
+function handleSaveForm(params: {
+  id?: string;
+  form: RouteFormType,
+  type: 'create' | 'edit'
+}){
+    if (params.type === 'create'){
+        createRoute(params.form);
+    }
+    if (params.type === 'edit' && params.id){
+        editRoute(params.id, params.form);
+    }
+}
+
+function handleCreateRoute(){
+    formType.value = 'create';
+    form.value = {
+        name: '',
+        title: '',
+        path: '',
+        desc: '',
+        sort: 0,
+        component: '',
+        status: false
+    };
+}
+
+async function createRoute(routeForm: RouteFormType) {
+    console.log(parentId.value);
+    // todo
+}
+
+async function editRoute(id: string, routeForm: RouteFormType) {
+    // todo
+}
+
+onMounted(async() => {
+    await getTreeData();
+    await getRouteData();
 });
-const ruleFormRef = ref<FormInstance>();
-const rules = reactive<FormRules>({
-    name: [
-        { required: true, message: '请输入菜单名称', trigger: 'blur' },
-        { min: 3, max: 255, message: '菜单名称不能超过255个字符', trigger: 'blur' },
-    ],
-    title: [
-        { required: true, message: '请输入菜单标题', trigger: 'blur' },
-        { min: 3, max: 32, message: '菜单标题不能超过32个字符', trigger: 'blur' },
-    ],
-    path: [
-        { required: true, message: '请输入菜单路径', trigger: 'blur' },
-        { min: 3, max: 255, message: '菜单路径不能超过255个字符', trigger: 'blur' },
-    ],
-    desc: [
-        { required: true, message: '请输入菜单描述', trigger: 'blur' },
-        { min: 3, max: 255, message: '菜单描述不能超过255个字符', trigger: 'blur' },
-    ],
-    sort: [
-        { required: true, message: '请输入排序字段', trigger: 'blur' },
-      { type: 'number', message: '排序字段只能是数字' },
-    ],
-    component: [
-        { required: true, message: '请输入组件名称', trigger: 'blur' },
-        { min: 3, max: 255, message: '组件名称不能超过255个字符', trigger: 'blur' },
-    ],
-});
-
-const submitForm = async(formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    await formEl.validate((valid, fields) => {
-        if (valid) {
-            console.log('submit!');
-        } else {
-            console.log('error submit!', fields);
-        }
-    });
-};
-
-const resetForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.resetFields();
-};
-
-// const onSubmit = () => {
-//     console.log('submit!');
-// };
 </script>
 
 <style scoped lang="scss">

@@ -1,11 +1,7 @@
 <template>
     <div v-loading="loading" class="common-table">
         <!--批量操作栏，勾选行时显示-->
-        <el-row
-            v-if="$tableConfig.showSelection && state.selection.length"
-            justify="space-between"
-            align="middle"
-            style="margin: 10px 0">
+        <el-row v-if="$tableConfig.showSelection && state.selection.length" justify="space-between" align="middle">
             <div class="multi-menu">
                 <span style="font-size: 12px">已选中{{ state.selection.length }}项</span>
                 <el-divider direction="vertical" />
@@ -87,11 +83,11 @@ import { INIT_PAGINATION_CONFIG, INIT_TABLE_CONFIG } from './constants';
 
 type IProps = {
     tableData: ITableData;
-    tableConfig?: Partial<ITableConfig<Recordable>>;
-    columns: Readonly<IColumn>[];
+    tableConfig?: Partial<ITableConfig>;
+    columns: IColumn[];
     loading?: boolean;
     showPagination?: boolean;
-    paginationConfig?: IPaginationConfig;
+    paginationConfig?: Partial<IPaginationConfig>;
 };
 // 定义组件接收的prop属性
 const prop = withDefaults(defineProps<IProps>(), {
@@ -103,6 +99,7 @@ const prop = withDefaults(defineProps<IProps>(), {
     paginationConfig: () => reactive({}),
 });
 const emit = defineEmits(['page-change', 'multi-selection']); // 声明emit
+
 const state: { selection: ITableData } = reactive({
     selection: [],
 });

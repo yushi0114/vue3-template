@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\SjcTable\types.ts
  * @Author: zys
  * @Date: 2022-11-03 14:59:33
- * @LastEditTime: 2022-11-09 10:21:22
+ * @LastEditTime: 2022-11-09 14:35:59
  * @LastEditors: zys
  * @Reference:
  */
@@ -35,4 +35,4 @@ export type IColumn<ColumnTypes = Recordable> = Omit<ITableColumnCtx<ColumnTypes
     children?: IColumn<ColumnTypes>[];
 };
 
-export type IPaginationConfig = Partial<PaginationProps>;
+export type IPaginationConfig = PaginationProps;

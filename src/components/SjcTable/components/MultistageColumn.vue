@@ -19,11 +19,11 @@ export default defineComponent({
 });
 </script>
 <script lang="ts" setup>
-import type { IColumn, ITableData } from '../types';
+import type { IColumn } from '../types';
 
 // 定义组件接收的prop属性
 const props = defineProps<{
-    column: IColumn<ITableData>;
+    column: Readonly<IColumn>;
 }>();
 
 const bindColumn = reactive(omit(props.column, 'children'));

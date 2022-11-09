@@ -56,7 +56,7 @@ const onClose = () => {
     close();
 };
 
-const handleSubmit = async (values) => {
+const handleSubmit = async(values) => {
     let request = null;
     let params = {};
     if (isEdit.value === 'EDIT') {

@@ -75,6 +75,7 @@
 <script lang="ts">
 export default {
     name: 'SjcTable',
+    inheritAttrs: false,
 };
 </script>
 
@@ -85,9 +86,9 @@ import type { ITableConfig, IColumn, ITableData, IPaginationConfig } from './typ
 import { INIT_PAGINATION_CONFIG, INIT_TABLE_CONFIG } from './constants';
 
 type IProps = {
-    tableData: ITableData[];
-    tableConfig?: Partial<ITableConfig<ITableData>>;
-    columns: IColumn<ITableData>[];
+    tableData: ITableData;
+    tableConfig?: Partial<ITableConfig<Recordable>>;
+    columns: Readonly<IColumn>[];
     loading?: boolean;
     showPagination?: boolean;
     paginationConfig?: IPaginationConfig;
@@ -102,13 +103,13 @@ const prop = withDefaults(defineProps<IProps>(), {
     paginationConfig: () => reactive({}),
 });
 const emit = defineEmits(['page-change', 'multi-selection']); // 声明emit
-const state: { selection: ITableData[] } = reactive({
+const state: { selection: ITableData } = reactive({
     selection: [],
 });
 const commonTableRef = ref<HTMLElement | null>(null); // 表格ref
 // 合并表格配置项
 const $tableConfig = computed(() => {
-    let result: Partial<ITableConfig<ITableData>> = {};
+    let result: Partial<ITableConfig> = {};
     const $tableConfig: IColumn = { label: '操作', minWidth: 100, width: 120, fixed: 'right', align: 'center' };
     // eslint-disable-next-line no-unused-expressions
     prop.tableConfig.handlerConfig && Object.assign($tableConfig, prop.tableConfig.handlerConfig);

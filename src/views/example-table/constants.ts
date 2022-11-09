@@ -1,6 +1,6 @@
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
-import type { IColumn } from '@/components/table/types';
-import type { DefItem } from '@/components/form/types';
+import type { IColumn } from '@/components/SjcTable/types';
+import type { DefItem } from '@/components/SjcForm/types';
 import { STATUS_LABEL_MAP, STATUS } from '@/enums';
 
 export interface IColumnTypes {

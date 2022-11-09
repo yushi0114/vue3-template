@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import unocss from 'unocss/vite';
-import { presetUno } from 'unocss';
+import { presetUno, presetAttributify, presetIcons } from 'unocss';
 import transformerDirectives from '@unocss/transformer-directives';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
@@ -27,7 +27,13 @@ export default defineConfig({
         vue(),
         vueJsx(),
         unocss({
-            presets: [presetUno()],
+            presets: [
+                presetUno(),
+                presetAttributify(),
+                presetIcons({
+                    cdn: 'https://esm.sh/',
+                }),
+            ],
             transformers: [transformerDirectives()],
         }),
         autoImport({

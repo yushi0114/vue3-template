@@ -18,7 +18,7 @@ function handleSignout() {
 </script>
 
 <template>
-    <div class="nav">
+    <FlexRow class="nav">
         <!-- -->
         <div class="nav-content">
             {{ route.meta.title }}
@@ -37,15 +37,21 @@ function handleSignout() {
             {{ state.user?.name }}
             <Button type="ghost" color="gray" @click="handleSignout">退出</Button>
         </div>
-    </div>
+    </FlexRow>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .nav {
-    @apply bg-indigo-500 py-4 px-6 flex items-center justify-between;
+    height: $nav-height;
+    padding: 0 $gap-lg;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 10;
+    background-color: var(--deep-bg-color);
+    transition: .2s ease-in-out all;
 }
 
 .nav-content {
-    @apply flex-1;
+    flex: 1;
 }
 </style>

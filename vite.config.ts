@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import unocss from 'unocss/vite';
-import { presetUno } from 'unocss';
+import { presetUno, presetAttributify, presetIcons } from 'unocss';
 import transformerDirectives from '@unocss/transformer-directives';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
@@ -14,7 +14,7 @@ import iconsResolver from 'unplugin-icons/resolver';
 import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-let proxyHost = '10.0.30.5';
+let proxyHost = '192.168.31.198';
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {
@@ -29,45 +29,41 @@ export default defineConfig({
         unocss({
             presets: [
                 presetUno(),
+                presetAttributify(),
+                presetIcons({
+                    cdn: 'https://esm.sh/',
+                }),
             ],
-            transformers: [
-                transformerDirectives(),
-            ]
+            transformers: [transformerDirectives()],
         }),
         autoImport({
             include: [
                 /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-                /\.vue$/, /\.vue\?vue/, // .vue
+                /\.vue$/,
+                /\.vue\?vue/, // .vue
             ],
             imports: [
                 'vue',
                 'vue-router',
                 'pinia',
+                {
+                    '@vueuse/core': ['onKeyStroke', 'useFocus'],
+                    '/src/utils/func.ts': ['omit'],
+                    '/src/composables/index.ts': ['useApi'],
+                },
             ],
-            dirs: [
-                './composables',
-                './components',
-                './types',
-                './utils',
-                './common',
-                './stores',
-            ],
-            resolvers: [
-                elementPlusResolver({
-                }),
-                iconsResolver({ prefix: 'Icon' })
-            ],
+            dirs: ['./composables', './components', './types', './utils', './common', './stores'],
+            resolvers: [elementPlusResolver({}), iconsResolver({ prefix: 'Icon' })],
             eslintrc: {
                 enabled: true,
-            }
+            },
         }),
         components({
             resolvers: [
                 iconsResolver({
                     enabledCollections: ['ep'],
                 }),
-                elementPlusResolver({
-                }),
+                elementPlusResolver({}),
             ],
         }),
         icons({
@@ -76,14 +72,12 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+        },
     },
     css: {
         postcss: {
-            plugins: [
-                autoprefixer, postcssNesting,
-            ]
+            plugins: [autoprefixer, postcssNesting],
         },
         preprocessorOptions: {
             scss: {
@@ -95,13 +89,17 @@ export default defineConfig({
         }
     },
     server: {
-        host: 'localhost',
+        // host: 'localhost',
         port: 8088,
         proxy: {
             '/clib-service': {
                 target: `http://${proxyHost}:10209`,
-                changeOrigin: true
+                changeOrigin: true,
             },
-        }
-    }
+            '/dms-service': {
+                target: `http://${proxyHost}:10208`,
+                changeOrigin: true,
+            },
+        },
+    },
 });

@@ -2,7 +2,9 @@
 </script>
 
 <template>
-    home
+    <PagePanel>
+        It's Home
+    </PagePanel>
 </template>
 <style lang="postcss">
 .home {

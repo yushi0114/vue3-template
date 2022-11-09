@@ -18,6 +18,7 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
     const loading = ref(false);
     const cache = ref<Awaited<ReturnType<T>>>();
     let timer: ReturnType<typeof setTimeout>;
+    const progress = useNProgress();
 
     function clear() {
         cache.value = undefined;
@@ -47,13 +48,17 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
                 if (opt.onSuccess && isFunction(opt.onSuccess)) {
                     opt.onSuccess(res);
                 }
-                return Promise.resolve(res);
+                else {
+                    Promise.resolve(res);
+                }
             })
             .catch((error: HttpError) => {
                 if (opt.onError && isFunction(opt.onError)) {
                     opt.onError(error);
                 }
-                return Promise.reject(error);
+                else {
+                    Promise.reject(error);
+                }
             })
             .finally(() => {
                 loading.value = false;

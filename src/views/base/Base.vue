@@ -17,22 +17,32 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <Layout>
-        <Nav />
-        <Layout type="horizontal" class="main-container">
-            <Sidebar :options="sidebarOptions" />
+    <main class="app-container">
+        <Sidebar :options="sidebarOptions" />
+        <Layout class="main-container">
+            <Nav />
             <Layout class="page-container">
                 <RouterView />
             </Layout>
         </Layout>
-    </Layout>
+    </main>
 </template>
-<style lang="postcss">
+<style lang="scss">
+.app-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+
+}
 .main-container {
-    @apply;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .page-container {
-    @apply bg-gray-200 p-5 box-border;
+    background: $fill-color-light;
+    // overflow-y: auto;
+    /* @apply bg-gray-200 p-5 box-border; */
 }
 </style>

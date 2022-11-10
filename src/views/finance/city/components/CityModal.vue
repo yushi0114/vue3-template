@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus';
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+import { createCity, updateCity } from '@/api/finance';
 
 interface Entity {
     name: string,
     code: string,
-    sort: string | number
+    sort: number | string
+    id: string
 }
 
 const props = defineProps({
@@ -21,7 +23,8 @@ const props = defineProps({
 let cityForm = reactive<Entity>({
     name: '',
     code: '',
-    sort: ''
+    sort: '',
+    id: ''
 });
 
 watch(props.dataEdit, (val) => {
@@ -30,15 +33,18 @@ watch(props.dataEdit, (val) => {
         cityForm.name = val.data.name;
         cityForm.code = val.data.code;
         cityForm.sort = val.data.sort;
+        cityForm.id = val.data.id;
     } else {
         cityForm.name = '';
         cityForm.code = '';
         cityForm.sort = '';
+        cityForm.id = '';
     }
 });
 
 const emit = defineEmits<{
-  (e: 'close', flag: Boolean): void
+  (e: 'close', flag: Boolean): void,
+  (e: 'refresh'): void
 }>();
 
 const cancel = (form: FormInstance | undefined) => {
@@ -47,14 +53,52 @@ const cancel = (form: FormInstance | undefined) => {
     emit('close', false);
 };
 
-const createOrEditCity = (title: string) => {
-    console.log(title);
-    if (title.includes('新建')) {
-        console.log(123);
-    } else {
-        console.log(456);
-    }
-    emit('close', false);
+const createOrEditCity = (form: FormInstance | undefined, title: string) => {
+    if (!form) return;
+    form.validate((valid) => {
+        if (valid) {
+            if (title.includes('新建')) {
+                const params = {
+                    name: cityForm.name,
+                    code: cityForm.code,
+                    sort: cityForm.sort,
+                    menuName: 'city'
+                };
+                return createCity(params)
+                    .then(() => {
+                        ElMessage({
+                            type: 'success',
+                            message: '创建城市成功',
+                        });
+                    })
+                    .catch(() => {})
+                    .finally(() => {
+                        emit('close', false);
+                        emit('refresh');
+                    });
+            } else {
+                const params = {
+                    id: cityForm.id,
+                    name: cityForm.name,
+                    code: cityForm.code,
+                    sort: cityForm.sort,
+                    menuName: 'city'
+                };
+                return updateCity(params)
+                    .then(() => {
+                        ElMessage({
+                            type: 'success',
+                            message: '修改城市成功',
+                        });
+                    })
+                    .catch(() => {})
+                    .finally(() => {
+                        emit('close', false);
+                        emit('refresh');
+                    });
+            }
+        }
+    });
 };
 
 const cityForRef = ref<FormInstance>();
@@ -158,7 +202,7 @@ const cityRules = reactive<FormRules>({
             <template #footer>
               <span class="dialog-footer">
                 <el-button @click="cancel(cityForRef)">取 消</el-button>
-                <el-button type="primary" @click="createOrEditCity(dataEdit.title)">
+                <el-button type="primary" @click="createOrEditCity(cityForRef,dataEdit.title)">
                   确 定
                 </el-button>
               </span>

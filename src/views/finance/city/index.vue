@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { Search, Plus } from '@element-plus/icons-vue';
-import { ElMessageBox, ElMessage, ElConfigProvider } from 'element-plus';
-import zhCn from 'element-plus/lib/locale/lang/zh-cn';
-import { fetchCityList, type CityEntity } from '@/api/finance';
+import { ElMessageBox, ElMessage } from 'element-plus';
+// import zhCn from 'element-plus/lib/locale/lang/zh-cn';
+import { fetchCityList, deleteCity, type CityEntity } from '@/api/finance';
 import type { ICityTable } from '@/types/city';
 
 import cityDetail from './components/CityDetail.vue';
 import cityModal from './components/CityModal.vue';
 
-let dataSource = reactive<CityEntity[]>([]);
+let dataSource = ref<CityEntity[]>([]);
 
 let searchInput = ref('');
 
@@ -34,9 +34,6 @@ let page = reactive({
     total: 0
 });
 
-// 分页器使用中文包
-const locale = zhCn;
-
 // 排序
 let sort = reactive({
     sortField: 'sort',
@@ -60,7 +57,7 @@ const getCityList = () => {
     loading.value = true;
     return fetchCityList(params)
         .then((res) => {
-            Object.assign(dataSource, res.data);
+            dataSource.value = res.data;
             page.total = res.pageTotal;
         })
         .catch(() => {})
@@ -68,13 +65,19 @@ const getCityList = () => {
             loading.value = false;
         });
 };
+// 刷新城市列表
+
+const refreshTable = () => {
+    page.currentPage = 1;
+    getCityList();
+};
 
 const handleSearch = () => {
     page.currentPage = 1;
     getCityList();
 };
 
-const handleSortChange = ({ prop, order }) => {
+const handleSortChange = ({ prop, order } : { prop: string, order: string }) => {
     sort.sortField = prop;
     if (order) {
         sort.sortType = order.slice(0, -6);
@@ -95,6 +98,10 @@ const handleEdit = (row: ICityTable) => {
 };
 
 const handleDelete = (row: ICityTable) => {
+    const params = {
+        id: row.id
+    };
+
     ElMessageBox.confirm(
         `确定删除“${row.name}”吗？`,
         '提示',
@@ -104,11 +111,18 @@ const handleDelete = (row: ICityTable) => {
             type: 'warning'
         }
     ).then(() => {
-        ElMessage({
-            type: 'success',
-            message: '删除成功',
-        });
-    }).catch(() => {});
+        return deleteCity(params)
+            .then(() => {
+                ElMessage({
+                    type: 'success',
+                    message: '删除城市成功',
+                });
+                refreshTable();
+            })
+            .catch(() => {});
+    }).catch(() => {}).finally(() => {
+        loading.value = false;
+    });
 };
 
 const handleToDetail = (data: ICityTable) => {
@@ -176,7 +190,7 @@ const handleCurrentChange = (val: number) => {
                         <el-table-column prop="sort" label="排序" sortable/>
                         <el-table-column prop="createBy" label="创建者" />
                         <el-table-column prop="createTime" label="创建时间" sortable/>
-                        <el-table-column prop="updateBy" label="更新时间" sortable/>
+                        <el-table-column prop="updateTime" label="更新时间" sortable/>
                         <el-table-column label="操作">
                             <template #default="scope">
                                 <el-button
@@ -197,22 +211,20 @@ const handleCurrentChange = (val: number) => {
                         </el-table-column>
                     </el-table>
 
-                    <ElConfigProvider :locale="locale">
-                        <el-pagination
-                            v-model:currentPage="page.currentPage"
-                            v-model:page-size="page.pageSize"
-                            :page-sizes="[10, 20, 50]"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="page.total"
-                            :background = true
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            class="table-pagination"
-                        />
-                    </ElConfigProvider>
+                    <el-pagination
+                        v-model:currentPage="page.currentPage"
+                        v-model:page-size="page.pageSize"
+                        :page-sizes="[10, 20, 50]"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="page.total"
+                        :background = true
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        class="table-pagination"
+                    />
 
                     <city-detail :drawerVisible="drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
-                    <city-modal :dialogVisible="dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose"></city-modal>
+                    <city-modal :dialogVisible="dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
                 </div>
             </Board>
         </Layout>

@@ -7,48 +7,37 @@
         @operateTreeItem="handleOperateTreeItem($event)"></RouteTree>
     </div>
      <div class="route-content">
-       <route-form @save="handleSaveForm($event)" :type="formType" :form="form"></route-form>
+       <RouteForm
+           @goBack="handleGoBack"
+           :form-type="formType" ></RouteForm>
      </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import RouteTree from './route-tree.vue';
-import {ref} from 'vue';
-import {routeTree} from '@/views/system-manage/mock/route-tree';
-import type {RouteFormType, TreeItemType} from '@/views/system-manage/type/route-list.type';
-import RouteForm from '@/views/system-manage/route-list/route-form.vue';
+import RouteForm from './route-form.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import {
+    dataSource,
+    getRouteData,
+    routeForm,
+    setParentId,
+    setCurrentRouteId,
+    formType,
+    removeRoutes
+} from './route-list';
 
-const dataSource = ref<TreeItemType[]>();
-
-const form = ref<RouteFormType>();
-const formType = ref<'create' | 'edit'>('edit');
-const parentId = ref();
-async function getTreeData(): Promise<void> {
-    dataSource.value = routeTree;
-}
-
-async function getRouteData(id?: string): Promise<void>{
-    if (id){
-        form.value = {
-            name: '123' + Math.random(),
-            title: '123',
-            path: '12',
-            desc: '123',
-            sort: 1,
-            component: '123',
-            status: false
-        };
-    } else {
-        form.value = undefined;
-    }
-}
-
-async function handleOperateTreeItem(params: {id: string, type: 'edit' | 'remove' | 'create'}) {
+async function handleOperateTreeItem(params: {
+  id: string,
+  type: 'edit' | 'remove' | 'create',
+  willDeleteList?: {id: string}[]
+}) {
     if (params.type === 'edit'){
+        setCurrentRouteId(params.id);
         await getRouteData(params.id);
     } else if (params.type === 'remove') {
+
         ElMessageBox.confirm(
             '确定要删除当前菜单吗？',
             '警告',
@@ -58,7 +47,11 @@ async function handleOperateTreeItem(params: {id: string, type: 'edit' | 'remove
                 type: 'warning',
             }
         )
-            .then(() => {
+            .then(async() => {
+                if (!params?.willDeleteList || !params.willDeleteList.length) {
+                    return;
+                }
+                await removeRoutes(params.willDeleteList.map(item => item.id));
                 ElMessage({
                     type: 'success',
                     message: '删除成功',
@@ -72,8 +65,8 @@ async function handleOperateTreeItem(params: {id: string, type: 'edit' | 'remove
             });
     } else if (params.type === 'create'){
         formType.value = 'create';
-        parentId.value = params.id;
-        form.value = {
+        setParentId(params.id);
+        routeForm.value = {
             name: '',
             title: '',
             path: '',
@@ -85,22 +78,15 @@ async function handleOperateTreeItem(params: {id: string, type: 'edit' | 'remove
     }
 }
 
-function handleSaveForm(params: {
-  id?: string;
-  form: RouteFormType,
-  type: 'create' | 'edit'
-}){
-    if (params.type === 'create'){
-        createRoute(params.form);
-    }
-    if (params.type === 'edit' && params.id){
-        editRoute(params.id, params.form);
-    }
+
+function handleGoBack(){
+    formType.value = 'edit';
+    routeForm.value = undefined;
 }
 
 function handleCreateRoute(){
     formType.value = 'create';
-    form.value = {
+    routeForm.value = {
         name: '',
         title: '',
         path: '',
@@ -111,19 +97,6 @@ function handleCreateRoute(){
     };
 }
 
-async function createRoute(routeForm: RouteFormType) {
-    console.log(parentId.value);
-    // todo
-}
-
-async function editRoute(id: string, routeForm: RouteFormType) {
-    // todo
-}
-
-onMounted(async() => {
-    await getTreeData();
-    await getRouteData();
-});
 </script>
 
 <style scoped lang="scss">
@@ -136,12 +109,12 @@ onMounted(async() => {
   .route-tree {
     width: 350px;
     height: 100%;
+    overflow-y: auto;
     min-width: 350px;
     border: 1px solid #ebeef5;
     border-radius: 4px;
     box-sizing: border-box;
     padding: 15px;
-    overflow-y: auto;
     &::-webkit-scrollbar {
       width: 0;
     }
@@ -159,7 +132,6 @@ onMounted(async() => {
     flex: 1;
     box-sizing: border-box;
     display: flex;
-    //flex-flow: column nowrap;
     overflow-y: auto;
   }
 }

@@ -6,12 +6,11 @@
     <el-form-item label="角色描述:"  required prop="desc">
       <el-input v-model="roleForm.desc" placeholder="请输入角色描述" />
     </el-form-item>
-
     <el-form-item label="配置菜单" required>
       <div style="margin-top: 10px">
         <el-tree
             ref="menuTree"
-            :data="menuList"
+            :data="dataSource"
             show-checkbox
             node-key="id"
             :default-expand-all="true"
@@ -30,38 +29,15 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive, defineProps, PropType} from 'vue';
+import {ref, reactive} from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import type { TreeItemType} from '@/views/system-manage/type/route-list.type';
-import type {RoleFormType} from '@/views/system-manage/type/role-list.type';
-
-const props = defineProps({
-    form: {
-        type: Object as PropType<RoleFormType>,
-        default: () => {}
-    },
-    menuList: {
-        type: Array as PropType<TreeItemType[]>,
-        default: () => []
-    },
-    formType: {
-        type: String as PropType<'create' | 'edit'>,
-        default: 'edit'
-    }
-});
+import {roleForm, formType, dataSource} from './role-list';
 
 const emit = defineEmits([
     'save', 'goBack'
 ]);
 const menuTree = ref();
-watch(() => props.form, (value) => {
-    roleForm.value = value;
-});
 
-const roleForm = ref({
-    name: '',
-    desc: '',
-});
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
     name: [

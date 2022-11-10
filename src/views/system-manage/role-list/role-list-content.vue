@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import {PropType, ref, reactive} from 'vue';
+import { ref, reactive} from 'vue';
 import type {RoleListItemType} from '@/views/system-manage/type/role-list.type';
 import {ElMessage, ElMessageBox} from 'element-plus';
 import {tableData} from '../mock/route-tree';

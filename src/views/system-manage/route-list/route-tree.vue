@@ -13,13 +13,13 @@
         default-expand-all
         @node-click="handleNodeClick"
         :expand-on-click-node="false">
-      <template #default="{ node }">
+      <template #default="{ node, data }">
         <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
           <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ node.label }} </span>
           <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start" trigger="hover" :width="100">
             <div class="popover-list">
               <el-button
-                  @click="handleOperateTreeItem(node, 'create')"
+                  @click="handleOperateTreeItem(data, 'create')"
                   text
                   :icon="Plus"
                   class="custom-btn"
@@ -27,7 +27,7 @@
                 新建
               </el-button>
               <el-button
-                  @click="handleOperateTreeItem(node, 'edit')"
+                  @click="handleOperateTreeItem(data, 'edit')"
                   text
                   :icon="Edit"
                   size="small"
@@ -35,7 +35,7 @@
                 编辑
               </el-button>
               <el-button
-                  @click="handleOperateTreeItem(node, 'remove')"
+                  @click="handleOperateTreeItem(data, 'remove')"
                   text
                   :icon="Delete"
                   class="custom-btn"
@@ -55,33 +55,37 @@
 
 <script lang="ts" setup>
 import { ref} from 'vue';
-import type { PropType } from 'vue';
 import { Delete, Edit, Plus, More } from '@element-plus/icons-vue';
-import type Node from 'element-plus/es/components/tree/src/model/node';
 import type {TreeItemType} from '@/views/system-manage/type/route-list.type';
+import {dataSource} from './route-list';
 
-
-const props = defineProps({
-    dataSource: {
-        type: Array as PropType<TreeItemType[]>,
-        default: () => []
-    }
-});
 const emit = defineEmits(['nodeClickHandle', 'operateTreeItem', 'create']);
 
-
 const activeId = ref();
-
 const filterText = ref('');
 
 function addNewRoute(){
-emit('create')
+    emit('create');
 }
 
-function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'create'){
+function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {
+    for (let item of data) {
+        arr.push({ id: item.id });
+        if (item.children && item.children.length) lookForAllId(item.children, arr);
+    }
+    return arr;
+}
+
+function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'create') {
+    let willDeleteList: {id: string}[] | undefined;
+    if (type === 'remove'){
+        willDeleteList = lookForAllId([item], []);
+    }
+
     emit('operateTreeItem', {
         id: item.id,
-        type
+        type,
+        willDeleteList
     });
 }
 
@@ -122,7 +126,6 @@ function handleMouseLeave(event: string){
       justify-content: center;
       color: #606266;
       box-sizing: border-box;
-      padding-right: 4px;
     }
   }
   .left-tree {

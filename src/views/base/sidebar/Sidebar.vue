@@ -64,14 +64,14 @@ const currentRoute = router.currentRoute;
                         <FlexRow
                             class="sidebar-root-block"
                             @click.prevent="expand ? parentLink.handleClick() : expand = true">
-                            <component class="el-icon sidebar-root-icon" :is="'ForkSpoon'" />
+                            <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
                             <a class="sidebar-root-link"
                                 :class="currentRoute.fullPath.includes('ecommerce') && 'TODO'"
                                 href="#0"
                                 >
                                 <FlexRow horizontal="between"
                                     class="sidebar-root-label">
-                                        {{ opt.label }}
+                                        {{ opt.title }}
                                         <i-ep-arrow-down class="sidebar-drop-arrow" :class="{ expanded: parentLink.expanded }"/>
                                 </FlexRow>
                             </a>
@@ -89,7 +89,7 @@ const currentRoute = router.currentRoute;
                                         :class="{ active: isExactActive }"
                                         :href="href"
                                         @click="navigate">
-                                        <span class="sidebar-sub-label">{{ optChild.label }}</span>
+                                        <span class="sidebar-sub-label">{{ optChild.title }}</span>
                                     </a>
                                 </FlexRow>
                             </RouterLink>
@@ -102,16 +102,16 @@ const currentRoute = router.currentRoute;
                         :key="String(i)"
                         custom
                         v-slot="{ href, navigate, isExactActive }"
-                        :to="opt.defaultPath || '/'"
+                        :to="opt.path || '/'"
                     >
                         <a
                             class="sidebar-root-block"
                             :class="{ active: isExactActive }"
                             :href="href" @click="navigate"
                         >
-                            <component class="el-icon sidebar-root-icon" :is="'ForkSpoon'" />
+                            <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
                             <div class="sidebar-root-link" :class="{ active: isExactActive }" >
-                                <span class="sidebar-root-label">{{ opt.label }}</span>
+                                <span class="sidebar-root-label">{{ opt.title }}</span>
                             </div>
                         </a>
                     </RouterLink>

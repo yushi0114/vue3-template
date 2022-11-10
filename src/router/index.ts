@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from
 import { Home } from '@/views/home';
 import { Signin } from '@/views/access';
 import type { DynamicNavEntity } from '@/types';
-import { dynamicRouteMap, genDynamicComponent } from '@/views';
+import { genDynamicComponent } from '@/views';
 import { Error404 } from '@/views/system';
 import { Base } from '@/views/base';
 
@@ -51,17 +51,14 @@ export const router = createRouter({
 
 export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
     navs
-        .map((nav) => ({ nav, routePair: dynamicRouteMap.get(nav.id) }))
-        .filter(navSource => !!navSource.routePair)
-        .forEach(({ nav, routePair }) => {
-            const [routePath, filePath] = routePair as [string, string];
-            nav.defaultPath = routePath.replace(/\/:\w+/g, '/0');
+        .forEach((nav) => {
+            nav.defaultPath = nav.path.replace(/\/:\w+/g, '/0');
             router.addRoute(ROOT_NAME, {
-                path: routePath,
-                component: genDynamicComponent(filePath),
+                path: nav.path,
+                component: genDynamicComponent(nav.component),
                 meta: {
-                    title: nav.label,
-                    permission: nav.permission || RoutePermission.read
+                    title: nav.title,
+                    permission: RoutePermission.read
                 }
             });
         });

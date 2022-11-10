@@ -3,6 +3,23 @@ import TodayIndicator from './TodayIndicator.vue';
 import TotalIndicator from './TotalIndicator.vue';
 import SuccessRate from './SuccessRate.vue';
 import RankList from './RankList.vue';
+import { type GetHomepageCountResponse, getHomepageCount } from '@/api/dashboard';
+
+
+const count = ref<GetHomepageCountResponse>();
+
+const getHomepageData = () => {
+    return getHomepageCount()
+        .then((res) => {
+            count.value = res;
+        })
+        .catch(() => {});
+};
+
+onBeforeMount(() => {
+    getHomepageData();
+});
+
 </script>
 
 <template>

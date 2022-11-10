@@ -1,5 +1,17 @@
 <script lang="ts" setup>
+import type { TodayIndicatorEntity } from '@/types/dashboard';
 
+withDefaults(
+    defineProps<TodayIndicatorEntity>(),
+    {
+        countTodayElibUser: 0,
+        countTodayEzjfwUser: 0,
+        countTodayExactReq: 0,
+        countTodayProductReq: 0,
+        countTodayEzjfwExactReq: 0,
+        countTodayEzjfwProductReq: 0
+    }
+);
 </script>
 
 <template>
@@ -7,7 +19,7 @@
         <div class="card-header">今日核心指标</div>
         <div class="indicator">
             <div class="item-label">企业新用户</div>
-            <div class="item-value">67 <span>/</span> 104</div>
+            <div class="item-value">{{ countTodayElibUser }} <span>/</span> {{ countTodayEzjfwUser }}</div>
             <div class="item-desc">辽信通 <span>/</span> 市综服</div>
         </div>
         <div class="indicator">

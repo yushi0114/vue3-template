@@ -3,7 +3,7 @@
         <div class="w-full flex">
             <div class="flex-1 pr-2">
                 <el-row>
-                    <el-col v-for="(item, index) in formData.form" :key="item.keyName" :span="item.span || 8">
+                    <el-col v-for="(item, index) in formData.form" :key="item.keyName" :span="item.span || 24">
                         <el-form-item :label="item.label" :prop="`form[${index}].value`" :rules="item.rules || []">
                             <el-input
                                 v-if="item.type === 'input'"
@@ -24,6 +24,18 @@
                                     {{ option.title }}
                                 </el-option>
                             </el-select>
+                            {{ item }}
+                            <el-tree
+                                v-if="item.type === 'tree'"
+                                :ref="(el: any) => bindTreeRef(el, item.keyName)"
+                                :data="item.treeData"
+                                :props="treeProps"
+                                show-checkbox
+                                highlight-current
+                                default-expand-all
+                                :default-checked-keys="item.value"
+                                node-key="id"
+                                @check-change="handleTreeCheckChange(item)"></el-tree>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -44,9 +56,11 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, ElTree } from 'element-plus';
 import type { DefItem, IFormValues } from './types';
+import { useTree } from './hooks';
 
+const { treeProps, handleTreeCheckChange, bindTreeRef } = useTree();
 const props = withDefaults(
     defineProps<{
         def: DefItem[];
@@ -65,8 +79,10 @@ const emit = defineEmits<{
 const form = ref<FormInstance>();
 const formData = reactive<{ form: DefItem[] }>({ form: [] });
 const initForm = () => {
+    console.log('props.def：', props.def);
     formData.form.length = 0;
     props.def.forEach((item) => {
+        console.log('item: ', item);
         const tmpItem = reactive<DefItem>({
             ...item,
             value: undefined,
@@ -75,8 +91,10 @@ const initForm = () => {
         if (item.type === 'date-picker') {
             tmpItem.value = null;
         }
+        console.log('item.defaultValue: ', item.defaultValue);
 
         if (item.defaultValue || item.defaultValue === 0) {
+            console.log('item.defaultValue: ', item.defaultValue);
             tmpItem.value = item.defaultValue;
         }
 
@@ -85,7 +103,7 @@ const initForm = () => {
     });
 };
 
-const handleSearch = async() => {
+const handleSearch = async () => {
     if (!form) return;
     await form.value?.validate((valid, fields) => {
         if (valid) {
@@ -95,6 +113,7 @@ const handleSearch = async() => {
                     values[formItem.keyName] = formItem.value;
                 }
             });
+            console.log('values：', values);
             emit('search', values);
         } else {
             const [[{ message }]] = Object.values(fields ?? {});

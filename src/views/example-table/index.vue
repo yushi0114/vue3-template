@@ -3,9 +3,7 @@ import { PagePanel } from '@/components';
 import { COLUMNS, SEARCH_FORM } from './constants';
 import { useTable } from './hooks/useTable';
 import AddRoleDialog from './dialog/AddRoleDialog.vue';
-
 const addRole = ref<InstanceType<typeof AddRoleDialog> | null>(null);
-
 const sjcTableRef = ref<HTMLElement | null>(null); // 表格ref
 const {
     tableConfig,

@@ -102,7 +102,7 @@ export function isIE(): boolean {
 }
 
 export function isFalsy(o: any): boolean {
-    return !isDefind(o) || ['', 0, false, NaN/* 0n */].includes(o);
+    return !isDefind(o) || ['', 0, false, NaN].includes(o);
 }
 
 export function isTruthy(o: any): boolean {
@@ -123,17 +123,17 @@ export function isEmptyPlainObject(o: any): boolean {
  * @param {*} uselessKeys 剔除的属性
  * @returns
  */
-export const omit = (obj: Recordable, uselessKeys: string[]) => {
+export const omit = <T extends Record<string, any>>(obj: T, uselessKeys: string[]) => {
     const resolveObject = Object.keys(obj).reduce((acc, key) => {
         return uselessKeys.includes(key) ? acc : { ...acc, [key]: obj[key] };
     }, {});
     return resolveObject;
 };
 
-export const deepFreeze = (obj: Recordable, ignoreKeyList: string[] = []) => {
+export const deepFreeze = <T extends Record<string, any>>(obj: T, ignoreKeyList: string[] = []) => {
     // 取出属性
     const propNames = Object.getOwnPropertyNames(obj);
-    propNames.forEach((name) => {
+    propNames.forEach((name: keyof T) => {
         const prop = obj[name];
 
         // 如果prop是个对象，冻结它
@@ -176,3 +176,26 @@ export const deepFreeze = (obj: Recordable, ignoreKeyList: string[] = []) => {
         },
     });
 };
+
+/**
+ * 深拷贝
+ * @param {*} obj
+ */
+
+export function cloneDeep<T extends Array<any> | Record<string | number, any>>(obj: T): T {
+    if (!isObject(obj)) {
+        console.error('[TypeError] param obj is not a object');
+        return obj;
+    }
+    const result: T | any = Array.isArray(obj) ? [] : {};
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+                result[key] = cloneDeep(obj[key]); // 递归复制
+            } else {
+                result[key] = obj[key];
+            }
+        }
+    }
+    return result;
+}

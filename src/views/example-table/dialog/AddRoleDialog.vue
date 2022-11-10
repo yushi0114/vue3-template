@@ -20,8 +20,9 @@
 <script lang="ts" setup>
 import { useModal } from '@/composables';
 import type { IColumnTypes, IColumnKeys } from '../types';
-import { ROLE_FORM } from '../constants';
+import { INIT_ROLE_FORM } from '../constants';
 import type { IFormValues } from '@/components/SjcForm/types';
+import { cloneDeep } from '@/utils';
 // import { addUser, updateUser } from '@/api/user';
 // import { OPERATION_TYPES } from '@/constants/index';
 
@@ -29,20 +30,19 @@ const updateSubmit = ref(new Date().getTime());
 const updateReset = ref(new Date().getTime());
 const isEdit = ref('ADD');
 const id = ref('');
+const ROLE_FORM = ref(cloneDeep<typeof INIT_ROLE_FORM>(INIT_ROLE_FORM));
 const openCallback = (row: IColumnTypes) => {
     console.log('isEdit: ', row);
     if (row?.id) {
         isEdit.value = 'EDIT';
         id.value = row.id;
-        ROLE_FORM.forEach((user) => {
+        ROLE_FORM.value.forEach((user) => {
             user.defaultValue = row[user.keyName as IColumnKeys];
         });
     } else {
         isEdit.value = 'ADD';
         id.value = '';
-        ROLE_FORM.forEach((user) => {
-            Reflect.deleteProperty(user, 'defaultValue');
-        });
+        ROLE_FORM.value = cloneDeep(INIT_ROLE_FORM);
     }
 };
 const { visible, open, close } = useModal(openCallback);
@@ -58,7 +58,7 @@ const onClose = () => {
     close();
 };
 
-const handleSubmit = async(values: IFormValues) => {
+const handleSubmit = async (values: IFormValues) => {
     let request = null;
     let params = {};
     if (isEdit.value === 'EDIT') {

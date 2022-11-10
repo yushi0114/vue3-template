@@ -100,7 +100,7 @@ export const SEARCH_FORM: DefItem[] = [
     },
 ];
 
-export const ROLE_FORM: DefItem[] = [
+export const INIT_ROLE_FORM: DefItem[] = [
     {
         type: 'select',
         keyName: 'status',
@@ -148,5 +148,20 @@ export const ROLE_FORM: DefItem[] = [
         keyName: 'phone',
         placeholder: '请输入',
         label: '手机号码',
+    },
+    {
+        type: 'tree',
+        keyName: 'menu',
+        placeholder: '',
+        label: '菜单配置',
+        defaultValue: ['123432334231'],
+        treeData: [
+            {
+                id: '13232323211',
+                label: '1',
+                children: [{ id: '123432334231', label: '2' }],
+            },
+            { id: '1256522311', label: '2', children: [{ id: '9899323211', label: '3' }] },
+        ],
     },
 ];

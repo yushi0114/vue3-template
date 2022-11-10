@@ -1,7 +1,6 @@
 import { isFunction } from './../utils/func';
 import { isNumber } from '@/utils';
 import { ref } from 'vue';
-import { useNProgress } from './useNProgress';
 import type { HttpError } from '@/api/types';
 
 export type UseApiOption<T> = {
@@ -18,14 +17,12 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
     const loading = ref(false);
     const cache = ref<Awaited<ReturnType<T>>>();
     let timer: ReturnType<typeof setTimeout>;
-    const progress = useNProgress();
 
     function clear() {
         cache.value = undefined;
         clearTimeout(timer);
     }
     const request: T = ((...args) => {
-        progress.start();
         loading.value = true;
 
         const requestResponse = cache.value
@@ -45,24 +42,23 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
 
         return requestResponse
             .then((res: Awaited<ReturnType<T>>) => {
-                if (opt.onSuccess && isFunction(opt.onSuccess)) {
-                    opt.onSuccess(res);
+                if (isFunction(opt.onSuccess)) {
+                    opt.onSuccess!(res);
                 }
                 else {
-                    Promise.resolve(res);
+                    return Promise.resolve(res);
                 }
             })
             .catch((error: HttpError) => {
-                if (opt.onError && isFunction(opt.onError)) {
-                    opt.onError(error);
+                if (isFunction(opt.onError)) {
+                    opt.onError!(error);
                 }
                 else {
-                    Promise.reject(error);
+                    return Promise.reject(error);
                 }
             })
             .finally(() => {
                 loading.value = false;
-                progress.done();
             });
     }) as T;
 

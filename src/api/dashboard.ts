@@ -4,7 +4,9 @@ import { api } from './http';
 
 export type GetHomepageCountResponse = TodayIndicatorEntity & TotalIndicatorEntity & {
     successRate: SuccessRateEntity[],
-    countEzjfwSuccessRate: SuccessRateEntity[],
+    ezjfwSuccessRate: SuccessRateEntity[],
+    reqSuccessRate: SuccessRateEntity[],
+    reqEzjfwSuccessRate: SuccessRateEntity[],
     countProduct: ApplyCountEntity[],
     countEzjfwProduct: ApplyCountEntity[]
 };

@@ -2,14 +2,18 @@
 import type { TodayIndicatorEntity } from '@/types/dashboard';
 
 withDefaults(
-    defineProps<TodayIndicatorEntity>(),
+    defineProps<{
+        data: TodayIndicatorEntity
+    }>(),
     {
-        countTodayElibUser: 0,
-        countTodayEzjfwUser: 0,
-        countTodayExactReq: 0,
-        countTodayProductReq: 0,
-        countTodayEzjfwExactReq: 0,
-        countTodayEzjfwProductReq: 0
+        data: () => ({
+            countTodayElibUser: 0,
+            countTodayEzjfwUser: 0,
+            countTodayExactReq: 0,
+            countTodayProductReq: 0,
+            countTodayEzjfwExactReq: 0,
+            countTodayEzjfwProductReq: 0
+        })
     }
 );
 </script>
@@ -19,24 +23,24 @@ withDefaults(
         <div class="card-header">今日核心指标</div>
         <div class="indicator">
             <div class="item-label">企业新用户</div>
-            <div class="item-value">{{ countTodayElibUser }} <span>/</span> {{ countTodayEzjfwUser }}</div>
+            <div class="item-value">{{ data.countTodayElibUser }} <span>/</span> {{ data.countTodayEzjfwUser }}</div>
             <div class="item-desc">辽信通 <span>/</span> 市综服</div>
         </div>
         <div class="indicator">
             <div class="item-label">辽信通需求</div>
-            <div class="item-value">569</div>
+            <div class="item-value">{{ data.countTodayExactReq }}</div>
         </div>
         <div class="indicator">
             <div class="item-label">辽信通产品需求</div>
-            <div class="item-value">45</div>
+            <div class="item-value">{{ data.countTodayProductReq }}</div>
         </div>
         <div class="indicator">
             <div class="item-label">市综服需求</div>
-            <div class="item-value">366</div>
+            <div class="item-value">{{ data.countTodayEzjfwExactReq }}</div>
         </div>
         <div class="indicator">
             <div class="item-label">市综服产品需求</div>
-            <div class="item-value">5639</div>
+            <div class="item-value">{{ data.countTodayEzjfwProductReq }}</div>
         </div>
     </el-card>
 </template>
@@ -44,7 +48,7 @@ withDefaults(
 <style lang="scss" scoped>
 .card-header {
     @include font(16px);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     color: #1e1e1e;
     font-weight: bold;
 }

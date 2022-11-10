@@ -1,15 +1,42 @@
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import type { TabPaneName } from 'element-plus';
 import * as echarts from 'echarts';
+import type { ApplyCountEntity } from '@/types/dashboard';
+
+const props = withDefaults(
+    defineProps<{
+        data: {
+            countProduct: ApplyCountEntity[],
+            countEzjfwProduct: ApplyCountEntity[]
+        }
+    }>(),
+    {
+        data: () => ({
+            countProduct: [] as ApplyCountEntity[],
+            countEzjfwProduct: [] as ApplyCountEntity[]
+        })
+    }
+);
+
+watch(
+    () => props.data,
+    () => {
+        loadOptions();
+    },
+    { deep: true }
+);
 
 const activeName = ref('lxt');
 
-const chartDom = ref<HTMLElement>();
-const chartInstance = ref<any>();
+const handleTabChange = () => {
+    loadOptions();
+};
+
+const chartDomRef = ref<HTMLElement>();
+let chartInstance: echarts.ECharts;
+
 const options = {
     grid: {
-        top: 20,
+        top: 0,
         left: 134,
         right: 40,
         bottom: 0
@@ -78,7 +105,7 @@ const options = {
                 }
             }
         },
-        data: ['政务e贷', '红星贷', '盛京兴科贷', '智慧快贷', '贴息贷']
+        data: [] as string[]
     },
     series: [
         {
@@ -88,19 +115,13 @@ const options = {
             itemStyle: {
                 color: '#6fa1ff'
             },
-            data: [30, 28, 22, 16, 11]
+            data: [] as number[]
         },
         {
             type: 'bar',
             barWidth: 10,
             barGap: '-100%',
-            data: [
-                { realValue: 30, value: 30 },
-                { realValue: 28, value: 30 },
-                { realValue: 22, value: 30 },
-                { realValue: 16, value: 30 },
-                { realValue: 11, value: 30 }
-            ],
+            data: [] as any[],
             label: {
                 show: true,
                 distance: 20,
@@ -123,24 +144,22 @@ const options = {
 };
 
 const loadOptions = () => {
-    chartInstance.value.setOption(options, true);
+    const data = activeName.value === 'lxt' ? props.data.countProduct : props.data.countEzjfwProduct;
+    options.yAxis.data = data.map(item => item.name);
+    options.series[0].data = data.map(item => item.count);
+    options.series[1].data = data.map(item => ({ realValue: item.count, value: data[0].count }));
+    chartInstance.setOption(options, true);
 };
 
 const resizeHandler = () => {
     loadOptions();
-    chartInstance.value.resize();
+    chartInstance.resize();
 };
 
 const initChart = () => {
-    chartInstance.value = echarts.init(chartDom.value!);
+    chartInstance = echarts.init(chartDomRef.value!);
     loadOptions();
     window.addEventListener('resize', resizeHandler);
-};
-
-const handleTabChange = (name: TabPaneName) => {
-    console.log(name);
-    // options. =
-    loadOptions();
 };
 
 onMounted(() => {
@@ -149,7 +168,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     window.removeEventListener('resize', resizeHandler);
-    chartInstance.value.dispose();
+    chartInstance.dispose();
 });
 </script>
 
@@ -160,20 +179,20 @@ onBeforeUnmount(() => {
             <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
             <el-tab-pane label="市综服" name="szf"></el-tab-pane>
         </el-tabs>
-        <div class="chart-wrapper" ref="chartDom"></div>
+        <div class="chart-wrapper" ref="chartDomRef"></div>
     </el-card>
 </template>
 
 <style lang="scss" scoped>
 .card-header {
     @include font(16px);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     color: #1e1e1e;
     font-weight: bold;
 }
 
 .chart-wrapper {
     width: 100%;
-    height: 300px;
+    height: 200px;
 }
 </style>

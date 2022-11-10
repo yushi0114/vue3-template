@@ -5,14 +5,14 @@ import type { SuccessRateEntity } from '@/types/dashboard';
 const props = withDefaults(
     defineProps<{
         data: {
-            reqSuccessRate: SuccessRateEntity[],
-            reqEzjfwSuccessRate: SuccessRateEntity[]
+            successRate: SuccessRateEntity[],
+            ezjfwSuccessRate: SuccessRateEntity[]
         }
     }>(),
     {
         data: () => ({
-            reqSuccessRate: [] as SuccessRateEntity[],
-            reqEzjfwSuccessRate: [] as SuccessRateEntity[]
+            successRate: [] as SuccessRateEntity[],
+            ezjfwSuccessRate: [] as SuccessRateEntity[]
         })
     }
 );
@@ -31,9 +31,6 @@ let chartInstance: echarts.ECharts;
 const options = {
     tooltip: {
         trigger: 'axis',
-        axisPointer: {
-            type: 'shadow'
-        },
         valueFormatter: (value: any) => value + '%'
     },
     grid: {
@@ -64,21 +61,21 @@ const options = {
     series: [
         {
             name: '辽信通',
-            type: 'bar',
+            type: 'line',
             data: [] as number[]
         },
         {
             name: '市综服',
-            type: 'bar',
+            type: 'line',
             data: [] as number[]
         }
     ]
 };
 
 const loadOptions = () => {
-    options.xAxis.data = props.data.reqSuccessRate.map(item => item.month);
-    options.series[0].data = props.data.reqSuccessRate.map(item => item.per);
-    options.series[1].data = props.data.reqEzjfwSuccessRate.map(item => item.per);
+    options.xAxis.data = props.data.successRate.map(item => item.month);
+    options.series[0].data = props.data.successRate.map(item => item.per);
+    options.series[1].data = props.data.ezjfwSuccessRate.map(item => item.per);
     chartInstance.setOption(options, true);
 };
 
@@ -105,12 +102,12 @@ onBeforeUnmount(() => {
 
 <template>
     <el-card :body-style="{ padding: '20px 24px 28px' }" shadow="never">
-        <div class="card-header">需求受理月成功率数据趋势</div>
+        <div class="card-header">产品需求受理月成功率数据趋势</div>
         <div class="success-rate-label">当月成功率 (辽信通 / 市综服)</div>
         <div class="success-rate-value">
-            {{ data.reqSuccessRate[data.reqSuccessRate.length - 1]?.per }}%
+            {{ data.successRate[data.successRate.length - 1]?.per }}%
             /
-            {{ data.reqEzjfwSuccessRate[data.reqEzjfwSuccessRate.length - 1]?.per }}%
+            {{ data.ezjfwSuccessRate[data.ezjfwSuccessRate.length - 1]?.per }}%
         </div>
         <div class="chart-wrapper" ref="chartDomRef"></div>
     </el-card>

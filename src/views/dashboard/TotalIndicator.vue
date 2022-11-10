@@ -1,9 +1,35 @@
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
 import * as echarts from 'echarts';
+import type { TotalIndicatorEntity } from '@/types/dashboard';
 
-const chartDom = ref<HTMLElement>();
-const chartInstance = ref<any>();
+const props = withDefaults(
+    defineProps<{
+        data: TotalIndicatorEntity
+    }>(),
+    {
+        data: () => ({
+            countUser: 0,
+            countSimpleReq: 0,
+            perSimpleReq: '0',
+            countExactReq: 0,
+            perExactReq: '0',
+            countProductReq: 0,
+            perProductReq: '0'
+        })
+    }
+);
+
+watch(
+    () => props.data,
+    () => {
+        loadOptions();
+    },
+    { deep: true }
+);
+
+const chartDomRef = ref<HTMLElement>();
+let chartInstance: echarts.ECharts;
+
 let chartWidth = 0;
 const textStyle = {
     rich: {
@@ -32,8 +58,8 @@ const options = {
         {
             text: [
                 '{a|敏捷需求}',
-                '{b|370,221,928}',
-                '{c|占比61.5%}'
+                '{b|0}',
+                '{c|占比0%}'
             ].join('\n'),
             left: 0,
             top: -5,
@@ -42,8 +68,8 @@ const options = {
         {
             text: [
                 '{a|精准需求}',
-                '{b|180,596,062}',
-                '{c|占比30%}'
+                '{b|0}',
+                '{c|占比0%}'
             ].join('\n'),
             left: 0,
             top: -5,
@@ -52,8 +78,8 @@ const options = {
         {
             text: [
                 '{a|产品需求}',
-                '{b|51,168,884}',
-                '{c|占比8.5%}'
+                '{b|0}',
+                '{c|占比0%}'
             ].join('\n'),
             left: 0,
             top: -5,
@@ -67,18 +93,19 @@ const options = {
             center: [0, 32],
             data: [
                 {
-                    value: 1048,
+                    value: 0,
                     itemStyle: {
                         color: '#6fa1ff'
                     }
                 },
                 {
-                    value: 389,
+                    value: 0,
                     itemStyle: {
                         color: '#f2f4f9'
                     }
                 }
             ],
+            stillShowZeroSum: false,
             silent: true,
             label: {
                 show: false
@@ -90,18 +117,19 @@ const options = {
             center: [0, 32],
             data: [
                 {
-                    value: 287,
+                    value: 0,
                     itemStyle: {
-                        color: '#98e38a'
+                        color: '#91cc75'
                     }
                 },
                 {
-                    value: 1150,
+                    value: 0,
                     itemStyle: {
                         color: '#f2f4f9'
                     }
                 }
             ],
+            stillShowZeroSum: false,
             silent: true,
             label: {
                 show: false
@@ -113,18 +141,19 @@ const options = {
             center: [0, 32],
             data: [
                 {
-                    value: 102,
+                    value: 0,
                     itemStyle: {
                         color: '#5d7092'
                     }
                 },
                 {
-                    value: 1335,
+                    value: 0,
                     itemStyle: {
                         color: '#f2f4f9'
                     }
                 }
             ],
+            stillShowZeroSum: false,
             silent: true,
             label: {
                 show: false
@@ -134,24 +163,33 @@ const options = {
 };
 
 const loadOptions = () => {
-    chartWidth = chartDom.value!.getBoundingClientRect().width;
+    chartWidth = chartDomRef.value!.getBoundingClientRect().width;
     const leftOffsets = [0, chartWidth / 3, chartWidth / 3 * 2];
     options.title.map((item, index) => {
         item.left = leftOffsets[index] + 148;
     });
+    options.title[0].text = ['{a|敏捷需求}', `{b|${props.data.countSimpleReq}}`, `{c|占比${props.data.perSimpleReq}%}`].join('\n');
+    options.title[1].text = ['{a|精准需求}', `{b|${props.data.countExactReq}}`, `{c|占比${props.data.perExactReq}%}`].join('\n');
+    options.title[2].text = ['{a|产品需求}', `{b|${props.data.countProductReq}}`, `{c|占比${props.data.perProductReq}%}`].join('\n');
     options.series.map((item, index) => {
         item.center = [leftOffsets[index] + 100, 32];
     });
-    chartInstance.value.setOption(options, true);
+    options.series[0].data[0].value = props.data.countSimpleReq;
+    options.series[0].data[1].value = props.data.countExactReq + props.data.countProductReq;
+    options.series[1].data[0].value = props.data.countExactReq;
+    options.series[1].data[1].value = props.data.countSimpleReq + props.data.countProductReq;
+    options.series[2].data[0].value = props.data.countProductReq;
+    options.series[2].data[1].value = props.data.countSimpleReq + props.data.countExactReq;
+    chartInstance.setOption(options, true);
 };
 
 const resizeHandler = () => {
     loadOptions();
-    chartInstance.value.resize();
+    chartInstance.resize();
 };
 
 const initChart = () => {
-    chartInstance.value = echarts.init(chartDom.value!);
+    chartInstance = echarts.init(chartDomRef.value!);
     loadOptions();
     window.addEventListener('resize', resizeHandler);
 };
@@ -162,7 +200,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     window.removeEventListener('resize', resizeHandler);
-    chartInstance.value.dispose();
+    chartInstance.dispose();
 });
 </script>
 
@@ -170,9 +208,9 @@ onBeforeUnmount(() => {
     <el-card :body-style="{ display: 'flex', padding: '24px 32px 28px' }" shadow="never">
         <div class="count-user">
             <div class="item-label">企业总人数</div>
-            <div class="item-value">601,986,875</div>
+            <div class="item-value">{{ data.countUser }}</div>
         </div>
-        <div class="chart-wrapper" ref="chartDom"></div>
+        <div class="chart-wrapper" ref="chartDomRef"></div>
     </el-card>
 </template>
 

@@ -1,16 +1,17 @@
 <script lang="ts" setup>
+import Welcome from './Welcome.vue';
 import TodayIndicator from './TodayIndicator.vue';
 import TotalIndicator from './TotalIndicator.vue';
 import SuccessRate from './SuccessRate.vue';
+import ProductSuccessRate from './ProductSuccessRate.vue';
 import RankList from './RankList.vue';
 import { type GetHomepageCountResponse, getHomepageCount } from '@/api/dashboard';
-
 
 const count = ref<GetHomepageCountResponse>();
 
 const getHomepageData = () => {
     return getHomepageCount()
-        .then((res) => {
+        .then(res => {
             count.value = res;
         })
         .catch(() => {});
@@ -19,53 +20,33 @@ const getHomepageData = () => {
 onBeforeMount(() => {
     getHomepageData();
 });
-
 </script>
 
 <template>
-    <el-space direction="vertical" :size="20" fill>
-        <div class="banner">
-            <div class="avatar"></div>
-            <div class="welcome-cantainer">
-                <div class="welcome">欢迎登录</div>
-                <div>一站式数据管理、探索、分析平台</div>
+    <PagePanel class="dashboard">
+        <el-space direction="vertical" :size="20" fill :style="{ width: '100%' }">
+            <Welcome />
+            <TodayIndicator :data="count" />
+            <TotalIndicator :data="count" />
+            <div style="display: flex; width: 100%">
+                <SuccessRate class="flex-card" :data="count" />
+                <ProductSuccessRate class="flex-card" :data="count" />
+                <RankList class="flex-card" :data="count" />
             </div>
-        </div>
-        <TodayIndicator />
-        <TotalIndicator />
-        <div style="display: flex">
-            <SuccessRate  style="flex: 1 1 0" />
-            <RankList style="flex: 1 1 0; margin-left: 20px" />
-        </div>
-    </el-space>
+        </el-space>
+    </PagePanel>
 </template>
 
 <style lang="scss" scoped>
-.banner {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    padding: 35px;
-    height: 150px;
-    background: url(@/assets/images/home-banner.png) no-repeat top -44px right -40px, linear-gradient(rgb(58, 149, 255) 0%, rgb(27, 92, 255) 100%);
-    background-size: 631px 451px;
-    border-radius: 8px;
+.flex-card {
+    flex: 1 1 0;
 
-    .avatar {
-        width: 80px;
-        height: 80px;
-        background-color: aliceblue;
-        border-radius: 50%;
+    &:not(:first-child) {
+        margin-left: 20px;
     }
+}
 
-    .welcome-cantainer {
-        margin-left: 25px;
-        color: #fff;
-
-        .welcome {
-            @include font(24px);
-            margin-bottom: 12px;
-        }
-    }
+:deep(.el-space__item:nth-child(4)) {
+    width: 100%;
 }
 </style>

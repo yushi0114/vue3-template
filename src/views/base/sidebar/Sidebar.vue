@@ -38,68 +38,68 @@ const currentRoute = router.currentRoute;
     <!-- Sidebar backdrop (mobile only) -->
     <div class="sidebar-mobile-shadow" :class="{ expand }" aria-hidden="true"></div>
     <div
-        class="sidebar no-scrollbar"
+        class="sidebar"
         ref="sidebar"
         :class="{ expand }"
     >
-        <FlexRow horizontal="center" class="logo-container">
-            <slot name="logo"></slot>
-        </FlexRow>
-        <div class="sidebar-content">
+        <div class="sidebar-content no-scrollbar">
             <!-- <button ref="trigger" class="lg:hidden text-gray-500 hover:text-gray-400" @click.stop="emits('close')"
                 aria-controls="sidebar" :aria-expanded="expand">
                 <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
                 </svg>
             </button> -->
-            <div>
-                <template v-for="(opt, i) in options">
-                    <!-- 有子菜单 -->
-                    <SidebarLinkGroup
-                        v-if="opt.children"
-                        :key="i"
-                        v-slot="parentLink"
-                        :activeCondition="currentRoute.fullPath.includes('ecommerce')">
-                        <!-- 子菜单Header -->
-                        <FlexRow
-                            class="sidebar-root-block"
-                            @click.prevent="expand ? parentLink.handleClick() : expand = true">
+            <template v-for="(opt, i) in options">
+                <!-- 有子菜单 -->
+                <SidebarLinkGroup
+                    v-if="opt.children"
+                    :key="i"
+                    v-slot="parentLink"
+                    :activeCondition="currentRoute.fullPath.startsWith(opt.path)">
+                    <!-- 子菜单Header -->
+                    <FlexRow
+                        class="sidebar-root-block" :class="{ active: parentLink.active }"
+                        @click.prevent="expand ? parentLink.handleClick() : expand = true">
+                        <div>
                             <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
-                            <a class="sidebar-root-link"
-                                :class="currentRoute.fullPath.includes('ecommerce') && 'TODO'"
-                                href="#0"
-                                >
-                                <FlexRow horizontal="between"
-                                    class="sidebar-root-label">
-                                        {{ opt.title }}
-                                        <i-ep-arrow-down class="sidebar-drop-arrow" :class="{ expanded: parentLink.expanded }"/>
-                                </FlexRow>
-                            </a>
-                        </FlexRow>
-                        <div class="sidebar-sub-list" v-show="parentLink.expanded && expand">
-                            <RouterLink
-                                v-for="optChild in opt.children"
-                                :key="optChild.id"
-                                :to="optChild.defaultPath!"
-                                custom
-                                v-slot="{ href, navigate, isExactActive }">
-                                <FlexRow class="sidebar-sub-block">
-                                    <a
-                                        class="sidebar-sub-link"
-                                        :class="{ active: isExactActive }"
-                                        :href="href"
-                                        @click="navigate">
-                                        <span class="sidebar-sub-label">{{ optChild.title }}</span>
-                                    </a>
-                                </FlexRow>
-                            </RouterLink>
                         </div>
-                    </SidebarLinkGroup>
+                        <a class="sidebar-root-link"
+                            :class="{ active: parentLink.active }"
+                            href="#0"
+                            >
+                            <FlexRow horizontal="between"
+                                class="sidebar-root-label">
+                                    {{ opt.title }}
+                                    <i-ep-arrow-down class="sidebar-drop-arrow" :class="{ expanded: parentLink.expanded }"/>
+                            </FlexRow>
+                        </a>
+                    </FlexRow>
+                    <div class="sidebar-sub-list" v-show="parentLink.expanded && expand">
+                        <RouterLink
+                            v-for="optChild in opt.children"
+                            :key="optChild.id"
+                            :to="optChild.defaultPath!"
+                            custom
+                            v-slot="{ href, navigate, isExactActive }">
+                            <FlexRow class="sidebar-sub-block">
+                                <a
+                                    class="sidebar-sub-link"
+                                    :class="{ active: isExactActive }"
+                                    :href="href"
+                                    @click="navigate">
+                                    <span class="sidebar-sub-label">{{ optChild.title }}</span>
+                                </a>
+                            </FlexRow>
+                        </RouterLink>
+                    </div>
+                </SidebarLinkGroup>
 
-                    <!-- 没有子菜单 -->
+                <!-- 没有子菜单 -->
+                <div
+                    v-else
+                    :key="String(i)"
+                >
                     <RouterLink
-                        v-else
-                        :key="String(i)"
                         custom
                         v-slot="{ href, navigate, isExactActive }"
                         :to="opt.path || '/'"
@@ -109,14 +109,16 @@ const currentRoute = router.currentRoute;
                             :class="{ active: isExactActive }"
                             :href="href" @click="navigate"
                         >
-                            <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
+                            <div>
+                                <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
+                            </div>
                             <div class="sidebar-root-link" :class="{ active: isExactActive }" >
                                 <span class="sidebar-root-label">{{ opt.title }}</span>
                             </div>
                         </a>
                     </RouterLink>
-                </template>
-            </div>
+                </div>
+            </template>
         </div>
         <FlexRow
             :horizontal="expand ? 'end' : 'center'"
@@ -133,10 +135,8 @@ const currentRoute = router.currentRoute;
     @apply
         flex flex-col shrink-0 border-box select-none
         transform transition-all duration-200 ease-in-out // -translate-x-64 lg: translate-x-0
-        absolute z-10 left-0 top-0 h-screen lg:static lg:left-auto lg:top-auto
-        w-12
-        overflow-y-scroll
-        px-4
+        w-20
+        overflow-y-hidden
         ;
 
         background-color: var(--deep-bg-color);
@@ -150,12 +150,8 @@ const currentRoute = router.currentRoute;
     }
 }
 
-.logo-container {
-    @apply h-20;
-}
-
 .sidebar-content {
-    @apply flex-1;
+    @apply flex-1 flex flex-col flex-nowrap overflow-y-auto px-4 pt-2;
 }
 
 .sidebar-root-block {
@@ -175,7 +171,7 @@ const currentRoute = router.currentRoute;
 }
 
 .sidebar-root-link {
-    @apply flex flex-1 truncate transition duration-150;
+    @apply flex flex-1 truncate;
 }
 
 .sidebar-root-label {
@@ -211,6 +207,8 @@ const currentRoute = router.currentRoute;
 .sidebar-sub-link {
     @apply block transition duration-150 truncate;
 
+    color: var(--el-color-info-light-3);
+
     &:hover, &.active {
         color: var(--el-color-primary);
     }
@@ -225,7 +223,7 @@ const currentRoute = router.currentRoute;
 }
 
 .sidebar-footer {
-    @apply py-2 text-2xl;
+    @apply py-2 text-2xl px-4;
     color: var(--el-text-color-secondary);
 }
 

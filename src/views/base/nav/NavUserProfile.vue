@@ -108,6 +108,7 @@ function handleSignout() {
 <style lang="scss">
 .nav-user-profile {
     padding: $gap-xs;
+    margin-right: -$gap-xs;
     cursor: default;
     border-radius: 4px;
     transition: .2s ease-in-out all;

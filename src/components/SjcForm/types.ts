@@ -1,9 +1,9 @@
 /*
  * @Description:
- * @FilePath: \dms-web\src\components\form\types.ts
+ * @FilePath: \dms-web\src\components\SjcForm\types.ts
  * @Author: zys
  * @Date: 2022-10-28 10:51:15
- * @LastEditTime: 2022-11-08 10:03:10
+ * @LastEditTime: 2022-11-09 14:20:23
  * @LastEditors: zys
  * @Reference:
  */
@@ -28,4 +28,5 @@ export interface DefItem {
     rules?: FormItemRule[];
 }
 
-export type { DefItemValue };
+type IFormValues<K extends string = string> = Record<K, DefItemValue>;
+export type { DefItemValue, IFormValues };

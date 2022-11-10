@@ -34,6 +34,8 @@ const {
         </el-space>
         <div class="i-carbon-sun dark:i-carbon-moon"></div>
         <div class="i-iwwa-add-1m"></div>
+        <div class="i-carbon-add-alt"></div>
+        <div class="i-ep-add-location"></div>
         <sjc-table
             ref="sjcTableRef"
             :table-data="state.data"

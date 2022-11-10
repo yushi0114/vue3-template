@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\types\globals.d.ts
  * @Author: zys
  * @Date: 2022-11-07 16:13:20
- * @LastEditTime: 2022-11-07 16:13:43
+ * @LastEditTime: 2022-11-09 15:56:46
  * @LastEditors: zys
  * @Reference:
  */

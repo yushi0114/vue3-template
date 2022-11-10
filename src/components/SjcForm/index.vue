@@ -45,9 +45,8 @@ export default {
 </script>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus';
-import type { DefItem, DefItemValue } from './types';
+import type { DefItem, IFormValues } from './types';
 
-type IValues = { [K in typeof formData.form[number]['keyName']]: DefItemValue };
 const props = withDefaults(
     defineProps<{
         def: DefItem[];
@@ -60,7 +59,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-    (e: 'search', values: IValues): void;
+    (e: 'search', values: IFormValues): void;
 }>();
 
 const form = ref<FormInstance>();
@@ -86,11 +85,11 @@ const initForm = () => {
     });
 };
 
-const handleSearch = async () => {
+const handleSearch = async() => {
     if (!form) return;
     await form.value?.validate((valid, fields) => {
         if (valid) {
-            const values: IValues = {};
+            const values: IFormValues = {};
             formData.form.forEach((formItem) => {
                 if (formItem.keyName) {
                     values[formItem.keyName] = formItem.value;

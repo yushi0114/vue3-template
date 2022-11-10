@@ -8,13 +8,13 @@
 <script lang="ts" setup>
 import type { IPaginationConfig } from '../types';
 // 定义组件接收的prop属性
-const props = withDefaults(defineProps<{ pageConfig: IPaginationConfig }>(), {
+const props = withDefaults(defineProps<{ pageConfig: Partial<IPaginationConfig> }>(), {
     pageConfig: () => reactive({}),
 });
 const emit = defineEmits<{
-    (e: 'page-change', values: IPaginationConfig): void;
+    (e: 'page-change', values: Partial<IPaginationConfig>): void;
 }>();
-const page: IPaginationConfig = reactive({
+const page: Partial<IPaginationConfig> = reactive({
     ...props.pageConfig,
 });
 watch(page, () => {

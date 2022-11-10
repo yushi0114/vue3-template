@@ -24,6 +24,7 @@
         {{formType === 'edit' ? '编辑' : '创建'}}
       </el-button>
       <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+      <el-button @click="goBack()">返回</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -50,7 +51,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
-    'save'
+    'save', 'goBack'
 ]);
 const menuTree = ref();
 watch(() => props.form, (value) => {
@@ -89,6 +90,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.resetFields();
 };
+
+function goBack(){
+    emit('goBack');
+}
 
 </script>
 

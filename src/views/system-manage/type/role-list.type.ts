@@ -5,8 +5,6 @@ export type RoleFormType = {
     desc: string;
 }
 
-
-
 export type RoleListItemType = {
     id: string;
     name: string;

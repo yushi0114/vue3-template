@@ -51,3 +51,44 @@ export const routeTree: TreeItemType[] = [
         ],
     },
 ];
+
+
+export const tableData = [
+    {
+        id: '1',
+        createAt: '2016-05-03',
+        name: 'Tom',
+        phone: '13342422781',
+        roleId: '1'
+    },
+    {
+        id: '2',
+        createAt: '2016-05-02',
+        name: 'Tom',
+        phone: '13342422781',
+        roleId: '1'
+    },
+    {
+        id: '3',
+        createAt: '2016-05-04',
+        name: 'Tom',
+        phone: '13342422781',
+        roleId: '1'
+    },
+    {
+        id: '4',
+        createAt: '2016-05-01',
+        name: 'Tom',
+        phone: '13342422781',
+        roleId: '1'
+    },
+];
+
+
+export const roleList = [
+    {
+        id: '1',
+        name: '管理员'
+    }
+];
+

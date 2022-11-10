@@ -8,8 +8,11 @@
     <el-button :icon="Plus" type="primary" @click="handleCreateNewRole">新建</el-button>
   </div>
   <el-table :data="roleTableData.list" style="width: 100%">
-    <el-table-column prop="name" label="名称" width="180" />
-    <el-table-column prop="desc" label="创建者" width="180" />
+    <el-table-column prop="name" label="姓名" width="180" />
+    <el-table-column prop="phone" label="手机号" width="180" />
+    <el-table-column prop="roleId" label="角色" width="180">
+
+    </el-table-column>
     <el-table-column prop="createAt" label="创建时间" />
     <el-table-column label="操作" width="180">
       <template #default="scope">
@@ -85,7 +88,7 @@ function handleCreateNewRole(){
 
 function handleRemoveRoleItem(item: RoleListItemType){
     ElMessageBox.confirm(
-        '确定要删除当前角色吗？',
+        '确定要删除当前用户吗？',
         '警告',
         {
             confirmButtonText: '确认',
@@ -107,7 +110,7 @@ function handleRemoveRoleItem(item: RoleListItemType){
         });
 }
 
-async function getRoleListData(){
+async function getUserListData(){
     roleTableData.value = {
         list: tableData,
         total: 4,
@@ -116,7 +119,7 @@ async function getRoleListData(){
 }
 
 onMounted(async() => {
-    await getRoleListData();
+    await getUserListData();
 });
 </script>
 

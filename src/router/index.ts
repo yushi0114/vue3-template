@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from 'vue-router';
-import { Home } from '@/views/home';
+import Home from '@/views/home/Home.vue';
 import { Signin } from '@/views/access';
 import type { DynamicNavEntity } from '@/types';
 import { dynamicRouteMap, genDynamicComponent } from '@/views';
@@ -49,6 +49,11 @@ const routes: RouteRecordRaw[] = [
         path: '/roleList',
         name: 'roleList',
         component: () => import('@/views/system-manage/role-list.vue')
+    },
+    {
+        path: '/userList',
+        name: 'userList',
+        component: () => import('@/views/system-manage/user-list.vue')
     }
 ];
 

@@ -3,7 +3,7 @@
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="DMS" name="dms">
         <div style="padding: 15px;">
-          <dms-role-config></dms-role-config>
+          <dms-user-config></dms-user-config>
         </div>
       </el-tab-pane>
       <el-tab-pane label="征信端" name="clib"></el-tab-pane>
@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 
-import DmsRoleConfig from '@/views/system-manage/role-list/dms-role-config.vue';
+import DmsUserConfig from '@/views/system-manage/user-list/dms-user-config.vue';
 import {ref} from 'vue';
 import type {TabsPaneContext} from 'element-plus';
 import TestLayout from '@/views/system-manage/test-layout.vue';

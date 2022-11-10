@@ -36,14 +36,17 @@ export function signout() {
     return api.post(`${DMS_DOMAIN}/v1/logout`);
 }
 
-export type GetUserInfoPayload = string;
+export type GetUserInfoPayload = {
+    id?: string;
+    tab?: MENU_TAB;
+};
 export type GetUserInfoResponse = UserEntity & {
     token: string;
 };
 
-export function getUserInfo(uid: GetUserInfoPayload): Promise<GetUserInfoResponse> {
+export function getUserInfo(params: GetUserInfoPayload): Promise<GetUserInfoResponse> {
     return api.get(`${DMS_DOMAIN}/v1/user`, {
-        params: { id: uid },
+        params,
     });
 }
 

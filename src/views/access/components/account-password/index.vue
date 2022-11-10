@@ -87,6 +87,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus';
+import { useApi } from '@/composables';
 import { useUserStore } from '@/stores';
 import { getCaptcha } from '@/api/access';
 import { encrypt } from '@/utils/crypto';
@@ -94,7 +95,23 @@ import { COUNT_PASSWORD_FORM_RULES } from '../../constants';
 import { MENU_TAB } from '@/enums';
 const { push } = useRouter();
 const { signin } = useUserStore();
-const { loading, request: login } = useApi(signin);
+
+const { loading, request: login } = useApi(signin, {
+    onSuccess() {
+        // 路由跳转
+        push('/home');
+    },
+    onError() {
+        getVerifyCode();
+    },
+});
+
+const { request: getVerifyCode } = useApi(getCaptcha, {
+    onSuccess(data) {
+        countAndPasswordForm.verifyCode = data;
+    },
+    onError() {},
+});
 
 // 监听Enter键登录！
 onKeyStroke(
@@ -119,13 +136,6 @@ const countAndPasswordForm = reactive({
     inputVerifyCode: '',
 });
 
-const getVerifyCode = () => {
-    return getCaptcha()
-        .then((res) => {
-            countAndPasswordForm.verifyCode = res;
-        })
-        .catch(() => {});
-};
 const loginCountAndPasswordHandle = () => {
     formRef.value?.validate((valid) => {
         if (valid) {
@@ -140,14 +150,7 @@ const doLoginHandle = () => {
         captcha: countAndPasswordForm.inputVerifyCode,
         tab: MENU_TAB.MENU_TAB_DMS,
     };
-    return login(reqData)
-        .then(() => {
-            // 路由跳转
-            push('/home');
-        })
-        .catch(() => {
-            getVerifyCode();
-        });
+    return login(reqData);
 };
 const changePass = (params: string) => {
     visible.value = !(params === 'show');

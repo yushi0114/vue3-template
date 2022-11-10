@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 export interface ITextProps {
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'current',
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'current',
     align?: 'left' | 'center' | 'right' | 'justify',
-    color?: 'gray' | 'green' | 'indigo' | 'yellow' | 'red' | 'blue' | 'current',
+    color?:
+        'primary' | 'danger' | 'success' | 'warning' | 'info' |
+        'paragraph' | 'regular' | 'secondary' | 'placeholder' | 'disbled' |
+        'current',
     italic?: boolean,
     truncate?: boolean,
     block?: boolean,
@@ -16,7 +19,7 @@ const props = withDefaults(
     {
         size: 'md',
         align: 'left',
-        color: 'gray',
+        color: 'current',
         italic: false,
         truncate: false,
         block: false,
@@ -35,14 +38,13 @@ const props = withDefaults(
         props.underline ? 'i-text-underline' : '',
         'i-text-' + props.align,
         props.size === 'current' ? '' : 'i-text-' + props.size,
-        props.color === 'current' ? '' : 'i-text-' + props.color,
+        props.color === 'current' ? '' : 'i-text-color-' + props.color,
     ]">
         <slot />
     </span>
 </template>
 <style lang="postcss">
 .i-text {
-    font-size: 1em;
     @apply inline text-current;
 }
 
@@ -84,87 +86,65 @@ const props = withDefaults(
 }
 
 .i-text-xs {
-    @apply text-xs;
-}
-
-.i-text-md {
-    @apply text-base;
+    font-size: 0.75rem;
+    line-height: 1.125rem;
 }
 
 .i-text-sm {
-    @apply text-sm;
+    font-size: 0.875rem;
+    line-height: 1.375rem;
 }
 
+.i-text-md {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+
 .i-text-lg {
-    @apply text-lg;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
 }
 
 .i-text-xl {
-    @apply text-xl;
+    font-size: 1.5rem;
+    line-height: 2rem;
 }
 
-.i-text-xxl {
-    @apply text-2xl;
+.i-text-color-primary {
+    color: var(--el-color-primary);
+}
+.i-text-color-danger {
+    color: var(--el-color-danger);
+}
+.i-text-color-success {
+    color: var(--el-color-success);
+}
+.i-text-color-warning {
+    color: var(--el-color-warning);
 }
 
-.i-text-xxl {
-    @apply text-2xl;
+.i-text-color-info {
+    color: var(--el-color-info);
 }
 
-.dark .i-text-gray {
-    @apply text-gray-300;
+.i-text-color-paragraph {
+    color: var(--el-text-color-primary);
 }
 
-.i-text-gray {
-    @apply text-gray-800;
+.i-text-color-regular {
+    color: var(--el-text-color-regular);
 }
 
-.dark .i-text-green {
-    @apply text-green-400;
+.i-text-color-secondary {
+    color: var(--el-text-color-secondary);
 }
 
-.i-text-green {
-    @apply text-green-600;
+.i-text-color-placeholder {
+    color: var(--el-text-color-placeholder);
 }
 
-
-.dark .i-text-indigo {
-    @apply text-indigo-400;
-}
-
-.i-text-indigo {
-    @apply text-indigo-600;
-}
-
-.dark .i-text-light-blue {
-    @apply text-light-blue-400;
-}
-
-.i-text-light-blue {
-    @apply text-light-blue-600;
-}
-
-.dark .i-text-yellow {
-    @apply text-yellow-400;
-}
-
-.i-text-yellow {
-    @apply text-yellow-600;
-}
-
-.dark .i-text-red {
-    @apply text-red-400;
-}
-
-.i-text-red {
-    @apply text-red-600;
-}
-
-.dark .i-text-blue {
-    @apply text-blue-400;
-}
-
-.i-text-blue {
-    @apply text-blue-600;
+.i-text-color-disbled {
+    color: var(--el-text-color-disbled);
 }
 </style>

@@ -14,7 +14,7 @@ import iconsResolver from 'unplugin-icons/resolver';
 import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-let proxyHost = '192.168.31.198';
+let proxyHost = '192.168.31.49';
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {
@@ -104,9 +104,12 @@ export default ({ mode }: ConfigEnv): UserConfig => {
             },
             preprocessorOptions: {
                 scss: {
-                    additionalData: '@use "@/style/global.scss" as *; \n',
-                },
-            },
+                    additionalData: `
+                        @use "@/style/global.scss" as *; \n
+                        @use "@/style/mixin.scss" as *; \n
+                    `,
+                }
+            }
         },
         server: {
             // host: 'localhost',

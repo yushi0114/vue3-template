@@ -49,7 +49,10 @@ service.interceptors.response.use(res => {
     // 获取错误信息
     const msg = res.data.msg;
     if (code === 10010) {
-        console.error('当前账号已在其他设备登录！');
+        ElMessage({
+            message: '当前账号已在其他设备登录！',
+            type: 'error'
+        });
         token.remove();
         router.replace('/signin');
         return Promise.reject('error');
@@ -60,7 +63,10 @@ service.interceptors.response.use(res => {
         console.error(msg);
         return Promise.reject(new Error(msg));
     } else if (code !== 200) {
-        window.alert(msg);
+        ElMessage({
+            message: msg,
+            type: 'error'
+        });
         return Promise.reject(res.data);
     } else {
         return res.data.data;
@@ -75,7 +81,10 @@ service.interceptors.response.use(res => {
     } else if (message.includes('Request failed with status code')) {
         message = '系统接口' + message.substr(message.length - 3) + '异常';
     }
-    window.alert(message);
+    ElMessage({
+        message: message,
+        type: 'error'
+    });
     return Promise.reject(error);
 });
 

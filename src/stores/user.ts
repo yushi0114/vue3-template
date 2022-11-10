@@ -8,7 +8,7 @@ import {
     type SigninPayload,
     type GetUserInfoPayload,
 } from '@/api';
-import type { DynamicNavEntity, UserEntity } from '@/types';
+import { NavStatusType, type DynamicNavEntity, type UserEntity } from '@/types';
 import { toTree } from '@/utils/tree';
 import { addDynamicRoutes } from '@/router';
 import { useRouter } from 'vue-router';
@@ -28,9 +28,9 @@ export const useUserStore = defineStore('user', () => {
         prevNavTree: [
             {
                 id: '',
-                defaultPath: '/home',
-                permission: 1,
-                label: 'Homepage',
+                path: '/home',
+                title: 'Homepage',
+                status: NavStatusType.default,
                 parentId: '',
                 sort: 0,
             },
@@ -69,9 +69,7 @@ export const useUserStore = defineStore('user', () => {
                 return dynamicNavs(user.roleId);
             })
             .then((navs) => {
-                console.log('eeeeeeeeeeeee', navs);
                 state.navs = navs;
-                console.log(navs);
                 addDynamicRoutes(router, navs);
                 state.navTree = toTree({}, navs);
                 return state.user as UserEntity;

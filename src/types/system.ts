@@ -11,4 +11,3 @@ export interface DynamicNavEntity extends NavEntity {
     permission?: number,
     children?: DynamicNavEntity[]
 }
-

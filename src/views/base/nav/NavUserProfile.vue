@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores';
 import { noop } from '@/utils';
 import { Key, SwitchButton, User, UserFilled } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
+import NavUserUpdatePwdDialog from './NavUserUpdatePwdDialog.vue';
 
 enum UserDropdownCommand {
     changePassword,
@@ -14,6 +15,7 @@ enum UserDropdownCommand {
 
 const { state, signout, getUserInfo } = useUserStore();
 const router = useRouter();
+const updatingPwdVisible = ref(false);
 
 function handleCommand(cmd: UserDropdownCommand) {
     switch (cmd) {
@@ -31,7 +33,7 @@ function handleCommand(cmd: UserDropdownCommand) {
 }
 
 function displayChangePassword() {
-
+    updatingPwdVisible.value = true;
 }
 
 function displayChangeUserName() {
@@ -100,9 +102,7 @@ function handleSignout() {
             </el-dropdown-menu>
         </template>
     </el-dropdown>
-    <el-dialog>
-        123
-    </el-dialog>
+    <NavUserUpdatePwdDialog v-model="updatingPwdVisible" />
 </template>
 
 <style lang="scss">

@@ -7,13 +7,13 @@
  * @LastEditors: zys
  * @Reference:
  */
-type ICallback = (message?: Error) => {};
+export type ValidateCallback = (message?: Error) => {};
 // 验证手机号
 export function isPhoneNumber(val: string): boolean {
     return /^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(val);
 }
 
-export const checkPhoneId = (rule: any, value: string, callback: ICallback) => {
+export const checkPhoneId = (rule: any, value: string, callback: ValidateCallback) => {
     if (!value) {
         callback(new Error('手机号不能为空！'));
     } else if (!isPhoneNumber(value)) {
@@ -23,7 +23,7 @@ export const checkPhoneId = (rule: any, value: string, callback: ICallback) => {
     }
 };
 
-export const checkVerifyCode = (rule: any, value: string, callback: ICallback) => {
+export const checkVerifyCode = (rule: any, value: string, callback: ValidateCallback) => {
     if (!value) {
         callback(new Error('图形验证码不能为空！'));
     } else if (!/^\d{1,2}$/.test(value)) {
@@ -33,7 +33,7 @@ export const checkVerifyCode = (rule: any, value: string, callback: ICallback) =
     }
 };
 
-export function checkPassword(rule: any, value: string, callback: ICallback) {
+export function checkPassword(rule: any, value: string, callback: ValidateCallback) {
     const passwordReg = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$&^*])[a-zA-Z0-9!@#$&^*]{8,18}$/);
     if (!passwordReg.test(value)) {
         callback(new Error('8-18个字符，必须包含数字、大小写字母、符号!@#$&^*的组合'));

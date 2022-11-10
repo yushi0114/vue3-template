@@ -58,3 +58,14 @@ export type UpdateUsernamePayload = {
 export function updateUsername(p: UpdateUsernamePayload) {
     return api.post(`${DMS_DOMAIN}/v1/update/name`, p);
 }
+
+// 修改密码
+export type UpdatePasswordPayload = {
+    newPassword: string,
+    oldPassword: string,
+    tab: MENU_TAB,
+}
+
+export function updatePassword(p: UpdatePasswordPayload) {
+    return api.post(`${DMS_DOMAIN}/v1/update/pwd`, p);
+}

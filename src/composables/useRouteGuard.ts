@@ -16,7 +16,7 @@ export function useRouteGuard() {
     const { getUserInfo } = useUserStore();
     const router = useRouter();
     const token = useToken();
-    const progress = useNProgress({ color: 'red' });
+    const progress = useNProgress();
 
     router.beforeEach((to, from, next) => {
         progress.start();

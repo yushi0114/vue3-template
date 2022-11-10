@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Layout, Nav, Sidebar } from '@/components';
+import Sidebar from './sidebar/Sidebar.vue';
+import Nav from './nav/Nav.vue';
+import { Layout } from '@/components';
 import { useUserStore } from '@/stores';
 import { computed, onBeforeMount } from 'vue';
 
@@ -18,7 +20,11 @@ onBeforeMount(() => {
 
 <template>
     <main class="app-container">
-        <Sidebar :options="sidebarOptions" />
+        <Sidebar :options="sidebarOptions">
+            <template v-slot:logo>
+                <RouterLink to="/home">DMS</RouterLink>
+            </template>
+        </Sidebar>
         <Layout class="main-container">
             <Nav />
             <Layout class="page-container">

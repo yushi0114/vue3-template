@@ -1,15 +1,15 @@
 /*
  * @Description:
- * @FilePath: \dms-web\src\components\table\constants.ts
+ * @FilePath: \dms-web\src\components\SjcTable\constants.ts
  * @Author: zys
  * @Date: 2022-11-04 09:12:54
- * @LastEditTime: 2022-11-07 16:09:52
+ * @LastEditTime: 2022-11-09 14:28:25
  * @LastEditors: zys
  * @Reference:
  */
 import type { IPaginationConfig } from './types';
 
-export const INIT_PAGINATION_CONFIG: IPaginationConfig = {
+export const INIT_PAGINATION_CONFIG: Partial<IPaginationConfig> = {
     total: 0,
     currentPage: 1,
     pageSize: 10,

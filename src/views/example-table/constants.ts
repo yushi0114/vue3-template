@@ -1,19 +1,10 @@
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
-import type { IColumn } from '@/components/SjcTable/types';
 import type { DefItem } from '@/components/SjcForm/types';
+import type { IColumnTypes, IColumnKeys } from './types';
 import { STATUS_LABEL_MAP, STATUS } from '@/enums';
 
-export interface IColumnTypes {
-    id: string;
-    name: string;
-    province: string;
-    area: string;
-    county: string;
-    amount: Number;
-}
-type IColumnKeys = keyof IColumnTypes;
 // 表格列配置
-export const COLUMNS: Readonly<IColumn<IColumnTypes>[]> = readonly([
+export const COLUMNS = readonly([
     // 自定义索引
     {
         label: '排名',

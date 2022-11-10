@@ -38,6 +38,7 @@ declare module '@vue/runtime-core' {
     IFlexColumn: typeof import('./src/components/IFlexColumn.vue')['default']
     Label: typeof import('./src/components/Label.vue')['default']
     Layout: typeof import('./src/components/Layout.vue')['default']
+    MessageDialog: typeof import('./src/components/MessageDialog.vue')['default']
     MultistageColumn: typeof import('./src/components/SjcTable/components/MultistageColumn.vue')['default']
     PagePanel: typeof import('./src/components/PagePanel.vue')['default']
     Pagination: typeof import('./src/components/SjcTable/components/Pagination.vue')['default']

@@ -20,7 +20,6 @@ module.exports = {
         'camelcase': 'error',
         'no-multiple-empty-lines': ['error', { 'max': 2, 'maxEOF': 1 }],
         'semi': ['error', 'always'],
-        'new-cap': 'error',
         'no-duplicate-imports': 'error',
         'indent': ['error', 4, { 'SwitchCase': 1 }],
         '@typescript-eslint/space-before-function-paren': ['error', 'never'],

@@ -1,80 +1,139 @@
 <script lang="ts" setup>
 import { Search, Plus } from '@element-plus/icons-vue';
-import { ElMessageBox } from 'element-plus';
-import cityDetail from './components/cityDetail.vue';
+import { ElMessageBox, ElMessage, ElConfigProvider } from 'element-plus';
+import zhCn from 'element-plus/lib/locale/lang/zh-cn';
+import { fetchCityList, type CityEntity } from '@/api/finance';
+import type { ICityTable } from '@/types/city';
 
-interface ICityTable {
-    name: string,
-    code: string,
-    sort: number,
-    createBy: string,
-    createTime: string,
-    updateBy?: string,
-    updateTime: string
-}
+import cityDetail from './components/CityDetail.vue';
+import cityModal from './components/CityModal.vue';
 
-const searchInput = ref('');
+let dataSource = reactive<CityEntity[]>([]);
 
-const dataSource = [
-    {
-        name: '沈阳市',
-        code: '210100',
-        sort: 1,
-        createBy: 'XXX',
-        createTime: '2022-07-15 20:01:17',
-        updateBy: 'YYY',
-        updateTime: '2022-09-19 14:01:22',
-    }
-];
+let searchInput = ref('');
+
+let loading = ref(true);
 
 let drawerFlag = ref(false);
-let dataDetail = reactive({});
 
-function handleSearch() {
-    console.log('搜索');
-}
+let dialogFlag = ref(false);
 
-function handleSortChange() {
-    console.log('排序');
-}
+let dataDetail = reactive({
+    data: {}
+});
 
-function handleCreateCity() {
-    console.log('新建');
-}
+let dataEdit = reactive({
+    data: {},
+    title: ''
+});
 
-function handleEdit(index: number, row: ICityTable) {
-    console.log('编辑');
-    console.log(index, row);
-}
+// 分页配置项
+let page = reactive({
+    currentPage: 1,
+    pageSize: 10,
+    total: 0
+});
 
-function handleDelete(index: number, row: ICityTable) {
-    console.log('删除');
-    console.log(index, row);
+// 分页器使用中文包
+const locale = zhCn;
+
+// 排序
+let sort = reactive({
+    sortField: 'sort',
+    sortType: 'asc'
+});
+
+onMounted(() => {
+    getCityList();
+});
+
+// 获取城市列表
+const getCityList = () => {
+    const params = {
+        name: searchInput.value,
+        pageIndex: page.currentPage,
+        pageSize: page.pageSize,
+        menuName: 'city',
+        sortField: sort.sortField,
+        sortType: sort.sortType
+    };
+    loading.value = true;
+    return fetchCityList(params)
+        .then((res) => {
+            Object.assign(dataSource, res.data);
+            page.total = res.pageTotal;
+        })
+        .catch(() => {})
+        .finally(() => {
+            loading.value = false;
+        });
+};
+
+const handleSearch = () => {
+    page.currentPage = 1;
+    getCityList();
+};
+
+const handleSortChange = ({ prop, order }) => {
+    sort.sortField = prop;
+    if (order) {
+        sort.sortType = order.slice(0, -6);
+        getCityList();
+    }
+};
+
+const handleCreateCity = () => {
+    dialogFlag.value = true;
+    dataEdit.data = {};
+    dataEdit.title = '新建城市';
+};
+
+const handleEdit = (row: ICityTable) => {
+    dialogFlag.value = true;
+    dataEdit.data = { ...row };
+    dataEdit.title = '编辑城市';
+};
+
+const handleDelete = (row: ICityTable) => {
     ElMessageBox.confirm(
         `确定删除“${row.name}”吗？`,
         '提示',
         {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
-            center: true,
+            type: 'warning'
         }
     ).then(() => {
+        ElMessage({
+            type: 'success',
+            message: '删除成功',
+        });
+    }).catch(() => {});
+};
 
-    }).catch(() => {
-
-    });
-}
-
-function handleToDetail(data: ICityTable) {
-    dataDetail = data;
-    console.log('详情');
+const handleToDetail = (data: ICityTable) => {
+    dataDetail.data = { ...data };
     drawerFlag.value = true;
-}
+};
 
-function handleClose() {
-    drawerFlag.value = !drawerFlag.value;
-}
+const handleDrawerClose = (val: boolean) => {
+    drawerFlag.value = val;
+};
+
+const handleDialogClose = (val: boolean) => {
+    dialogFlag.value = val;
+};
+
+const handleSizeChange = (val: number) => {
+    page.pageSize = val;
+    getCityList();
+};
+
+const handleCurrentChange = (val: number) => {
+    page.currentPage = val;
+    getCityList();
+};
+
 </script>
 
 <template>
@@ -103,10 +162,11 @@ function handleClose() {
                 </div>
                 <div class="table-content">
                     <el-table
+                        v-loading="loading"
                         :data="dataSource"
                         @sort-change="handleSortChange"
                         style="width: 100%"
-                        border>
+                    >
                         <el-table-column label="城市名称">
                             <template #default="scope">
                                 <div @click="handleToDetail(scope.row)" class="underline-text">{{ scope.row.name }}</div>
@@ -123,43 +183,51 @@ function handleClose() {
                                     link
                                     type="primary"
                                     size="small"
-                                    @click="handleEdit(scope.$index, scope.row)"
+                                    @click="handleEdit(scope.row)"
                                   >编辑</el-button
                                 >
                                 <el-button
                                     link
                                     type="danger"
                                     size="small"
-                                  @click="handleDelete(scope.$index, scope.row)"
+                                  @click="handleDelete(scope.row)"
                                   >删除</el-button
                                 >
                             </template>
                         </el-table-column>
                     </el-table>
 
-                    <!-- <el-drawer
-                        v-model="drawerFlag"
-                        title="城市详情"
-                        size="50%"
-                    >
-                        <span>123</span>
-                    </el-drawer> -->
-                    <city-detail :drawerFlag="drawerFlag" :dataDetail="dataDetail" @close="handleClose"></city-detail>
+                    <ElConfigProvider :locale="locale">
+                        <el-pagination
+                            v-model:currentPage="page.currentPage"
+                            v-model:page-size="page.pageSize"
+                            :page-sizes="[10, 20, 50]"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="page.total"
+                            :background = true
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            class="table-pagination"
+                        />
+                    </ElConfigProvider>
+
+                    <city-detail :drawerVisible="drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
+                    <city-modal :dialogVisible="dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose"></city-modal>
                 </div>
             </Board>
         </Layout>
     </PagePanel>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .city-wrapper {
-    padding: 12px;
 
     .page-header {
         font-size: 16px;
         line-height: 24px;
         margin-bottom: 20px;
     };
+
     .board {
         padding: 20px;
 
@@ -183,6 +251,11 @@ function handleClose() {
                 &:hover {
                     color: #1B5CFF;
                 }
+            }
+
+            .table-pagination {
+                margin-top: 20px;
+                justify-content: end;
             }
         }
     }

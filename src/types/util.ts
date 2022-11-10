@@ -5,3 +5,8 @@ export interface PlainOption<T = any> {
     name: string;
     value: T;
 }
+
+export interface ListResponse<T = any> {
+    pageTotal: number,
+    data: T[]
+}

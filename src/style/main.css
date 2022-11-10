@@ -1,11 +1,16 @@
 html, body, #app {
     height: 100%;
+    
 }
 
 html {
     font-size: 16px;
 }
 
+::selection {
+    background: var(--el-color-primary);
+    color: white;
+}
 
 @font-face {
     font-family: 'sans-regular';
@@ -17,13 +22,4 @@ html {
 
 * {
     font-family: sans-regular, "Microsoft YaHei", "黑体", sans-serif !important;
-}
-
-
-:root {
-    --el-color-primary: #cd164e;
-}
-
-html.dark {
-    --el-color-primary: red;
 }

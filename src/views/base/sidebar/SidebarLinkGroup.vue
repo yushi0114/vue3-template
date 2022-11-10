@@ -10,11 +10,13 @@ const handleClick = () => {
 </script>
 <template>
     <div class="sidebar-link-group" :class="{ active: activeCondition }">
-        <slot :handleClick="handleClick" :expanded="expanded" />
+        <slot :handleClick="handleClick" :expanded="expanded" :active="activeCondition" />
     </div>
 </template>
-<style>
+<style lang="postcss">
 .sidebar-link-group {
-
+    &.active {
+        background: var(--el-color-primary-light-9);
+    }
 }
 </style>

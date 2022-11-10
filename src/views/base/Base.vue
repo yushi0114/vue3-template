@@ -19,23 +19,23 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <main class="app-container">
-        <Sidebar :options="sidebarOptions">
-            <template v-slot:logo>
-                <RouterLink to="/home">DMS</RouterLink>
-            </template>
-        </Sidebar>
-        <Layout class="main-container">
-            <Nav />
+    <Layout class="app-container">
+        <Nav>
+            <RouterLink to="/home">
+                <Logo class="app-logo" />
+            </RouterLink>
+        </Nav>
+        <Layout class="main-container" type="horizontal">
+            <Sidebar :options="sidebarOptions">
+            </Sidebar>
             <Layout class="page-container">
                 <RouterView />
             </Layout>
         </Layout>
-    </main>
+    </Layout>
 </template>
 <style lang="scss">
 .app-container {
-    display: flex;
     height: 100vh;
     overflow: hidden;
     position: relative;
@@ -50,5 +50,12 @@ onBeforeMount(() => {
     background: $fill-color-light;
     // overflow-y: auto;
     /* @apply bg-gray-200 p-5 box-border; */
+}
+
+.app-logo {
+    height: 32px;
+    // & .st0 {
+    //     fill: red;
+    // }
 }
 </style>

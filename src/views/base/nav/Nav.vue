@@ -17,7 +17,6 @@ const isDark = useDark();
         <el-space size="small">
             <el-switch
                 v-model="isDark"
-                class="ml-2"
                 :active-icon="Moon"
                 :inactive-icon="Sunny"
                 inline-prompt
@@ -32,11 +31,15 @@ const isDark = useDark();
 .nav {
     height: $nav-height;
     padding: 0 $gap-lg;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     position: relative;
     z-index: 10;
     background-color: var(--deep-bg-color);
     transition: .2s ease-in-out all;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+}
+
+.dark .nav {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.35);
 }
 
 .nav-content {

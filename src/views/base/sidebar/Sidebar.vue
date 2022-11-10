@@ -97,9 +97,18 @@ const currentRoute = router.currentRoute;
                     </SidebarLinkGroup>
 
                     <!-- 没有子菜单 -->
-                    <RouterLink v-else :key="String(i)" custom v-slot="{ href, navigate, isExactActive }"
-                        :to="opt.defaultPath || '/'">
-                        <a class="sidebar-root-block" :class="{ active: isExactActive }" :href="href" @click="navigate">
+                    <RouterLink
+                        v-else
+                        :key="String(i)"
+                        custom
+                        v-slot="{ href, navigate, isExactActive }"
+                        :to="opt.defaultPath || '/'"
+                    >
+                        <a
+                            class="sidebar-root-block"
+                            :class="{ active: isExactActive }"
+                            :href="href" @click="navigate"
+                        >
                             <component class="el-icon sidebar-root-icon" :is="'ForkSpoon'" />
                             <div class="sidebar-root-link" :class="{ active: isExactActive }" >
                                 <span class="sidebar-root-label">{{ opt.label }}</span>
@@ -161,9 +170,8 @@ const currentRoute = router.currentRoute;
     }
 }
 
-.sidebar-root-icon {
-    font-weight: bold;
-    @apply font-medium text-2xl w-6 h-6;
+.el-icon.sidebar-root-icon {
+    @apply h-6 w-6;
 }
 
 .sidebar-root-link {
@@ -194,7 +202,7 @@ const currentRoute = router.currentRoute;
 
 
 .sidebar-sub-block {
-    @apply h-8 text-sm pl-11;
+    @apply h-8 text-sm pl-12;
     &:hover {
         /* background-color: #E9F2FF; */
     }

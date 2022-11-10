@@ -14,9 +14,9 @@ const emit = defineEmits<{
   (e: 'close', flag: Boolean): void
 }>();
 
-function handleClose() {
+const handleClose = () => {
     emit('close', false);
-}
+};
 
 </script>
 <template>

@@ -1,41 +1,40 @@
 <script lang="ts" setup>
-import { Search, Plus } from '@element-plus/icons-vue';
+import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-// import zhCn from 'element-plus/lib/locale/lang/zh-cn';
-import { fetchCityList, deleteCity, type CityEntity } from '@/api/finance';
+import { fetchCityList, deleteCity } from '@/api/finance';
 import type { ICityTable } from '@/types/city';
 
 import cityDetail from './components/CityDetail.vue';
 import cityModal from './components/CityModal.vue';
 
-let dataSource = ref<CityEntity[]>([]);
+let dataSource = ref<ICityTable[]>([]);
 
 let searchInput = ref('');
 
-let loading = ref(true);
+const allToogle = reactive({
+    loading: true,
+    drawerFlag: false,
+    dialogFlag: false
+});
 
-let drawerFlag = ref(false);
-
-let dialogFlag = ref(false);
-
-let dataDetail = reactive({
+const dataDetail = reactive({
     data: {}
 });
 
-let dataEdit = reactive({
+const dataEdit = reactive({
     data: {},
     title: ''
 });
 
 // 分页配置项
-let page = reactive({
+const page = reactive({
     currentPage: 1,
     pageSize: 10,
     total: 0
 });
 
 // 排序
-let sort = reactive({
+const sort = reactive({
     sortField: 'sort',
     sortType: 'asc'
 });
@@ -54,7 +53,8 @@ const getCityList = () => {
         sortField: sort.sortField,
         sortType: sort.sortType
     };
-    loading.value = true;
+
+    allToogle.loading = true;
     return fetchCityList(params)
         .then((res) => {
             dataSource.value = res.data;
@@ -62,11 +62,11 @@ const getCityList = () => {
         })
         .catch(() => {})
         .finally(() => {
-            loading.value = false;
+            allToogle.loading = false;
         });
 };
-// 刷新城市列表
 
+// 刷新城市列表
 const refreshTable = () => {
     page.currentPage = 1;
     getCityList();
@@ -86,13 +86,13 @@ const handleSortChange = ({ prop, order } : { prop: string, order: string }) => 
 };
 
 const handleCreateCity = () => {
-    dialogFlag.value = true;
+    allToogle.dialogFlag = true;
     dataEdit.data = {};
     dataEdit.title = '新建城市';
 };
 
 const handleEdit = (row: ICityTable) => {
-    dialogFlag.value = true;
+    allToogle.dialogFlag = true;
     dataEdit.data = { ...row };
     dataEdit.title = '编辑城市';
 };
@@ -121,21 +121,21 @@ const handleDelete = (row: ICityTable) => {
             })
             .catch(() => {});
     }).catch(() => {}).finally(() => {
-        loading.value = false;
+        allToogle.loading = false;
     });
 };
 
 const handleToDetail = (data: ICityTable) => {
     dataDetail.data = { ...data };
-    drawerFlag.value = true;
+    allToogle.drawerFlag = true;
 };
 
 const handleDrawerClose = (val: boolean) => {
-    drawerFlag.value = val;
+    allToogle.drawerFlag = val;
 };
 
 const handleDialogClose = (val: boolean) => {
-    dialogFlag.value = val;
+    allToogle.dialogFlag = val;
 };
 
 const handleSizeChange = (val: number) => {
@@ -176,7 +176,7 @@ const handleCurrentChange = (val: number) => {
                 </div>
                 <div class="table-content">
                     <el-table
-                        v-loading="loading"
+                        v-loading="allToogle.loading"
                         :data="dataSource"
                         @sort-change="handleSortChange"
                         style="width: 100%"
@@ -189,24 +189,24 @@ const handleCurrentChange = (val: number) => {
                         <el-table-column prop="code" label="行政区划代码" />
                         <el-table-column prop="sort" label="排序" sortable/>
                         <el-table-column prop="createBy" label="创建者" />
-                        <el-table-column prop="createTime" label="创建时间" sortable/>
-                        <el-table-column prop="updateTime" label="更新时间" sortable/>
+                        <el-table-column prop="createTime" label="创建时间" sortable />
+                        <el-table-column prop="updateTime" label="更新时间" sortable />
                         <el-table-column label="操作">
                             <template #default="scope">
                                 <el-button
-                                    link
                                     type="primary"
                                     size="small"
+                                    :icon="EditPen"
+                                    circle
                                     @click="handleEdit(scope.row)"
-                                  >编辑</el-button
-                                >
+                                ></el-button>
                                 <el-button
-                                    link
                                     type="danger"
                                     size="small"
-                                  @click="handleDelete(scope.row)"
-                                  >删除</el-button
-                                >
+                                    :icon="Delete"
+                                    circle
+                                    @click="handleDelete(scope.row)"
+                                ></el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -223,8 +223,8 @@ const handleCurrentChange = (val: number) => {
                         class="table-pagination"
                     />
 
-                    <city-detail :drawerVisible="drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
-                    <city-modal :dialogVisible="dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
+                    <city-detail :drawerVisible="allToogle.drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
+                    <city-modal :dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
                 </div>
             </Board>
         </Layout>
@@ -241,6 +241,7 @@ const handleCurrentChange = (val: number) => {
     };
 
     .board {
+        min-height: calc(100vh - 204px);
         padding: 20px;
 
         .table-header {

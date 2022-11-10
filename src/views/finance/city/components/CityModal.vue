@@ -20,7 +20,7 @@ const props = defineProps({
     }
 });
 
-let cityForm = reactive<Entity>({
+const cityForm = reactive<Entity>({
     name: '',
     code: '',
     sort: '',

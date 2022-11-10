@@ -69,7 +69,7 @@ const currentRoute = router.currentRoute;
                             >
                             <FlexRow horizontal="between"
                                 class="sidebar-root-label">
-                                    {{ opt.title }}
+                                    <Text size="sm" color="current">{{ opt.title }}</Text>
                                     <i-ep-arrow-down class="sidebar-drop-arrow" :class="{ expanded: parentLink.expanded }"/>
                             </FlexRow>
                         </a>
@@ -87,7 +87,7 @@ const currentRoute = router.currentRoute;
                                     :class="{ active: isExactActive }"
                                     :href="href"
                                     @click="navigate">
-                                    <span class="sidebar-sub-label">{{ optChild.title }}</span>
+                                    <Text class="sidebar-sub-label" size="sm">{{ optChild.title }}</Text>
                                 </a>
                             </FlexRow>
                         </RouterLink>
@@ -113,7 +113,7 @@ const currentRoute = router.currentRoute;
                                 <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
                             </div>
                             <div class="sidebar-root-link" :class="{ active: isExactActive }" >
-                                <span class="sidebar-root-label">{{ opt.title }}</span>
+                                <Text class="sidebar-root-label" size="sm">{{ opt.title }}</Text>
                             </div>
                         </a>
                     </RouterLink>
@@ -193,7 +193,7 @@ const currentRoute = router.currentRoute;
 }
 
 .sidebar-sub-list {
-    @apply;
+    @apply pb-2;
 }
 
 

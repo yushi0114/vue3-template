@@ -46,11 +46,11 @@
     --el-bg-color: #ffffff;
     --el-bg-color-page: #f2f3f5;
     --el-bg-color-overlay: #ffffff;
-    --el-text-color-primary: #303133;
-    --el-text-color-regular: #606266;
-    --el-text-color-secondary: #909399;
-    --el-text-color-placeholder: #a8abb2;
-    --el-text-color-disabled: #c0c4cc;
+    --el-text-color-primary: #1e1e1e;
+    --el-text-color-regular: #383838;
+    --el-text-color-secondary: #5e5e5e;
+    --el-text-color-placeholder: #d9d9d9;
+    --el-text-color-disabled: #d9d9d9;
     --el-border-color: #dcdfe6;
     --el-border-color-light: #e4e7ed;
     --el-border-color-lighter: #ebeef5;

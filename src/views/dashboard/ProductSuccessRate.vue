@@ -101,40 +101,52 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <el-card :body-style="{ padding: '20px 24px 28px' }" shadow="never">
+    <el-card :body-style="{ padding: '20px 24px 24px' }" shadow="never">
         <div class="card-header">产品需求受理月成功率数据趋势</div>
+        <div class="chart-wrapper" ref="chartDomRef"></div>
+    </el-card>
+    <div class="success-rate-wrapper">
         <div class="success-rate-label">当月成功率 (辽信通 / 市综服)</div>
         <div class="success-rate-value">
             {{ data.successRate[data.successRate.length - 1]?.per }}%
             /
             {{ data.ezjfwSuccessRate[data.ezjfwSuccessRate.length - 1]?.per }}%
         </div>
-        <div class="chart-wrapper" ref="chartDomRef"></div>
-    </el-card>
+    </div>
 </template>
 
 <style lang="scss" scoped>
 .card-header {
     @include font(16px);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     color: #1e1e1e;
     font-weight: bold;
 }
 
-.success-rate-label {
-    @include font(12px);
-    margin-bottom: 1px;
-    color: #5e5e5e;
-}
+.success-rate-wrapper {
+    margin-top: 20px;
+    padding: 11.5px 24px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(rgb(58, 149, 255) 0%, rgb(27, 92, 255) 100%);
+    border-radius: 4px;
 
-.success-rate-value {
-    line-height: 38px;
-    color: #1e1e1e;
-    font-size: 24px;
+    .success-rate-label {
+        @include font(12px);
+        margin-bottom: 1px;
+        color: #fff;
+    }
+
+    .success-rate-value {
+        line-height: 38px;
+        color: #fff;
+        font-size: 24px;
+    }
 }
 
 .chart-wrapper {
     width: 100%;
-    height: 209px;
+    height: 172px;
 }
 </style>

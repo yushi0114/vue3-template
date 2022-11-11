@@ -29,23 +29,17 @@ onBeforeMount(() => {
             <TodayIndicator :data="count" />
             <TotalIndicator :data="count" />
             <div style="display: flex; width: 100%">
-                <SuccessRate class="flex-card" :data="count" />
-                <ProductSuccessRate class="flex-card" :data="count" />
-                <RankList class="flex-card" :data="count" />
+                <SuccessRate style="flex: 3 1 0" :data="count" />
+                <div style="flex: 3 1 0; margin-left: 20px; display: flex; flex-direction: column;">
+                    <ProductSuccessRate :data="count" />
+                </div>
+                <RankList style="flex: 4 1 0; margin-left: 20px" :data="count" />
             </div>
         </el-space>
     </PagePanel>
 </template>
 
 <style lang="scss" scoped>
-.flex-card {
-    flex: 1 1 0;
-
-    &:not(:first-child) {
-        margin-left: 20px;
-    }
-}
-
 :deep(.el-space__item:nth-child(4)) {
     width: 100%;
 }

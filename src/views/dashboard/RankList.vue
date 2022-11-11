@@ -158,6 +158,9 @@ const resizeHandler = () => {
 
 const initChart = () => {
     chartInstance = echarts.init(chartDomRef.value!);
+    chartInstance.on('mousemove', () => {
+        //
+    });
     loadOptions();
     window.addEventListener('resize', resizeHandler);
 };
@@ -173,7 +176,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <el-card :body-style="{ padding: '20px 28px 40px' }" shadow="never">
+    <el-card :body-style="{ padding: '20px 28px 24px' }" shadow="never">
         <div class="card-header">产品申请数量排行榜</div>
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
             <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
@@ -193,6 +196,6 @@ onBeforeUnmount(() => {
 
 .chart-wrapper {
     width: 100%;
-    height: 200px;
+    height: 216px;
 }
 </style>

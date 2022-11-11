@@ -1,7 +1,7 @@
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
 import type { DefItem } from '@/components/SjcForm/types';
 import type { IColumnTypes, IColumnKeys } from './types';
-import { STATUS_LABEL_MAP, STATUS } from '@/enums';
+import { STATUS_LABEL_MAP, STATUS, FILE_TYPE } from '@/enums';
 
 // 表格列配置
 export const COLUMNS = readonly([
@@ -162,6 +162,26 @@ export const INIT_ROLE_FORM: DefItem[] = [
                 children: [{ id: '123432334231', label: '2' }],
             },
             { id: '1256522311', label: '2', children: [{ id: '9899323211', label: '3' }] },
+        ],
+    },
+    {
+        type: 'upload',
+        keyName: 'haha',
+        placeholder: '',
+        label: '图片上传',
+        uploadObj: {
+            limit: 1,
+            hideUpload: false,
+            tips: 'aaaaa',
+            listType: 'picture',
+            fileType: FILE_TYPE.IMAGE,
+        },
+        rules: [
+            {
+                required: true,
+                message: '图片上传必填',
+                trigger: ['blur', 'change'],
+            },
         ],
     },
 ];

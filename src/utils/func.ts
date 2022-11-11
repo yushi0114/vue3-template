@@ -199,3 +199,16 @@ export function cloneDeep<T extends Array<any> | Record<string | number, any>>(o
     }
     return result;
 }
+
+export function openWindow(
+    url: string | URL,
+    opt: { target?: '_self' | '_blank'; noopener?: boolean; noreferrer?: boolean }
+) {
+    const { target = '_blank', noopener = false, noreferrer = false } = opt || {};
+    const feature = [];
+
+    if (noopener) feature.push('noopener=yes');
+    if (noreferrer) feature.push('noreferrer=yes');
+
+    window.open(url, target, feature.join(','));
+}

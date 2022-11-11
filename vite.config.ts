@@ -104,9 +104,12 @@ export default ({ mode }: ConfigEnv): UserConfig => {
             },
             preprocessorOptions: {
                 scss: {
-                    additionalData: '@use "@/style/global.scss" as *; \n',
-                },
-            },
+                    additionalData: `
+                        @use "@/style/global.scss" as *; \n
+                        @use "@/style/mixin.scss" as *; \n
+                    `,
+                }
+            }
         },
         server: {
             // host: 'localhost',

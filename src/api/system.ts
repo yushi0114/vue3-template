@@ -1,3 +1,4 @@
+import { MENU_TAB } from '@/enums';
 import type { DynamicNavEntity, NavEntity, UserEntity } from '@/types';
 import { DMS_DOMAIN } from './const';
 import { api } from './http';
@@ -7,7 +8,7 @@ export type DynamicNavsResponse = DynamicNavEntity[];
 
 export function dynamicNavs(roleId: DynamicNavsPayload): Promise<DynamicNavsResponse> {
     return api.get(`${DMS_DOMAIN}/v1/role/menu/list`, {
-        params: { roleId },
+        params: { roleId, tab: MENU_TAB.MENU_TAB_DMS },
         // mock
         // adapter: (conf) => {
         //     if (!roleId) return Promise.reject();

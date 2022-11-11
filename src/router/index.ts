@@ -55,7 +55,7 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
             nav.defaultPath = nav.path.replace(/\/:\w+/g, '/0');
             router.addRoute(ROOT_NAME, {
                 path: nav.path,
-                component: genDynamicComponent(nav.component),
+                component: genDynamicComponent(nav.component!),
                 meta: {
                     title: nav.title,
                     permission: RoutePermission.read

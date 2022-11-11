@@ -1,0 +1,21 @@
+@mixin font($font-size: 12px) {
+    font-size: $font-size;
+    @if ($font-size == 12px) {
+        line-height: 18px;
+    }
+    @else if ($font-size == 14px) {
+        line-height: 22px;
+    }
+    @else if ($font-size == 16px) {
+        line-height: 24px;
+    }
+    @else if ($font-size == 20px) {
+        line-height: 28px;
+    }
+    @else if ($font-size == 24px) {
+        line-height: 32px;
+    }
+    @else {
+        line-height: normal;
+    }
+}

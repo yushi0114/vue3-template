@@ -9,7 +9,7 @@ export interface NavEntity {
     path: string,
     status: NavStatusType,
     desc?: string,
-    component: string,
+    component?: string,
     icon?: string,
     children?: NavEntity[],
 }

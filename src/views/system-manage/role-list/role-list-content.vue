@@ -1,13 +1,13 @@
 <template>
   <div class="search-box">
-    <el-input class="search-input" placeholder="请输入搜索内容" v-model="filterObject.searchInput">
+    <el-input class="search-input" placeholder="请输入搜索内容" v-model="roleFilterObject.searchInput">
       <template #append>
         <el-button :icon="Search" />
       </template>
     </el-input>
     <el-button :icon="Plus" type="primary" @click="handleCreateNewRole">新建</el-button>
   </div>
-  <el-table :data="roleTableData.list" style="width: 100%">
+  <el-table :data="roleList?.list" style="width: 100%">
     <el-table-column prop="name" label="名称" width="180" />
     <el-table-column prop="desc" label="创建者" width="180" />
     <el-table-column prop="createAt" label="创建时间" />
@@ -35,35 +35,18 @@
         class="margin-20-20"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="roleTableData.currentPage"
+        :current-page="roleFilterObject.currentPage"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="roleTableData.total">
+        :total="roleList?.total">
     </el-pagination>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive} from 'vue';
 import type {RoleListItemType} from '@/views/system-manage/type/role-list.type';
 import {ElMessage, ElMessageBox} from 'element-plus';
-import {tableData} from '../mock/route-tree';
 import {Search, Plus} from '@element-plus/icons-vue';
-
-const roleTableData = ref<{
-  list: RoleListItemType[],
-  total: number,
-  currentPage: number
-}>({
-    list: [],
-    total: 0,
-    currentPage: 0
-});
-
-const filterObject = reactive({
-    searchInput: '',
-    currentSize: 0,
-    currentPage: 0
-});
+import { roleFilterObject, roleList } from './role-list';
 
 const emit = defineEmits(['edit', 'create']);
 
@@ -72,11 +55,11 @@ function handleEditRoleItem(item: RoleListItemType){
 }
 
 function handleCurrentChange(item: number) {
-    filterObject.currentPage = item;
+    roleFilterObject.currentPage = item;
 }
 
 function handleSizeChange(item: number){
-    filterObject.currentSize = item;
+    roleFilterObject.currentSize = item;
 }
 
 function handleCreateNewRole(){
@@ -106,18 +89,6 @@ function handleRemoveRoleItem(item: RoleListItemType){
             });
         });
 }
-
-async function getRoleListData(){
-    roleTableData.value = {
-        list: tableData,
-        total: 4,
-        currentPage: 1
-    };
-}
-
-onMounted(async() => {
-    await getRoleListData();
-});
 </script>
 
 <style scoped lang="scss">

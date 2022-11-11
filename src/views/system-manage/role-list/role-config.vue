@@ -12,7 +12,14 @@ import RoleForm from './role-form.vue';
 import RoleListContent from '@/views/system-manage/role-list/role-list-content.vue';
 
 import {mode, currentRoleId, getTreeData} from './role-list';
+import type {PropType} from 'vue';
+import type {RouteTabType} from '@/views/system-manage/type/route-list.type';
+defineProps({
+    tab: {
+        type: String as PropType<RouteTabType>,
 
+    }
+});
 function handleEditRoleItem(id: string){
     mode.value = 'form';
     currentRoleId.value = id;

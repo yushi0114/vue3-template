@@ -20,16 +20,24 @@ import RoleConfig from '@/views/system-manage/role-list/role-config.vue';
 import {ref} from 'vue';
 import type {TabsPaneContext} from 'element-plus';
 import type {RouteTabType} from '@/views/system-manage/type/route-list.type';
+import {getRolePageList, roleFilterObject} from '@/views/system-manage/role-list/role-list';
 
 const activeName = ref<RouteTabType>('dms');
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-    console.log(tab, event);
+const handleClick = (tab: TabsPaneContext) => {
+    getRolePageList({
+        tab: tab.paneName as RouteTabType
+    });
 };
 
 onMounted(() => {
-
-})
+    roleFilterObject.currentSize = 10;
+    roleFilterObject.currentPage = 0;
+    console.log('----------');
+    getRolePageList({
+        tab: activeName.value
+    });
+});
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,6 @@ import type {
 } from '@/views/system-manage/type/route-list.type';
 import {getMenuTree, getMenuDetailById, addMenu, updateMenu, deleteMenu} from '@/api/system-manage';
 
-
 export const activeName = ref<RouteTabType>('fin');
 export const dataSource = ref<TreeItemType[]>();
 export const routeForm = ref<RouteFormType>();

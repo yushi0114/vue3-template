@@ -35,12 +35,12 @@ import {ref, reactive} from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import {
     activeName,
-    createRoute,
     currentRouteId,
-    editRoute,
-    getTreeData,
     routeForm,
     formType,
+    createRoute,
+    editRoute,
+    getTreeData,
     setFormType
 } from './route-list';
 import type {RouteFormType} from '@/views/system-manage/type/route-list.type';
@@ -48,7 +48,6 @@ import type {RouteFormType} from '@/views/system-manage/type/route-list.type';
 const emit = defineEmits([
     'goBack'
 ]);
-
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
@@ -98,7 +97,6 @@ async function handleSaveForm(params: {
   form: RouteFormType,
   type: 'create' | 'edit'
 }){
-    console.log(params);
     if (params.type === 'create'){
         await createRoute(params.form);
         setFormType('edit');

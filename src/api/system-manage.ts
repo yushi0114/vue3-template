@@ -61,16 +61,16 @@ export function getMenuDetailById(id: string, tab: RouteTabType) {
     });
 }
 
-
-export function getRoleLIst(params: {
+export function getRoleList(params: {
     searchInput?: string,
-    tab: RouteTabType
+    tab: RouteTabType,
+    pageIndex: number,
+    pageSize: number
+    sortField: 'updateTime',
+    sortType: 'asc' | 'desc'
 }) {
     return api.get(`${DMS_DOMAIN}/v1/role/list`, {
-        params: {
-            searchInput,
-            tab
-        }
+        params
     });
 }
 

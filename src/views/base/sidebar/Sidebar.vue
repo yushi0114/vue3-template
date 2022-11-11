@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import { useSidebar } from '@/composables';
 import type { DynamicNavEntity } from '@/types';
-import { useLocalStorage } from '@vueuse/core';
 import SidebarLinkGroup from './SidebarLinkGroup.vue';
 
 /**
@@ -20,14 +20,16 @@ withDefaults(
 );
 
 // const emits = defineEmits<{
+//     (e: 'expand', expand: boolean): void
 //     (e: 'close'): void,
 //     (e: 'change', opt: DynamicNavEntity, parent: DynamicNavEntity): void,
 // }>();
 
-const expand = useLocalStorage('SJZX_DMS_SIDEBAR_EXPAND', false);
+const { expand, toggleExpand } = useSidebar();
 const sidebar = ref<HTMLDivElement>();
 const router = useRouter();
 const currentRoute = router.currentRoute;
+
 
 // function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
 //     emits('change', opt, parent);
@@ -59,7 +61,7 @@ const currentRoute = router.currentRoute;
                     <!-- 子菜单Header -->
                     <FlexRow
                         class="sidebar-root-block" :class="{ active: parentLink.active }"
-                        @click.prevent="expand ? parentLink.handleClick() : expand = true">
+                        @click.prevent="expand ? parentLink.handleClick() : toggleExpand(true)">
                         <div>
                             <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
                         </div>
@@ -69,7 +71,7 @@ const currentRoute = router.currentRoute;
                             >
                             <FlexRow horizontal="between"
                                 class="sidebar-root-label">
-                                    {{ opt.title }}
+                                    <Text size="sm" color="current">{{ opt.title }}</Text>
                                     <i-ep-arrow-down class="sidebar-drop-arrow" :class="{ expanded: parentLink.expanded }"/>
                             </FlexRow>
                         </a>
@@ -87,7 +89,7 @@ const currentRoute = router.currentRoute;
                                     :class="{ active: isExactActive }"
                                     :href="href"
                                     @click="navigate">
-                                    <span class="sidebar-sub-label">{{ optChild.title }}</span>
+                                    <Text class="sidebar-sub-label" size="sm">{{ optChild.title }}</Text>
                                 </a>
                             </FlexRow>
                         </RouterLink>
@@ -113,7 +115,7 @@ const currentRoute = router.currentRoute;
                                 <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Files'" />
                             </div>
                             <div class="sidebar-root-link" :class="{ active: isExactActive }" >
-                                <span class="sidebar-root-label">{{ opt.title }}</span>
+                                <Text class="sidebar-root-label" size="sm">{{ opt.title }}</Text>
                             </div>
                         </a>
                     </RouterLink>
@@ -123,8 +125,8 @@ const currentRoute = router.currentRoute;
         <FlexRow
             :horizontal="expand ? 'end' : 'center'"
             class="sidebar-footer">
-            <i-ep-fold v-if="expand" @click="expand = false" />
-            <i-ep-expand v-else @click="expand = true" />
+            <i-ep-fold v-if="expand" @click="toggleExpand(false)" />
+            <i-ep-expand v-else @click="toggleExpand(true)" />
         </FlexRow>
     </div>
 </template>
@@ -193,7 +195,7 @@ const currentRoute = router.currentRoute;
 }
 
 .sidebar-sub-list {
-    @apply;
+    @apply pb-2;
 }
 
 

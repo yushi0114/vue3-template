@@ -1,15 +1,20 @@
 <script lang="ts" setup>
+import ErrorPage from './ErrorPage.vue';
 
 </script>
 
 <template>
-  <div class="error-404">
-    Page Not Found
-  </div>
+    <ErrorPage class="error-404">
+        <img class="error-404-pic" src="@/assets/images/404.png" />
+        <Text color="regular" class="">实在抱歉！页面一不小心跑丢了</Text>
+        <RouterLink to="/dashboard" replace>
+            <el-button type="primary">返回首页</el-button>
+        </RouterLink>
+    </ErrorPage>
 </template>
 
-<style lang="postcss">
-.error-404 {
-  @apply;
+<style lang="scss">
+.error-404-pic {
+    height: 400px;
 }
 </style>

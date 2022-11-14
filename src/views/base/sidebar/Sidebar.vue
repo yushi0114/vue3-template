@@ -70,7 +70,8 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                         class="sidebar-root-block" :class="{ active: parentLink.active }"
                         @click.prevent="handleParentBlockClick(parentLink)">
                         <div>
-                            <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Folder'" />
+                            <!-- <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Folder'" /> -->
+                            <Icon class="sidebar-root-icon" :name="opt.icon || 'ep-folder'" />
                         </div>
                         <a class="sidebar-root-link"
                             :class="{ active: parentLink.active }"
@@ -97,7 +98,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                                     :href="href"
                                     @click="navigate">
                                     <div>
-                                        <component class="el-icon sidebar-sub-icon" :is="optChild.icon || 'Files'" />
+                                        <Icon class="sidebar-sub-icon" :name="optChild.icon || 'ep-files'" />
                                     </div>
                                     <Text size="sm">{{ optChild.title }}</Text>
                                 </a>
@@ -122,7 +123,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                             :href="href" @click="navigate"
                         >
                             <div>
-                                <component class="el-icon sidebar-root-icon" :is="opt.icon || 'Folder'" />
+                                <Icon class="sidebar-root-icon" :name="opt.icon || 'ep-folder'" />
                             </div>
                             <div class="sidebar-root-link" :class="{ active: isExactActive }" >
                                 <Text class="sidebar-root-label" size="sm">{{ opt.title }}</Text>
@@ -179,12 +180,12 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 }
 
 
-.el-icon.sidebar-root-icon {
+.sidebar-root-icon {
     @apply h-6 w-6 mt-0.5;
 }
 
-.el-icon.sidebar-sub-icon {
-    @apply h-4 w-4 mt-1;
+.sidebar-sub-icon {
+    @apply h-5 w-5 mt-1;
 }
 
 .sidebar-root-link {

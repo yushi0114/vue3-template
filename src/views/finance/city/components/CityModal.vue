@@ -1,13 +1,7 @@
 <script lang="ts" setup>
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { createCity, updateCity } from '@/api/finance';
-
-interface Entity {
-    name: string,
-    code: string,
-    sort: number | string
-    id: string
-}
+import type { OperateCityEntity } from '@/types/city';
 
 const props = defineProps({
     dialogVisible: {
@@ -20,7 +14,7 @@ const props = defineProps({
     }
 });
 
-const cityForm = reactive<Entity>({
+const cityForm = reactive<OperateCityEntity>({
     name: '',
     code: '',
     sort: '',
@@ -35,10 +29,7 @@ watch(props.dataEdit, (val) => {
         cityForm.sort = val.data.sort;
         cityForm.id = val.data.id;
     } else {
-        cityForm.name = '';
-        cityForm.code = '';
-        cityForm.sort = '';
-        cityForm.id = '';
+        initForm(cityForm, '');
     }
 });
 
@@ -47,10 +38,16 @@ const emit = defineEmits<{
   (e: 'refresh'): void
 }>();
 
-const cancel = (form: FormInstance | undefined) => {
-    if (!form) return;
-    form.resetFields();
+const cancel = () => {
+    initForm(cityForm, '');
     emit('close', false);
+};
+
+const initForm = (form: OperateCityEntity , val: string) => {
+    form.name = val;
+    form.code = val;
+    form.sort = val;
+    form.id = val;
 };
 
 const createOrEditCity = (form: FormInstance | undefined, title: string) => {
@@ -101,7 +98,7 @@ const createOrEditCity = (form: FormInstance | undefined, title: string) => {
     });
 };
 
-const cityForRef = ref<FormInstance>();
+const cityFormRef = ref<FormInstance>();
 
 const cityRules = reactive<FormRules>({
     name: [
@@ -125,6 +122,9 @@ const cityRules = reactive<FormRules>({
         },
         {
             validator: (rule, value, callback) => {
+                if (!value) {
+                    return;
+                }
                 if (!/^\d{6}$/.test(value)) {
                     callback(new Error('行政区划代码必须为6位数字！'));
                 } else {
@@ -143,6 +143,9 @@ const cityRules = reactive<FormRules>({
         {
             required: true,
             validator: (rule, value, callback) => {
+                if (!value) {
+                    return;
+                }
                 if (!/^[1-9]\d{0,2}$/.test(value)) {
                     callback(new Error('排序只能为1-999的整数！'));
                 } else {
@@ -161,10 +164,10 @@ const cityRules = reactive<FormRules>({
             v-model="dialogVisible"
             :title="dataEdit.title"
             :width="'500px'"
-            @close="cancel(cityForRef)"
+            @close="cancel"
         >
             <el-form
-                ref="cityForRef"
+                ref="cityFormRef"
                 :model="cityForm"
                 :rules="cityRules"
                 label-width="120px"
@@ -201,8 +204,8 @@ const cityRules = reactive<FormRules>({
             </el-form>
             <template #footer>
               <span class="dialog-footer">
-                <el-button @click="cancel(cityForRef)">取 消</el-button>
-                <el-button type="primary" @click="createOrEditCity(cityForRef,dataEdit.title)">
+                <el-button @click="cancel">取 消</el-button>
+                <el-button type="primary" @click="createOrEditCity(cityFormRef, dataEdit.title)">
                   确 定
                 </el-button>
               </span>

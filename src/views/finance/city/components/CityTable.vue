@@ -72,9 +72,21 @@ const refreshTable = () => {
     getCityList();
 };
 
-const handleSearch = () => {
-    page.currentPage = 1;
-    getCityList();
+const handleSearch = (isClear: boolean) => {
+    if (isClear) {
+        page.currentPage = 1;
+        getCityList();
+    } else {
+        if (searchInput.value.length >= 2) {
+            page.currentPage = 1;
+            getCityList();
+        } else {
+            ElMessage({
+                type: 'error',
+                message: '输入内容不能少于2个字符',
+            });
+        }
+    }
 };
 
 const handleSortChange = ({ prop, order } : { prop: string, order: string }) => {
@@ -158,11 +170,11 @@ const handleCurrentChange = (val: number) => {
                 placeholder="请输入关键字进行查询"
                 v-model.trim="searchInput"
                 clearable
-                @clear="handleSearch"
-                @keyup.enter="handleSearch"
+                @clear="handleSearch(true)"
+                @keyup.enter="handleSearch(false)"
             >
                 <template #append>
-                    <el-button :icon="Search" @click="handleSearch" />
+                    <el-button :icon="Search" @click="handleSearch(false)" />
                 </template>
             </el-input>
             <el-button type="primary" :icon="Plus" @click="handleCreateCity">新建</el-button>

@@ -1,3 +1,5 @@
+import type { PlainOption } from '@/types';
+
 /*
  * @Description: 定义枚举类型
  * @FilePath: \dms-web\src\enums\index.ts
@@ -56,3 +58,18 @@ export enum FormType {
     UPLOAD = 'upload',
     INPUT_NUMBER = 'input-number',
 }
+
+export enum PlatformType {
+    LiaoXinTong = 0,
+    ShiZongFu = 1,
+}
+
+export const platformTypeMap: Readonly<Record<PlatformType, string>> = Object.freeze({
+    [PlatformType.LiaoXinTong]: '辽信通',
+    [PlatformType.ShiZongFu]: '市综服',
+});
+
+export const platformTypeOptions: PlainOption<PlatformType>[] = [
+    { name: platformTypeMap[PlatformType.LiaoXinTong], value: PlatformType.LiaoXinTong },
+    { name: platformTypeMap[PlatformType.ShiZongFu], value: PlatformType.ShiZongFu },
+];

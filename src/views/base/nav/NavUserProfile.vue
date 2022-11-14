@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { updateUsername } from '@/api';
-import { MENU_TAB } from '@/enums';
 import { useUserStore } from '@/stores';
 import { noop } from '@/utils';
 import { Key, SwitchButton, User, UserFilled } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
 import NavUserUpdatePwdDialog from './NavUserUpdatePwdDialog.vue';
+import NavUserUpdateNameDialog from './NavUserUpdateNameDialog.vue';
 
 enum UserDropdownCommand {
     changePassword,
@@ -13,9 +12,10 @@ enum UserDropdownCommand {
     Signout,
 }
 
-const { state, signout, getUserInfo } = useUserStore();
+const { state, signout } = useUserStore();
 const router = useRouter();
 const updatingPwdVisible = ref(false);
+const updatingNameVisible = ref(false);
 
 function handleCommand(cmd: UserDropdownCommand) {
     switch (cmd) {
@@ -37,30 +37,7 @@ function displayChangePassword() {
 }
 
 function displayChangeUserName() {
-    ElMessageBox.prompt('请输入新的用户名', '修改用户名', {
-        showInput: true,
-        inputValue: state.user?.name || '',
-        inputValidator: (val) => {
-            if (val.length === 0) return '用户名不能为空';
-            return true;
-        },
-        confirmButtonText: '修改',
-    })
-        .then(({ value: newName }) => {
-            return updateUsername({
-                id: state.user?.id!,
-                name: newName,
-                tab: MENU_TAB.MENU_TAB_DMS
-            });
-        })
-        .then(() => {
-            ElMessage({
-                message: '修改用戶名成功',
-                type: 'success',
-            });
-            return getUserInfo();
-        })
-        .catch(noop);
+    updatingNameVisible.value = true;
 }
 
 function handleSignout() {
@@ -103,6 +80,7 @@ function handleSignout() {
         </template>
     </el-dropdown>
     <NavUserUpdatePwdDialog v-model="updatingPwdVisible" />
+    <NavUserUpdateNameDialog v-model="updatingNameVisible" />
 </template>
 
 <style lang="scss">

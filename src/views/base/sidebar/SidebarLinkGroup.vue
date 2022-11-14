@@ -1,12 +1,25 @@
 
 <script lang="ts" setup>
-const props = defineProps<{ activeCondition?: boolean }>();
+export type LinkGroupSlotProperty = {
+    handleClick: Function,
+    expanded?: boolean,
+    active?: boolean,
+};
+
+const props = defineProps<{
+    activeCondition?: boolean
+    parentExpanded?: boolean
+}>();
 
 const expanded = ref(props.activeCondition);
 
 const handleClick = () => {
     expanded.value = !expanded.value;
 };
+
+watch(() => props.parentExpanded, () => {
+    if (props.parentExpanded === false) expanded.value = false;
+});
 </script>
 <template>
     <div class="sidebar-link-group" :class="{ active: activeCondition }">

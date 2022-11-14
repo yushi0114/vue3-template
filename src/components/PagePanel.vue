@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="page-panel" v-bind="$attrs">
+    <Layout class="page-panel" v-bind="$attrs">
         <!-- -->
         <header class="page-panel-header" v-if="title">
             <Title>{{ title }}</Title>
@@ -29,7 +29,7 @@ onMounted(() => {
         <div class="page-panel-content">
             <slot />
         </div>
-    </div>
+    </Layout>
 </template>
 
 <style lang="scss">
@@ -52,5 +52,6 @@ onMounted(() => {
 
 .page-panel-content {
     box-sizing: border-box;
+    flex: 1;
 }
 </style>

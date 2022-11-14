@@ -3,3 +3,4 @@ export * from './useRouteGuard';
 export * from './useApi';
 export * from './useToken';
 export * from './useModal';
+export * from './useSidebar';

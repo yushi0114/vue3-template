@@ -9,6 +9,7 @@ export interface ITextProps {
     italic?: boolean,
     truncate?: boolean,
     block?: boolean,
+    bold?: boolean,
     uppercase?: boolean,
     underline?: boolean,
 }
@@ -23,6 +24,7 @@ const props = withDefaults(
         italic: false,
         truncate: false,
         block: false,
+        bold: false,
         uppercase: false,
         underline: false,
     }
@@ -36,6 +38,7 @@ const props = withDefaults(
         props.block ? 'i-text-block' : '',
         props.uppercase ? 'i-text-uppercase' : '',
         props.underline ? 'i-text-underline' : '',
+        props.bold ? 'i-text-bold' : '',
         'i-text-' + props.align,
         props.size === 'current' ? '' : 'i-text-' + props.size,
         props.color === 'current' ? '' : 'i-text-color-' + props.color,
@@ -48,16 +51,16 @@ const props = withDefaults(
     @apply inline text-current;
 }
 
-.dark .i-text {
-    @apply text-current;
-}
-
 .i-text-underline {
     @apply underline;
 }
 
 .i-text.i-text-block {
     @apply block;
+}
+
+.i-text.i-text-bold {
+    @apply font-bold;
 }
 
 .i-text-italic {

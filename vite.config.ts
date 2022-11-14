@@ -49,7 +49,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                     'pinia',
                     {
                         '@vueuse/core': ['onKeyStroke', 'useFocus'],
-                        '/src/utils/func.ts': ['omit'],
+                        '/src/utils/func.ts': ['omit', 'cloneDeep'],
                         '/src/composables/index.ts': ['useApi'],
                     },
                 ],

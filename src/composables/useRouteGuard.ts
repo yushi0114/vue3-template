@@ -12,6 +12,8 @@ function hasNecessaryRoute(router: Router, to: RouteLocationNormalized) {
     });
 }
 
+const necessaryCheckedRoutePathSet = new Set<string>();
+
 export function useRouteGuard() {
     const { getUserInfo } = useUserStore();
     const router = useRouter();
@@ -22,14 +24,22 @@ export function useRouteGuard() {
         progress.start();
 
         if (token.get()) {
+            // 访问的路由如果还没有添加，可能是一个动态路由
+            // 需要重新拉取api 动态添加路由，然后通过重定向 next({ ...to, replace }) 再次触发路由
             if (!hasNecessaryRoute(router, to)) {
-                getUserInfo()
-                    .then(() => {
-                        next({ ...to, replace: true });
-                    })
-                    .catch(() => {
-                        next(ERROR_404_PATH);
-                    });
+                if (necessaryCheckedRoutePathSet.has(to.fullPath)) {
+                    next(ERROR_404_PATH);
+                }
+                else {
+                    necessaryCheckedRoutePathSet.add(to.fullPath);
+                    getUserInfo()
+                        .then(() => {
+                            next({ ...to, replace: true });
+                        })
+                        .catch(() => {
+                            next(ERROR_404_PATH);
+                        });
+                }
             }
             else {
                 if (to.path === SIGNIN_PATH) {

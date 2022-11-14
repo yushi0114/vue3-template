@@ -6,6 +6,8 @@ import LoginFooter from './components/footer/index.vue';
 <template>
     <div class="login">
         <div class="form">
+            <div class="form-title">金融栈数据管理平台</div>
+            <div class="form-title-line"></div>
             <account-password-login></account-password-login>
         </div>
         <div class="footer">
@@ -28,6 +30,22 @@ import LoginFooter from './components/footer/index.vue';
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
+}
+.form-title {
+    width: 335px;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--el-color-primary);
+    line-height: 67px;
+    white-space: nowrap;
+}
+
+.form-title-line {
+    margin-top: 20px;
+    margin-bottom: 70px;
+    width: 95px;
+    height: 3px;
+    background: var(--el-color-primary);
 }
 
 .form {

@@ -2,6 +2,7 @@
   "globals": {
     "EffectScope": true,
     "acceptHMRUpdate": true,
+    "cloneDeep": true,
     "computed": true,
     "createApp": true,
     "createPinia": true,

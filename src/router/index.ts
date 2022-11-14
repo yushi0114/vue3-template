@@ -5,6 +5,7 @@ import type { DynamicNavEntity } from '@/types';
 import { genDynamicComponent } from '@/views';
 import { Error404 } from '@/views/system';
 import { Base } from '@/views/base';
+import { isFunction } from '@/utils';
 
 // @/store/user signin()
 export const SIGNIN_PATH = '/signin';

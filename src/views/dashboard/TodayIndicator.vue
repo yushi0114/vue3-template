@@ -19,8 +19,10 @@ withDefaults(
 </script>
 
 <template>
-    <el-card :body-style="{ padding: '20px 24px 24px' }" shadow="never">
-        <div class="card-header">今日核心指标</div>
+    <Board bordered :style="{ padding: '20px 24px 24px' }" shadow="never">
+        <div class="card-header">
+            <Text color="paragraph" bold size="md">今日核心指标</Text>
+        </div>
         <div class="indicator">
             <div class="item-label">企业新用户</div>
             <div class="item-value">{{ data.countTodayElibUser }} <span>/</span> {{ data.countTodayEzjfwUser }}</div>
@@ -42,15 +44,12 @@ withDefaults(
             <div class="item-label">市综服产品需求</div>
             <div class="item-value">{{ data.countTodayEzjfwProductReq }}</div>
         </div>
-    </el-card>
+    </Board>
 </template>
 
 <style lang="scss" scoped>
 .card-header {
-    @include font(16px);
     margin-bottom: 16px;
-    color: #1e1e1e;
-    font-weight: bold;
 }
 
 .indicator {

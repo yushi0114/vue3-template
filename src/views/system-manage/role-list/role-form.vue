@@ -13,8 +13,8 @@
             :data="dataSource"
             show-checkbox
             node-key="id"
-            :default-expand-all="true"
-        >
+            :default-checked-keys="roleForm.menuIdArr"
+            :default-expand-all="true">
         </el-tree>
       </div>
     </el-form-item>
@@ -22,7 +22,6 @@
       <el-button type="primary" @click="submitForm(ruleFormRef)">
         {{formType === 'edit' ? '编辑' : '创建'}}
       </el-button>
-      <el-button @click="resetForm(ruleFormRef)">重置</el-button>
       <el-button @click="goBack()">返回</el-button>
     </el-form-item>
   </el-form>
@@ -31,13 +30,10 @@
 <script lang="ts" setup>
 import {ref, reactive} from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import {roleForm, formType, dataSource} from './role-list';
+import {roleForm, formType, dataSource, activeName, handleGoBack, currentRoleId, setRoleListLoading} from './role-list';
+import {addRole, updateRole} from '@/api/system-manage';
 
-const emit = defineEmits([
-    'save', 'goBack'
-]);
 const menuTree = ref();
-
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
     name: [
@@ -52,24 +48,41 @@ const rules = reactive<FormRules>({
 
 const submitForm = async(formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    await formEl.validate((valid, fields) => {
+    await formEl.validate(async(valid, fields) => {
         if (valid) {
-            let checkedNodeIds = menuTree.value.getCheckedNodes(false, true).map((item) => item.id);
+            let checkedNodeIds = menuTree.value
+                .getCheckedNodes(false, true)
+                .map((item) => item.id);
             console.log(checkedNodeIds);
+            setRoleListLoading(true);
+            if (formType.value === 'create'){
+                await addRole({
+                    ...roleForm.value,
+                    menuIdArr: checkedNodeIds,
+                    tab: activeName.value,
+                    menuName: ''
+                });
+            } else {
+                await updateRole({
+                    roleId: currentRoleId.value,
+                    ...roleForm.value,
+                    menuIdArr: checkedNodeIds,
+                    tab: activeName.value,
+                    menuName: ''
+                });
+            }
+            setRoleListLoading(false);
+            await handleGoBack();
         } else {
             console.log('error submit!', fields);
         }
     });
 };
 
-const resetForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.resetFields();
-};
-
-function goBack(){
-    emit('goBack');
+async function goBack(){
+    await handleGoBack();
 }
+
 
 </script>
 

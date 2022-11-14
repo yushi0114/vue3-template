@@ -1,20 +1,27 @@
 import {reactive, ref} from 'vue';
-import type {RoleFormType, RoleListItemType} from '@/views/system-manage/type/role-list.type';
-import {routeTree} from '@/views/system-manage/mock/route-tree';
-import {getRoleList} from '@/api/system-manage';
-import type {RouteTabType, TreeItemType} from '@/views/system-manage/type/route-list.type';
+import type {RoleTabType, RoleFormType, RoleListItemType} from '@/views/system-manage/type/role-list.type';
+import {getMenuTree, getRoleList} from '@/api/system-manage';
+import type { TreeItemType} from '@/views/system-manage/type/route-list.type';
 
-
+export const isLoading = ref(false);
+export const activeName = ref<RoleTabType>('dms');
 export const dataSource = ref<TreeItemType[]>();
 export const mode = ref<'form' | 'list'>('list');
 export const currentRoleId = ref();
-export const roleForm = ref<RoleFormType>();
+export const roleForm = ref<RoleFormType>({
+    name: '',
+    desc: '',
+    menuIdArr: []
+});
 export const formType = ref<'create' | 'edit'>('edit');
 
-export const roleList = ref<{
+export const roleList = reactive<{
     total: number;
     list: RoleListItemType[];
-}>();
+}>({
+    total: 0,
+    list: []
+});
 
 export const roleFilterObject = reactive({
     searchInput: '',
@@ -22,12 +29,26 @@ export const roleFilterObject = reactive({
     currentPage: 0
 });
 
-export async function getTreeData(): Promise<void> {
-    dataSource.value = routeTree;
+export function setRoleListLoading(value: boolean){
+    isLoading.value = value;
+}
+
+export async function handleGoBack() {
+    mode.value = 'list';
+    currentRoleId.value = undefined;
+    await getRolePageList({
+        tab: activeName.value
+    });
+}
+
+export async function getTreeData(name?: RoleTabType): Promise<void> {
+    getMenuTree(name ? name : activeName.value).then(data => {
+        dataSource.value = data as unknown as TreeItemType[];
+    });
 }
 
 export async function getRolePageList(params: {
-    tab: RouteTabType,
+    tab: RoleTabType,
 }){
     getRoleList({
         ...params,
@@ -37,10 +58,7 @@ export async function getRolePageList(params: {
         sortField: 'updateTime',
         sortType: 'desc'
     }).then(data => {
-        console.log(data, '-----------');
-        roleList.value = {
-            list: data.data as unknown as RoleListItemType[],
-            total: 1
-        };
+        roleList.list = data.data as unknown as RoleListItemType[];
+        roleList.total = 1;
     });
 }

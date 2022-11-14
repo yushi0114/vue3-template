@@ -2,13 +2,13 @@
     <PageContent :title="'路由管理'" :desc="'路由管理包括DMS、金融端和征信端'">
         <el-tabs v-model="activeName" class="demo-tabs" style="height: 100%" @tab-click="handleClick">
           <el-tab-pane label="金融端" name="fin">
-              <route-config :data-source="dataSource" :tab="'fin'"></route-config>
+              <route-config :tab="'fin'"></route-config>
           </el-tab-pane>
           <el-tab-pane label="DMS" name="dms">
-              <route-config :data-source="dataSource" :tab="'dms'"></route-config>
+              <route-config :tab="'dms'"></route-config>
           </el-tab-pane>
           <el-tab-pane label="征信端" name="cre">
-              <route-config :data-source="dataSource" :tab="'cre'"></route-config>
+              <route-config :tab="'cre'"></route-config>
           </el-tab-pane>
         </el-tabs>
     </PageContent>
@@ -17,11 +17,10 @@
 <script setup lang="ts">
 import type { TabsPaneContext } from 'element-plus';
 import RouteConfig from '@/views/system-manage/route-list/route-config.vue';
-import {activeName, dataSource, getRouteData, getTreeData} from './route-list/route-list';
+import {activeName, getRouteData, getTreeData} from './route-list/route-list';
 import type {RouteTabType} from '@/views/system-manage/type/route-list.type';
 
 async function handleClick(tab: TabsPaneContext, event: Event) {
-    console.log(tab, event);
     await getTreeData(tab.paneName as RouteTabType);
 }
 

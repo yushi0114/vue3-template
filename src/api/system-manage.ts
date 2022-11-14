@@ -6,6 +6,8 @@ import type {
     RouteTabType,
     UpdateMenuType
 } from '@/views/system-manage/type/route-list.type';
+import type {AddRoleType, DeleteRoleType, RoleTabType, UpdateRoleType} from '@/views/system-manage/type/role-list.type';
+import type {AddUserType, DeleteUserType, UpdateUserType} from '@/views/system-manage/type/user-list.type';
 
 
 export function addMenu(params: AddRouteType) {
@@ -63,7 +65,7 @@ export function getMenuDetailById(id: string, tab: RouteTabType) {
 
 export function getRoleList(params: {
     searchInput?: string,
-    tab: RouteTabType,
+    tab: RoleTabType,
     pageIndex: number,
     pageSize: number
     sortField: 'updateTime',
@@ -74,3 +76,58 @@ export function getRoleList(params: {
     });
 }
 
+export function getTotalRoleList(params: {
+    tab: RoleTabType
+}) {
+    return api.get(`${DMS_DOMAIN}/v1/role/all`, {
+        params
+    });
+}
+
+
+export function addRole(params: AddRoleType) {
+    return api.post(`${DMS_DOMAIN}/v1/add/role`, params);
+}
+
+export function updateRole(params: UpdateRoleType) {
+    return api.post(`${DMS_DOMAIN}/v1/update/role`, params);
+}
+
+export function deleteRole(params: DeleteRoleType) {
+    return api.post(`${DMS_DOMAIN}/v1/del/role`, params);
+}
+
+export function getRoleMenuIds(params: {
+    tab: RoleTabType;
+    roleId: string;
+}) {
+    return api.get(`${DMS_DOMAIN}/v1/role/menu/ids`, {
+        params
+    });
+}
+
+
+export function addUser(params: AddUserType) {
+    return api.post(`${DMS_DOMAIN}/v1/add/user`, params);
+}
+
+export function updateUser(params: UpdateUserType) {
+    return api.post(`${DMS_DOMAIN}/v1/update/user`, params);
+}
+
+export function deleteUser(params: DeleteUserType) {
+    return api.post(`${DMS_DOMAIN}/v1/del/user`, params);
+}
+
+export function getUserList(params: {
+    searchInput?: string,
+    tab: RoleTabType,
+    pageIndex: number,
+    pageSize: number
+    sortField: 'updateTime',
+    sortType: 'asc' | 'desc'
+}) {
+    return api.get(`${DMS_DOMAIN}/v1/user/role/list`, {
+        params
+    });
+}

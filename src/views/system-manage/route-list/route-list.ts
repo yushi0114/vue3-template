@@ -4,14 +4,14 @@ import type {
 } from '@/views/system-manage/type/route-list.type';
 import {getMenuTree, getMenuDetailById, addMenu, updateMenu, deleteMenu} from '@/api/system-manage';
 
-export const activeName = ref<RouteTabType>('fin');
+export const activeName = ref<RouteTabType>('dms');
 export const dataSource = ref<TreeItemType[]>();
 export const routeForm = ref<RouteFormType>();
 export const parentId = ref();
 export const currentRouteId = ref();
 export const formType = ref<'create' | 'edit'>('edit');
-export async function getTreeData(name?: RouteTabType): Promise<void> {
-    getMenuTree(name ? name : activeName.value).then(data => {
+export async function getTreeData(): Promise<void> {
+    getMenuTree(activeName.value).then(data => {
         dataSource.value = data as unknown as TreeItemType[];
     });
 }

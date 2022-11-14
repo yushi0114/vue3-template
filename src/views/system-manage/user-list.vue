@@ -1,28 +1,35 @@
 <template>
-  <test-layout>
+  <PageContent>
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="DMS" name="dms">
-        <div style="padding: 15px;">
-          <dms-user-config></dms-user-config>
-        </div>
+          <user-config></user-config>
       </el-tab-pane>
-      <el-tab-pane label="征信端" name="clib"></el-tab-pane>
+      <el-tab-pane label="征信端" name="cre">
+        <user-config></user-config>
+      </el-tab-pane>
     </el-tabs>
-  </test-layout>
+  </PageContent>
 </template>
 
 <script lang="ts" setup>
 
-import DmsUserConfig from '@/views/system-manage/user-list/dms-user-config.vue';
-import {ref} from 'vue';
+import UserConfig from '@/views/system-manage/user-list/user-config.vue';
 import type {TabsPaneContext} from 'element-plus';
-import TestLayout from '@/views/system-manage/test-layout.vue';
+import {getUserListData, activeName, getRoleListData} from '@/views/system-manage/user-list/user-list';
 
-const activeName = ref('dms');
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
     console.log(tab, event);
 };
+
+onMounted(async() => {
+    await getUserListData({
+        tab: activeName.value
+    });
+    await getRoleListData({
+        tab: activeName.value
+    });
+});
 </script>
 
 <style lang="scss" scoped>

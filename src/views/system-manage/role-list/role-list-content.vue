@@ -7,7 +7,7 @@
     </el-input>
     <el-button :icon="Plus" type="primary" @click="handleCreateNewRole">新建</el-button>
   </div>
-  <el-table :data="roleList?.list" style="width: 100%">
+  <el-table :data="roleList.list" style="width: 100%">
     <el-table-column prop="name" label="名称" width="180" />
     <el-table-column prop="desc" label="创建者" width="180" />
     <el-table-column prop="createAt" label="创建时间" />
@@ -16,14 +16,14 @@
         <el-button
             type="primary"
             size="small"
-            @click.prevent="handleEditRoleItem(scope.$index)"
+            @click.prevent="handleEditRoleItem(scope.row)"
         >
           编辑
         </el-button>
         <el-button
             type="danger"
             size="small"
-            @click.prevent="handleRemoveRoleItem(scope.$index)"
+            @click.prevent="handleRemoveRoleItem(scope.row)"
         >
           删除
         </el-button>
@@ -37,7 +37,7 @@
         @current-change="handleCurrentChange"
         :current-page="roleFilterObject.currentPage"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="roleList?.total">
+        :total="roleList.total">
     </el-pagination>
   </div>
 </template>
@@ -46,12 +46,35 @@
 import type {RoleListItemType} from '@/views/system-manage/type/role-list.type';
 import {ElMessage, ElMessageBox} from 'element-plus';
 import {Search, Plus} from '@element-plus/icons-vue';
-import { roleFilterObject, roleList } from './role-list';
+import {
+    activeName,
+    currentRoleId, formType, getRolePageList,
+    getTreeData,
+    mode,
+    roleFilterObject,
+    roleForm,
+    roleList,
+    setRoleListLoading
+} from './role-list';
+import {deleteRole, getRoleMenuIds} from '@/api/system-manage';
 
-const emit = defineEmits(['edit', 'create']);
+async function handleEditRoleItem(item: RoleListItemType) {
+    setRoleListLoading(true);
+    mode.value = 'form';
+    formType.value = 'edit';
+    currentRoleId.value = item.id;
+    await getTreeData();
+    const menuList = await getRoleMenuIds({
+        tab: activeName.value,
+        roleId: item.id
+    });
+    roleForm.value = {
+        name: item.name,
+        desc: item.desc ?? '',
+        menuIdArr: menuList as unknown as string[]
+    };
+    setRoleListLoading(false);
 
-function handleEditRoleItem(item: RoleListItemType){
-    emit('edit', item.id);
 }
 
 function handleCurrentChange(item: number) {
@@ -62,8 +85,12 @@ function handleSizeChange(item: number){
     roleFilterObject.currentSize = item;
 }
 
-function handleCreateNewRole(){
-    emit('create');
+async function handleCreateNewRole(){
+    setRoleListLoading(true);
+    mode.value = 'form';
+    formType.value = 'create';
+    await getTreeData();
+    setRoleListLoading(false);
 }
 
 function handleRemoveRoleItem(item: RoleListItemType){
@@ -76,10 +103,18 @@ function handleRemoveRoleItem(item: RoleListItemType){
             type: 'warning',
         }
     )
-        .then(() => {
+        .then(async() => {
+            await deleteRole({
+                roleId: item.id,
+                tab: activeName.value,
+                menuName: ''
+            });
             ElMessage({
                 type: 'success',
                 message: '删除成功',
+            });
+            await getRolePageList({
+                tab: activeName.value
             });
         })
         .catch(() => {

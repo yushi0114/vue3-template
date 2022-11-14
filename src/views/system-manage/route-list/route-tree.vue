@@ -3,7 +3,7 @@
     <div class="route-tree-header">
       <el-input placeholder="请输入搜索内容" prefix-icon="el-icon-search" clearable v-model="filterText">
       </el-input>
-      <el-button text class="add-route-btn" @click="addNewRoute" :icon="Plus" title="新建路由">
+      <el-button text class="add-route-btn" @click="handleAddNewRoute" :icon="Plus" title="新建路由">
       </el-button>
     </div>
     <el-tree
@@ -64,7 +64,7 @@ const emit = defineEmits(['nodeClickHandle', 'operateTreeItem', 'create']);
 const activeId = ref();
 const filterText = ref('');
 
-function addNewRoute(){
+function handleAddNewRoute(){
     emit('create');
 }
 
@@ -81,7 +81,6 @@ function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'cr
     if (type === 'remove'){
         willDeleteList = lookForAllId([item], []);
     }
-
     emit('operateTreeItem', {
         id: item.id,
         type,
@@ -97,11 +96,11 @@ function handleNodeClick(data: TreeItemType) {
     });
 }
 
-function handleMouseEnter(event: string){
+function handleMouseEnter(event: string) {
     activeId.value = event;
 }
 
-function handleMouseLeave(event: string){
+function handleMouseLeave(event: string) {
     activeId.value = event;
 }
 

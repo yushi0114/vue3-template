@@ -1,5 +1,18 @@
 <script lang="ts" setup>
 import statisticsTable from './components/StatisticsTable.vue';
+import ZjftStatisticsTable from './components/ZjfwStatistics.vue';
+
+const route = useRoute();
+const isLxtstatistics = ref(true);
+
+onMounted(() => {
+    route.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
+});
+
+watch(route, (val) => {
+    val.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
+});
+
 </script>
 
 <template>
@@ -11,7 +24,13 @@ import statisticsTable from './components/StatisticsTable.vue';
                 </el-col>
             </el-row>
             <Board class="board">
-                <statistics-table></statistics-table>
+                <PlatformTab />
+                <template v-if="isLxtstatistics">
+                    <statistics-table></statistics-table>
+                </template>
+                <template v-else>
+                    <ZjftStatisticsTable></ZjftStatisticsTable>
+                </template>
             </Board>
         </Layout>
     </PagePanel>

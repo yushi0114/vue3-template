@@ -4,3 +4,12 @@ export interface statistics {
     successFinance: number,
     solveFinance: number
 }
+
+export interface zjfwStatistics {
+    registerEnterprise: number,
+    financialProduct: number,
+    releaseRequirement: number,
+    registerOrg: number,
+    financeResolve: number,
+    propertyFinanceResolve: number
+}

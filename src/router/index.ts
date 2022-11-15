@@ -35,21 +35,21 @@ const routes: RouteRecordRaw[] = [
                     title: 'Home'
                 }
             },
-            {
-                path: '/routerList',
-                name: 'routerList',
-                component: () => import('@/views/system-manage/router-list.vue')
-            },
-            {
-                path: '/roleList',
-                name: 'roleList',
-                component: () => import('@/views/system-manage/role-list.vue')
-            },
-            {
-                path: '/userList',
-                name: 'userList',
-                component: () => import('@/views/system-manage/user-list.vue')
-            }
+            // {
+            //     path: '/routerList',
+            //     name: 'routerList',
+            //     component: () => import('@/views/system/menu/index.vue')
+            // },
+            // {
+            //     path: '/roleList',
+            //     name: 'roleList',
+            //     component: () => import('@/views/system/role/index.vue')
+            // },
+            // {
+            //     path: '/userList',
+            //     name: 'userList',
+            //     component: () => import('@/views/system/user/index.vue')
+            // }
         ],
     },{
         path: SIGNIN_PATH,

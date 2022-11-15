@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import type { TabsPaneContext } from 'element-plus';
 import RouteConfig from '@/views/system-manage/route-list/route-config.vue';
-import {activeName, getRouteData, getTreeData} from './route-list/route-list';
+import {activeName, getRouteData, getTreeData} from '../../system-manage/route-list/route-list';
 import type {RouteTabType} from '@/views/system-manage/type/route-list.type';
 
 async function handleClick(tab: TabsPaneContext, event: Event) {

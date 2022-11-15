@@ -10,6 +10,10 @@ const props = withDefaults(
     }
 );
 
+const emits = defineEmits<{
+    (e: 'tab-change', v: PlatformType): void
+}>();
+
 const route = useRoute();
 const router = useRouter();
 const platform = computed(() => Number(route.params.type));
@@ -19,6 +23,7 @@ const options = computed(() => {
 
 function handleTab(tabname: string) {
     router.push(route.path.replace(/\d+$/, tabname));
+    emits('tab-change', Number(tabname));
 }
 </script>
 

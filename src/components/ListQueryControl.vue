@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useQueryParams } from '@/composables';
+// import { useQueryParams } from '@/composables';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
@@ -19,6 +19,7 @@ export type ControlOptionConfig<T = any> = ControlConfig & {
 
 const props = withDefaults(
     defineProps<{
+        modelValue?: any,
         searchConfig?: ControlConfig,
         typeOptionsConfigs?: ControlOptionConfig[]
         filterOptionsConfigs?: ControlOptionConfig[]
@@ -26,94 +27,138 @@ const props = withDefaults(
         dateRangeConfig?: ControlOptionConfig,
     }>(),
     {
-        searchConfig: () => ({ label: '输入名称', field: 'search' }),
-        typeOptionsConfigs: () => [],
-        filterOptionsConfigs: () => [],
     }
 );
 
 const emits = defineEmits<{
     (e: 'update', model: any): void;
+    (e: 'update:modelValue', modelValue: any): void
 }>();
 
 type ModelType = any
-const model = ref<ModelType>({});
-const dateModel = ref<string[]>([]);
+const model = reactive<ModelType>({});
 
-
-watchEffect(() => {
+watch(() => props.searchConfig, () => {
     if (props.searchConfig) {
-        model.value[props.searchConfig.field] = props.searchConfig.defaultValue;
+        if (model[props.searchConfig.field] === undefined) {
+            model[props.searchConfig.field] = props.searchConfig.defaultValue;
+        }
     }
-});
+}, { immediate: true });
 
-watchEffect(() => {
+watch(() => props.typeOptionsConfigs, () => {
     if (Array.isArray(props.typeOptionsConfigs)) {
         // TODO
     }
-});
+}, { immediate: true });
 
-watchEffect(() => {
+watch(() => props.filterOptionsConfigs, () => {
     if (Array.isArray(props.filterOptionsConfigs)) {
         props.filterOptionsConfigs.forEach((fConf) => {
-            model.value[fConf.field] = fConf.defaultValue;
+            if (model[fConf.field] === undefined) {
+                model[fConf.field] = fConf.defaultValue;
+            }
         });
     }
-});
+}, { immediate: true });
 
-watchEffect(() => {
+watch(() => props.dateRangeConfig, () => {
     if (props.dateRangeConfig) {
-        model.value[props.dateRangeConfig.options[0].value] = props.dateRangeConfig.defaultValue;
-        model.value[props.dateRangeConfig.options[1].value] = props.dateRangeConfig.defaultValue;
+        if (model.DATE === undefined) {
+            model.DATE = props.dateRangeConfig.defaultValue;
+        }
     }
-});
+}, { immediate: true });
 
-watchEffect(() => {
+watch(() => props.sortConfigs, () => {
     if (Array.isArray(props.sortConfigs)) {
-        // TODO
         props.sortConfigs.forEach((sConf) => {
-            model.value[sConf.field] = sConf.defaultValue || SortType.none;
+            if (model[sConf.field] === undefined) {
+                model[sConf.field] = sConf.defaultValue || SortType.none;
+            }
         });
     }
-});
+}, { immediate: true });
 
-// 这个传值顺序必须在 model 配置之后
-const { queryParams, goQuery } = useQueryParams<ModelType>(model.value);
+watch(props.modelValue, (newModel) => {
+    Object.keys(newModel).forEach((key) => {
+        if (newModel[key] !== model[key]) {
+            model[key] = newModel[key];
+        }
+    });
 
-// 因为url参数与 date组件的 v-model 格式不同需要格式化
-watch(queryParams, () => {
-    console.log('emits');
     if (props.dateRangeConfig) {
-        dateModel.value = [model.value[props.dateRangeConfig.options[0].value], model.value[props.dateRangeConfig.options[1].value]];
+        const start = newModel[props.dateRangeConfig.options[0].value];
+        const until = newModel[props.dateRangeConfig.options[1].value];
+        if (start || until) {
+            model.DATE = [start, until];
+        }
+        else {
+            model.DATE = null;
+        }
     }
 
-    emits('update', model.value);
 }, { immediate: true });
 
 function loopSort(s: SortType) {
-    return s === SortType.none
-        ? SortType.asc
-        : s === SortType.asc
-            ? SortType.desc
-            : SortType.none;
+    return s === SortType.asc || s === SortType.none
+        ? SortType.desc
+        : SortType.asc;
 }
 
-function handleDateChange(v: [string, string]) {
-    if (!props.dateRangeConfig) return;
-    wrapGo({
-        [props.dateRangeConfig.options[0].value]: v[0],
-        [props.dateRangeConfig.options[1].value]: v[1],
+function wrapGo() {
+    // goQuery(param);
+
+    let params: any = {};
+
+    if (props.searchConfig) {
+        params[props.searchConfig.field] = model[props.searchConfig.field];
+    }
+
+    if (Array.isArray(props.typeOptionsConfigs)) {
+        props.typeOptionsConfigs.forEach((tConf) => {
+            params[tConf.field] = model[tConf.field];
+        });
+    }
+
+    if (Array.isArray(props.filterOptionsConfigs)) {
+        props.filterOptionsConfigs.forEach((fConf) => {
+            params[fConf.field] = model[fConf.field];
+        });
+    }
+
+    if (props.dateRangeConfig) {
+        const modelDate = model.DATE;
+        params[props.dateRangeConfig.options[0].value] = modelDate ? modelDate[0] : '';
+        params[props.dateRangeConfig.options[1].value] = modelDate ? modelDate[1] : '';
+    }
+
+
+    if (Array.isArray(props.sortConfigs)) {
+        props.sortConfigs.some((sConf) => {
+            const sortValue = model[sConf.field];
+            if (sortValue !== SortType.none) {
+                params['sortField'] = sConf.field;
+                params['sortType'] = sortValue;
+
+                return true;
+            }
+        });
+    }
+
+    emits('update:modelValue', Object.assign(props.modelValue, params));
+}
+
+function handleSort(sField: string, sValue: SortType) {
+    props.sortConfigs?.forEach((sConf) => {
+        model[sConf.field] = sConf.field === sField ? sValue : SortType.none;
     });
+    wrapGo();
 }
 
-function wrapGo(param: Partial<ModelType>) {
-    goQuery(param);
-    emits('update', model.value);
-}
-
-onMounted(() => {
-    // console.log(props);
-});
+// onMounted(() => {
+//     wrapGo();
+// });
 
 </script>
 
@@ -121,7 +166,7 @@ onMounted(() => {
   <div class="list-query-control">
     <!-- -->
     <FlexRow horizontal="between" class="lqc-search-row">
-        <div>
+        <div v-if="searchConfig">
             <el-input
                 v-model="model[searchConfig.field]"
                 :placeholder="searchConfig.label"
@@ -130,7 +175,7 @@ onMounted(() => {
                 <template #append>
                     <el-button
                         :icon="Search"
-                        @click="wrapGo({ [searchConfig.field]: model[searchConfig.field] })"
+                        @click="wrapGo"
                     />
                 </template>
             </el-input>
@@ -152,13 +197,13 @@ onMounted(() => {
                 clearable
                 :placeholder="fConf.label"
                 v-model="model[fConf.field]"
-                @change="wrapGo({ [fConf.field]: model[fConf.field] })"
+                @change="wrapGo"
                 >
                 <el-option
                     v-for="opt in fConf.options"
                     :key="opt.value"
                     :label="opt.name"
-                    :value="String(opt.value)"
+                    :value="opt.value"
                 />
             </el-select>
         </div>
@@ -166,10 +211,10 @@ onMounted(() => {
             <el-date-picker
                 type="monthrange"
                 unlink-panels
-                v-model="dateModel"
+                v-model="model.DATE"
                 range-separator="~"
-                value-format="YYYY-MM-DD"
-                @change="handleDateChange"
+                value-format="YYYYMM"
+                @change="wrapGo"
                 :start-placeholder="dateRangeConfig.options[0].name"
                 :end-placeholder="dateRangeConfig.options[1].name"
             />
@@ -178,7 +223,7 @@ onMounted(() => {
             <slot name="filter-rest" />
         </div>
         <div
-            @click="wrapGo({ [sOpt.field]: loopSort(model[sOpt.field]) })"
+            @click="handleSort(sOpt.field, loopSort(model[sOpt.field]))"
             v-for="sOpt in sortConfigs" :key="sOpt.field">
             <Text
                 :color="model[sOpt.field] === SortType.none ? 'regular' : 'primary'">
@@ -188,7 +233,7 @@ onMounted(() => {
             </Text>
         </div>
     </FlexRow>
-    {{ queryParams }}
+    inner {{ model }}
   </div>
 </template>
 

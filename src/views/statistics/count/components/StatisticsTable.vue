@@ -181,7 +181,7 @@ const cancelHandle = ({ field } : { field: string }) => {
 <template>
     <div class="statistics-container" v-loading="isLoading">
         <div class="header">首页统计数据</div>
-        <el-form ref="countFormRef" :model="countForm" :rules="countRules" label-width="80px">
+        <el-form ref="countFormRef" :model="countForm" :rules="countRules" label-width="120px">
             <div class="formItem">
                 <el-form-item label="注册企业" prop="registerCorp">
                     <el-input
@@ -329,8 +329,8 @@ const cancelHandle = ({ field } : { field: string }) => {
 
 <style lang="scss" scoped>
 .statistics-container {
-    width: 25%;
-    max-width: 25%;
+    width: 27%;
+    max-width: 27%;
     margin: 0 auto;
 
     .header {

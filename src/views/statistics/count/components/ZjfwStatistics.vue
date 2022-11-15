@@ -450,8 +450,8 @@ const cancelHandle = ({ field } : { field: string }) => {
 
 <style lang="scss" scoped>
 .statistics-container {
-    width: 25%;
-    max-width: 25%;
+    width: 27%;
+    max-width: 27%;
     margin: 0 auto;
 
     .header {

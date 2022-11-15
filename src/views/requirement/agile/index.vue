@@ -1,4 +1,16 @@
 <script lang="ts" setup>
+import { acceptProgressTypeOptions } from '@/enums';
+import { useUrlSearchParams } from '@vueuse/core';
+
+const route = useRoute();
+
+// watchEffect(() => {
+//     console.log(route.query);
+// });
+
+function handleCtrlChange(model: any) {
+    console.log('onchange', model);
+}
 </script>
 
 <template>
@@ -6,26 +18,25 @@
     <Board class="req-agile">
         <PlatformTab />
         <ListQueryControl
+            @update="handleCtrlChange"
             :searchConfig="{
                 label: '请输入企业名称',
                 field: 'search'
             }"
             :filterOptionsConfigs="[
-                { label: '是否为小微企业', field: 'micro', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
+                { label: '机构名称', field: 'org', options: [] },
+                { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
             ]"
             :sortConfigs="[
-                { label: '是否为小微企业', field: 'micro', },
-                { label: '是否为小微企业2', field: 'micro2', },
-                { label: '是否为小微企业2', field: 'micro2', },
+                { label: '发布时间', field: 'sort1', },
+                { label: '期望融资金额', field: 'micro2', },
             ]"
             :dateRangeConfig="{
                 label: '发布日期',
-                field: 'x',
+                field: '',
                 options: [
-                    {  name: '开始时间', value: 'start', },
-                    {  name: '结束时间', value: 'until', },
+                    {  name: '开始月份', value: 'start', },
+                    {  name: '结束月份', value: 'until', },
                 ]
             }"
         >
@@ -33,6 +44,8 @@
                 <el-button type="primary">下载</el-button>
             </template>
         </ListQueryControl>
+        <Text>
+        </Text>
     </Board>
   </PagePanel>
 </template>

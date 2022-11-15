@@ -10,11 +10,6 @@
                 label: '请输入企业名称',
                 field: 'search'
             }"
-            :typeOptionsConfigs="[
-                { label: '是否为小微企业', field: 'micro', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
-            ]"
             :filterOptionsConfigs="[
                 { label: '是否为小微企业', field: 'micro', options: [] },
                 { label: '是否为小微企业2', field: 'micro2', options: [] },

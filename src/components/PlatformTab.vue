@@ -1,0 +1,46 @@
+<script lang="ts" setup>
+import { PlatformType, platformTypeOptions } from '@/enums';
+
+const props = withDefaults(
+    defineProps<{
+        filterTypes?: PlatformType[]
+    }>(),
+    {
+        filterTypes: () => [PlatformType.LiaoXinTong, PlatformType.ShiZongFu]
+    }
+);
+
+const route = useRoute();
+const router = useRouter();
+const platform = computed(() => Number(route.params.type));
+const options = computed(() => {
+    return platformTypeOptions.filter(opt => props.filterTypes.includes(opt.value));
+});
+
+function handleTab(tabname: string) {
+    router.push(route.path.replace(/\d+$/, tabname));
+}
+</script>
+
+<template>
+  <div class="platform-tab">
+    <!-- -->
+    <el-tabs
+        v-if="options.length > 0"
+        :model-value="platform"
+        @tab-change="handleTab"
+    >
+        <el-tab-pane
+            v-for="opt in options"
+            :key="opt.value"
+            :label="opt.name"
+            :name="opt.value"></el-tab-pane>
+    </el-tabs>
+  </div>
+</template>
+
+<style lang="postcss">
+.platform-tab {
+  @apply;
+}
+</style>

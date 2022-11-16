@@ -1,28 +1,23 @@
-import {DMS_DOMAIN} from './const';
-import {api} from './http';
-import type {
-    MenuRouteType,
-    DeleteMenuType,
-    MenuTabType,
-    UpdateMenuType
-} from '@/views/system/type/menu-list.type';
-import type {AddRoleType, DeleteRoleType, RoleTabType, UpdateRoleType} from '@/views/system/type/role-list.type';
-import type {AddUserType, DeleteUserType, UpdateUserType, UserListItemType} from '@/views/system/type/user-list.type';
+import { DMS_DOMAIN } from './const';
+import { api } from './http';
+import type { DeleteMenuType, MenuRouteType, MenuTabType, UpdateMenuType } from '@/views/system/type/menu-list.type';
+import type { AddRoleType, DeleteRoleType, RoleTabType, UpdateRoleType } from '@/views/system/type/role-list.type';
+import type { AddUserType, DeleteUserType, UpdateUserType, UserListItemType } from '@/views/system/type/user-list.type';
 
 
-export function addMenu(params: MenuRouteType) {
+export function addMenuApi(params: MenuRouteType) {
     return api.post(`${DMS_DOMAIN}/v1/add/menu`, params);
 }
 
-export function updateMenu(params: UpdateMenuType) {
+export function updateMenuApi(params: UpdateMenuType) {
     return api.post(`${DMS_DOMAIN}/v1/update/menu`, params);
 }
 
-export function deleteMenu(params: DeleteMenuType) {
+export function deleteMenuApi(params: DeleteMenuType) {
     return api.post(`${DMS_DOMAIN}/v1/del/menu`, params);
 }
 
-export function getMenuTree(tab: MenuTabType) {
+export function getMenuTreeApi(tab: MenuTabType) {
     return api.get(`${DMS_DOMAIN}/v1/menu/tree`, {
         params: {
             tab
@@ -54,7 +49,7 @@ export function getMenuTreeByRoleId(roleId: string) {
     });
 }
 
-export function getMenuDetailById(id: string, tab: MenuTabType) {
+export function getMenuDetailByIdApi(id: string, tab: MenuTabType) {
     return api.get(`${DMS_DOMAIN}/v1/menu/detail`, {
         params: {
             id,
@@ -63,12 +58,12 @@ export function getMenuDetailById(id: string, tab: MenuTabType) {
     });
 }
 
-export function getRoleList(params: {
+export function getRoleListApi(params: {
     searchInput?: string,
     tab: RoleTabType,
     pageIndex: number,
     pageSize: number
-    sortField: 'updateTime',
+    sortField: 'updateTime' | 'createTime',
     sortType: 'asc' | 'desc'
 }) {
     return api.get(`${DMS_DOMAIN}/v1/role/list`, {
@@ -76,7 +71,7 @@ export function getRoleList(params: {
     });
 }
 
-export function getTotalRoleList(params: {
+export function getTotalRoleListApi(params: {
     tab: RoleTabType
 }) {
     return api.get(`${DMS_DOMAIN}/v1/role/all`, {
@@ -85,19 +80,19 @@ export function getTotalRoleList(params: {
 }
 
 
-export function addRole(params: AddRoleType) {
+export function addRoleApi(params: AddRoleType) {
     return api.post(`${DMS_DOMAIN}/v1/add/role`, params);
 }
 
-export function updateRole(params: UpdateRoleType) {
+export function updateRoleApi(params: UpdateRoleType) {
     return api.post(`${DMS_DOMAIN}/v1/update/role`, params);
 }
 
-export function deleteRole(params: DeleteRoleType) {
+export function deleteRoleApi(params: DeleteRoleType) {
     return api.post(`${DMS_DOMAIN}/v1/del/role`, params);
 }
 
-export function getRoleMenuIds(params: {
+export function getRoleMenuIdsApi(params: {
     tab: RoleTabType;
     roleId: string;
 }) {
@@ -107,24 +102,24 @@ export function getRoleMenuIds(params: {
 }
 
 
-export function addUser(params: AddUserType) {
+export function addUserApi(params: AddUserType) {
     return api.post(`${DMS_DOMAIN}/v1/add/user`, params);
 }
 
-export function updateUser(params: UpdateUserType) {
+export function updateUserApi(params: UpdateUserType) {
     return api.post(`${DMS_DOMAIN}/v1/update/user`, params);
 }
 
-export function deleteUser(params: DeleteUserType) {
+export function deleteUserApi(params: DeleteUserType) {
     return api.post(`${DMS_DOMAIN}/v1/del/user`, params);
 }
 
-export function getUserList(params: {
+export function getUserListApi(params: {
     searchInput?: string,
     tab: RoleTabType,
     pageIndex: number,
     pageSize: number
-    sortField: 'updateTime',
+    sortField: 'updateTime' | 'createTime',
     sortType: 'asc' | 'desc'
 }): Promise<{
     data: UserListItemType[],

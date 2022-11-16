@@ -1,11 +1,11 @@
 <template>
   <PageContent :title="'角色管理'">
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="DMS" name="dms">
-        <role-config :tab="'dms'"></role-config>
+        <role-config v-if="activeName === 'dms'"></role-config>
       </el-tab-pane>
       <el-tab-pane label="征信端" name="cre">
-        <role-config :tab="'cre'"></role-config>
+        <role-config v-if="activeName === 'cre'"></role-config>
       </el-tab-pane>
     </el-tabs>
   </PageContent>
@@ -20,13 +20,14 @@ import {
     getRolePageList,
     roleFilterObject,
     activeName,
-    mode
+    mode, resetRoleFilterObject
 } from '@/views/system/role/components/role-list';
 import {LoadingService} from '@/views/system/loading-service';
 
 const handleClick = async(tab: TabsPaneContext) => {
     LoadingService.getInstance().loading();
     mode.value = 'list';
+    resetRoleFilterObject();
     await getRolePageList({
         tab: tab.paneName as RoleTabType
     });
@@ -35,8 +36,8 @@ const handleClick = async(tab: TabsPaneContext) => {
 
 onMounted(async() => {
     LoadingService.getInstance().loading();
-    roleFilterObject.currentSize = 10;
-    roleFilterObject.currentPage = 0;
+    roleFilterObject.value.currentSize = 10;
+    roleFilterObject.value.currentPage = 0;
     await getRolePageList({
         tab: activeName.value
     });
@@ -45,5 +46,32 @@ onMounted(async() => {
 </script>
 
 <style lang="scss" scoped>
+.el-tabs {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    background: #ffffff;
+    overflow-y: auto;
+}
 
+.el-tabs ::v-deep .el-tabs__header {
+    height: 40px;
+    min-height: 40px;
+    width: 100%;
+}
+
+.el-tabs ::v-deep .el-tabs__content {
+    flex: 1;
+    width: 100%;
+}
+
+.el-tab-pane {
+    height: 100%;
+}
 </style>

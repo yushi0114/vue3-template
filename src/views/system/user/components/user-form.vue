@@ -1,45 +1,50 @@
 <template>
-  <el-form :model="userForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
-    <el-form-item label="姓名:" required prop="name">
-      <el-input v-model="userForm.name" placeholder="请输入姓名" />
-    </el-form-item>
-    <el-form-item label="手机号:" required prop="account">
-      <el-input v-model="userForm.account" placeholder="请输入手机号" />
-    </el-form-item>
-    <el-form-item label="角色:" required prop="roleId">
-      <el-select v-model="userForm.roleId" placeholder="请选择角色" >
-        <el-option
-            v-for="item in roleUIList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"/>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="状态:" required prop="status">
-      <el-switch v-model="userForm.status" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">
-        {{formType === 'edit' ? '编辑' : '创建'}}
-      </el-button>
-      <el-button @click="goBack()">返回</el-button>
-    </el-form-item>
-  </el-form>
+    <el-form class="custom-form" :model="userForm" :rules="rules" label-width="120px" ref="ruleFormRef">
+        <el-form-item label="姓名:" required prop="name">
+            <el-input v-model="userForm.name" placeholder="请输入姓名"/>
+        </el-form-item>
+        <el-form-item label="手机号:" required prop="account">
+            <el-input v-model="userForm.account" placeholder="请输入手机号"/>
+        </el-form-item>
+        <el-form-item label="角色:" required prop="roleId">
+            <el-select v-model="userForm.roleId" placeholder="请选择角色">
+                <el-option
+                    v-for="item in roleUIList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"/>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="状态:" required prop="status">
+            <el-switch v-model="userForm.status"/>
+        </el-form-item>
+        <el-form-item>
+            <el-button @click="goBack()">
+                <template #icon>
+                    <Icon :name="'ep:back'"></Icon>
+                </template>
+            </el-button>
+            <el-button type="primary" @click="submitForm(ruleFormRef)">
+                <template #icon>
+                    <Icon :name="'ep:edit'"></Icon>
+                </template>
+            </el-button>
+        </el-form-item>
+    </el-form>
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive} from 'vue';
+import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
+import Icon from '@/components/Icon.vue';
 import {
-    mode,
+    addUser,
     formType,
-    userForm,
-    roleUIList,
-    activeName,
-    currentUserId,
-    handleGoBack
+    handleGoBack,
+    roleUIList, updateUser,
+    userForm
 } from '@/views/system/user/components/user-list';
-import {addUser, updateUser} from '@/api/system-manage';
+import { LoadingService } from '@/views/system/loading-service';
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
@@ -49,39 +54,35 @@ const rules = reactive<FormRules>({
     ],
 });
 
-const submitForm = async(formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    await formEl.validate(async(valid, fields) => {
+async function submitForm(formElement: FormInstance | undefined) {
+    if (!formElement) return;
+    await formElement.validate(async(valid, fields) => {
         if (valid) {
-            if (formType.value === 'create'){
-                await addUser({
-                    ...userForm.value,
-                    status: userForm.value.status ? 1 : 0,
-                    tab: activeName.value,
-                    menuName: ''
-                });
+            LoadingService.getInstance().loading();
+            if (formType.value === 'create') {
+                await addUser();
             } else {
-                await updateUser({
-                    id: currentUserId.value,
-                    ...userForm.value,
-                    status: userForm.value.status ? 1 : 0,
-                    tab: activeName.value,
-                    menuName: ''
-                });
+                await updateUser();
             }
             await handleGoBack();
+            LoadingService.getInstance().stop();
         } else {
             console.log('error submit!', fields);
         }
     });
-};
+}
 
-function goBack(){
-    mode.value = 'list';
+async function goBack() {
+    LoadingService.getInstance().loading();
+    await handleGoBack();
+    LoadingService.getInstance().stop();
 }
 
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.custom-form {
+    width: 700px;
+    padding: 40px 0;
+}
 </style>

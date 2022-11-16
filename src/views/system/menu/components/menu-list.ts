@@ -1,72 +1,136 @@
-import {ref} from 'vue';
-import type {
-    MenuFormType, MenuTabType, TreeItemType
-} from '@/views/system/type/menu-list.type';
-import {getMenuTree, getMenuDetailById, addMenu, updateMenu, deleteMenu} from '@/api/system-manage';
+import { ref } from 'vue';
+import type { MenuFormType, MenuTabType, TreeItemType } from '@/views/system/type/menu-list.type';
+import { addMenuApi, deleteMenuApi, getMenuDetailByIdApi, getMenuTreeApi, updateMenuApi } from '@/api/system-manage';
+import { ElMessage } from 'element-plus';
 
 export const activeName = ref<MenuTabType>('dms');
-export const dataSource = ref<TreeItemType[]>();
-export const menuForm = ref<MenuFormType>();
+export const menuTreeData = ref<TreeItemType[]>();
+export const menuForm = ref<MenuFormType>({
+    icon: '',
+    name: '',
+    title: '',
+    path: '',
+    desc: '',
+    sort: 0,
+    component: '',
+    status: false
+});
 export const parentId = ref();
 export const currentMenuId = ref();
-export const formType = ref<'create' | 'edit'>('edit');
-export async function getTreeData(tab?: MenuTabType): Promise<void> {
-    getMenuTree(tab ? tab : activeName.value).then(data => {
-        dataSource.value = data as unknown as TreeItemType[];
-    });
-}
+export const menuFilterText = ref();
+export const formType = ref<'create' | 'edit' | 'empty'>('edit');
 
-export function setParentId(value?: string){
+export function setParentId(value?: string) {
     parentId.value = value;
 }
 
-export function setCurrentMenuId(value?: string){
+export function setCurrentMenuId(value?: string) {
     currentMenuId.value = value;
 }
 
-export function setFormType(value: 'create' | 'edit') {
+export function setFormType(value: 'create' | 'edit' | 'empty') {
     formType.value = value;
 }
 
-export async function getMenuData(id?: string): Promise<void>{
-    if (id){
-        getMenuDetailById(id, activeName.value).then(data => {
+export function resetMenuForm() {
+    menuForm.value = {
+        icon: '',
+        name: '',
+        title: '',
+        path: '',
+        desc: '',
+        sort: 0,
+        component: '',
+        status: false
+    };
+}
+
+export async function getTreeData(params?: {
+    tab?: MenuTabType,
+    searchText?: string
+}): Promise<void> {
+    return new Promise((resolve) => {
+        getMenuTreeApi(params?.tab ? params.tab : activeName.value).then(data => {
+            menuTreeData.value = data as unknown as TreeItemType[];
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
+    });
+
+}
+
+export async function getMenuData(id: string): Promise<void> {
+    return new Promise((resolve) => {
+        getMenuDetailByIdApi(id, activeName.value).then(data => {
             menuForm.value = {
                 ...data.data[0],
                 status: data.data[0].status === 1
             };
+            resolve();
+        }).catch(() => {
+            resolve();
         });
-    } else {
-        menuForm.value = undefined;
-    }
-}
-
-export async function createMenu(menuForm: MenuFormType) {
-    await addMenu({
-        ...menuForm,
-        status: menuForm.status ? 1 : 0,
-        menuName: '',
-        tab: activeName.value,
-        parentId: parentId.value ?? 0
     });
 
 }
 
-export async function editMenu(id: string, menuForm: MenuFormType) {
-    await updateMenu({
-        id,
-        ...menuForm,
-        status: menuForm.status ? 1 : 0,
-        menuName: '',
-        tab: activeName.value,
+export async function createMenu(menuForm: MenuFormType): Promise<void> {
+    return new Promise((resolve) => {
+        addMenuApi({
+            ...menuForm,
+            status: menuForm.status ? 1 : 0,
+            menuName: '',
+            tab: activeName.value,
+            parentId: parentId.value ?? 0
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '创建成功',
+            });
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
+    });
+}
+
+export async function editMenu(id: string, menuForm: MenuFormType): Promise<void> {
+    return new Promise((resolve) => {
+        updateMenuApi({
+            id,
+            ...menuForm,
+            status: menuForm.status ? 1 : 0,
+            menuName: '',
+            tab: activeName.value,
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '更新成功',
+            });
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
     });
 }
 
 
-export async function removeMenus(willDeleteIds: string[]){
-    await deleteMenu({
-        tab: activeName.value,
-        menuName: '',
-        idArr: willDeleteIds
+export async function removeMenus(willDeleteIds: string[]): Promise<void> {
+    return new Promise((resolve) => {
+        deleteMenuApi({
+            tab: activeName.value,
+            menuName: '',
+            idArr: willDeleteIds
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
     });
+
 }

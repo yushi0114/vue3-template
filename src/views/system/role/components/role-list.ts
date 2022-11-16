@@ -1,10 +1,12 @@
-import {reactive, ref} from 'vue';
-import type {RoleTabType, RoleFormType, RoleListItemType} from '@/views/system/type/role-list.type';
-import {getMenuTree, getRoleList} from '@/api/system-manage';
-import type { TreeItemType} from '@/views/system/type/menu-list.type';
+import { ref } from 'vue';
+import type { RoleFormType, RoleListItemType, RoleTabType } from '@/views/system/type/role-list.type';
+import { addRoleApi, getMenuTreeApi, getRoleListApi, updateRoleApi } from '@/api/system-manage';
+import type { TreeItemType } from '@/views/system/type/menu-list.type';
+import { LoadingService } from '@/views/system/loading-service';
+import { ElMessage } from 'element-plus';
 
 export const activeName = ref<RoleTabType>('dms');
-export const dataSource = ref<TreeItemType[]>();
+export const roleMenuTreeData = ref<TreeItemType[]>();
 export const mode = ref<'form' | 'list'>('list');
 export const currentRoleId = ref();
 export const roleForm = ref<RoleFormType>({
@@ -14,7 +16,7 @@ export const roleForm = ref<RoleFormType>({
 });
 export const formType = ref<'create' | 'edit'>('edit');
 
-export const roleList = reactive<{
+export const roleList = ref<{
     total: number;
     list: RoleListItemType[];
 }>({
@@ -22,39 +24,116 @@ export const roleList = reactive<{
     list: []
 });
 
-export const roleFilterObject = reactive({
+export function resetRoleForm(){
+    roleForm.value = {
+        name: '',
+        desc: '',
+        menuIdArr: []
+    };
+}
+export const roleFilterObject = ref<{
+    currentSize: number;
+    currentPage: number;
+    searchInput: string;
+    sortField: 'updateTime' | 'createTime',
+    sortType: 'asc' | 'desc'
+}>({
+    sortField: 'updateTime',
+    sortType: 'desc',
     searchInput: '',
     currentSize: 0,
     currentPage: 0
 });
 
+export function resetRoleFilterObject() {
+    roleFilterObject.value = {
+        sortField: 'updateTime',
+        sortType: 'desc',
+        searchInput: '',
+        currentSize: 0,
+        currentPage: 0
+    };
+}
 
 export async function handleGoBack() {
     mode.value = 'list';
     currentRoleId.value = undefined;
+    LoadingService.getInstance().loading();
     await getRolePageList({
         tab: activeName.value
     });
+    LoadingService.getInstance().stop();
 }
 
 export async function getTreeData(name?: RoleTabType): Promise<void> {
-    getMenuTree(name ? name : activeName.value).then(data => {
-        dataSource.value = data as unknown as TreeItemType[];
+    return new Promise((resolve) => {
+        getMenuTreeApi(name ? name : activeName.value).then(data => {
+            roleMenuTreeData.value = data as unknown as TreeItemType[];
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
     });
 }
 
 export async function getRolePageList(params: {
     tab: RoleTabType,
-}){
-    getRoleList({
-        ...params,
-        pageIndex: roleFilterObject.currentPage + 1,
-        pageSize: roleFilterObject.currentSize,
-        searchInput: roleFilterObject.searchInput,
-        sortField: 'updateTime',
-        sortType: 'desc'
-    }).then(data => {
-        roleList.list = data.data as unknown as RoleListItemType[];
-        roleList.total = 1;
+}): Promise<void> {
+    return new Promise((resolve) => {
+        getRoleListApi({
+            ...params,
+            pageIndex: roleFilterObject.value.currentPage + 1,
+            pageSize: roleFilterObject.value.currentSize,
+            searchInput: roleFilterObject.value.searchInput,
+            sortField: roleFilterObject.value.sortField,
+            sortType: roleFilterObject.value.sortType
+        }).then(data => {
+            roleList.value.list = data.data as unknown as RoleListItemType[];
+            roleList.value.total = 1;
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
     });
+}
+
+export async function addRole(checkedNodeIds: string[]): Promise<void>{
+    return new Promise((resolve) => {
+        addRoleApi({
+            ...roleForm.value,
+            menuIdArr: checkedNodeIds,
+            tab: activeName.value,
+            menuName: ''
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '创建成功',
+            });
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
+    });
+
+}
+
+export async function updateRole(checkedNodeIds: string[]): Promise<void>{
+    return new Promise((resolve) => {
+        updateRoleApi({
+            roleId: currentRoleId.value,
+            ...roleForm.value,
+            menuIdArr: checkedNodeIds,
+            tab: activeName.value,
+            menuName: ''
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '更新成功',
+            });
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
+    });
+
 }

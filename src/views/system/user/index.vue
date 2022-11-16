@@ -1,11 +1,11 @@
 <template>
   <PageContent :title="'用户管理'">
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="DMS" name="dms">
-          <user-config></user-config>
+          <user-config v-if="activeName === 'dms'"> </user-config>
       </el-tab-pane>
       <el-tab-pane label="征信端" name="cre">
-        <user-config></user-config>
+        <user-config v-if="activeName === 'cre'"></user-config>
       </el-tab-pane>
     </el-tabs>
   </PageContent>
@@ -15,18 +15,26 @@
 import {onMounted} from 'vue';
 import UserConfig from '@/views/system/user/components/user-config.vue';
 import type {TabsPaneContext} from 'element-plus';
-import {getUserListData, activeName, getRoleListData} from '@/views/system/user/components/user-list';
+import {
+    getUserListData,
+    activeName,
+    getRoleListData,
+    mode,
+    userFilterObject
+} from '@/views/system/user/components/user-list';
 import type {UserTabType} from '@/views/system/type/user-list.type';
 import {LoadingService} from '@/views/system/loading-service';
 
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
+async function handleClick(tab: TabsPaneContext) {
     LoadingService.getInstance().loading();
-    getUserListData({
+    mode.value = 'list';
+    userFilterObject.value.searchInput = '';
+    await getUserListData({
         tab: tab.paneName as UserTabType
     });
     LoadingService.getInstance().stop();
-};
+}
 
 onMounted(async() => {
     LoadingService.getInstance().loading();
@@ -41,5 +49,32 @@ onMounted(async() => {
 </script>
 
 <style lang="scss" scoped>
+.el-tabs {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    background: #ffffff;
+    overflow-y: auto;
+}
 
+.el-tabs ::v-deep .el-tabs__header {
+    height: 40px;
+    min-height: 40px;
+    width: 100%;
+}
+
+.el-tabs ::v-deep .el-tabs__content {
+    flex: 1;
+    width: 100%;
+}
+
+.el-tab-pane {
+    height: 100%;
+}
 </style>

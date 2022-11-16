@@ -1,70 +1,126 @@
 <template>
-  <div class="search-box">
-    <el-input class="search-input" placeholder="请输入搜索内容" v-model="userFilterObject.searchInput">
-      <template #append>
-        <el-button :icon="Search" />
-      </template>
-    </el-input>
-    <el-button :icon="Plus" type="primary" @click="handleCreateNewRole">新建</el-button>
-  </div>
-  <el-table :data="userTableData.list" style="width: 100%">
-    <el-table-column prop="name" label="姓名" width="180" />
-    <el-table-column prop="account" label="手机号" width="180" />
-    <el-table-column prop="roleName" label="角色" width="180">
-      <template #default="scope">
-        <el-tag
-            :type="'success'"
-            disable-transitions
-        >{{ scope.row.roleName }}</el-tag
-        >
-      </template>
-    </el-table-column>
-    <el-table-column prop="createAt" label="创建时间" />
-    <el-table-column label="操作" width="180">
-      <template #default="scope">
-        <el-button
-            type="primary"
-            size="small"
-            @click.prevent="handleEditRoleItem(scope.row)"
-        >
-          编辑
+    <div class="search-box">
+        <el-input
+            class="search-input"
+            placeholder="请输入搜索内容"
+            @clear="handleClear"
+            clearable
+            @keyup.enter="handleSearchList"
+            v-model="userFilterObject.searchInput">
+            <template #append>
+                <el-button @click="handleSearchList">
+                    <template #icon>
+                        <Icon :name="'ep:search'"></Icon>
+                    </template>
+                </el-button>
+            </template>
+        </el-input>
+        <el-button type="primary" @click="handleCreateNewRole">
+            <template #icon>
+                <Icon :name="'ep:plus'"></Icon>
+            </template>
         </el-button>
-        <el-button
-            type="danger"
-            size="small"
-            @click.prevent="handleRemoveRoleItem(scope.row
+    </div>
+    <el-table :data="userTableData.list" style="width: 100%"
+              @sort-change="handleSortChange"
+              :default-sort="{ prop: 'updateTime', order: 'descending' }">
+        <el-table-column prop="name" label="姓名" width="180"/>
+        <el-table-column prop="account" label="手机号" width="180"/>
+        <el-table-column prop="roleName" label="角色" width="180"></el-table-column>
+        <el-table-column prop="createTime" sortable label="创建时间"/>
+        <el-table-column prop="updateTime" sortable label="更新时间"/>
+        <el-table-column prop="createBy" label="创建人"/>
+        <el-table-column label="操作" width="180">
+            <template #default="scope">
+                <el-button
+                    type="primary"
+                    size="small"
+                    @click.prevent="handleEditRoleItem(scope.row)"
+                >
+                    <template #icon>
+                        <Icon :name="'ep:edit'"></Icon>
+                    </template>
+                </el-button>
+                <el-button
+                    type="danger"
+                    size="small"
+                    @click.prevent="handleRemoveRoleItem(scope.row
             )"
-        >
-          删除
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  <div class="page-content">
-    <el-pagination
-        class="margin-20-20"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="userFilterObject.currentPage"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="userTableData.total">
-    </el-pagination>
-  </div>
+                >
+                    <template #icon>
+                        <Icon :name="'ep:delete'"></Icon>
+                    </template>
+                </el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+    <div class="page-content">
+        <el-pagination
+            class="margin-20-20"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="userFilterObject.currentPage"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="userTableData.total">
+        </el-pagination>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import {ElMessage, ElMessageBox} from 'element-plus';
-import {Search, Plus} from '@element-plus/icons-vue';
+import Icon from '@/components/Icon.vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import {
-    currentUserId,
+    activeName,
+    currentUserId, deleteUser,
+    formType,
+    getUserListData,
     mode,
-    userTableData,
-    userFilterObject, userForm, activeName, formType
+    resetUserFilterObject,
+    userFilterObject,
+    userForm,
+    userTableData
 } from '@/views/system/user/components/user-list';
-import type {UserListItemType} from '@/views/system/type/user-list.type';
-import {deleteUser} from '@/api/system-manage';
+import type { UserListItemType } from '@/views/system/type/user-list.type';
+import { deleteUserApi } from '@/api/system-manage';
+import { LoadingService } from '@/views/system/loading-service';
 
-function handleEditRoleItem(item: UserListItemType){
+function formatSortType(value: string) {
+    return value === 'ascending' ? 'asc' : 'desc';
+}
+
+async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
+    console.log(params);
+    LoadingService.getInstance().loading();
+    userFilterObject.value.currentPage = 0;
+    userFilterObject.value.currentSize = 10;
+    userFilterObject.value.sortField = params.prop;
+    userFilterObject.value.sortType = formatSortType(params.order);
+    await getUserListData({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
+}
+
+async function handleSearchList() {
+    LoadingService.getInstance().loading();
+    userFilterObject.value.currentPage = 0;
+    userFilterObject.value.currentSize = 10;
+    await getUserListData({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
+}
+
+async function handleClear() {
+    LoadingService.getInstance().loading();
+    resetUserFilterObject();
+    await getUserListData({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
+}
+
+function handleEditRoleItem(item: UserListItemType) {
     mode.value = 'form';
     userForm.value.roleId = item.roleId;
     userForm.value.name = item.name;
@@ -72,18 +128,18 @@ function handleEditRoleItem(item: UserListItemType){
     currentUserId.value = item.id;
 }
 
-async function handleCreateNewRole(){
+async function handleCreateNewRole() {
     mode.value = 'form';
     formType.value = 'create';
     currentUserId.value = '';
 }
 
 function handleCurrentChange(item: number) {
-    userFilterObject.currentPage = item;
+    userFilterObject.value.currentPage = item;
 }
 
 function handleSizeChange(item: number) {
-    userFilterObject.currentSize = item;
+    userFilterObject.value.currentSize = item;
 }
 
 function handleRemoveRoleItem(item: UserListItemType) {
@@ -96,19 +152,14 @@ function handleRemoveRoleItem(item: UserListItemType) {
             type: 'warning',
         }
     )
-        .then(() => {
-            deleteUser({
-                menuName: '',
-                accountList: [item.account],
-                idList: [item.id],
-                tab: activeName.value
-            }).then(() => {
-                ElMessage({
-                    type: 'success',
-                    message: '删除成功',
-                });
+        .then(async() => {
+            await deleteUser({
+                account: item.account,
+                id: item.id
             });
-
+            await getUserListData({
+                tab: activeName.value
+            });
         })
         .catch(() => {
             ElMessage({
@@ -121,17 +172,19 @@ function handleRemoveRoleItem(item: UserListItemType) {
 </script>
 
 <style scoped lang="scss">
-.search-box{
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  .search-input {
-    max-width: 220px;
-  }
+.search-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+
+    .search-input {
+        max-width: 220px;
+    }
 }
+
 .page-content {
-  display: flex;
-  justify-content: right;
-  padding-top: 10px;
+    display: flex;
+    justify-content: right;
+    padding-top: 10px;
 }
 </style>

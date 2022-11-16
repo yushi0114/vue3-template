@@ -54,6 +54,10 @@ export const acceptProgressTypeMap: Record<AcceptProgressType, string> = Object.
     [AcceptProgressType.undoIn48]: '意向银行48小时内未受理'
 });
 
+export const requirmentProgressTypeMap: Record<AcceptProgressType, string> = Object.assign({}, acceptProgressTypeMap, {
+    [AcceptProgressType.undoIn48]: '意向银行都没有受理'
+});
+
 export const acceptProgressTypeOptions: PlainOption<AcceptProgressType>[] = [
     { name: acceptProgressTypeMap[AcceptProgressType.undo], value: AcceptProgressType.undo },
     { name: acceptProgressTypeMap[AcceptProgressType.doing], value: AcceptProgressType.doing },

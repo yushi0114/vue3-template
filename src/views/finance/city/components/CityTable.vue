@@ -35,8 +35,8 @@ const page = reactive({
 
 // 排序
 const sort = reactive({
-    sortField: '',
-    sortType: ''
+    sortField: 'sort',
+    sortType: 'asc'
 });
 
 onMounted(() => {
@@ -151,6 +151,7 @@ const handleDialogClose = (val: boolean) => {
 };
 
 const handleSizeChange = (val: number) => {
+    page.currentPage = 1;
     page.pageSize = val;
     getCityList();
 };
@@ -256,6 +257,10 @@ const handleCurrentChange = (val: number) => {
     }
 
     .table-content {
+        :deep(.el-table__cell) {
+            padding: 12px;
+        }
+
         .underline-text {
             text-decoration: underline;
             cursor: pointer;

@@ -1,10 +1,9 @@
 <template>
-  <div class="page-content">
+  <div class="page-content" v-loading="isLoading">
     <div class="title-container">
       <div class="title">
         {{title}}
       </div>
-      <div class="desc">{{desc}}</div>
     </div>
     <div class="content">
       <slot></slot>
@@ -13,27 +12,27 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
     title: {
         type: String,
         default: ''
     },
-    desc: {
-        type: String
+    isLoading: {
+        type: Boolean,
+        default: false
     }
 });
 </script>
 
 <style scoped lang="scss">
 .page-content {
-  padding: 32px 24px 24px 24px;
+  display: block;
+  padding: 32px 24px 22px 24px;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  display: flex;
-  flex-flow: column;
   .title-container {
-    height: 62px;
+    height: 32px;
     width: 100%;
     display: flex;
     flex-flow: column;
@@ -44,7 +43,8 @@ const props = defineProps({
     }
   }
   .content {
-    flex: 1;
+    box-sizing: border-box;
+    height: calc(100vh - 166px);
     background: #FFF;
     border-radius: 6PX;
     padding: 15px 19px;

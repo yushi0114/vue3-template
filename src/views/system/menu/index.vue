@@ -1,32 +1,39 @@
 <template>
-    <PageContent :title="'路由管理'" :desc="'路由管理包括DMS、金融端和征信端'">
+    <PageContent :title="'菜单管理'">
         <el-tabs v-model="activeName" class="demo-tabs" style="height: 100%" @tab-click="handleClick">
           <el-tab-pane label="金融端" name="fin">
-              <route-config :tab="'fin'"></route-config>
+              <menu-config :tab="'fin'"></menu-config>
           </el-tab-pane>
           <el-tab-pane label="DMS" name="dms">
-              <route-config :tab="'dms'"></route-config>
+              <menu-config :tab="'dms'"></menu-config>
           </el-tab-pane>
           <el-tab-pane label="征信端" name="cre">
-              <route-config :tab="'cre'"></route-config>
+              <menu-config :tab="'cre'"></menu-config>
           </el-tab-pane>
         </el-tabs>
     </PageContent>
 </template>
 
 <script setup lang="ts">
+import {onMounted} from 'vue';
 import type { TabsPaneContext } from 'element-plus';
-import RouteConfig from '@/views/system-manage/route-list/route-config.vue';
-import {activeName, getRouteData, getTreeData} from '../../system-manage/route-list/route-list';
-import type {RouteTabType} from '@/views/system-manage/type/route-list.type';
+import MenuConfig from '@/views/system/menu/components/menu-config.vue';
+import {activeName, getMenuData, getTreeData} from './components/menu-list';
+import type {MenuTabType} from '@/views/system/type/menu-list.type';
+import {LoadingService} from '@/views/system/loading-service';
 
-async function handleClick(tab: TabsPaneContext, event: Event) {
-    await getTreeData(tab.paneName as RouteTabType);
+
+async function handleClick(tab: TabsPaneContext) {
+    LoadingService.getInstance().loading();
+    await getTreeData(tab.paneName as MenuTabType);
+    LoadingService.getInstance().stop();
 }
 
 onMounted(async() => {
+    LoadingService.getInstance().loading();
     await getTreeData();
-    await getRouteData();
+    await getMenuData();
+    LoadingService.getInstance().stop();
 });
 </script>
 

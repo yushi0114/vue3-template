@@ -1,5 +1,5 @@
 <template>
-  <PageContent :title="'角色管理'" v-loading="isLoading">
+  <PageContent :title="'角色管理'">
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="DMS" name="dms">
         <role-config :tab="'dms'"></role-config>
@@ -12,34 +12,35 @@
 </template>
 
 <script lang="ts" setup>
-
-import RoleConfig from '@/views/system-manage/role-list/role-config.vue';
+import {onMounted} from 'vue';
+import RoleConfig from '@/views/system/role/components/role-config.vue';
 import type {TabsPaneContext} from 'element-plus';
-import type {RoleTabType} from '@/views/system-manage/type/role-list.type';
+import type {RoleTabType} from '@/views/system/type/role-list.type';
 import {
     getRolePageList,
     roleFilterObject,
     activeName,
-    mode,
-    isLoading,
-    setRoleListLoading
-} from '@/views/system-manage/role-list/role-list';
+    mode
+} from '@/views/system/role/components/role-list';
+import {LoadingService} from '@/views/system/loading-service';
 
 const handleClick = async(tab: TabsPaneContext) => {
+    LoadingService.getInstance().loading();
     mode.value = 'list';
-    setRoleListLoading(true);
     await getRolePageList({
         tab: tab.paneName as RoleTabType
     });
-    setRoleListLoading(false);
+    LoadingService.getInstance().stop();
 };
 
 onMounted(async() => {
+    LoadingService.getInstance().loading();
     roleFilterObject.currentSize = 10;
     roleFilterObject.currentPage = 0;
     await getRolePageList({
         tab: activeName.value
     });
+    LoadingService.getInstance().stop();
 });
 </script>
 

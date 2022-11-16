@@ -1,5 +1,5 @@
 <template>
-  <PageContent>
+  <PageContent :title="'用户管理'">
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="DMS" name="dms">
           <user-config></user-config>
@@ -12,23 +12,31 @@
 </template>
 
 <script lang="ts" setup>
-
-import UserConfig from '@/views/system-manage/user-list/user-config.vue';
+import {onMounted} from 'vue';
+import UserConfig from '@/views/system/user/components/user-config.vue';
 import type {TabsPaneContext} from 'element-plus';
-import {getUserListData, activeName, getRoleListData} from '@/views/system-manage/user-list/user-list';
+import {getUserListData, activeName, getRoleListData} from '@/views/system/user/components/user-list';
+import type {UserTabType} from '@/views/system/type/user-list.type';
+import {LoadingService} from '@/views/system/loading-service';
 
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-    console.log(tab, event);
+    LoadingService.getInstance().loading();
+    getUserListData({
+        tab: tab.paneName as UserTabType
+    });
+    LoadingService.getInstance().stop();
 };
 
 onMounted(async() => {
+    LoadingService.getInstance().loading();
     await getUserListData({
         tab: activeName.value
     });
     await getRoleListData({
         tab: activeName.value
     });
+    LoadingService.getInstance().stop();
 });
 </script>
 

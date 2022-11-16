@@ -10,7 +10,7 @@ const buttonConfig = reactive({
 
 const locale = zhCn;
 
-// useRouteGuard();
+useRouteGuard();
 </script>
 
 <template>

@@ -1,16 +1,16 @@
 import {DMS_DOMAIN} from './const';
 import {api} from './http';
 import type {
-    AddRouteType,
+    MenuRouteType,
     DeleteMenuType,
-    RouteTabType,
+    MenuTabType,
     UpdateMenuType
-} from '@/views/system-manage/type/route-list.type';
-import type {AddRoleType, DeleteRoleType, RoleTabType, UpdateRoleType} from '@/views/system-manage/type/role-list.type';
-import type {AddUserType, DeleteUserType, UpdateUserType} from '@/views/system-manage/type/user-list.type';
+} from '@/views/system/type/menu-list.type';
+import type {AddRoleType, DeleteRoleType, RoleTabType, UpdateRoleType} from '@/views/system/type/role-list.type';
+import type {AddUserType, DeleteUserType, UpdateUserType, UserListItemType} from '@/views/system/type/user-list.type';
 
 
-export function addMenu(params: AddRouteType) {
+export function addMenu(params: MenuRouteType) {
     return api.post(`${DMS_DOMAIN}/v1/add/menu`, params);
 }
 
@@ -22,7 +22,7 @@ export function deleteMenu(params: DeleteMenuType) {
     return api.post(`${DMS_DOMAIN}/v1/del/menu`, params);
 }
 
-export function getMenuTree(tab: RouteTabType) {
+export function getMenuTree(tab: MenuTabType) {
     return api.get(`${DMS_DOMAIN}/v1/menu/tree`, {
         params: {
             tab
@@ -30,7 +30,7 @@ export function getMenuTree(tab: RouteTabType) {
     });
 }
 
-export function getMenuList(tab: RouteTabType) {
+export function getMenuList(tab: MenuTabType) {
     return api.get(`${DMS_DOMAIN}/v1/menu/list`, {
         params: {
             tab
@@ -54,7 +54,7 @@ export function getMenuTreeByRoleId(roleId: string) {
     });
 }
 
-export function getMenuDetailById(id: string, tab: RouteTabType) {
+export function getMenuDetailById(id: string, tab: MenuTabType) {
     return api.get(`${DMS_DOMAIN}/v1/menu/detail`, {
         params: {
             id,
@@ -126,7 +126,10 @@ export function getUserList(params: {
     pageSize: number
     sortField: 'updateTime',
     sortType: 'asc' | 'desc'
-}) {
+}): Promise<{
+    data: UserListItemType[],
+    pageTotal: number
+}> {
     return api.get(`${DMS_DOMAIN}/v1/user/role/list`, {
         params
     });

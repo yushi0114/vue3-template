@@ -56,7 +56,7 @@ onMounted(() => {
             :searchConfig="{
                 label: '请输入企业名称',
                 field: 'searchInput'
-            }"
+        }"
             :filterOptionsConfigs="[
                 // { label: '机构名称', field: 'org', options: [] },
                 { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },

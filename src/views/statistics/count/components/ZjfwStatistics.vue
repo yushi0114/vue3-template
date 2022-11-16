@@ -209,21 +209,27 @@ const cancelHandle = ({ field } : { field: string }) => {
     if (field === 'registerEnterprise') {
         countForm.registerEnterprise = cloneFormData.registerEnterprise;
         allDisabled.registerEnterpriseDisabled = true;
+        isEdit.value = false;
     } else if (field === 'financialProduct') {
         countForm.financialProduct = cloneFormData.financialProduct;
         allDisabled.financialProductDisabled = true;
+        isEdit.value = false;
     } else if (field === 'financeResolve') {
         countForm.financeResolve = cloneFormData.financeResolve;
         allDisabled.financeResolveDisabled = true;
+        isEdit.value = false;
     } else if (field === 'registerOrg') {
         countForm.registerOrg = cloneFormData.registerOrg;
         allDisabled.registerOrgDisabled = true;
+        isEdit.value = false;
     } else if (field === 'releaseRequirement') {
         countForm.releaseRequirement = cloneFormData.releaseRequirement;
         allDisabled.releaseRequirementDisabled = true;
+        isEdit.value = false;
     } else if (field === 'propertyFinanceResolve') {
         countForm.propertyFinanceResolve = cloneFormData.propertyFinanceResolve;
         allDisabled.propertyFinanceResolveDisabled = true;
+        isEdit.value = false;
     }
 };
 

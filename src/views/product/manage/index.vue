@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { acceptProgressTypeOptions, PlatformType } from '@/enums';
-import { getExactReqs } from '@/api';
-import type { AgileReqEntity, RequirementEntity } from '@/types';
-import { ReqList } from '../components';
+import { getProducts } from '@/api';
+import type { ProductEntity } from '@/types';
+import { ProductList } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel } from '@/composables';
 
@@ -13,11 +13,11 @@ const { model: listControlModel, clear: clearModel } = useListControlModel();
 
 
 const count = ref(0);
-const list = ref<AgileReqEntity[]>([]);
+const list = ref<ProductEntity[]>([]);
 function getList() {
-    getExactReqs(Object.assign({ menuName: 'requirement', platform: platform.value }, listControlModel))
-        .then(({ pageTotal, data }) => {
-            count.value = pageTotal;
+    getProducts(Object.assign({ menuName: 'requirement', platform: platform.value }, listControlModel))
+        .then(({ total, data }) => {
+            count.value = total;
             list.value = data;
         })
         .catch(noop);
@@ -38,7 +38,7 @@ function handleTabChange(plat: PlatformType) {
     platform.value = plat;
 }
 
-function goDetail(req: RequirementEntity) {
+function goDetail(req: ProductEntity) {
     console.log(req);
 }
 
@@ -55,19 +55,18 @@ onMounted(() => {
         <ListQueryControl
             v-model="listControlModel"
             :searchConfig="{
-                label: '请输入企业名称',
+                label: '请输入产品名称',
                 field: 'searchInput'
             }"
             :filterOptionsConfigs="[
                 // { label: '机构名称', field: 'org', options: [] },
-                { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
+                { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
             ]"
             :sortConfigs="[
-                { label: '发布时间', field: 'updateTime', },
-                { label: '期望融资金额', field: 'expectFinancing', },
+                { label: '申请时间', field: 'createTime', },
             ]"
             :dateRangeConfig="{
-                label: '发布日期',
+                label: '申请时间',
                 field: '',
                 options: [
                     {  name: '开始月份', value: 'startTime', },
@@ -76,13 +75,13 @@ onMounted(() => {
             }"
         >
             <template v-slot:search-rest>
-                <el-button type="primary">下载</el-button>
+                <el-button type="primary">新建</el-button>
             </template>
         </ListQueryControl>
         <Text>
         </Text>
 
-        <ReqList :list="list" @click-detail="goDetail" />
+        <ProductList :list="list" @click-detail="goDetail" />
 
         <FlexRow horizontal="end">
             <el-pagination

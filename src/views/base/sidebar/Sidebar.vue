@@ -51,12 +51,6 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
         :class="{ expand }"
     >
         <div class="sidebar-content no-scrollbar">
-            <!-- <button ref="trigger" class="lg:hidden text-gray-500 hover:text-gray-400" @click.stop="emits('close')"
-                aria-controls="sidebar" :aria-expanded="expand">
-                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
-                </svg>
-            </button> -->
             <template v-for="(opt, i) in options">
                 <!-- 有子菜单 -->
                 <SidebarLinkGroup
@@ -94,7 +88,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                             <FlexRow class="sidebar-sub-block">
                                 <a
                                     class="sidebar-sub-link"
-                                    :class="{ active: isExactActive || href.replace(/\d+$/, '') === optChild.defaultPath!.replace(/\d+$/, '') }"
+                                    :class="{ active: isExactActive || href.replace(/\d+$/, '') === currentRoute.fullPath.replace(/\d+$/, '') }"
                                     :href="href"
                                     @click="navigate">
                                     <div>

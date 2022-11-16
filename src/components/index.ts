@@ -9,4 +9,6 @@ export { default as PagePanel } from './PagePanel.vue';
 export { default as SelectTree } from './SelectTree.vue';
 export { default as Title } from './Title.vue';
 export { default as Panel } from './Panel.vue';
+export { default as RectLogo } from './RectLogo.vue';
+export * from './list';
 

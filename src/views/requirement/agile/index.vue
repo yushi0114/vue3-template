@@ -1,43 +1,35 @@
 <script lang="ts" setup>
 import { acceptProgressTypeOptions, PlatformType } from '@/enums';
 import { getAligeReqs } from '@/api';
-import type { AgileReqEntity } from '@/types';
-import { useUrlSearchParams } from '@vueuse/core';
-
+import type { AgileReqEntity, RequirementEntity } from '@/types';
+import { ReqList } from '../components';
+import { noop } from '@/utils';
+import { useListControlModel } from '@/composables';
 
 const route = useRoute();
 const platform = ref(Number(route.params.type));
 
-const listControlModel = reactive<any>({
-    pageIndex: 1,
-    pageSize: 20,
-});
-
-const params = useUrlSearchParams('history', {
-    initialValue: listControlModel,
-});
+const { model: listControlModel, clear: clearModel } = useListControlModel();
 
 const count = ref(0);
 const list = ref<AgileReqEntity[]>([]);
 function getList() {
-    getAligeReqs(Object.assign({ menuName: 'requirement' }, listControlModel))
+    getAligeReqs(Object.assign({ menuName: 'requirement', platform: platform.value }, listControlModel))
         .then(({ total, data }) => {
             count.value = total;
             list.value = data;
-        });
+        })
+        .catch(noop);
 }
 
-watch(listControlModel, (model) => {
-    Object.assign(params, model);
-    getList();
+watch(listControlModel, () => {
+    nextTick(getList);
 });
 
 function clear() {
     count.value = 0;
     list.value = [];
-    Object.keys(listControlModel).forEach(key => delete listControlModel[key]);
-    listControlModel.pageIndex = 1;
-    listControlModel.pageSize = 20;
+    clearModel();
 }
 
 function handleTabChange(plat: PlatformType) {
@@ -45,12 +37,11 @@ function handleTabChange(plat: PlatformType) {
     platform.value = plat;
 }
 
+function goDetail(req: RequirementEntity) {
+    console.log(req);
+}
+
 onMounted(() => {
-    const numberFields = ['progress', 'pageIndex', 'pageSize'];
-    Object.keys(params).forEach((key) => {
-        if (listControlModel[key] === params[key]) return;
-        listControlModel[key] = numberFields.includes(key) ? Number(params[key]) : params[key];
-    });
     getList();
 });
 
@@ -90,21 +81,17 @@ onMounted(() => {
         <Text>
         </Text>
 
-        modelValue: {{ listControlModel }}
+        <ReqList :list="list" @click-detail="goDetail" />
 
-        <ul>
-            <li v-for="item in list" :key="item.id">
-                {{ item.corpName }}
-            </li>
-        </ul>
-
-        <el-pagination
-            v-model:current-page="listControlModel.pageIndex"
-            v-model:page-size="listControlModel.pageSize"
-            :page-sizes="[20, 30, 50, 100]"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="count"
-        />
+        <FlexRow horizontal="end">
+            <el-pagination
+                v-model:current-page="listControlModel.pageIndex"
+                v-model:page-size="listControlModel.pageSize"
+                :page-sizes="[10, 20, 50]"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="count"
+            />
+        </FlexRow>
     </Board>
   </PagePanel>
 </template>

@@ -1,7 +1,7 @@
 import type { AcceptProgressType, ExpectTimeType } from '@/enums';
 
 export interface RequirementEntity {
-    barCode: AcceptProgressType
+    barCode: number
     barMsg: string
     contactMobile: string
     contactPerson: string
@@ -11,10 +11,14 @@ export interface RequirementEntity {
     expectFinancing: string
     expectTime: ExpectTimeType
     id: string
-    progress: number
+    progress: AcceptProgressType
     updateTime: string
 }
 
 export interface AgileReqEntity extends RequirementEntity {
+
+}
+
+export interface ExactReqEntity extends RequirementEntity {
 
 }

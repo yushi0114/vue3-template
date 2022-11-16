@@ -3,6 +3,7 @@
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
+import { getNextMonth } from '@/utils';
 // TODO
 export type ControlConfig = {
     label: string,
@@ -160,6 +161,9 @@ function handleSort(sField: string, sValue: SortType) {
 //     wrapGo();
 // });
 
+function disableDate(d: Date) {
+    return d >= getNextMonth();
+}
 </script>
 
 <template>
@@ -192,7 +196,7 @@ function handleSort(sField: string, sValue: SortType) {
     </FlexRow>
     <FlexRow
         class="lqc-filter-row">
-        <div v-for="fConf in filterOptionsConfigs" :key="fConf.field">
+        <div class="lqc-filter-item" v-for="fConf in filterOptionsConfigs" :key="fConf.field">
             <el-select
                 clearable
                 :placeholder="fConf.label"
@@ -207,7 +211,7 @@ function handleSort(sField: string, sValue: SortType) {
                 />
             </el-select>
         </div>
-        <div v-if="dateRangeConfig">
+        <div class="lqc-date-item" v-if="dateRangeConfig">
             <el-date-picker
                 type="monthrange"
                 unlink-panels
@@ -215,25 +219,27 @@ function handleSort(sField: string, sValue: SortType) {
                 range-separator="~"
                 value-format="YYYYMM"
                 @change="wrapGo"
+                :disabled-date="disableDate"
                 :start-placeholder="dateRangeConfig.options[0].name"
                 :end-placeholder="dateRangeConfig.options[1].name"
             />
         </div>
-        <div>
+        <div class="lqc-filter-rest">
             <slot name="filter-rest" />
         </div>
         <div
+            class="lqc-sort-item"
             @click="handleSort(sOpt.field, loopSort(model[sOpt.field]))"
             v-for="sOpt in sortConfigs" :key="sOpt.field">
             <Text
+                size="sm"
                 :color="model[sOpt.field] === SortType.none ? 'regular' : 'primary'">
                 {{ sOpt.label }}
                 <i-ep-sort-up v-if="model[sOpt.field] === SortType.asc" />
-                <i-ep-sort-down v-if="model[sOpt.field] === SortType.desc"/>
+                <i-ep-sort-down v-else />
             </Text>
         </div>
     </FlexRow>
-    inner {{ model }}
   </div>
 </template>
 
@@ -245,7 +251,37 @@ function handleSort(sField: string, sValue: SortType) {
 
 }
 
+.lqc-search-row {
+    margin-bottom: $gap-md;
+}
+
+.lqc-filter-row {
+    border-radius: 4px;
+    padding: $gap-xs $gap-md;
+    margin-bottom: $gap-xs;
+    background-color: var(--el-color-info-light-8);
+}
+
+.lqc-filter-item {
+    margin-right: $gap-xs;
+}
+
 .lqc-search-rest {
+    flex: 1;
+}
+
+.lqc-sort-item {
+    cursor: pointer;
+    margin-left: $gap-xs;
+
+    & svg {
+        transform: translateY(2px);
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.lqc-filter-rest {
     flex: 1;
 }
 </style>

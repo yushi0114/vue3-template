@@ -43,7 +43,6 @@ watch(
 const chartDomRef = ref<HTMLElement>();
 let chartInstance: echarts.ECharts;
 
-let chartWidth = 0;
 const textStyle = {
     rich: {
         a: {
@@ -74,7 +73,7 @@ const options = {
                 '{b|0}',
                 '{c|占比0%}'
             ].join('\n'),
-            left: 0,
+            left: '12.726%',
             top: -5,
             textStyle
         },
@@ -84,7 +83,7 @@ const options = {
                 '{b|0}',
                 '{c|占比0%}'
             ].join('\n'),
-            left: 0,
+            left: '46.045%',
             top: -5,
             textStyle
         },
@@ -94,7 +93,7 @@ const options = {
                 '{b|0}',
                 '{c|占比0%}'
             ].join('\n'),
-            left: 0,
+            left: '79.364%',
             top: -5,
             textStyle
         }
@@ -176,12 +175,6 @@ const options = {
 };
 
 const loadOptions = () => {
-    chartWidth = chartDomRef.value!.getBoundingClientRect().width;
-    const leftOffsets = [0, chartWidth / 3, chartWidth / 3 * 2];
-    console.log(leftOffsets);
-    options.title.map((item, index) => {
-        item.left = leftOffsets[index] + 148;
-    });
     options.title[0].text = ['{a|敏捷需求}', `{b|${props.data.countSimpleReq}}`, `{c|占比${props.data.perSimpleReq}%}`].join('\n');
     options.title[1].text = ['{a|精准需求}', `{b|${props.data.countExactReq}}`, `{c|占比${props.data.perExactReq}%}`].join('\n');
     options.title[2].text = ['{a|产品需求}', `{b|${props.data.countProductReq}}`, `{c|占比${props.data.perProductReq}%}`].join('\n');

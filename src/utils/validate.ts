@@ -41,3 +41,9 @@ export function checkPassword(rule: any, value: string, callback: ValidateCallba
         callback();
     }
 }
+
+export function genCheckEmpty(msg: string = '不能为空') {
+    return (_rule: any, val: string, callback: ValidateCallback) => {
+        callback(val.length === 0 ? new Error(msg) : undefined);
+    };
+}

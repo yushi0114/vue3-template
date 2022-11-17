@@ -1,6 +1,3 @@
-import * as iconCollection from '@element-plus/icons-vue';
-import type { App } from 'vue';
-
 export { default as Board } from './Board.vue';
 export { default as Layout } from './Layout.vue';
 export { default as Button } from './Button.vue';
@@ -12,10 +9,6 @@ export { default as PagePanel } from './PagePanel.vue';
 export { default as SelectTree } from './SelectTree.vue';
 export { default as Title } from './Title.vue';
 export { default as Panel } from './Panel.vue';
+export { default as RectLogo } from './RectLogo.vue';
+export * from './list';
 
-export function registerElementIcons(app: App) {
-    Object.keys(iconCollection).forEach((iconName: string) => {
-        const icon = iconCollection[iconName as keyof typeof iconCollection];
-        app.component(icon.name, icon);
-    });
-}

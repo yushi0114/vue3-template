@@ -15,6 +15,8 @@ import { useRouter } from 'vue-router';
 import { useToken } from '@/composables';
 import { noop } from '@vueuse/core';
 import { MENU_TAB } from '@/enums';
+import { isFunction } from '@/utils';
+import { genDynamicComponent } from '@/views';
 export const useUserStore = defineStore('user', () => {
     const state = reactive<{
         user: UserEntity | null;
@@ -28,6 +30,7 @@ export const useUserStore = defineStore('user', () => {
         prevNavTree: [
             {
                 id: '',
+                name: '',
                 path: '/home',
                 title: 'Homepage',
                 status: NavStatusType.default,
@@ -63,16 +66,20 @@ export const useUserStore = defineStore('user', () => {
             id: uid,
             tab: params?.tab ?? MENU_TAB.MENU_TAB_DMS,
         };
+
         return getUserInfoApi(queryParams)
             .then((user) => {
                 state.user = user;
                 return dynamicNavs(user.roleId);
             })
             .then((navs) => {
-                state.navs = navs;
-                addDynamicRoutes(router, navs);
-                state.navTree = toTree({}, navs);
-                return state.user as UserEntity;
+                const validNavs = navs.filter((nav) => isFunction(genDynamicComponent(nav.component!)));
+                state.navs = validNavs;
+                return addDynamicRoutes(router, validNavs).then(() => {
+
+                    state.navTree = toTree({}, validNavs);
+                    return state.user as UserEntity;
+                });
             })
             .catch(noop);
     }

@@ -3,6 +3,7 @@ export enum NavStatusType {
 }
 export interface NavEntity {
     id: string,
+    name: string,
     parentId: NavEntity['id'],
     sort: number,
     title: string,

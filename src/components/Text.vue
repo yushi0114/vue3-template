@@ -1,11 +1,12 @@
 <script lang="ts" setup>
+export type TextColor = 'primary' | 'danger' | 'success' | 'warning' | 'info' | 'exception' | 'error' |
+        'paragraph' | 'regular' | 'secondary' | 'placeholder' | 'disbled' |
+        'current';
+
 export interface ITextProps {
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'current',
     align?: 'left' | 'center' | 'right' | 'justify',
-    color?:
-        'primary' | 'danger' | 'success' | 'warning' | 'info' |
-        'paragraph' | 'regular' | 'secondary' | 'placeholder' | 'disbled' |
-        'current',
+    color?: TextColor,
     italic?: boolean,
     truncate?: boolean,
     block?: boolean,
@@ -13,7 +14,6 @@ export interface ITextProps {
     uppercase?: boolean,
     underline?: boolean,
 }
-
 
 const props = withDefaults(
     defineProps<ITextProps>(),
@@ -117,6 +117,8 @@ const props = withDefaults(
 .i-text-color-primary {
     color: var(--el-color-primary);
 }
+.i-text-color-exception,
+.i-text-color-error,
 .i-text-color-danger {
     color: var(--el-color-danger);
 }

@@ -14,7 +14,7 @@ import iconsResolver from 'unplugin-icons/resolver';
 import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-let proxyHost = '192.168.31.49';
+let proxyHost = '10.0.30.5';
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {
@@ -49,7 +49,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                     'pinia',
                     {
                         '@vueuse/core': ['onKeyStroke', 'useFocus'],
-                        '/src/utils/func.ts': ['omit'],
+                        '/src/utils/func.ts': ['omit', 'cloneDeep'],
                         '/src/composables/index.ts': ['useApi'],
                     },
                 ],

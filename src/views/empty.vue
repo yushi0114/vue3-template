@@ -4,7 +4,7 @@
 
 <template>
   <div class="empty">
-    <!-- -->
+    Empty
   </div>
 </template>
 

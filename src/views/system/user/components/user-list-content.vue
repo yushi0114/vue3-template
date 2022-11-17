@@ -75,7 +75,7 @@ import {
     formType,
     getUserListData,
     mode,
-    resetUserFilterObject,
+    resetUserFilterObject, resetUserForm,
     userFilterObject,
     userForm,
     userTableData
@@ -132,6 +132,7 @@ async function handleCreateNewRole() {
     mode.value = 'form';
     formType.value = 'create';
     currentUserId.value = '';
+    resetUserForm();
 }
 
 function handleCurrentChange(item: number) {

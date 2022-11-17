@@ -7,7 +7,11 @@ import { ElMessage } from 'element-plus';
 export const activeName = ref<UserTabType>('dms');
 export const mode = ref<'form' | 'list'>('list');
 export const currentUserId = ref();
-export const form = ref<UserFormType>();
+export const form = ref<UserFormType>({
+    name: '',
+    roleId: '',
+    status: false
+});
 export const formType = ref<'create' | 'edit'>('edit');
 export const totalRoleList = ref<RoleListItemType[]>();
 
@@ -40,6 +44,13 @@ export const userFilterObject = ref<{
     currentPage: 0
 });
 
+export function resetUserForm() {
+    form.value = {
+        name: '',
+        roleId: '',
+        status: false
+    };
+}
 export const roleUIList = computed(() => totalRoleList.value?.map(item => ({
     ...item,
     label: item.name,

@@ -3,7 +3,6 @@
         <div class="menu-tree" v-if="formType !== 'create'">
             <MenuTree
                 :data-source="menuTreeData"
-                @create="handleCreateMenu"
                 @operateTreeItem="handleOperateTreeItem($event)"></MenuTree>
         </div>
         <div class="menu-content">
@@ -70,12 +69,6 @@ async function handleOperateTreeItem(params: {
         setParentId(params.id);
         resetMenuForm();
     }
-}
-
-
-function handleCreateMenu() {
-    formType.value = 'create';
-    resetMenuForm();
 }
 
 </script>

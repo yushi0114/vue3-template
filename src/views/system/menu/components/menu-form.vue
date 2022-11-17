@@ -26,14 +26,14 @@
             <el-switch v-model="menuForm.status"/>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="submitForm(ruleFormRef)">
-                <template #icon>
-                    <Icon :name="'ep:edit'"></Icon>
-                </template>
-            </el-button>
             <el-button v-if="formType === 'create'" @click="goBack">
                 <template #icon>
                     <Icon :name="'ep:back'"></Icon>
+                </template>
+            </el-button>
+            <el-button type="primary" @click="submitForm(ruleFormRef)">
+                <template #icon>
+                    <Icon :name="'ep:edit'"></Icon>
                 </template>
             </el-button>
         </el-form-item>
@@ -51,7 +51,7 @@ import {
     editMenu,
     formType,
     getTreeData,
-    menuForm,
+    menuForm, resetMenuForm,
     setFormType
 } from './menu-list';
 import type { MenuFormType } from '@/views/system/type/menu-list.type';
@@ -119,6 +119,7 @@ async function handleSaveForm(params: {
 
 async function goBack() {
     LoadingService.getInstance().loading();
+    resetMenuForm();
     await getTreeData({ tab: activeName.value });
     formType.value = 'edit';
     LoadingService.getInstance().stop();

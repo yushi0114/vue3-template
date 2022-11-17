@@ -32,7 +32,6 @@ export function getOrgTypeDic(): Promise<FinanceCategoryListItemType[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/type/dic`);
 }
 
-
 export function getAllSystemMenuTree(): Promise<AllSystemMenuTreeItem[]> {
     return api.get(`${DMS_DOMAIN}/v1/sys/menu/tree/all`);
 }

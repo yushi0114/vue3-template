@@ -1,27 +1,36 @@
 <template>
     <div class="search-box">
-        <el-input class="search-input" placeholder="请输入搜索内容" @clear="handleClear" clearable
-                  v-model="roleFilterObject.searchInput">
+        <el-input
+            class="search-input"
+            placeholder="请输入搜索内容"
+            @clear="handleClear"
+            clearable
+            @keyup.enter="handleSearchList"
+            v-model="filterObject.searchInput">
             <template #append>
-                <el-button @click="handleSearchRoleList">
+                <el-button @click="handleSearchList">
                     <template #icon>
                         <Icon :name="'ep:search'"></Icon>
                     </template>
                 </el-button>
             </template>
         </el-input>
-        <el-button type="primary" @click="handleCreateNewRole">
+        <el-button type="primary" @click="handleCreateNewItem">
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
             </template>
         </el-button>
     </div>
     <el-table
-        :data="roleList.list" style="width: 100%"
+        :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
-              :default-sort="{ prop: 'updateTime', order: 'descending' }">
-        <el-table-column prop="name" label="名称" width="180"/>
-        <el-table-column prop="desc" label="描述" width="180"/>
+        :default-sort="{ prop: 'updateTime', order: 'descending' }">
+        <el-table-column prop="name" label="姓名" width="180"/>
+        <el-table-column prop="imgUrl" label="图片" width="180">
+            <template #default="scope">
+                <el-image :src="scope.row.imgUrl"></el-image>
+            </template>
+        </el-table-column>
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
         <el-table-column prop="createBy" label="创建人"/>
@@ -30,7 +39,8 @@
                 <el-button
                     type="primary"
                     size="small"
-                    @click.prevent="handleEditRoleItem(scope.row)">
+                    @click.prevent="handleEditItem(scope.row)"
+                >
                     <template #icon>
                         <Icon :name="'ep:edit'"></Icon>
                     </template>
@@ -38,7 +48,9 @@
                 <el-button
                     type="danger"
                     size="small"
-                    @click.prevent="handleRemoveRoleItem(scope.row)">
+                    @click.prevent="handleRemoveItem(scope.row
+            )"
+                >
                     <template #icon>
                         <Icon :name="'ep:delete'"></Icon>
                     </template>
@@ -51,30 +63,31 @@
             class="margin-20-20"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="roleFilterObject.currentPage"
+            :current-page="filterObject.currentPage"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="roleList.total">
+            :total="listData.total">
         </el-pagination>
     </div>
 </template>
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
-import type { RoleListItemType } from '@/views/system/type/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { LoadingService } from '@/views/system/loading-service';
 import {
     activeName,
-    currentRoleId,
+    currentId,
+    filterObject,
+    form,
     formType,
-    getRolePageList,
-    getTreeData,
-    mode, resetRoleFilterObject, resetRoleForm,
-    roleFilterObject,
-    roleForm,
-    roleList
-} from './role-list';
-import { deleteRoleApi, getRoleMenuIdsApi } from '@/api/system-manage';
-import { LoadingService } from '@/views/system/loading-service';
+    getPageList,
+    listData,
+    mode,
+    remove,
+    resetFilterObject,
+    resetForm
+} from '@/views/finance/partner/components/finance-partner';
+import type { FinancePartnerListItemType } from '@/views/finance/type/finance-parnter.type';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -83,21 +96,21 @@ function formatSortType(value: string) {
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
     console.log(params);
     LoadingService.getInstance().loading();
-    roleFilterObject.value.currentPage = 0;
-    roleFilterObject.value.currentSize = 10;
-    roleFilterObject.value.sortField = params.prop;
-    roleFilterObject.value.sortType = formatSortType(params.order);
-    await getRolePageList({
+    filterObject.value.currentPage = 0;
+    filterObject.value.currentSize = 10;
+    filterObject.value.sortField = params.prop;
+    filterObject.value.sortType = formatSortType(params.order);
+    await getPageList({
         tab: activeName.value
     });
     LoadingService.getInstance().stop();
 }
 
-async function handleSearchRoleList() {
+async function handleSearchList() {
     LoadingService.getInstance().loading();
-    roleFilterObject.value.currentPage = 0;
-    roleFilterObject.value.currentSize = 10;
-    await getRolePageList({
+    filterObject.value.currentPage = 0;
+    filterObject.value.currentSize = 10;
+    await getPageList({
         tab: activeName.value
     });
     LoadingService.getInstance().stop();
@@ -105,51 +118,38 @@ async function handleSearchRoleList() {
 
 async function handleClear() {
     LoadingService.getInstance().loading();
-    resetRoleFilterObject();
-    await getRolePageList({
+    resetFilterObject();
+    await getPageList({
         tab: activeName.value
     });
     LoadingService.getInstance().stop();
 }
 
-async function handleEditRoleItem(item: RoleListItemType) {
-    LoadingService.getInstance().loading();
+function handleEditItem(item: FinancePartnerListItemType) {
     mode.value = 'form';
-    formType.value = 'edit';
-    currentRoleId.value = item.id;
-    await getTreeData();
-    const menuList = await getRoleMenuIdsApi({
-        tab: activeName.value,
-        roleId: item.id
-    });
-    roleForm.value = {
-        name: item.name,
-        desc: item.desc ?? '',
-        menuIdArr: menuList as unknown as string[]
-    };
-    LoadingService.getInstance().stop();
+    form.value.name = item.name;
+    form.value.status = item.status === 1;
+    currentId.value = item.id;
+}
+
+async function handleCreateNewItem() {
+    mode.value = 'form';
+    formType.value = 'create';
+    currentId.value = '';
+    resetForm();
 }
 
 function handleCurrentChange(item: number) {
-    roleFilterObject.value.currentPage = item;
+    filterObject.value.currentPage = item;
 }
 
 function handleSizeChange(item: number) {
-    roleFilterObject.value.currentSize = item;
+    filterObject.value.currentSize = item;
 }
 
-async function handleCreateNewRole() {
-    mode.value = 'form';
-    formType.value = 'create';
-    resetRoleForm();
-    LoadingService.getInstance().loading();
-    await getTreeData();
-    LoadingService.getInstance().stop();
-}
-
-function handleRemoveRoleItem(item: RoleListItemType) {
+function handleRemoveItem(item: FinancePartnerListItemType) {
     ElMessageBox.confirm(
-        '确定要删除当前角色吗？',
+        '确定要删除当前用户吗？',
         '警告',
         {
             confirmButtonText: '确认',
@@ -157,17 +157,11 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
-            await deleteRoleApi({
-                roleId: item.id,
-                tab: activeName.value,
-                menuName: ''
+        .then(async () => {
+            await remove({
+                id: item.id
             });
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
-            });
-            await getRolePageList({
+            await getPageList({
                 tab: activeName.value
             });
         })
@@ -178,6 +172,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             });
         });
 }
+
 </script>
 
 <style scoped lang="scss">

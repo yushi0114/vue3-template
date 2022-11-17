@@ -1,7 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" clearable v-model="menuFilterText">
+            <el-input placeholder="请输入搜索内容" clearable   >
                 <template #append>
                     <el-button @click="handleSearchMenuTree">
                         <template #icon>
@@ -18,14 +18,14 @@
         </div>
         <el-tree
             class="left-tree"
-            :data="menuTreeData"
+            :data="institutionTreeData"
             node-key="id"
             default-expand-all
             @node-click="handleNodeClick"
             :expand-on-click-node="false">
             <template #default="{ node, data }">
                 <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
-                    <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ node.label }} </span>
+                    <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ data.orgName }} </span>
                     <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start"
                                 trigger="hover"
                                 :width="100">
@@ -75,21 +75,21 @@
 import { ref } from 'vue';
 import type { TreeItemType } from '@/views/system/type/menu-list.type';
 import Icon from '@/components/Icon.vue';
-import { formType, getTreeData, menuFilterText, menuTreeData, resetMenuForm } from './menu-list';
+import { getInstitutionTree, institutionTreeData, getInstitutionItem } from './finance-institution';
+import {
+    setFinanceInstitutionMenuTree
+} from "@/views/finance/institution/components/institution-menu/institution-menu";
 
-const emit = defineEmits(['nodeClickHandle', 'operateTreeItem']);
 
 const activeId = ref();
 
 function handleAddNewMenu() {
-    formType.value = 'create';
-    resetMenuForm();
+    // todo
 }
 
 async function handleSearchMenuTree() {
-    await getTreeData({
-        searchText: menuFilterText.value
-    });
+    await getInstitutionTree();
+
 }
 
 function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {
@@ -105,19 +105,14 @@ function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'cr
     if (type === 'remove') {
         willDeleteList = lookForAllId([item], []);
     }
-    emit('operateTreeItem', {
-        id: item.id,
-        type,
-        willDeleteList
-    });
+    // todo
 }
 
 
-function handleNodeClick(data: TreeItemType) {
-    emit('operateTreeItem', {
-        id: data.id,
-        type: 'edit'
-    });
+async function handleNodeClick(data: TreeItemType) {
+    // todo
+    await getInstitutionItem(data.id);
+    await setFinanceInstitutionMenuTree({id: data.id})
 }
 
 function handleMouseEnter(event: string) {
@@ -195,9 +190,7 @@ function handleMouseLeave(event: string) {
 }
 </style>
 <style lang="scss">
-//.custom-popover {
-//
-//}
+
 .el-popover.el-popper {
     min-width: 100px !important;
 }

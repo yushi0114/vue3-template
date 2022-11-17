@@ -88,7 +88,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                             <FlexRow class="sidebar-sub-block">
                                 <a
                                     class="sidebar-sub-link"
-                                    :class="{ active: isExactActive || href.replace(/\d+$/, '') === currentRoute.fullPath.replace(/\d+$/, '') }"
+                                    :class="{ active: isExactActive || currentRoute.fullPath.replace(/\d+$/, '').startsWith(href.replace(/\/\d+$/, '')) }"
                                     :href="href"
                                     @click="navigate">
                                     <div>

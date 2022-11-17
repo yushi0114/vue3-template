@@ -15,7 +15,7 @@ const { model: listControlModel, clear: clearModel } = useListControlModel();
 const count = ref(0);
 const list = ref<AgileReqEntity[]>([]);
 function getList() {
-    getExactReqs(Object.assign({ menuName: 'requirement', platform: platform.value }, listControlModel))
+    getExactReqs(Object.assign({ platform: platform.value }, listControlModel))
         .then(({ pageTotal, data }) => {
             count.value = pageTotal;
             list.value = data;

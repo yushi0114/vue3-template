@@ -18,6 +18,7 @@
     background: url(@/assets/images/home-banner.png) no-repeat top -44px right -40px, linear-gradient(rgb(58, 149, 255) 0%, rgb(27, 92, 255) 100%);
     background-size: 631px 451px;
     border-radius: 8px;
+    box-shadow: 0 4px 4px rgb(0, 0, 0, .25);
 
     .welcome-cantainer {
         margin-left: 25px;

@@ -26,7 +26,7 @@ const formModel = reactive({
     username: state.user?.name!,
 });
 
-const rules = reactive({
+const rules: any = reactive({
     username: [{ validator: genCheckEmpty('用户名不能为空'), trigger: 'change' }],
 });
 

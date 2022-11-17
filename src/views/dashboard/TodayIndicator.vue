@@ -20,29 +20,31 @@ withDefaults(
 
 <template>
     <Board bordered :style="{ padding: '20px 24px 24px' }" shadow="never">
-        <div class="card-header">
-            <Text color="paragraph" bold size="md">今日核心指标</Text>
-        </div>
-        <div class="indicator">
-            <div class="item-label">企业新用户</div>
-            <div class="item-value">{{ data.countTodayElibUser }} <span>/</span> {{ data.countTodayEzjfwUser }}</div>
-            <div class="item-desc">辽信通 <span>/</span> 市综服</div>
-        </div>
-        <div class="indicator">
-            <div class="item-label">辽信通需求</div>
-            <div class="item-value">{{ data.countTodayExactReq }}</div>
-        </div>
-        <div class="indicator">
-            <div class="item-label">辽信通产品需求</div>
-            <div class="item-value">{{ data.countTodayProductReq }}</div>
-        </div>
-        <div class="indicator">
-            <div class="item-label">市综服需求</div>
-            <div class="item-value">{{ data.countTodayEzjfwExactReq }}</div>
-        </div>
-        <div class="indicator">
-            <div class="item-label">市综服产品需求</div>
-            <div class="item-value">{{ data.countTodayEzjfwProductReq }}</div>
+        <div>
+            <div class="card-header">
+                <Text color="paragraph" bold size="md">今日核心指标</Text>
+            </div>
+            <div class="indicator">
+                <div class="item-label">企业新用户</div>
+                <div class="item-value">{{ data.countTodayElibUser }} <span>/</span> {{ data.countTodayEzjfwUser }}</div>
+                <div class="item-desc">辽信通 <span>/</span> 市综服</div>
+            </div>
+            <div class="indicator">
+                <div class="item-label">辽信通需求</div>
+                <div class="item-value">{{ data.countTodayExactReq }}</div>
+            </div>
+            <div class="indicator">
+                <div class="item-label">辽信通产品需求</div>
+                <div class="item-value">{{ data.countTodayProductReq }}</div>
+            </div>
+            <div class="indicator">
+                <div class="item-label">市综服需求</div>
+                <div class="item-value">{{ data.countTodayEzjfwExactReq }}</div>
+            </div>
+            <div class="indicator">
+                <div class="item-label">市综服产品需求</div>
+                <div class="item-value">{{ data.countTodayEzjfwProductReq }}</div>
+            </div>
         </div>
     </Board>
 </template>

@@ -78,9 +78,38 @@ $ npm run start:local
 
 ## 添加动态路由流程 
 
-1. 修改mock 数据：`src/api/system.ts`  `dynamicNavs()`  现在只有 id name 字段有用。 value permission 随便填
-2. 在 `src/views/index.ts` `dynamicRouteMap<id, [前端url路径，组件的文件路径]`> 中设置映射关系
-3. 按照 步骤2的 组件文件路径 创建组件
+
+### 菜单栏路由
+
+菜单栏路由数据由数据库管理，必须保证 `RESPONSE.component` 路径字段对应一个 `.vue` 组件，否则侧边栏则不会展示此路由
+
+
+### 前端动态路由
+
+#### 添加动态路由
+
+1. 在 `RESPONSE.component` 路径字段对应的地方新建同名ts文件 `${RESPONSE.component}.ts`。e.g. `/product/manage/index` -> `src/views/product/manage/index.ts`
+
+2. 在文件中导出 `routes` 字段, e.g:
+
+``` ts
+export const routes = [
+	{ path: '/create', component: CreateProduct }
+]
+```
+
+3. 使用 
+
+``` ts
+router.push(route.path + '/create')
+
+<router-link :to="route.path + '/create'" />
+```
+
+#### 解析原理
+
+在动态添加菜单栏时，同时查询对应目录的 `.ts` 文件是否导出了`routes`.
+
 
 ## 图标使用方法
 

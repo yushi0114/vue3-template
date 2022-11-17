@@ -30,6 +30,7 @@ export const useUserStore = defineStore('user', () => {
         prevNavTree: [
             {
                 id: '',
+                name: '',
                 path: '/home',
                 title: 'Homepage',
                 status: NavStatusType.default,
@@ -65,6 +66,7 @@ export const useUserStore = defineStore('user', () => {
             id: uid,
             tab: params?.tab ?? MENU_TAB.MENU_TAB_DMS,
         };
+
         return getUserInfoApi(queryParams)
             .then((user) => {
                 state.user = user;
@@ -73,9 +75,11 @@ export const useUserStore = defineStore('user', () => {
             .then((navs) => {
                 const validNavs = navs.filter((nav) => isFunction(genDynamicComponent(nav.component!)));
                 state.navs = validNavs;
-                addDynamicRoutes(router, validNavs);
-                state.navTree = toTree({}, validNavs);
-                return state.user as UserEntity;
+                return addDynamicRoutes(router, validNavs).then(() => {
+
+                    state.navTree = toTree({}, validNavs);
+                    return state.user as UserEntity;
+                });
             })
             .catch(noop);
     }

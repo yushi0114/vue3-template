@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { encrypt, encryptHexMd5 } from '@/utils';
-import { genUUID, jsonReplacer } from './utils';
+import { genUUID, jsonReplacer, resolveParams } from './utils';
 import { useToken } from '@/composables';
 import { router } from '@/router';
+import { HttpContentType, HttpStatus } from './types';
+
 const service = axios.create({
     timeout: 30000
 });
@@ -21,6 +23,19 @@ service.interceptors.request.use(config => {
         }
         const uuid = genUUID();
         config.headers['uuid'] = uuid;
+
+        const menuName = router.currentRoute.value.meta.menu;
+
+        if (config.method === 'get') {
+            config.params = { ...config.params, menuName };
+        } else if (config.method === 'post') {
+            if (config.headers['Content-Type'] === HttpContentType.formData) {
+                config.params = { ...config.params, menuName };
+            }
+            config.data = resolveParams({ ...config.data, menuName }, config.headers['Content-Type'] as HttpContentType);
+        }
+
+
         // 添加sign
         const stringifyParams = encryptHexMd5(
             config.method === 'get'
@@ -45,7 +60,7 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(res => {
     const token = useToken();
     // 未设置状态码则默认成功状态
-    const code = res.data.code || 200;
+    const code = res.data.code || HttpStatus.ok;
     // 获取错误信息
     const msg = res.data.msg;
     if (code === 10010) {
@@ -56,13 +71,13 @@ service.interceptors.response.use(res => {
         token.remove();
         router.replace('/signin');
         return Promise.reject('error');
-    } else if (code === 401) {
+    } else if (code === HttpStatus.unauthorized) {
         token.remove();
         router.replace('/signin');
-    } else if (code === 500) {
+    } else if (code === HttpStatus.internalServerError) {
         console.error(msg);
         return Promise.reject(new Error(msg));
-    } else if (code !== 200) {
+    } else if (code !== HttpStatus.ok) {
         ElMessage({
             message: msg,
             type: 'error'

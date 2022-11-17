@@ -10,3 +10,7 @@ export interface ProductEntity {
     status: number
     successRate: string
 }
+
+export interface ProductApplicationEntity {
+
+}

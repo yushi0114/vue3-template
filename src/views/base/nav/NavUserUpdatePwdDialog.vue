@@ -33,7 +33,7 @@ function checkNewPassword(rule: any, value: string, callback: ValidateCallback) 
     return checkPassword(rule, value, callback);
 }
 
-const rules = reactive({
+const rules: any = reactive({
     oldPassword: [{ validator: checkPassword, trigger: 'change' }],
     newPassword: [{ validator: checkNewPassword, trigger: 'change' }],
 });

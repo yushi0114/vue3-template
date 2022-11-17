@@ -75,7 +75,9 @@ onMounted(() => {
             }"
         >
             <template v-slot:search-rest>
-                <el-button type="primary">新建</el-button>
+                <RouterLink :to="`${route.path}/new/1`">
+                    <el-button type="primary">新建</el-button>
+                </RouterLink>
             </template>
         </ListQueryControl>
         <Text>

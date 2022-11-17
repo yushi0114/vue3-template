@@ -48,52 +48,50 @@ onMounted(() => {
 </script>
 
 <template>
-  <PagePanel>
-    <Board class="req-agile">
-        <PlatformTab @tab-change="handleTabChange" />
-        <ListQueryControl
-            v-model="listControlModel"
-            :searchConfig="{
-                label: '请输入企业名称',
-                field: 'searchInput'
-        }"
-            :filterOptionsConfigs="[
-                // { label: '机构名称', field: 'org', options: [] },
-                { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
-            ]"
-            :sortConfigs="[
-                { label: '发布时间', field: 'updateTime', },
-                { label: '期望融资金额', field: 'expectFinancing', },
-            ]"
-            :dateRangeConfig="{
-                label: '发布日期',
-                field: '',
-                options: [
-                    {  name: '开始月份', value: 'startTime', },
-                    {  name: '结束月份', value: 'endTime', },
-                ]
+    <PagePanel>
+        <Board class="req-agile">
+            <PlatformTab @tab-change="handleTabChange" />
+            <ListQueryControl
+                v-model="listControlModel"
+                :searchConfig="{
+                    label: '请输入企业名称',
+                    field: 'searchInput'
             }"
-        >
-            <template v-slot:search-rest>
-                <el-button type="primary">下载</el-button>
-            </template>
-        </ListQueryControl>
-        <Text>
-        </Text>
+                :filterOptionsConfigs="[
+                    // { label: '机构名称', field: 'org', options: [] },
+                    { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
+                ]"
+                :sortConfigs="[
+                    { label: '发布时间', field: 'updateTime', },
+                    { label: '期望融资金额', field: 'expectFinancing', },
+                ]"
+                :dateRangeConfig="{
+                    label: '发布日期',
+                    field: '',
+                    options: [
+                        {  name: '开始月份', value: 'startTime', },
+                        {  name: '结束月份', value: 'endTime', },
+                    ]
+                }"
+            >
+                <template v-slot:search-rest>
+                    <el-button type="primary">下载</el-button>
+                </template>
+            </ListQueryControl>
 
-        <ReqList :list="list" @click-detail="goDetail" />
+            <ReqList :list="list" @click-detail="goDetail" />
 
-        <FlexRow horizontal="end">
-            <el-pagination
-                v-model:current-page="listControlModel.pageIndex"
-                v-model:page-size="listControlModel.pageSize"
-                :page-sizes="[10, 20, 50]"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="count"
-            />
-        </FlexRow>
-    </Board>
-  </PagePanel>
+            <FlexRow horizontal="end">
+                <el-pagination
+                    v-model:current-page="listControlModel.pageIndex"
+                    v-model:page-size="listControlModel.pageSize"
+                    :page-sizes="[10, 20, 50]"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="count"
+                />
+            </FlexRow>
+        </Board>
+    </PagePanel>
 </template>
 <style lang="postcss">
 .req-agile {

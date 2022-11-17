@@ -15,7 +15,7 @@ const { model: listControlModel, clear: clearModel } = useListControlModel();
 const count = ref(0);
 const list = ref<ProductEntity[]>([]);
 function getList() {
-    getProducts(Object.assign({ menuName: 'requirement', platform: platform.value }, listControlModel))
+    getProducts(Object.assign({ platform: platform.value }, listControlModel))
         .then(({ total, data }) => {
             count.value = total;
             list.value = data;
@@ -50,7 +50,7 @@ onMounted(() => {
 
 <template>
   <PagePanel>
-    <Board class="req-agile">
+    <Board class="product-manage">
         <PlatformTab @tab-change="handleTabChange" />
         <ListQueryControl
             v-model="listControlModel"
@@ -60,7 +60,7 @@ onMounted(() => {
             }"
             :filterOptionsConfigs="[
                 // { label: '机构名称', field: 'org', options: [] },
-                { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
+                { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
             ]"
             :sortConfigs="[
                 { label: '申请时间', field: 'createTime', },
@@ -75,7 +75,7 @@ onMounted(() => {
             }"
         >
             <template v-slot:search-rest>
-                <el-button type="primary">新建</el-button>
+                <el-button type="primary">下载</el-button>
             </template>
         </ListQueryControl>
         <Text>
@@ -96,7 +96,7 @@ onMounted(() => {
   </PagePanel>
 </template>
 <style lang="postcss">
-.req-agile {
+.product-manage {
   @apply;
 }
 </style>

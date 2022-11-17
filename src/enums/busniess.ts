@@ -73,7 +73,6 @@ export const acceptProgressTypeWithAllOptions: PlainOption<AcceptProgressType>[]
 
 // #endregion
 
-
 // #region 科技型企业
 export enum SteType {
     stSmall = 0,
@@ -159,7 +158,7 @@ export const expectRateTypeOptions: PlainOption<ExpectRateType>[] = [
     { name: expectRateTypeMap[ExpectRateType.leP8], value: ExpectRateType.leP8 },
 ];
 
-// #endregion1
+// #endregion
 
 // #region 企业纳税信用等级
 export enum TaxGradeType {
@@ -276,4 +275,22 @@ export const orgProgressStatusTypeMap: Record<OrgProgressStatusType, string> = O
     [OrgProgressStatusType.failLoan]: '放款办结失败',
 });
 
+// #endregion
+
+// #region 推荐产品类型
+export enum ProductRecommandType {
+    primary = '0',
+    secondary = '1'
+}
+
+
+export const productRecommandTypeMap: Record<ProductRecommandType, string> = {
+    [ProductRecommandType.primary]: '主推产品',
+    [ProductRecommandType.secondary]: '辅推产品',
+};
+
+export const productRecommandTypeOptions: PlainOption<ProductRecommandType>[] = [
+    { name: productRecommandTypeMap[ProductRecommandType.primary], value: ProductRecommandType.primary },
+    { name: productRecommandTypeMap[ProductRecommandType.secondary], value: ProductRecommandType.secondary },
+];
 // #endregion

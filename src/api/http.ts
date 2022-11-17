@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { encrypt, encryptHexMd5 } from '@/utils';
+import { encrypt, encryptHexMd5, isString } from '@/utils';
 import { genUUID, jsonReplacer } from './utils';
 import { useToken } from '@/composables';
 import { router } from '@/router';
@@ -69,7 +69,7 @@ service.interceptors.response.use(res => {
         });
         return Promise.reject(res.data);
     } else {
-        return res.data.data;
+        return isString(res.data.code) ? res.data : res.data.data;
     }
 }, error => {
     console.log('err' + error);

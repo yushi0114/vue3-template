@@ -1,36 +1,76 @@
 <script lang="ts" setup>
+import { acceptProgressTypeOptions, PlatformType } from '@/enums';
+import { getAligeReqs } from '@/api';
+import type { AgileReqEntity, RequirementEntity } from '@/types';
+import { ReqList } from '../components';
+import { noop } from '@/utils';
+import { useListControlModel } from '@/composables';
+
+const route = useRoute();
+const platform = ref(Number(route.params.type));
+
+const { model: listControlModel, clear: clearModel } = useListControlModel();
+
+const count = ref(0);
+const list = ref<AgileReqEntity[]>([]);
+function getList() {
+    getAligeReqs(Object.assign({ platform: platform.value }, listControlModel))
+        .then(({ total, data }) => {
+            count.value = total;
+            list.value = data;
+        })
+        .catch(noop);
+}
+
+watch(listControlModel, () => {
+    nextTick(getList);
+});
+
+function clear() {
+    count.value = 0;
+    list.value = [];
+    clearModel();
+}
+
+function handleTabChange(plat: PlatformType) {
+    clear();
+    platform.value = plat;
+}
+
+function goDetail(req: RequirementEntity) {
+    console.log(req);
+}
+
+onMounted(() => {
+    getList();
+});
+
 </script>
 
 <template>
   <PagePanel>
     <Board class="req-agile">
-        <PlatformTab />
+        <PlatformTab @tab-change="handleTabChange" />
         <ListQueryControl
+            v-model="listControlModel"
             :searchConfig="{
                 label: '请输入企业名称',
-                field: 'search'
-            }"
-            :typeOptionsConfigs="[
-                { label: '是否为小微企业', field: 'micro', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
-            ]"
+                field: 'searchInput'
+        }"
             :filterOptionsConfigs="[
-                { label: '是否为小微企业', field: 'micro', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
-                { label: '是否为小微企业2', field: 'micro2', options: [] },
+                // { label: '机构名称', field: 'org', options: [] },
+                { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
             ]"
             :sortConfigs="[
-                { label: '是否为小微企业', field: 'micro', },
-                { label: '是否为小微企业2', field: 'micro2', },
-                { label: '是否为小微企业2', field: 'micro2', },
+                { label: '发布时间', field: 'updateTime', },
+                { label: '期望融资金额', field: 'expectFinancing', },
             ]"
             :dateRangeConfig="{
                 label: '发布日期',
-                field: 'x',
+                field: '',
                 options: [
-                    {  name: '开始时间', value: 'start', },
-                    {  name: '结束时间', value: 'until', },
+                    {  name: '开始月份', value: 'startTime', },
+                    {  name: '结束月份', value: 'endTime', },
                 ]
             }"
         >
@@ -38,10 +78,23 @@
                 <el-button type="primary">下载</el-button>
             </template>
         </ListQueryControl>
+        <Text>
+        </Text>
+
+        <ReqList :list="list" @click-detail="goDetail" />
+
+        <FlexRow horizontal="end">
+            <el-pagination
+                v-model:current-page="listControlModel.pageIndex"
+                v-model:page-size="listControlModel.pageSize"
+                :page-sizes="[10, 20, 50]"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="count"
+            />
+        </FlexRow>
     </Board>
   </PagePanel>
 </template>
-
 <style lang="postcss">
 .req-agile {
   @apply;

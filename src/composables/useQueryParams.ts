@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from '@vueuse/core';
+import { isNumber, useUrlSearchParams } from '@vueuse/core';
 import { ref, watch } from 'vue';
 
 /**
@@ -16,7 +16,15 @@ export function useQueryParams<T extends Record<string, any>>(initialValue: T) {
         Object.assign(searchParams, params);
     }
     watch(searchParams, () => {
-        Object.assign(queryParams.value, searchParams);
+        Object.keys(searchParams).forEach((key) => {
+            let value = searchParams[key];
+            if (isNumber(queryParams.value[key])) {
+                value = Number(value);
+            }
+            if (queryParams.value[key] !== value) {
+                queryParams.value[key] = value;
+            }
+        });
     }, { immediate: true });
 
     return { queryParams, goQuery };

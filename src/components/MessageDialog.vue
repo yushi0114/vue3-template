@@ -23,18 +23,18 @@ const bodyRef = ref<HTMLDivElement>();
 
 function handleOpened() {
     if (bodyRef.value && props.autoFocus) {
-        const firstInputDom = bodyRef.value.querySelector('input')
+        const firstInputDom = bodyRef.value.querySelector('input');
         if (firstInputDom) {
             setTimeout(() => {
                 firstInputDom.focus();
-            }, 30)
+            }, 30);
         }
     }
 }
 </script>
 
 <template>
-    <el-dialog 
+    <el-dialog
         v-model="modelValue"
         class="message-dialog"
         align-center

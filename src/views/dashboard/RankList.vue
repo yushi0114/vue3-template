@@ -1,6 +1,18 @@
 <script lang="ts" setup>
 import * as echarts from 'echarts';
 import type { ApplyCountEntity } from '@/types/dashboard';
+import { useSidebar } from '@/composables';
+
+const { expand } = useSidebar();
+
+watch(
+    expand,
+    () => {
+        setTimeout(() => {
+            resizeHandler();
+        }, 150);
+    }
+);
 
 const props = withDefaults(
     defineProps<{

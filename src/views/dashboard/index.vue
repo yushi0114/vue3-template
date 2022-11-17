@@ -6,10 +6,8 @@ import SuccessRate from './SuccessRate.vue';
 import ProductSuccessRate from './ProductSuccessRate.vue';
 import RankList from './RankList.vue';
 import { type GetHomepageCountResponse, getHomepageCount } from '@/api/dashboard';
-import { useSidebar } from '@/composables';
 
 const count = ref<GetHomepageCountResponse>();
-const { expand } = useSidebar();
 const getHomepageData = () => {
     return getHomepageCount()
         .then(res => {
@@ -27,7 +25,6 @@ onBeforeMount(() => {
     <PagePanel class="dashboard">
         <el-space direction="vertical" :size="20" fill :style="{ width: '100%' }">
             <Welcome />
-            {{ expand }}
             <TodayIndicator :data="count" />
             <TotalIndicator :data="count" />
             <div style="display: flex; width: 100%">

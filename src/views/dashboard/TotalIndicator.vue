@@ -1,6 +1,19 @@
 <script lang="ts" setup>
 import * as echarts from 'echarts';
 import type { TotalIndicatorEntity } from '@/types/dashboard';
+import { useSidebar } from '@/composables';
+
+const { expand } = useSidebar();
+
+watch(
+    expand,
+    () => {
+        setTimeout(() => {
+            resizeHandler();
+        }, 150);
+    }
+);
+
 
 const props = withDefaults(
     defineProps<{
@@ -90,7 +103,7 @@ const options = {
         {
             type: 'pie',
             radius: [24, 32],
-            center: [0, 32],
+            center: ['8.598%', 32],
             data: [
                 {
                     value: 0,
@@ -114,7 +127,7 @@ const options = {
         {
             type: 'pie',
             radius: [24, 32],
-            center: [0, 32],
+            center: ['41.917%', 32],
             data: [
                 {
                     value: 0,
@@ -138,7 +151,7 @@ const options = {
         {
             type: 'pie',
             radius: [24, 32],
-            center: [0, 32],
+            center: ['75.236%', 32],
             data: [
                 {
                     value: 0,
@@ -165,15 +178,13 @@ const options = {
 const loadOptions = () => {
     chartWidth = chartDomRef.value!.getBoundingClientRect().width;
     const leftOffsets = [0, chartWidth / 3, chartWidth / 3 * 2];
+    console.log(leftOffsets);
     options.title.map((item, index) => {
         item.left = leftOffsets[index] + 148;
     });
     options.title[0].text = ['{a|敏捷需求}', `{b|${props.data.countSimpleReq}}`, `{c|占比${props.data.perSimpleReq}%}`].join('\n');
     options.title[1].text = ['{a|精准需求}', `{b|${props.data.countExactReq}}`, `{c|占比${props.data.perExactReq}%}`].join('\n');
     options.title[2].text = ['{a|产品需求}', `{b|${props.data.countProductReq}}`, `{c|占比${props.data.perProductReq}%}`].join('\n');
-    options.series.map((item, index) => {
-        item.center = [leftOffsets[index] + 100, 32];
-    });
     options.series[0].data[0].value = props.data.countSimpleReq;
     options.series[0].data[1].value = props.data.countExactReq + props.data.countProductReq;
     options.series[1].data[0].value = props.data.countExactReq;

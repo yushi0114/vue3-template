@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { acceptProgressTypeOptions, PlatformType } from '@/enums';
+import { acceptProgressTypeOptions, PlatformType, switchTypeOptions, taxGradeTypeOptions } from '@/enums';
 import { getExactReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
 import { ReqList } from '../components';
@@ -61,6 +61,14 @@ onMounted(() => {
             :filterOptionsConfigs="[
                 // { label: '机构名称', field: 'org', options: [] },
                 { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
+            ]"
+            :typeOptionsConfigs="[
+                { label: '小微企业', field: 'mseType', options: switchTypeOptions },
+                { label: '有抵押物', field: 'pawnType', options: switchTypeOptions },
+                { label: '可提供担保', field: 'guaranteeType', options: switchTypeOptions },
+                { label: '在银行有过融资行为', field: 'financingType', options: switchTypeOptions },
+                { label: '有政府采购订单', field: 'gpType', options: switchTypeOptions },
+                { label: '企业纳税信用等级', field: 'taxGrade', options: taxGradeTypeOptions },
             ]"
             :sortConfigs="[
                 { label: '发布时间', field: 'updateTime', },

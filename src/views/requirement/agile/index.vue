@@ -50,7 +50,7 @@ onMounted(() => {
 <template>
     <PagePanel>
         <Board class="req-agile">
-            <PlatformTab @tab-change="handleTabChange" />
+            <PlatformTab @tab-change="handleTabChange" :filter-types="[PlatformType.LiaoXinTong]"/>
             <ListQueryControl
                 v-model="listControlModel"
                 :searchConfig="{

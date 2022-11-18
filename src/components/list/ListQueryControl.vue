@@ -49,7 +49,11 @@ watch(() => props.searchConfig, () => {
 
 watch(() => props.typeOptionsConfigs, () => {
     if (Array.isArray(props.typeOptionsConfigs)) {
-        // TODO
+        props.typeOptionsConfigs.forEach((tConf) => {
+            if (model[tConf.field] === undefined) {
+                model[tConf.field] = tConf.defaultValue;
+            }
+        });
     }
 }, { immediate: true });
 
@@ -164,6 +168,11 @@ function handleSort(sField: string, sValue: SortType) {
 function disableDate(d: Date) {
     return d >= getNextMonth();
 }
+
+function handleRadioClick(tField: string, tValue: any) {
+    model[tField] = model[tField] === tValue ? '' : tValue;
+    wrapGo();
+}
 </script>
 
 <template>
@@ -191,8 +200,21 @@ function disableDate(d: Date) {
     </FlexRow>
     <FlexRow
         class="lqc-type-row"
-        v-if="typeOptionsConfigs"
-        >
+        v-if="typeOptionsConfigs">
+        <div class="lqc-type-item" v-for="tConf in typeOptionsConfigs" :key="tConf.field">
+            <Text size="sm" color="regular">{{ tConf.label }}:</Text>
+            <el-button-group size="small" >
+                <el-button
+                    v-for="opt in tConf.options || []"
+                    :key="opt.value"
+                    text
+                    :type="model[tConf.field] === opt.value ? 'primary' : 'plain'"
+                    @click="handleRadioClick(tConf.field, opt.value)"
+                >
+                    {{ opt.name }}
+                </el-button>
+            </el-button-group>
+        </div>
     </FlexRow>
     <FlexRow
         class="lqc-filter-row">
@@ -242,7 +264,11 @@ function disableDate(d: Date) {
     </FlexRow>
   </div>
 </template>
-
+<style lang="postcss">
+.lqc-type-row {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+</style>
 <style lang="scss">
 .list-query-control {
 }
@@ -255,12 +281,15 @@ function disableDate(d: Date) {
     margin-bottom: $gap-md;
 }
 
+.lqc-type-row,
 .lqc-filter-row {
     border-radius: 4px;
     padding: $gap-xs $gap-md;
     margin-bottom: $gap-xs;
-    background-color: var(--el-color-info-light-8);
+    background-color: var(--el-color-info-light-9);
+    gap: $gap-xs;
 }
+
 
 .lqc-filter-item {
     margin-right: $gap-xs;
@@ -278,6 +307,14 @@ function disableDate(d: Date) {
         transform: translateY(2px);
         width: 15px;
         height: 15px;
+    }
+}
+
+.lqc-type-item {
+    display: inline-flex;
+    align-items: center;
+    & .i-text {
+        margin-right: $gap-xs;
     }
 }
 

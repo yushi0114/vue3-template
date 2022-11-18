@@ -29,10 +29,20 @@ export const switchTypeMap: Record<SwitchType, string> = Object.freeze({
     [SwitchType.off]: '否'
 });
 
-export const switchTypeOptions: PlainOption<SwitchType>[] = [
-    { name: switchTypeMap[SwitchType.on], value: SwitchType.on },
-    { name: switchTypeMap[SwitchType.off], value: SwitchType.off }
-];
+export const onlineTypeMap: Record<SwitchType, string> = Object.freeze({
+    [SwitchType.on]: '上架',
+    [SwitchType.off]: '下架'
+});
+
+export function genSwitchTypeOptions(map: Record<SwitchType, string>): PlainOption<SwitchType>[] {
+    return [
+        { name: map[SwitchType.on], value: SwitchType.on },
+        { name: map[SwitchType.off], value: SwitchType.off }
+    ];
+}
+
+export const switchTypeOptions = genSwitchTypeOptions(switchTypeMap);
+export const onlineTypeOptions = genSwitchTypeOptions(onlineTypeMap);
 // #endregion
 
 // #region 需求状态

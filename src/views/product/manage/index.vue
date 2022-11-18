@@ -52,7 +52,7 @@ watch(listControlModel, () => {
 
 onBeforeMount(() => {
     requestOrgOptions()
-        .then(res => topOrgOptions.value = res.map(({ id, orgName }) => ({ name: orgName, value: id })))
+        .then(res => topOrgOptions.value = res.map(({ id, orgName }) => ({ name: orgName, value: id })));
 });
 </script>
 

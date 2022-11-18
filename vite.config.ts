@@ -53,7 +53,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                         '/src/composables/index.ts': ['useApi'],
                     },
                 ],
-                dirs: ['./composables', './components', './types', './utils', './common', './stores'],
+                dirs: ['./composables', './components', './types', './utils', './stores'],
                 resolvers: [elementPlusResolver(), iconsResolver({ prefix: 'Icon' })],
                 eslintrc: {
                     enabled: true,

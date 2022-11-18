@@ -5,6 +5,7 @@ import type { DynamicNavEntity } from '@/types';
 import { genDynamicComponent, genDynamicViewConfig } from '@/views';
 import { Error404 } from '@/views/system';
 import { Base } from '@/views/base';
+import ReportDetail from '@/components/ReportDetail/index.vue';
 
 // @/store/user signin()
 export const SIGNIN_PATH = '/signin';
@@ -39,6 +40,14 @@ const routes: RouteRecordRaw[] = [
         path: SIGNIN_PATH,
         name: 'signin',
         component: Signin
+    },{
+        path: '/report/detail',
+        name: 'report',
+        component: ReportDetail,
+        meta: {
+            menu: 'requirement',
+            title: 'requirement'
+        }
     }
 ];
 

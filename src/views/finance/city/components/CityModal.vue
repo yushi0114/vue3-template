@@ -34,11 +34,13 @@ watch(props.dataEdit, (val) => {
 });
 
 const emit = defineEmits<{
-  (e: 'close', flag: Boolean): void,
+  (e: 'close', flag: boolean): void,
   (e: 'refresh'): void
 }>();
 
-const cancel = () => {
+const cancel = (form: FormInstance | undefined) => {
+    if (!form) return;
+    form.resetFields();
     initForm(cityForm, '');
     emit('close', false);
 };
@@ -164,7 +166,7 @@ const cityRules = reactive<FormRules>({
             v-model="dialogVisible"
             :title="dataEdit.title"
             :width="'500px'"
-            @close="cancel"
+            @close="cancel(cityFormRef)"
         >
             <el-form
                 ref="cityFormRef"
@@ -204,7 +206,7 @@ const cityRules = reactive<FormRules>({
             </el-form>
             <template #footer>
               <span class="dialog-footer">
-                <el-button @click="cancel">取 消</el-button>
+                <el-button @click="cancel(cityFormRef)">取 消</el-button>
                 <el-button type="primary" @click="createOrEditCity(cityFormRef, dataEdit.title)">
                   确 定
                 </el-button>

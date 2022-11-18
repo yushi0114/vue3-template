@@ -29,10 +29,20 @@ export const switchTypeMap: Record<SwitchType, string> = Object.freeze({
     [SwitchType.off]: '否'
 });
 
-export const switchTypeOptions: PlainOption<SwitchType>[] = [
-    { name: switchTypeMap[SwitchType.on], value: SwitchType.on },
-    { name: switchTypeMap[SwitchType.off], value: SwitchType.off }
-];
+export const onlineTypeMap: Record<SwitchType, string> = Object.freeze({
+    [SwitchType.on]: '上架',
+    [SwitchType.off]: '下架'
+});
+
+export function genSwitchTypeOptions(map: Record<SwitchType, string>): PlainOption<SwitchType>[] {
+    return [
+        { name: map[SwitchType.on], value: SwitchType.on },
+        { name: map[SwitchType.off], value: SwitchType.off }
+    ];
+}
+
+export const switchTypeOptions = genSwitchTypeOptions(switchTypeMap);
+export const onlineTypeOptions = genSwitchTypeOptions(onlineTypeMap);
 // #endregion
 
 // #region 需求状态
@@ -72,7 +82,6 @@ export const acceptProgressTypeWithAllOptions: PlainOption<AcceptProgressType>[]
 ];
 
 // #endregion
-
 
 // #region 科技型企业
 export enum SteType {
@@ -159,7 +168,7 @@ export const expectRateTypeOptions: PlainOption<ExpectRateType>[] = [
     { name: expectRateTypeMap[ExpectRateType.leP8], value: ExpectRateType.leP8 },
 ];
 
-// #endregion1
+// #endregion
 
 // #region 企业纳税信用等级
 export enum TaxGradeType {
@@ -276,4 +285,22 @@ export const orgProgressStatusTypeMap: Record<OrgProgressStatusType, string> = O
     [OrgProgressStatusType.failLoan]: '放款办结失败',
 });
 
+// #endregion
+
+// #region 推荐产品类型
+export enum ProductRecommandType {
+    primary = '0',
+    secondary = '1'
+}
+
+
+export const productRecommandTypeMap: Record<ProductRecommandType, string> = {
+    [ProductRecommandType.primary]: '主推产品',
+    [ProductRecommandType.secondary]: '辅推产品',
+};
+
+export const productRecommandTypeOptions: PlainOption<ProductRecommandType>[] = [
+    { name: productRecommandTypeMap[ProductRecommandType.primary], value: ProductRecommandType.primary },
+    { name: productRecommandTypeMap[ProductRecommandType.secondary], value: ProductRecommandType.secondary },
+];
 // #endregion

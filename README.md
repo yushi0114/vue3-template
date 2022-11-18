@@ -18,7 +18,6 @@ $ npm run start:local
 	|- assets/ # 图片及字体资源
 		|- fonts/
 		|- images/
-	|- common/ # 业务相关集合
 	|- components/ # 组件库
 	|- componsables/ # composition api
 	|- router/ # 静态路由定义

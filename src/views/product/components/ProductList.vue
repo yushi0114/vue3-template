@@ -31,7 +31,8 @@ const emits = defineEmits<{
                         <ListField label="贷款期限" type="desc">{{ item.loanLimit }}</ListField>
                     </div>
                     <div class="pdt-list-item">
-                        <ListField>&nbsp</ListField>
+                        <!-- 空格占位 -->
+                        <ListField>{{ '\u00A0' }}</ListField>
                         <ListField label="年化利率" type="desc">{{ item.referenceRate }}</ListField>
                     </div>
                 </div>

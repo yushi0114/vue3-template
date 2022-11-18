@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import type { ProductEntity } from '@/types';
+import type { ProductRequirementEntity } from '@/types';
 import { List, ListField, ListItem, ListProgress, RectLogo } from '@/components';
+import { AcceptProgressType, expectTimeTypeMap, requirmentProgressTypeMap } from '@/enums';
 
 withDefaults(
     defineProps<{
-        list?: ProductEntity[],
+        list?: ProductRequirementEntity[],
     }>(),
     {
         list: () => []
@@ -12,42 +13,54 @@ withDefaults(
 );
 
 const emits = defineEmits<{
-    (e: 'click-detail', detail: ProductEntity): void;
+    (e: 'click-detail', detail: ProductRequirementEntity): void;
 }>();
+
+const colorStatusMap: Record<AcceptProgressType, string> = {
+    [AcceptProgressType.all]: 'warning',
+    [AcceptProgressType.undo]: 'warning',
+    [AcceptProgressType.doing]: '',
+    [AcceptProgressType.done]: 'success',
+    [AcceptProgressType.refuse]: 'exception',
+    [AcceptProgressType.undoIn48]: 'warning'
+};
 </script>
 
 <template>
   <List class="pdt-list">
         <ListItem v-for="item in list" :key="item.id" class="pdt-list-item">
-            <RectLogo :name="item.name" />
+            <RectLogo :name="item.corpName" />
             <div class="pdt-list-content">
                 <div class="pdt-list-info">
                     <div class="pdt-list-item">
-                        <ListField hoverable @click="emits('click-detail', item)">{{ item.name }}</ListField>
-                        <ListField label="贷款额度" type="desc">{{ item.loanDue }}</ListField>
+                        <ListField
+                            label="企业名称"
+                            hoverable
+                            @click="emits('click-detail', item)"
+                        >{{ item.corpName }}</ListField>
+                        <ListField label="期望融资金额" type="desc">{{ item.expectFinancing }}万元</ListField>
                     </div>
                     <div class="pdt-list-item">
-                        <ListField label="机构名称">{{ item.orgName }}</ListField>
-                        <ListField label="贷款期限" type="desc">{{ item.loanLimit }}</ListField>
+                        <ListField label="申请产品名称">{{ item.productName }}</ListField>
+                        <ListField label="期望放款时间" type="desc">{{ expectTimeTypeMap[item.expectTime] }}</ListField>
                     </div>
                     <div class="pdt-list-item">
-                        <ListField>&nbsp</ListField>
-                        <ListField label="年化利率" type="desc">{{ item.referenceRate }}</ListField>
+                        <ListField label="申请机构名称">{{ item.orgName }}</ListField>
+                        <ListField label="联系人" type="desc">{{ item.contactPerson }}</ListField>
+                    </div>
+                    <div class="pdt-list-item">
+                        <ListField label="申请时间">{{ item.updateTime }}</ListField>
+                        <ListField label="联系电话" type="desc">{{ item.contactMobile }}</ListField>
                     </div>
                 </div>
                 <FlexRow class="pdt-list-bottom" horizontal="between">
                     <ListProgress
-                        label="成功率"
-                        :progress="Number(item.successRate) * 100"
-                        status=""
+                        label="需求进度"
+                        :progress="item.barCode * 100"
+                        :status="colorStatusMap[item.progress]"
                     >
-                        {{ Number(item.successRate) * 100 }}%
+                        {{ requirmentProgressTypeMap[item.progress] }}
                     </ListProgress>
-
-                    <div class="pdt-list-operation">
-                        <TextHoverable size="xs" color="regular">查看申请企业</TextHoverable>
-                        <TextHoverable size="xs" color="regular">更多</TextHoverable>
-                    </div>
                 </FlexRow>
             </div>
         </ListItem>

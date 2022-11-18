@@ -1,6 +1,15 @@
 <script lang="ts" setup>
 import type { ProductEntity } from '@/types';
-import { List, ListField, ListItem, ListProgress, RectLogo } from '@/components';
+import { List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
+import { SwitchType } from '@/enums';
+
+enum ItemOpt {
+    corps = 1,
+    offline = 2,
+    online = 3,
+    edit = 4,
+    delete = 5,
+}
 
 withDefaults(
     defineProps<{
@@ -11,16 +20,51 @@ withDefaults(
     }
 );
 
+const router = useRouter();
+const route = useRoute();
 const emits = defineEmits<{
     (e: 'click-detail', detail: ProductEntity): void;
 }>();
+
+function handleOperate(opt: ListOperatorOption<ItemOpt>, pdt: ProductEntity) {
+    if (opt.value === ItemOpt.corps) {
+        router.push(`/product-apply/${route.params.type}?corp=${pdt.id}`);
+    }
+    else if (opt.value === ItemOpt.offline) {
+        //
+    }
+    else if (opt.value === ItemOpt.online) {
+        //
+    }
+    else if (opt.value === ItemOpt.edit) {
+        //
+    }
+    else if (opt.value === ItemOpt.delete) {
+        //
+    }
+}
 </script>
 
 <template>
   <List class="pdt-list">
-        <ListItem v-for="item in list" :key="item.id" class="pdt-list-item">
+        <ListItem
+            v-for="item in list"
+            :key="item.id"
+            class="pdt-list-item"
+            :disabled="item.status === SwitchType.off"
+            @operate="(opt) => handleOperate(opt, item)"
+            :variables="{
+                isOnline: item.status === SwitchType.on
+            }"
+            v-slot="{ isOnline }"
+            :operators="[
+                { name: '查看申请企业', value: ItemOpt.corps },
+                { name: item.status === SwitchType.off ? '上架' : '下架', value: item.status === SwitchType.off ? ItemOpt.online : ItemOpt.offline },
+                { name: '编辑', value: ItemOpt.edit, icon: 'ep-edit', disabled: isOnline },
+                { name: '删除', value: ItemOpt.delete, icon: 'ep-delete', disabled: isOnline },
+            ]">
             <RectLogo :name="item.name" />
-            <div class="pdt-list-content">
+            <div class="pdt-list-content" :disabled="isOnline">
                 <div class="pdt-list-info">
                     <div class="pdt-list-item">
                         <ListField hoverable @click="emits('click-detail', item)">{{ item.name }}</ListField>
@@ -44,11 +88,6 @@ const emits = defineEmits<{
                     >
                         {{ Number(item.successRate) * 100 }}%
                     </ListProgress>
-
-                    <div class="pdt-list-operation">
-                        <TextHoverable size="xs" color="regular">查看申请企业</TextHoverable>
-                        <TextHoverable size="xs" color="regular">更多</TextHoverable>
-                    </div>
                 </FlexRow>
             </div>
         </ListItem>
@@ -88,9 +127,4 @@ const emits = defineEmits<{
     display: flex;
 }
 
-.pdt-list-operation {
-    & .i-text {
-        margin-left: $gap-sm;
-    }
-}
 </style>

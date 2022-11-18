@@ -45,7 +45,8 @@ const routes: RouteRecordRaw[] = [
         name: 'report',
         component: ReportDetail,
         meta: {
-            title: 'ReportDetail'
+            menu: 'requirement',
+            title: 'requirement'
         }
     }
 ];

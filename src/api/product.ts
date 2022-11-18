@@ -8,7 +8,9 @@ import { api } from './http';
 export type GetProductPayload = {
 
 }
+
 export type GetProductResponse = ListResponse<ProductEntity>;
+
 export function getProducts(payload: GetProductPayload): Promise<GetProductResponse> {
     return api.post(`${DMS_DOMAIN}/v1/product/list`, payload);
 }

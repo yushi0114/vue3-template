@@ -9,7 +9,9 @@ import { useListControlModel } from '@/composables';
 const route = useRoute();
 const platform = ref(Number(route.params.type));
 
-const { model: listControlModel, clear: clearModel } = useListControlModel();
+const { model: listControlModel, clear: clearModel } = useListControlModel({
+    numberFields: ['progress']
+});
 
 const count = ref(0);
 const list = ref<AgileReqEntity[]>([]);

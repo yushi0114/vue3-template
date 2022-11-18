@@ -1,15 +1,23 @@
 <script lang="ts" setup>
-import { acceptProgressTypeOptions, onlineTypeOptions, PlatformType } from '@/enums';
-import { getProducts } from '@/api';
-import type { ProductEntity } from '@/types';
+import { onlineTypeOptions, PlatformType } from '@/enums';
+import { getProducts, getTopOrgs } from '@/api';
+import type { PlainOption, ProductEntity } from '@/types';
 import { ProductList } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel } from '@/composables';
+import { useListControlModel, useApi } from '@/composables';
 
 const route = useRoute();
 const platform = ref(Number(route.params.type));
+const topOrgOptions = ref<PlainOption[]>([]);
 
-const { model: listControlModel, clear: clearModel } = useListControlModel();
+const { model: listControlModel, clear: clearModel } = useListControlModel({
+    numberFields: ['status']
+});
+
+
+const { request: requestOrgOptions } = useApi(getTopOrgs, {
+    cache: true,
+});
 
 
 const count = ref(0);
@@ -22,10 +30,6 @@ function getList() {
         })
         .catch(noop);
 }
-
-watch(listControlModel, () => {
-    nextTick(getList);
-}, { immediate: true });
 
 function clear() {
     count.value = 0;
@@ -42,6 +46,14 @@ function goDetail(req: ProductEntity) {
     console.log(req);
 }
 
+watch(listControlModel, () => {
+    nextTick(getList);
+}, { immediate: true });
+
+onBeforeMount(() => {
+    requestOrgOptions()
+        .then(res => topOrgOptions.value = res.map(({ id, orgName }) => ({ name: orgName, value: id })))
+});
 </script>
 
 <template>
@@ -55,7 +67,7 @@ function goDetail(req: ProductEntity) {
                 field: 'searchInput'
             }"
             :filterOptionsConfigs="[
-                // { label: '机构名称', field: 'org', options: [] },
+                { label: '机构名称', field: 'orgId', options: topOrgOptions },
                 { label: '产品状态', field: 'status', options: onlineTypeOptions },
             ]"
             :sortConfigs="[

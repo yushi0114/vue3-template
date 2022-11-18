@@ -1,8 +1,11 @@
 import { useUrlSearchParams } from '@vueuse/core';
 
-export function useListControlModel() {
+export function useListControlModel(opt?: {
+    initialModel?: any,
+    numberFields?: string[],
+}) {
 
-    const listControlModel = reactive<any>({
+    const listControlModel = reactive<any>(opt?.initialModel || {
         pageIndex: 1,
         pageSize: 20,
     });
@@ -23,13 +26,13 @@ export function useListControlModel() {
     });
 
     function clear() {
-        Object.keys(listControlModel).forEach(key => delete listControlModel[key]);
+        Object.keys(listControlModel).forEach(key => listControlModel[key] = undefined);
         listControlModel.pageIndex = 1;
         listControlModel.pageSize = 20;
     }
 
     onBeforeMount(() => {
-        const numberFields = ['progress', 'pageIndex', 'pageSize', 'status'];
+        const numberFields = ['pageIndex', 'pageSize', ...(opt?.numberFields || [])];
         Object.keys(params).forEach((key) => {
             if (listControlModel[key] === params[key]) return;
             listControlModel[key] = numberFields.includes(key) ? Number(params[key]) : params[key];

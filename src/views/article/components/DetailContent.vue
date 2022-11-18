@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { Recordable } from '@/types/globals';
 import SjcEditor from '@/components/editor/SjcEditor.vue';
 import type { NewsItem } from '@/types';
 import { ARTICLE_MODULE } from '@/enums';
@@ -29,9 +30,13 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
                 <div>发布日期：{{ data.publishDate }}</div>
             </div>
             <el-divider class="!border-t-$el-color-error"></el-divider>
-            <sjc-editor v-model:model-value="data.content" read-only></sjc-editor>
+            <sjc-editor
+                v-model:model-value="data.content"
+                read-only></sjc-editor>
         </template>
-        <el-empty v-else :description="`请在左侧选择${getArticleTypeLabel}~`"></el-empty>
+        <el-empty
+            v-else
+            :description="`请在左侧选择${getArticleTypeLabel}~`"></el-empty>
     </div>
 </template>
 

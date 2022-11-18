@@ -84,7 +84,7 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
 
 const ARTICLE_FORM = ref(cloneDeep(ARTICLE_FORM_MAP[getArticleTypeLabel.value]));
 
-const handleSubmit = async(values: CreateNewsParams | UpdateNewsParams) => {
+const handleSubmit = async(values: any) => {
     const queryParams: CreateNewsParams | UpdateNewsParams = {
         ...values,
         status: params.status,

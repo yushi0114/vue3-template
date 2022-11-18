@@ -1,18 +1,27 @@
 <script lang="ts" setup>
-import { Search } from '@element-plus/icons-vue';
+// import { Search } from '@element-plus/icons-vue';
 import { NEWS_TYPE, ARTICLE_STATUS, ARTICLE_OPERATE_MODE_LABEL, ARTICLE_OPERATE_MODE, ARTICLE_MODULE } from '@/enums';
-import ArticleFilter from './ArticleFilter.vue';
+// import ArticleFilter from './ArticleFilter.vue';
 import { useTable, useJumpLink, useArticleModule } from '../hooks';
-import { TABLE_COLUMNS, ARTICLE_STATUS_TAG_MAP } from '../constants';
+import {
+    TABLE_COLUMNS,
+    ARTICLE_STATUS_TAG_MAP,
+    ARTICLE_STATUS_SELECT_OPTIONS,
+    ARTICLE_SORT_CONFIG,
+} from '../constants';
 import errImg from '@/assets/images/empty-image.png';
 import type { TAB_ITEM } from '@/types';
+import { useListControlModel } from '@/composables';
+import { pick } from 'lodash';
+
+const { model: listControlModel } = useListControlModel();
 
 const props = defineProps<{
     tab: TAB_ITEM;
     module: ARTICLE_MODULE;
 }>();
 
-const { isNewsModule } = useArticleModule(props.module);
+const { isNewsModule, getArticleTypeLabel } = useArticleModule(props.module);
 
 const getDate = computed(() => {
     return (date: string) => {
@@ -26,29 +35,33 @@ const getDate = computed(() => {
 });
 
 const sjcTableRef = ref<HTMLElement | null>(null); // 表格ref
-const {
-    params,
-    tableConfig,
-    state,
-    pageConfig,
-    handleSearch,
-    handleFilterChange,
-    pageSizeChange,
-    handleSortChange,
-    handleMoreOperate,
-} = useTable(props.tab, props.module);
+const { params, tableConfig, state, pageConfig, pageSizeChange, handleMoreOperate, fetchTableData } = useTable(
+    props.tab,
+    props.module
+);
+
+Object.assign(pageConfig, pick(listControlModel, ['pageIndex', 'pageSize']));
 
 const JumpLinkParams = reactive({
     tab: props.tab,
     module: props.module,
 });
 const { handleToCreate, handleToEdit, handleToDetail } = useJumpLink(JumpLinkParams);
+
+watch(listControlModel, () => {
+    Object.assign(params, listControlModel);
+    nextTick(fetchTableData);
+});
 </script>
 
 <template>
     <div class="article-list">
-        <el-space direction="vertical" :size="20" fill class="!w-full">
-            <div class="flex justify-between">
+        <el-space
+            direction="vertical"
+            :size="20"
+            fill
+            class="!w-full">
+            <!-- <div class="flex justify-between">
                 <el-input
                     class="!w-350px"
                     placeholder="请输入关键字进行查询"
@@ -65,7 +78,33 @@ const { handleToCreate, handleToEdit, handleToDetail } = useJumpLink(JumpLinkPar
             <article-filter
                 :tab="tab"
                 @sort-change="handleSortChange"
-                @filter-change="handleFilterChange"></article-filter>
+                @filter-change="handleFilterChange"></article-filter> -->
+            <ListQueryControl
+                v-model="listControlModel"
+                :searchConfig="{
+                    label: `请输入${getArticleTypeLabel}标题`,
+                    field: isNewsModule ? 'searchInput' : 'title',
+                }"
+                :filterOptionsConfigs="
+                    tab.value === ARTICLE_STATUS.ALL
+                        ? [
+                              {
+                                  label: `${getArticleTypeLabel}状态`,
+                                  field: 'status',
+                                  options: ARTICLE_STATUS_SELECT_OPTIONS,
+                              },
+                          ]
+                        : []
+                "
+                :sortConfigs="ARTICLE_SORT_CONFIG">
+                <template v-slot:search-rest>
+                    <el-button
+                        type="primary"
+                        @click="handleToCreate"
+                        >新建</el-button
+                    >
+                </template>
+            </ListQueryControl>
             <sjc-table
                 ref="sjcTableRef"
                 :table-data="state.data"
@@ -76,10 +115,17 @@ const { handleToCreate, handleToEdit, handleToDetail } = useJumpLink(JumpLinkPar
                 :pagination-config="pageConfig"
                 @page-change="pageSizeChange">
                 <template #thumbnail="{ scope }">
-                    <div class="w-67px h-60px border border-$el-fill-color" v-if="isNewsModule">
-                        <img class="w-full h-full" v-real-img="{ img: scope.row.thumbnail, errImg }" alt="" />
+                    <div
+                        class="w-67px h-60px border border-$el-fill-color"
+                        v-if="isNewsModule">
+                        <img
+                            class="w-full h-full"
+                            v-real-img="{ img: scope.row.thumbnail, errImg }"
+                            alt="" />
                     </div>
-                    <div v-else class="w-67px h-67px flex-center flex-col border border-$el-fill-color">
+                    <div
+                        v-else
+                        class="w-67px h-67px flex-center flex-col border border-$el-fill-color">
                         <div class="w-full h-60% bg-$el-fill-color text-2xl text-center">
                             {{ getDate(scope.row.publishDate).day }}
                         </div>
@@ -102,7 +148,9 @@ const { handleToCreate, handleToEdit, handleToDetail } = useJumpLink(JumpLinkPar
                                         .label
                                 }}
                             </el-tag>
-                            <el-tag v-if="isNewsModule && scope.row.hotNews === NEWS_TYPE.HOT" type="danger">
+                            <el-tag
+                                v-if="isNewsModule && scope.row.hotNews === NEWS_TYPE.HOT"
+                                type="danger">
                                 热点新闻
                             </el-tag>
                         </el-col>
@@ -132,7 +180,11 @@ const { handleToCreate, handleToEdit, handleToDetail } = useJumpLink(JumpLinkPar
                             >编辑</el-button
                         >
                         <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, scope.row)">
-                            <el-button size="small" link> 更多<i-ep-arrow-down /> </el-button>
+                            <el-button
+                                size="small"
+                                link>
+                                更多<i-ep-arrow-down />
+                            </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item
@@ -140,7 +192,9 @@ const { handleToCreate, handleToEdit, handleToDetail } = useJumpLink(JumpLinkPar
                                         :command="ARTICLE_OPERATE_MODE.OFFLINE"
                                         ><i-ep-sold-out />{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
                                     </el-dropdown-item>
-                                    <el-dropdown-item v-else :command="ARTICLE_OPERATE_MODE.PUBLISH">
+                                    <el-dropdown-item
+                                        v-else
+                                        :command="ARTICLE_OPERATE_MODE.PUBLISH">
                                         <i-ep-sell />{{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
                                     </el-dropdown-item>
                                     <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"

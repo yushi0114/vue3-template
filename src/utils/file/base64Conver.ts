@@ -4,7 +4,7 @@
 export function dataURLtoBlob(base64Buf: string) {
     const arr = base64Buf.split(',');
     const typeItem = arr[0];
-    const mime = typeItem.match(/:(.*?);/) ? typeItem.match(/:(.*?);/)?.[1] : '';
+    const mime = typeItem.match(/:(.*?);/)?.[1] ?? '';
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
@@ -37,7 +37,7 @@ export function dataURLToFile(base64Buf: string) {
  * img url to base64
  * @param url
  */
-export function urlToBase64(url: string, mineType?: string): Promise<string> {
+export function urlToBase64(url: string, mineType = 'image/png'): Promise<string> {
     return new Promise((resolve, reject) => {
         let canvas: any = document.createElement('CANVAS');
         const ctx = canvas ? canvas.getContext('2d') : '';
@@ -52,7 +52,7 @@ export function urlToBase64(url: string, mineType?: string): Promise<string> {
             canvas.height = img.height;
             canvas.width = img.width;
             ctx.drawImage(img, 0, 0);
-            const dataURL = canvas.toDataURL(mineType || 'image/png');
+            const dataURL = canvas.toDataURL(mineType);
             canvas = null;
             resolve(dataURL);
         };
@@ -106,7 +106,7 @@ export function getBase64Size(base64url: string) {
     // 获取base64图片大小，返回KB数字
     const indexBase64 = base64url.indexOf('base64,');
     if (indexBase64 < 0) return -1;
-    const base64Content = base64url.substr(indexBase64 + 6);
+    const base64Content = base64url.substring(indexBase64 + 6);
     const base64ContentLength = base64Content.length;
     return Math.floor(base64ContentLength - (base64ContentLength / 8) * 2);
 }

@@ -8,5 +8,6 @@ export interface PlainOption<T = any> {
 
 export interface ListResponse<T = any> {
     pageTotal: number,
+    total: number,
     data: T[]
 }

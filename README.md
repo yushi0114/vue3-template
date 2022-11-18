@@ -48,7 +48,7 @@ $ npm run start:local
 - vite.config.ts # vite 配置文件
 ```
 
-### Denpendencies
+## Denpendencies
 
 - axios: 自带 .d.ts
 - crypto-js: @types/crypto-js
@@ -59,7 +59,7 @@ $ npm run start:local
 - [@vueuse/core](https://vueuse.org/guide/) 常用 composition-api
 - [element-plus](https://element-plus.org/zh-CN/) 组件库
 
-### DevDependencies
+## DevDependencies
 
 - vite
 - [eslint]() 如果受到TS影响，需要修改配置. e.g. `'@typescript-eslint/no-unused-vars': 'error',`
@@ -76,12 +76,53 @@ $ npm run start:local
 	- presetUno: css 预设字段
 	- transformerDirectives: 支持在css中使用 `@apply` -->
 
-### 添加动态路由流程 
+## 添加动态路由流程 
 
-1. 修改mock 数据：`src/api/system.ts`  `dynamicNavs()`  现在只有 id name 字段有用。 value permission 随便填
-2. 在 `src/views/index.ts` `dynamicRouteMap<id, [前端url路径，组件的文件路径]`> 中设置映射关系
-3. 按照 步骤2的 组件文件路径 创建组件
 
+### 菜单栏路由
+
+菜单栏路由数据由数据库管理，必须保证 `RESPONSE.component` 路径字段对应一个 `.vue` 组件，否则侧边栏则不会展示此路由
+
+
+### 前端动态路由
+
+#### 添加动态路由
+
+1. 在 `RESPONSE.component` 路径字段对应的地方新建同名ts文件 `${RESPONSE.component}.ts`。e.g. `/product/manage/index` -> `src/views/product/manage/index.ts`
+
+2. 在文件中导出 `routes` 字段, e.g:
+
+``` ts
+export const routes = [
+	{ path: '/create', component: CreateProduct }
+]
+```
+
+3. 使用 
+
+``` ts
+router.push(route.path + '/create')
+
+<router-link :to="route.path + '/create'" />
+```
+
+#### 解析原理
+
+在动态添加菜单栏时，同时查询对应目录的 `.ts` 文件是否导出了`routes`.
+
+
+## 图标使用方法
+
+### Use
+
+1. 具名图标 `<i-ep-fold>`
+
+2. 动态图标 `<Icon name="ep-folder" />` Icon 组件在 `src/components/Icon.vue`
+
+### Install
+
+1. 如果使用具名图标，vite会在运行是自动添加图标集依赖。e.g. Element Plus 图标集 `package.json.devDependencies.@iconify-json/ep`
+2. 如果使用动态图标，前往 `https://icon-sets.iconify.design/` 找到图标集的名称手动安装依赖。e.g. Bootstrap Icon `$npm i @iconify-json/bi -D`
 
 ## 关于 VSCode 
 

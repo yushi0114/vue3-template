@@ -4,9 +4,11 @@ import { ARTICLE_MODULE } from '../../../enums';
 </script>
 
 <template>
-    <div class="publish">
-        <article-wrapper :module="ARTICLE_MODULE.POLICY_ZJFW"></article-wrapper>
-    </div>
+    <PagePanel>
+        <Board class="publish">
+            <article-wrapper :module="ARTICLE_MODULE.POLICY_ZJFW"></article-wrapper>
+        </Board>
+    </PagePanel>
 </template>
 
 <style lang="postcss">

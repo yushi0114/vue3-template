@@ -1,6 +1,18 @@
 <script lang="ts" setup>
 import * as echarts from 'echarts';
 import type { ApplyCountEntity } from '@/types/dashboard';
+import { useSidebar } from '@/composables';
+
+const { expand } = useSidebar();
+
+watch(
+    expand,
+    () => {
+        setTimeout(() => {
+            resizeHandler();
+        }, 150);
+    }
+);
 
 const props = withDefaults(
     defineProps<{
@@ -48,6 +60,7 @@ const options = {
     yAxis: {
         type: 'category',
         inverse: true,
+        triggerEvent: true,
         axisLine: {
             show: false
         },
@@ -157,7 +170,19 @@ const resizeHandler = () => {
 };
 
 const initChart = () => {
+    let labelTooltip = document.getElementById('label-tooltip')!;
     chartInstance = echarts.init(chartDomRef.value!);
+    chartInstance.on('mousemove', (params) => {
+        if (params.componentType === 'yAxis') {
+            labelTooltip.style.display = 'block';
+            labelTooltip.style.left = params.event!.offsetX + 50 + 'px';
+            labelTooltip.style.top = params.event!.offsetY + 110 + 'px';
+            labelTooltip.innerText = params.value as string;
+        }
+    });
+    chartInstance.on('mouseout', () => {
+        labelTooltip.style.display = 'none';
+    });
     loadOptions();
     window.addEventListener('resize', resizeHandler);
 };
@@ -173,13 +198,14 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <el-card :body-style="{ padding: '20px 28px 40px' }" shadow="never">
+    <el-card :body-style="{ position: 'relative', padding: '20px 28px 24px' }" shadow="never">
         <div class="card-header">产品申请数量排行榜</div>
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
             <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
             <el-tab-pane label="市综服" name="szf"></el-tab-pane>
         </el-tabs>
         <div class="chart-wrapper" ref="chartDomRef"></div>
+        <div id="label-tooltip"></div>
     </el-card>
 </template>
 
@@ -193,6 +219,18 @@ onBeforeUnmount(() => {
 
 .chart-wrapper {
     width: 100%;
-    height: 200px;
+    height: 216px;
+}
+
+#label-tooltip {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 3px 5px;
+    color: #ffffff;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, .6);
+    font-size: 12px;
 }
 </style>

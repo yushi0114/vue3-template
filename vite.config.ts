@@ -55,6 +55,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                         '@vueuse/core': ['onKeyStroke', 'useFocus'],
                         '/src/utils/func.ts': ['omit', 'cloneDeep'],
                         '/src/composables/index.ts': ['useApi'],
+                        'element-plus': ['ElMessage'],
                     },
                 ],
                 dirs: ['./composables', './components', './types', './utils', './common', './stores'],

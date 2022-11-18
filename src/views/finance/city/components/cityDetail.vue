@@ -11,7 +11,7 @@ defineProps({
 });
 
 const emit = defineEmits<{
-  (e: 'close', flag: Boolean): void
+  (e: 'close', flag: boolean): void
 }>();
 
 const handleClose = () => {
@@ -26,7 +26,7 @@ const handleClose = () => {
         size="50%"
         :before-close="handleClose"
     >
-    <el-form :model="dataDetail" label-width="135px">
+        <el-form :model="dataDetail" label-width="135px">
             <el-form-item label="城市名称" prop="name">
                 <span>{{ dataDetail.name }}</span>
             </el-form-item>

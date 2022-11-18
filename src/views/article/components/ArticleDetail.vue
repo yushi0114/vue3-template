@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { Recordable } from '@/types/globals';
 import ArticleWrapper from '../components/ArticleWrapper.vue';
 import DetailContent from './DetailContent.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -8,6 +9,7 @@ import { useApi } from '@/composables';
 import type { ICommonResult } from '@/api/types';
 import type { NewsItem } from '@/types';
 import { useTable, useArticleDetail } from '../hooks';
+import { isArray } from 'lodash';
 const { back } = useRouter();
 
 const { activeId, tabItem, bindDetailListRef, detailListMap } = useArticleDetail();
@@ -22,14 +24,21 @@ const state: { data: (ICommonResult & NewsItem) | Recordable } = reactive({
     data: {},
 });
 
-const { loading: loadingDetail, request: getArticleDetail } = useApi(() => ARTICLE_API_MAP[ARTICLE_API.LOAD_ARTICLE_DETAIL]({ id: activeId.value }), {
-    onSuccess([data]) {
-        state.data = data;
-    },
-    onError() {
-        state.data = {};
-    },
-});
+const { loading: loadingDetail, request: getArticleDetail } = useApi(
+    () => ARTICLE_API_MAP[ARTICLE_API.LOAD_ARTICLE_DETAIL]({ id: activeId.value }),
+    {
+        onSuccess(data) {
+            if (isArray(data)) {
+                state.data = data[0];
+            } else {
+                state.data = data;
+            }
+        },
+        onError() {
+            state.data = {};
+        },
+    }
+);
 
 const publish = async() => {
     await detailListMap.value
@@ -57,10 +66,14 @@ onBeforeMount(() => {
 
 <template>
     <div class="article-detail">
-        <el-row :gutter="16" class="!mx-0 h-full">
+        <el-row
+            :gutter="16"
+            class="!mx-0 h-full">
             <el-col :span="6">
                 <el-card class="h-full">
-                    <article-wrapper :module="module" :tab-value="tabItem?.value">
+                    <article-wrapper
+                        :module="module"
+                        :tab-value="tabItem?.value">
                         <template #default="{ tab, module }">
                             <detail-left-list
                                 :ref="(el) => bindDetailListRef(el, tab.value)"
@@ -77,7 +90,11 @@ onBeforeMount(() => {
             <el-col :span="18">
                 <el-card class="h-full">
                     <div class="flex justify-between">
-                        <el-button class="mr-2" @click="back">返回</el-button>
+                        <el-button
+                            class="mr-2"
+                            @click="back"
+                            >返回</el-button
+                        >
                         <el-button
                             v-if="state.data.id && state.data.status !== ARTICLE_STATUS.PUBLISHED"
                             type="primary"
@@ -85,7 +102,10 @@ onBeforeMount(() => {
                             >发布</el-button
                         >
                     </div>
-                    <detail-content v-loading="loadingDetail" :data="state.data" :module="module"></detail-content>
+                    <detail-content
+                        v-loading="loadingDetail"
+                        :data="state.data"
+                        :module="module"></detail-content>
                 </el-card>
             </el-col>
         </el-row>

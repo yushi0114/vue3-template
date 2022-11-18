@@ -20,7 +20,6 @@ const state: State = reactive({
 });
 
 const handleCommand = (command: { label: string; value: ARTICLE_STATUS }) => {
-    console.log('command: ', command);
     state.label = command.label;
     state.status = command.value;
     emit('filter-change', pick(state, ['status']));
@@ -50,7 +49,10 @@ const handleSortChange = (item: ArticleSortItem) => {
 
 <template>
     <div class="article-filter">
-        <el-dropdown v-show="($attrs.tab as any).value === ARTICLE_STATUS.ALL" trigger="click" @command="handleCommand">
+        <el-dropdown
+            v-show="($attrs.tab as any).value === ARTICLE_STATUS.ALL"
+            trigger="click"
+            @command="handleCommand">
             <span class="el-dropdown-link cursor-pointer">
                 {{ state.label }}
                 <el-icon class="el-icon--right">
@@ -61,9 +63,9 @@ const handleSortChange = (item: ArticleSortItem) => {
                 <el-dropdown-menu>
                     <el-dropdown-item
                         v-for="option in ARTICLE_STATUS_SELECT_OPTIONS"
-                        :key="option.label"
+                        :key="option.name"
                         :command="option">
-                        {{ option.label }}
+                        {{ option.name }}
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </template>
@@ -87,7 +89,7 @@ const handleSortChange = (item: ArticleSortItem) => {
 
 <style lang="postcss" scoped>
 .article-filter {
-    @apply bg-#E4EBF4 flex justify-between items-center h-50px;
+    @apply bg-$el-color-info-light-8 flex justify-between items-center h-50px;
 }
 .article-sort-item {
     @apply cursor-pointer;

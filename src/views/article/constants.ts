@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\constants.ts
  * @Author: zys
  * @Date: 2022-11-14 11:26:22
- * @LastEditTime: 2022-11-18 10:30:16
+ * @LastEditTime: 2022-11-18 16:20:58
  * @LastEditors: zys
  * @Reference:
  */
@@ -17,6 +17,7 @@ import {
     ARTICLE_TYPE_LABEL,
     FILE_TYPE,
     FILE_SERVER,
+    ELEMENT_TAG_TYPE,
 } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
 import { useUserStore } from '@/stores';
@@ -50,33 +51,33 @@ export const ARTICLE_TYPE = Object.freeze({
 
 export const ARTICLE_STATUS_TAG_MAP = {
     [ARTICLE_STATUS.PUBLISHED]: {
-        status: 'success',
+        status: ELEMENT_TAG_TYPE.SUCCESS,
         label: ARTICLE_STATUS_TAG.PUBLISHED,
     },
     [ARTICLE_STATUS.OFFLINE]: {
-        status: 'info',
+        status: ELEMENT_TAG_TYPE.INFO,
         label: ARTICLE_STATUS_TAG.OFFLINE,
     },
     [ARTICLE_STATUS.DRAFT]: {
-        status: 'warning',
+        status: ELEMENT_TAG_TYPE.WARNING,
         label: ARTICLE_STATUS_TAG.DRAFT,
     },
 };
 export const ARTICLE_STATUS_SELECT_OPTIONS = [
     {
-        label: ARTICLE_STATUS_LABEL.ALL,
+        name: ARTICLE_STATUS_LABEL.ALL,
         value: ARTICLE_STATUS.ALL,
     },
     {
-        label: ARTICLE_STATUS_LABEL.PUBLISHED,
+        name: ARTICLE_STATUS_LABEL.PUBLISHED,
         value: ARTICLE_STATUS.PUBLISHED,
     },
     {
-        label: ARTICLE_STATUS_LABEL.OFFLINE,
+        name: ARTICLE_STATUS_LABEL.OFFLINE,
         value: ARTICLE_STATUS.OFFLINE,
     },
     {
-        label: ARTICLE_STATUS_LABEL.MY_PUBLISHED,
+        name: ARTICLE_STATUS_LABEL.MY_PUBLISHED,
         value: ARTICLE_STATUS.MY_PUBLISHED,
     },
 ];
@@ -99,6 +100,20 @@ export const INIT_ARTICLE_SORT_LIST = [
     },
 ];
 
+export const ARTICLE_SORT_CONFIG = [
+    {
+        field: 'sort',
+        label: ' 文章序号',
+    },
+    {
+        field: 'updateTime',
+        label: ' 更新时间',
+    },
+    {
+        field: 'publishDate',
+        label: ' 发布日期',
+    },
+];
 // 表格列配置
 export const TABLE_COLUMNS = [
     // 自定义索引

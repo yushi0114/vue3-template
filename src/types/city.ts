@@ -8,3 +8,10 @@ export interface ICityTable {
     updateBy: string,
     updateTime: string
 }
+
+export interface OperateCityEntity {
+    name: string,
+    code: string,
+    sort: number | string
+    id: string
+}

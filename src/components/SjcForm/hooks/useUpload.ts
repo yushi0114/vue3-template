@@ -3,20 +3,20 @@
  * @FilePath: \dms-web\src\components\SjcForm\hooks\useUpload.ts
  * @Author: zys
  * @Date: 2022-11-10 10:34:30
- * @LastEditTime: 2022-11-11 11:38:24
+ * @LastEditTime: 2022-11-18 17:07:20
  * @LastEditors: zys
  * @Reference:
  */
 // eslint-disable-next-line no-duplicate-imports
 import type { Ref } from 'vue';
-import type { ElUpload, UploadFile, FormInstance } from 'element-plus';
+import type { ElUpload, FormInstance, UploadRawFile, UploadFiles } from 'element-plus';
 // eslint-disable-next-line no-duplicate-imports
 import { genFileId } from 'element-plus';
 import { checkFileType, FILE_TYPE_ERROR_MAP, FILE_TYPE_LIMIT_MAP, FILE_SIZE_ERROR_MAP } from '@/utils';
 import type { UploadObj, DefItem } from '../types';
 
 type IUploadProps = {
-    fileList?: UploadFile[];
+    fileList?: UploadFiles;
     item: DefItem;
     index: number;
 };
@@ -38,13 +38,13 @@ export const useUpload = (form: Ref<FormInstance>) => {
     const dialogImageUrl = ref('');
 
     // 文件预览
-    const handlePictureCardPreview = (file: UploadFile) => {
+    const handlePictureCardPreview = (file: any) => {
         console.log('file: ', file);
         dialogImageUrl.value = file.url ?? '';
         dialogVisible.value = true;
     };
     // 文件上传之前的钩子函数
-    const beforeUpload = (file: UploadFile, uploadObj: UploadObj) => {
+    const beforeUpload = (file: UploadRawFile, uploadObj: UploadObj) => {
         const fileNameSuffix = checkFileType(file.name);
         if (fileNameSuffix !== uploadObj.fileType) {
             ElMessage.error(FILE_TYPE_ERROR_MAP[uploadObj.fileType]);
@@ -61,6 +61,7 @@ export const useUpload = (form: Ref<FormInstance>) => {
     // 文件上传
     const handleUpload = ({ index }: IUploadProps) => {
         pushUpload({ index });
+        return Promise.resolve('上传成功');
     };
 
     const handleRemove = ({ fileList, item, index }: IUploadProps) => {
@@ -77,9 +78,9 @@ export const useUpload = (form: Ref<FormInstance>) => {
         form.value.validateField(`form[${index}].value`); // 调用验证form表单的文件上传
     };
 
-    const handleExceed = ({ fileList, item }: Omit<IUploadProps, 'index'>) => {
+    const handleExceed = ({ fileList, item }: Omit<IUploadProps, 'index' | 'fileList'> & { fileList: File[] }) => {
         uploadListMap.value.get(item.keyName)!.clearFiles();
-        const file = fileList![0];
+        const file: any = fileList![0];
         file.uid = genFileId();
         uploadListMap.value.get(item.keyName)!.handleStart(file);
     };

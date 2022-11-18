@@ -4,31 +4,40 @@ withDefaults(
     defineProps<{
         title?: string
         bordered?: boolean
+        full?: boolean
     }>(),
-    { title: '', bordered: false }
+    { title: '', bordered: false, full: false }
 );
 
 
 </script>
 <template>
-    <div class="i-board" :class="{ bordered }" v-bind="$attrs">
-        <div class="i-board-title" v-if="title">{{ title }}</div>
+    <div class="i-board" :class="{ bordered, full }" v-bind="$attrs">
+        <Text class="i-board-title" v-if="title" size="xl" bold>{{ title }}</Text>
         <slot />
     </div>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .i-board {
-    @apply flex-1 p-2 rounded border-box;
+    border-radius: 4px;
+    box-sizing: border-box;
     background-color: var(--deep-bg-color);
     border-color: var(--el-border-color-light);
+    padding: $gap-md;
+    display: flex;
+    flex-direction: column;
 
     &.bordered {
         border-width: 1px;
         border-style: solid;
     }
+
+    &.full {
+        min-height: 100%;
+        flex: 1;
+    }
 }
 
 .i-board-title {
-    @apply font-semibold text-2xl;
 }
 </style>

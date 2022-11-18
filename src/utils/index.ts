@@ -9,3 +9,4 @@ export * from './file/base64Conver';
 export * from './file/util';
 export * from './await-to-js';
 export * from './xss';
+export * from './date';

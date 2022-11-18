@@ -68,7 +68,7 @@ defineExpose({
                         <el-option
                             v-for="item in ARTICLE_STATUS_SELECT_OPTIONS"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.name"
                             :value="item.value">
                         </el-option>
                     </el-select>

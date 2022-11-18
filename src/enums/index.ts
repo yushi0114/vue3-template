@@ -1,22 +1,16 @@
+export * from './busniess';
+export * from './utils';
+
 /*
  * @Description: 定义枚举类型
  * @FilePath: \dms-web\src\enums\index.ts
  * @Author: zys
  * @Date: 2022-11-04 15:03:26
- * @LastEditTime: 2022-11-18 10:27:26
+ * @LastEditTime: 2022-11-18 16:31:54
  * @LastEditors: zys
  * @Reference:
  */
 export * from './article';
-enum STATUS {
-    DISABLED = 0,
-    ABLED = 1,
-}
-
-export const STATUS_LABEL_MAP = Object.freeze({
-    [STATUS.DISABLED]: '停用',
-    [STATUS.ABLED]: '启用',
-});
 
 // 菜单tabs
 export const enum MENU_TAB {
@@ -68,4 +62,11 @@ export enum FormType {
 export enum FILE_SERVER {
     LXT = '/lncredit/files',
     ZJFW = '/zjfw/files',
+}
+
+export enum ELEMENT_TAG_TYPE {
+    SUCCESS = 'success',
+    WARNING = 'warning',
+    DANGER = 'danger',
+    INFO = 'info',
 }

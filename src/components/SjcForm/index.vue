@@ -1,5 +1,9 @@
 <template>
-    <el-form class="sjc-form" ref="form" :model="formData" label-width="120px">
+    <el-form
+        class="sjc-form"
+        ref="form"
+        :model="formData"
+        label-width="120px">
         <div class="w-full flex">
             <div class="flex-1">
                 <el-row>
@@ -135,9 +139,15 @@
                                 </el-checkbox>
                             </el-checkbox-group>
                             <!-- text展示 -->
-                            <span v-if="item.type === FormType.TEXT" v-text="item.value"></span>
+                            <span
+                                v-if="item.type === FormType.TEXT"
+                                v-text="item.value"></span>
                             <!-- 计量单位 -->
-                            <span class="ml-2" v-if="item.type === FormType.UNIT">{{ item.value }}</span>
+                            <span
+                                class="ml-2"
+                                v-if="item.type === FormType.UNIT"
+                                >{{ item.value }}</span
+                            >
                             <!-- 文件上传 --><!-- 如果对象有值就回显，没有值就为空 -->
                             <el-upload
                                 v-if="item.type === FormType.UPLOAD"
@@ -150,22 +160,26 @@
                                 }"
                                 :on-preview="handlePictureCardPreview"
                                 :on-remove="
-                                    (file: UploadFile, fileList: UploadFile[]) =>
+                                    (file: any, fileList: UploadFiles) =>
                                         handleRemove(
                                             {fileList,item,index}
                                         )
                                 "
                                 :on-success="
-                                    (response: any, file: UploadFile, fileList: UploadFile[]) =>
+                                    (response: any, file: any, fileList: UploadFiles) =>
                                         uploadSuccess({fileList,item, index})
                                 "
-                                :on-exceed="(files: UploadFile[]) => handleExceed({ fileList: files, item })"
+                                :on-exceed="(files: File[]) => handleExceed({ fileList: files, item })"
                                 :http-request="() => handleUpload({ item, index })"
                                 :show-file-list="item.uploadObj!.showFileList"
-                                :before-upload="(file: UploadFile) => beforeUpload(file, item.uploadObj as UploadObj)"
+                                :before-upload="(rawFile: UploadRawFile) => beforeUpload(rawFile, item.uploadObj as UploadObj)"
                                 :auto-upload="true"
                                 :list-type="item.uploadObj!.listType">
-                                <el-button class="el-upload__btn mr-4" type="primary">点击上传 </el-button>
+                                <el-button
+                                    class="el-upload__btn mr-4"
+                                    type="primary"
+                                    >点击上传
+                                </el-button>
                                 <template #tip>
                                     <span class="el-upload__tip">{{ item.uploadObj!.tips }}</span>
                                 </template>
@@ -183,7 +197,11 @@
                                 :modal-append-to-body="true"
                                 append-to-body
                                 width="40%">
-                                <img class="w-full block" width="100%" :src="dialogImageUrl" alt="" />
+                                <img
+                                    class="w-full block"
+                                    width="100%"
+                                    :src="dialogImageUrl"
+                                    alt="" />
                             </el-dialog>
 
                             <sjc-editor
@@ -195,10 +213,21 @@
                 </el-row>
             </div>
 
-            <div v-if="props.showBtn" class="pl-2">
+            <div
+                v-if="props.showBtn"
+                class="pl-2">
                 <el-space size="small">
-                    <el-button type="default" @click="onReset">重置</el-button>
-                    <el-button type="primary" :loading="loading" @click="handleSearch">查询</el-button>
+                    <el-button
+                        type="default"
+                        @click="onReset"
+                        >重置</el-button
+                    >
+                    <el-button
+                        type="primary"
+                        :loading="loading"
+                        @click="handleSearch"
+                        >查询</el-button
+                    >
                 </el-space>
             </div>
         </div>
@@ -213,7 +242,7 @@ export default {
 import type { Ref } from 'vue';
 import SjcEditor from '@/components/editor/SjcEditor.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { FormInstance, ElTree, UploadFile } from 'element-plus';
+import type { FormInstance, ElTree, UploadRawFile, UploadFiles } from 'element-plus';
 import type { DefItem, IFormValues, UploadObj } from './types';
 import { useTree, useUpload } from './hooks';
 import { FormType } from '@/enums';

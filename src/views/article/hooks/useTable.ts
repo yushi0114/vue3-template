@@ -1,10 +1,9 @@
-import { getFileIdByUrl } from './../../../utils/file/util';
 /*
  * @Description:
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-11-18 11:44:15
+ * @LastEditTime: 2022-11-18 15:56:37
  * @LastEditors: zys
  * @Reference:
  */
@@ -20,6 +19,7 @@ import {
     ARTICLE_API,
     ARTICLE_PAGE,
 } from '@/enums';
+import { getFileIdByUrl } from './../../../utils/file/util';
 import type { NewsItem, PolicyItem, NewsListParams, ArticleSortItem, TAB_ITEM } from '@/types';
 import { useApi } from '@/composables';
 import { useApiManage } from './useApiManage';
@@ -232,7 +232,7 @@ export const useTable = (
         }
     };
 
-    const updateArticleStatus = async ({ row, status, operateLabel }: any) => {
+    const updateArticleStatus = async({ row, status, operateLabel }: any) => {
         try {
             await ElMessageBox.confirm(`确定${operateLabel}标题为“${row.title}”的${ARTICLE_TYPE_LABEL}吗？`, {
                 type: 'warning',
@@ -243,7 +243,7 @@ export const useTable = (
         }
     };
 
-    const updateArticleSort = async ({ row }: any) => {
+    const updateArticleSort = async({ row }: any) => {
         try {
             const { value } = await ElMessageBox.prompt('请输入新的序号', '修改排序', {
                 showInput: true,

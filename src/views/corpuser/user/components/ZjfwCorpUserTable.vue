@@ -3,7 +3,7 @@ import { Search } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import type { CorpUserTable } from '@/types/corpUser';
 import { getZfBusinessUser, updateZfBusinessUserStatus } from '@/api/corpUser';
-import userDetail from './ZjfwShopDetail.vue';
+import ZjfwShopDetail from './ZjfwShopDetail.vue';
 
 const userList = ref<CorpUserTable[]>([]);
 const searchInput = ref('');
@@ -200,7 +200,7 @@ const handleCurrentChange = (val: number) => {
                 class="table-pagination"
             />
 
-            <user-detail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></user-detail>
+            <ZjfwShopDetail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></ZjfwShopDetail>
         </div>
     </div>
 

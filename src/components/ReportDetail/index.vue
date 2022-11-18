@@ -324,8 +324,6 @@ const print = () => {
 
     .report-container {
         padding: 0 !important;
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
     }
 }
 </style>

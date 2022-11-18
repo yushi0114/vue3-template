@@ -34,7 +34,7 @@ watch(props.dataEdit, (val) => {
 });
 
 const emit = defineEmits<{
-  (e: 'close', flag: Boolean): void,
+  (e: 'close', flag: boolean): void,
   (e: 'refresh'): void
 }>();
 

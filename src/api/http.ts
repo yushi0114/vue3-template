@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { encrypt, encryptHexMd5 } from '@/utils';
+import { encrypt, encryptHexMd5, isString } from '@/utils';
 import { genUUID, jsonReplacer, resolveParams } from './utils';
 import { useToken } from '@/composables';
 import { router } from '@/router';

@@ -43,7 +43,7 @@ const isZero = (rule: any, value: string, callback: (message?: Error) => {}) => 
 };
 
 // 表单规则
-const countRules = reactive({
+const countRules:any = reactive({
     registerCorp: [
         { required: true, message: '请输入注册企业数', trigger: 'change' },
         { validator: isZero, trigger: 'change' }

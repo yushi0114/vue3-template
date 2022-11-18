@@ -76,7 +76,7 @@ const handleCurrentChange = (val: number) => {
 };
 
 const emit = defineEmits<{
-  (e: 'close', flag: Boolean): void
+  (e: 'close', flag: boolean): void
 }>();
 
 const handleClose = () => {

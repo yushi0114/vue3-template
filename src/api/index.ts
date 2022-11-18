@@ -5,3 +5,4 @@ export * from './system';
 export * from './article';
 export * from './requirement';
 export * from './product';
+export * from './org';

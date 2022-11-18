@@ -1,12 +1,16 @@
 <script lang="ts" setup>
+// import { PlatformType } from '@/enums';
+
 
 </script>
 
 <template>
-  <div class="product-filter">
-    <!-- -->
-    product filter
-  </div>
+    <PagePanel>
+        <Board class="product-recommend" full>
+            <PlatformTab />
+
+        </Board>
+    </PagePanel>
 </template>
 
 <style lang="postcss">

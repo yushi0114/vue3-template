@@ -70,3 +70,4 @@ export enum ELEMENT_TAG_TYPE {
     DANGER = 'danger',
     INFO = 'info',
 }
+

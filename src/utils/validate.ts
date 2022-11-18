@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\validate.ts
  * @Author: zys
  * @Date: 2022-11-07 17:08:03
- * @LastEditTime: 2022-11-18 17:17:38
+ * @LastEditTime: 2022-11-18 17:21:59
  * @LastEditors: zys
  * @Reference:
  */
@@ -35,7 +35,7 @@ export const checkVerifyCode: RuleItem['validator'] = (rule, value, callback) =>
     }
 };
 
-export const checkPassword = (rule: any, value: string, callback: ValidateCallback ) => {
+export const checkPassword = (rule: any, value: string, callback: ValidateCallback) => {
     const passwordReg = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$&^*])[a-zA-Z0-9!@#$&^*]{8,18}$/);
     if (!passwordReg.test(value)) {
         callback(new Error('8-18个字符，必须包含数字、大小写字母、符号!@#$&^*的组合'));

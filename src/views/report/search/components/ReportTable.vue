@@ -81,7 +81,6 @@ function scrollBehavior(e: any) {
             return;
         } else {
             if (clientHeight + scrollTop >= scrollHeight - 1) {
-                console.log(1);
                 page.currentPage += 1;
                 getCorpList();
             }

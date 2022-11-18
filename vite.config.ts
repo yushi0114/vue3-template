@@ -58,7 +58,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                         'element-plus': ['ElMessage'],
                     },
                 ],
-                dirs: ['./composables', './components', './types', './utils', './common', './stores'],
+                dirs: ['./composables', './components', './types', './utils', './stores'],
                 resolvers: [elementPlusResolver(), iconsResolver({ prefix: 'Icon' })],
                 eslintrc: {
                     enabled: true,

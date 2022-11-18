@@ -1,31 +1,35 @@
 <script lang="ts" setup>
-import { acceptProgressTypeOptions, PlatformType } from '@/enums';
-import { getProducts } from '@/api';
-import type { ProductEntity } from '@/types';
+import { onlineTypeOptions, PlatformType } from '@/enums';
+import { getProducts, getTopOrgs } from '@/api';
+import type { PlainOption, ProductEntity } from '@/types';
 import { ProductList } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel } from '@/composables';
+import { useListControlModel, useApi } from '@/composables';
 
 const route = useRoute();
 const platform = ref(Number(route.params.type));
+const topOrgOptions = ref<PlainOption[]>([]);
 
-const { model: listControlModel, clear: clearModel } = useListControlModel();
+const { model: listControlModel, clear: clearModel } = useListControlModel({
+    numberFields: ['status']
+});
+
+
+const { request: requestOrgOptions } = useApi(getTopOrgs, {
+    cache: true,
+});
 
 
 const count = ref(0);
 const list = ref<ProductEntity[]>([]);
 function getList() {
-    getProducts(Object.assign({ menuName: 'requirement', platform: platform.value }, listControlModel))
+    getProducts(Object.assign({ platform: platform.value }, listControlModel))
         .then(({ total, data }) => {
             count.value = total;
             list.value = data;
         })
         .catch(noop);
 }
-
-watch(listControlModel, () => {
-    nextTick(getList);
-});
 
 function clear() {
     count.value = 0;
@@ -42,15 +46,19 @@ function goDetail(req: ProductEntity) {
     console.log(req);
 }
 
-onMounted(() => {
-    getList();
-});
+watch(listControlModel, () => {
+    nextTick(getList);
+}, { immediate: true });
 
+onBeforeMount(() => {
+    requestOrgOptions()
+        .then(res => topOrgOptions.value = res.map(({ id, orgName }) => ({ name: orgName, value: id })));
+});
 </script>
 
 <template>
   <PagePanel>
-    <Board class="req-agile">
+    <Board class="product-manage">
         <PlatformTab @tab-change="handleTabChange" />
         <ListQueryControl
             v-model="listControlModel"
@@ -59,20 +67,12 @@ onMounted(() => {
                 field: 'searchInput'
             }"
             :filterOptionsConfigs="[
-                // { label: '机构名称', field: 'org', options: [] },
-                { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
+                { label: '机构名称', field: 'orgId', options: topOrgOptions },
+                { label: '产品状态', field: 'status', options: onlineTypeOptions },
             ]"
             :sortConfigs="[
                 { label: '申请时间', field: 'createTime', },
             ]"
-            :dateRangeConfig="{
-                label: '申请时间',
-                field: '',
-                options: [
-                    {  name: '开始月份', value: 'startTime', },
-                    {  name: '结束月份', value: 'endTime', },
-                ]
-            }"
         >
             <template v-slot:search-rest>
                 <RouterLink :to="`${route.path}/new/1`">
@@ -98,7 +98,7 @@ onMounted(() => {
   </PagePanel>
 </template>
 <style lang="postcss">
-.req-agile {
+.product-manage {
   @apply;
 }
 </style>

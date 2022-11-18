@@ -37,9 +37,9 @@ export function dataURLToFile(base64Buf: string) {
  * img url to base64
  * @param url
  */
-export function urlToBase64(url: string, mineType = 'image/png'): Promise<string> {
+export function urlToBase64(url: string, mineType = 'image/png') {
     return new Promise((resolve, reject) => {
-        let canvas: any = document.createElement('CANVAS');
+        let canvas = document.createElement('CANVAS') as HTMLCanvasElement | null;
         const ctx = canvas ? canvas.getContext('2d') : '';
 
         const img = new Image();
@@ -64,7 +64,7 @@ export function urlToBase64(url: string, mineType = 'image/png'): Promise<string
  * file to img url
  * @param url
  */
-export function fileToURL(file: File) {
+export function fileToURL(file: Blob) {
     let url = null;
     if ((window as any).createObjectURL != undefined) {
         url = (window as any).createObjectURL(file);
@@ -83,7 +83,7 @@ export const blobToDataURL = (blob: Blob, cb: Function) => {
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = function(evt) {
-            const base64 = evt.target?.result || '';
+            const base64 = evt.target?.result;
             cb(base64);
             resolve(base64);
         };

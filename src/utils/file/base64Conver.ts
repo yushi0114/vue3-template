@@ -1,10 +1,10 @@
 /**
  * @description: base64 to blob
  */
-export function dataURLtoBlob(base64Buf) {
+export function dataURLtoBlob(base64Buf: string) {
     const arr = base64Buf.split(',');
     const typeItem = arr[0];
-    const mime = typeItem.match(/:(.*?);/) ? typeItem.match(/:(.*?);/)[1] : '';
+    const mime = typeItem.match(/:(.*?);/) ? typeItem.match(/:(.*?);/)?.[1] : '';
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
@@ -18,7 +18,8 @@ export function dataURLtoBlob(base64Buf) {
 /**
  * @description: blob to file
  */
-export function blobToFile(theBlob, type) {
+// eslint-disable-next-line no-undef
+export function blobToFile(theBlob: Blob & { lastModifiedDate?: Date }, type: FilePropertyBag) {
     theBlob.lastModifiedDate = new Date();
 
     return new File([theBlob], `${new Date().getTime()}.png`, type);
@@ -27,7 +28,7 @@ export function blobToFile(theBlob, type) {
 /**
  * @description: base64 to file
  */
-export function dataURLToFile(base64Buf) {
+export function dataURLToFile(base64Buf: string) {
     const theBlob = dataURLtoBlob(base64Buf);
     return blobToFile(theBlob, { type: theBlob.type });
 }
@@ -36,15 +37,15 @@ export function dataURLToFile(base64Buf) {
  * img url to base64
  * @param url
  */
-export function urlToBase64(url, mineType) {
+export function urlToBase64(url: string, mineType?: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        let canvas = document.createElement('CANVAS');
+        let canvas: any = document.createElement('CANVAS');
         const ctx = canvas ? canvas.getContext('2d') : '';
 
         const img = new Image();
         img.crossOrigin = '';
         // eslint-disable-next-line consistent-return
-        img.onload = function () {
+        img.onload = function() {
             if (!canvas || !ctx) {
                 return reject(new Error());
             }
@@ -63,10 +64,10 @@ export function urlToBase64(url, mineType) {
  * file to img url
  * @param url
  */
-export function fileToURL(file) {
+export function fileToURL(file: File) {
     let url = null;
-    if (window.createObjectURL != undefined) {
-        url = window.createObjectURL(file);
+    if ((window as any).createObjectURL != undefined) {
+        url = (window as any).createObjectURL(file);
     } else if (window.URL != undefined) {
         url = window.URL.createObjectURL(file);
     } else if (window.webkitURL != undefined) {
@@ -78,11 +79,11 @@ export function fileToURL(file) {
 /**
  * file转base64
  */
-export const blobToDataURL = (blob, cb) => {
-    return new Promise((resolve, reject) => {
+export const blobToDataURL = (blob: Blob, cb: Function) => {
+    return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = function (evt) {
-            const base64 = evt.target.result;
+        reader.onload = function(evt) {
+            const base64 = evt.target?.result || '';
             cb(base64);
             resolve(base64);
         };
@@ -101,7 +102,7 @@ export const blobToDataURL = (blob, cb) => {
 //     return blob;
 // };
 
-export function getBase64Size(base64url) {
+export function getBase64Size(base64url: string) {
     // 获取base64图片大小，返回KB数字
     const indexBase64 = base64url.indexOf('base64,');
     if (indexBase64 < 0) return -1;

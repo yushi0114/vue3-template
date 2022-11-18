@@ -3,11 +3,12 @@
  * @FilePath: \dms-web\src\enums\index.ts
  * @Author: zys
  * @Date: 2022-11-04 15:03:26
- * @LastEditTime: 2022-11-11 10:03:59
+ * @LastEditTime: 2022-11-18 10:27:26
  * @LastEditors: zys
  * @Reference:
  */
-export enum STATUS {
+export * from './article';
+enum STATUS {
     DISABLED = 0,
     ABLED = 1,
 }
@@ -29,6 +30,12 @@ export enum FILE_TYPE {
     IMAGE = 'image',
     FILE = 'file',
 }
+
+export enum UPLOAD_FILE_TYPE {
+    IMAGE = 1,
+    ANY_FILE = 2,
+}
+
 // 文件校验
 export enum FILE_SIZE_ENUMS {
     // 图片最大2M
@@ -55,4 +62,10 @@ export enum FormType {
     UNIT = 'unit',
     UPLOAD = 'upload',
     INPUT_NUMBER = 'input-number',
+    EDITOR = 'editor',
+}
+
+export enum FILE_SERVER {
+    LXT = '/lncredit/files',
+    ZJFW = '/zjfw/files',
 }

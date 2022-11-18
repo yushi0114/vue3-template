@@ -6,3 +6,6 @@ export * from './validate';
 export * from './file/file-check';
 export * from './file/download';
 export * from './file/base64Conver';
+export * from './file/util';
+export * from './await-to-js';
+export * from './xss';

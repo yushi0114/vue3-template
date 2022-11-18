@@ -14,7 +14,7 @@ import iconsResolver from 'unplugin-icons/resolver';
 import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-let proxyHost = '192.168.31.49';
+let proxyHost = '10.0.30.5';
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {
@@ -35,6 +35,10 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                         cdn: 'https://esm.sh/',
                     }),
                 ],
+                shortcuts: {
+                    'flex-center': 'flex items-center justify-center',
+                    'flex-between': 'flex items-center justify-between',
+                },
                 transformers: [transformerDirectives()],
             }),
             autoImport({
@@ -108,8 +112,8 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                         @use "@/style/global.scss" as *; \n
                         @use "@/style/mixin.scss" as *; \n
                     `,
-                }
-            }
+                },
+            },
         },
         server: {
             // host: 'localhost',
@@ -121,6 +125,14 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                 },
                 '/dms-service': {
                     target: `http://${proxyHost}:10208`,
+                    changeOrigin: true,
+                },
+                '/lncredit': {
+                    target: 'http://10.0.30.9',
+                    changeOrigin: true,
+                },
+                '/zjfw': {
+                    target: 'http://10.0.30.9',
                     changeOrigin: true,
                 },
             },

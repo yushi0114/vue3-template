@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\validate.ts
  * @Author: zys
  * @Date: 2022-11-07 17:08:03
- * @LastEditTime: 2022-11-07 17:20:14
+ * @LastEditTime: 2022-11-17 16:59:02
  * @LastEditors: zys
  * @Reference:
  */
@@ -40,4 +40,12 @@ export function checkPassword(rule: any, value: string, callback: ValidateCallba
     } else {
         callback();
     }
+}
+
+export function isUrl(path: string) {
+    // eslint-disable-next-line no-useless-escape
+    const reg =
+        // eslint-disable-next-line no-useless-escape
+        /(((^https?:(?:\/\/)?)(?:[-:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&%@.\w_]*)#?(?:[\w]*))?)$/;
+    return reg.test(path);
 }

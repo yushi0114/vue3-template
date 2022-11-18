@@ -80,6 +80,7 @@ import MultistageColumn from './components/MultistageColumn.vue'; // 递归多�
 import Pagination from './components/Pagination.vue'; // 分页组件
 import type { ITableConfig, IColumn, ITableData, IPaginationConfig } from './types';
 import { INIT_PAGINATION_CONFIG, INIT_TABLE_CONFIG } from './constants';
+import { cloneDeep } from 'lodash';
 
 type IProps = {
     tableData: ITableData;
@@ -104,18 +105,19 @@ const state: { selection: ITableData } = reactive({
     selection: [],
 });
 const commonTableRef = ref<HTMLElement | null>(null); // 表格ref
+const TABLE_CONFIG = cloneDeep(INIT_TABLE_CONFIG);
 // 合并表格配置项
 const $tableConfig = computed(() => {
     let result: Partial<ITableConfig> = {};
     const $tableConfig: IColumn = { label: '操作', minWidth: 100, width: 120, fixed: 'right', align: 'center' };
     // eslint-disable-next-line no-unused-expressions
     prop.tableConfig.handlerConfig && Object.assign($tableConfig, prop.tableConfig.handlerConfig);
-    result = Object.assign(INIT_TABLE_CONFIG, prop.tableConfig);
+    result = Object.assign(TABLE_CONFIG, prop.tableConfig);
     result.handlerConfig = $tableConfig;
     return result;
 });
 
-const PAGINATION_CONFIG = reactive(INIT_PAGINATION_CONFIG);
+const PAGINATION_CONFIG = reactive(cloneDeep(INIT_PAGINATION_CONFIG));
 // 合并分页配置
 const $paginationConfig = computed(() => {
     return Object.assign(PAGINATION_CONFIG, prop.paginationConfig) ?? {};

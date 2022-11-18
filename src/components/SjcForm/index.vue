@@ -14,7 +14,7 @@
                             :rules="item.rules || []"
                             :label-width="item.labelWidth">
                             <el-input
-                                v-if="item.type === 'input'"
+                                v-if="item.type === FormType.INPUT"
                                 v-model.trim="item.value"
                                 :placeholder="item.placeholder || ''"
                                 :disabled="item.disabled || false"
@@ -24,7 +24,7 @@
                                 :style="item.style || { width: '100%' }" />
 
                             <el-input-number
-                                v-if="item.type === 'input-number'"
+                                v-if="item.type === FormType.INPUT_NUMBER"
                                 v-model.trim="item.value"
                                 :min="item.min"
                                 :max="item.max"
@@ -36,7 +36,7 @@
                             <el-input
                                 size="small"
                                 type="textarea"
-                                v-if="item.type === 'textarea'"
+                                v-if="item.type === FormType.TEXTAREA"
                                 :disabled="item.disabled"
                                 :autosize="item.autosize || { minRows: 2 }"
                                 v-model.trim="item.value"
@@ -45,7 +45,7 @@
                                 :placeholder="item.placeholder"
                                 :style="item.style || { width: '100%' }"></el-input>
                             <el-select
-                                v-if="item.type === 'select'"
+                                v-if="item.type === FormType.SELECT"
                                 v-model="item.value"
                                 :style="item.style || { width: '100%' }"
                                 :disabled="item.disabled"
@@ -61,7 +61,7 @@
                                 </el-option>
                             </el-select>
                             <el-tree
-                                v-if="item.type === 'tree'"
+                                v-if="item.type === FormType.TREE"
                                 :ref="(el: any) => bindTreeRef(el, item.keyName)"
                                 :data="item.treeData"
                                 :props="item.fieldNames || treeProps"
@@ -75,24 +75,25 @@
                             </el-tree>
                             <!-- 日期选择器 -->
                             <el-date-picker
-                                v-if="item.type === 'date-picker'"
-                                :value-format="item.valueFormat || 'yyyy-MM-dd'"
+                                v-if="item.type === FormType.DATA_PICKER"
+                                class="w-full"
+                                :value-format="item.valueFormat || 'YYYY-MM-DD'"
                                 :type="item.datePickerType || 'date'"
-                                size="small"
                                 :disabled="item.disabled"
                                 :disabled-date="item.disabledDate"
                                 :start-placeholder="item.startPlaceholder || '开始时间'"
                                 :end-placeholder="item.endPlaceholder || '结束时间'"
                                 :range-separator="item.rangeSeparator || '至'"
                                 v-model="item.value"
-                                :placeholder="item.placeholder">
+                                :placeholder="item.placeholder"
+                                :style="item.style || { width: '100%' }">
                             </el-date-picker>
                             <!-- 时分秒选择器 -->
                             <el-time-picker
-                                v-if="item.type === 'time-picker'"
-                                :value-format="item.valueFormat || 'yyyy-MM-dd'"
+                                v-if="item.type === FormType.TIME_PICKER"
+                                :style="item.style || { width: '100%' }"
+                                :value-format="item.valueFormat || 'HH:mm:ss'"
                                 :type="item.datePickerType || 'date'"
-                                size="small"
                                 clearable
                                 :is-range="item.isRange"
                                 :disabled="item.disabled"
@@ -104,14 +105,16 @@
                             </el-time-picker>
                             <!-- switch开关 -->
                             <el-switch
-                                size="small"
-                                v-if="item.type === 'switch'"
+                                v-if="item.type === FormType.SWITCH"
                                 :disabled="item.disabled"
                                 v-model="item.value"
                                 :active-value="item.activeValue"
                                 :inactive-value="item.inactiveValue"></el-switch>
                             <!-- radio单选框 -->
-                            <el-radio-group v-if="item.type === 'radio'" :disabled="item.disabled" v-model="item.value">
+                            <el-radio-group
+                                v-if="item.type === FormType.RADIO"
+                                :disabled="item.disabled"
+                                v-model="item.value">
                                 <el-radio
                                     :label="option.value"
                                     v-for="(option, index) in item.radioOptions"
@@ -121,7 +124,7 @@
                             </el-radio-group>
                             <!-- checkbox复选框 -->
                             <el-checkbox-group
-                                v-if="item.type === 'checkbox'"
+                                v-if="item.type === FormType.CHECKBOX"
                                 :disabled="item.disabled"
                                 v-model="item.value">
                                 <el-checkbox
@@ -132,17 +135,18 @@
                                 </el-checkbox>
                             </el-checkbox-group>
                             <!-- text展示 -->
-                            <span v-if="item.type === 'text'" v-text="item.value"></span>
+                            <span v-if="item.type === FormType.TEXT" v-text="item.value"></span>
                             <!-- 计量单位 -->
-                            <span class="ml-2" v-if="item.type === 'unit'">{{ item.value }}</span>
+                            <span class="ml-2" v-if="item.type === FormType.UNIT">{{ item.value }}</span>
                             <!-- 文件上传 --><!-- 如果对象有值就回显，没有值就为空 -->
                             <el-upload
-                                v-if="item.type === 'upload'"
+                                v-if="item.type === FormType.UPLOAD"
                                 :ref="(el: any) => bindUploadRef(el, item.keyName)"
                                 v-model:file-list="item.value"
                                 :limit="item.uploadObj!.limit"
                                 :class="{
                                     hide: isHiddenUploadBtn(item),
+                                    'w-full': true,
                                 }"
                                 :on-preview="handlePictureCardPreview"
                                 :on-remove="
@@ -172,15 +176,20 @@
                                 :limit="item.uploadObj!.limit"
                                 :prop="item.keyName"
                                 :index="index"
-                                v-if="item.type === 'upload'"></slot>
+                                v-if="item.type === FormType.UPLOAD"></slot>
                             <el-dialog
                                 v-model="dialogVisible"
-                                v-if="item.type === 'upload'"
+                                v-if="item.type === FormType.UPLOAD"
                                 :modal-append-to-body="true"
                                 append-to-body
                                 width="40%">
                                 <img class="w-full block" width="100%" :src="dialogImageUrl" alt="" />
                             </el-dialog>
+
+                            <sjc-editor
+                                v-if="item.type === FormType.EDITOR"
+                                :file-server="item.fileServer"
+                                v-model:model-value="item.value"></sjc-editor>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -201,7 +210,8 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import type { Ref} from 'vue';
+import type { Ref } from 'vue';
+import SjcEditor from '@/components/editor/SjcEditor.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { FormInstance, ElTree, UploadFile } from 'element-plus';
 import type { DefItem, IFormValues, UploadObj } from './types';
@@ -230,7 +240,7 @@ const props = withDefaults(
         updateSubmit?: number;
         updateReset?: number;
     }>(),
-    { def: () => [], loading: false, showBtn: true, updateSubmit: 0, updateReset: 0 }
+    { def: () => [], loading: false, showBtn: false, updateSubmit: 0, updateReset: 0 }
 );
 
 const emit = defineEmits<{
@@ -246,9 +256,9 @@ const initForm = () => {
             value: undefined,
         });
 
-        if (item.type === FormType.DATA_PICKER) {
-            tmpItem.value = null;
-        }
+        // if (item.type === FormType.DATA_PICKER && item.datePickerType !== 'date') {
+        //     tmpItem.value = null;
+        // }
 
         if (item.type === FormType.UPLOAD) {
             tmpItem.value = [];
@@ -260,6 +270,7 @@ const initForm = () => {
 
         formData.form.push(tmpItem);
     });
+    console.log('formData：', formData);
 };
 
 const handleSearch = async() => {
@@ -321,6 +332,30 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .sjc-form {
+    :deep(.el-date-editor) {
+        .el-input__wrapper {
+            display: flex;
+        }
+    }
+    :deep(.el-upload-list) {
+        margin: 0;
+        width: 100%;
+        .el-upload-list__item {
+            margin: 0;
+            height: 52px;
+            overflow: hidden;
+            .el-upload-list__item-thumbnail {
+                width: 50px;
+                height: 50px;
+            }
+            .el-upload-list__item-info {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                transition: color 0.3s;
+                white-space: nowrap;
+            }
+        }
+    }
     .hide {
         display: flex;
 

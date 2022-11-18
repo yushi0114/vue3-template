@@ -3,16 +3,16 @@ import { isNumber } from '@/utils';
 import { ref } from 'vue';
 import type { HttpError } from '@/api/types';
 
-export type UseApiOption<T> = {
+export type UseApiOption<T, P = any[]> = {
     cache?: boolean | number;
-    onSuccess?: (data: T) => void;
+    onSuccess?: (data: T, params: P) => void;
     onError?: (error: HttpError) => void;
 };
 export function useApi<T extends (...args: any[]) => Promise<any>>(
     apiFunc: T,
-    option?: UseApiOption<Awaited<ReturnType<T>>>
+    option?: UseApiOption<Awaited<ReturnType<T>>, any[]>
 ) {
-    const opt: UseApiOption<Awaited<ReturnType<T>>> = Object.assign({ cache: false }, option);
+    const opt: UseApiOption<Awaited<ReturnType<T>>, any[]> = Object.assign({ cache: false }, option);
 
     const loading = ref(false);
     const cache = ref<Awaited<ReturnType<T>>>();
@@ -43,7 +43,7 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
         return requestResponse
             .then((res: Awaited<ReturnType<T>>) => {
                 if (isFunction(opt.onSuccess)) {
-                    opt.onSuccess!(res);
+                    opt.onSuccess!(res, [...args]);
                 }
                 else {
                     return Promise.resolve(res);

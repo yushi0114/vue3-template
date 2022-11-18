@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { acceptProgressTypeOptions, PlatformType } from '@/enums';
+import { acceptProgressTypeOptions, onlineTypeOptions, PlatformType } from '@/enums';
 import { getProducts } from '@/api';
 import type { ProductEntity } from '@/types';
 import { ProductList } from '../components';
@@ -25,7 +25,7 @@ function getList() {
 
 watch(listControlModel, () => {
     nextTick(getList);
-});
+}, { immediate: true });
 
 function clear() {
     count.value = 0;
@@ -42,10 +42,6 @@ function goDetail(req: ProductEntity) {
     console.log(req);
 }
 
-onMounted(() => {
-    getList();
-});
-
 </script>
 
 <template>
@@ -60,19 +56,11 @@ onMounted(() => {
             }"
             :filterOptionsConfigs="[
                 // { label: '机构名称', field: 'org', options: [] },
-                { label: '办理进度', field: 'progress', options: acceptProgressTypeOptions },
+                { label: '产品状态', field: 'status', options: onlineTypeOptions },
             ]"
             :sortConfigs="[
                 { label: '申请时间', field: 'createTime', },
             ]"
-            :dateRangeConfig="{
-                label: '申请时间',
-                field: '',
-                options: [
-                    {  name: '开始月份', value: 'startTime', },
-                    {  name: '结束月份', value: 'endTime', },
-                ]
-            }"
         >
             <template v-slot:search-rest>
                 <RouterLink :to="`${route.path}/new/1`">

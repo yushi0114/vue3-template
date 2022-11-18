@@ -208,7 +208,7 @@ function handleRadioClick(tField: string, tValue: any) {
                     v-for="opt in tConf.options || []"
                     :key="opt.value"
                     text
-                    :type="model[tConf.field] === opt.value ? 'primary' : 'plain'"
+                    :type="model[tConf.field] === opt.value ? 'primary' : ''"
                     @click="handleRadioClick(tConf.field, opt.value)"
                 >
                     {{ opt.name }}

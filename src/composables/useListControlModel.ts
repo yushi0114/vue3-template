@@ -29,7 +29,7 @@ export function useListControlModel() {
     }
 
     onBeforeMount(() => {
-        const numberFields = ['progress', 'pageIndex', 'pageSize'];
+        const numberFields = ['progress', 'pageIndex', 'pageSize', 'status'];
         Object.keys(params).forEach((key) => {
             if (listControlModel[key] === params[key]) return;
             listControlModel[key] = numberFields.includes(key) ? Number(params[key]) : params[key];

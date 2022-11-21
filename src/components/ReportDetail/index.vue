@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Top } from '@element-plus/icons-vue';
 import { getReport } from '@/api/report';
+import { useUserStore } from '@/stores';
 
 import basicIdentity from './components/basic/identity/index.vue';
 import basicStock from './components/basic/stockholder/index.vue';
@@ -53,15 +54,35 @@ const reportList = reactive({
     abnormal: [],
 });
 
+const reportInfo = reactive({
+    createTime: new Date().toLocaleString(),
+    account: '',
+    searchName: ''
+});
+
+const watermarkConfig = reactive({
+    textName: '',
+    textAccount: '',
+    textTime: '',
+    textColor: '#c7c7c7',
+    width: 400,
+    height: 200,
+    textRotate: -20
+});
+
 onMounted(() => {
+    getUserInfo();
     getReportDetail();
 });
 
-const reportInfo = computed(() => {
-    return {
-        createTime: new Date().toLocaleString()
-    };
-});
+const getUserInfo = () => {
+    const { getUserInfo } = useUserStore();
+    getUserInfo().then((res: any) => {
+        watermarkConfig.textAccount = reportInfo.account = res.account;
+        watermarkConfig.textName = reportInfo.searchName = res.name;
+        watermarkConfig.textTime = reportInfo.createTime;
+    });
+};
 
 const getReportDetail = () => {
     allToogle.loading = true;
@@ -73,8 +94,7 @@ const getReportDetail = () => {
 
         const params = {
             corpName: route.query.corpName as string,
-            corpCode: route.query.corpCode as string,
-            menuName: 'requirement'
+            corpCode: route.query.corpCode as string
         };
 
         allToogle.loading = true;
@@ -138,12 +158,16 @@ const print = () => {
             </div>
 
             <div class="report-body" v-else>
-                <div class="report-container" ref="printFrom" v-if="!allToogle.loading">
+                <div class="report-container" ref="printFrom" v-if="!allToogle.loading" v-watermark="watermarkConfig">
                     <div class="report-title">企业征信报告</div>
                     <div style="margin-top: 10px">
                         <div class="overview-line">
+                            <span class="overview-title">查询账号：</span>
+                            <span class="overview-line-content">{{ reportInfo && reportInfo.account }}</span>
                             <span class="overview-right-title">报告日期：</span>
-                            <span>{{ reportInfo && reportInfo.createTime }}</span>
+                            <span class="overview-line-content">{{ reportInfo && reportInfo.createTime }}</span>
+                            <span class="overview-title">查询人：</span>
+                            <span class="overview-line-content">{{ reportInfo && reportInfo.searchName }}</span>
                         </div>
                     </div>
 
@@ -255,6 +279,7 @@ const print = () => {
                 .overview-line {
                     padding: 3px 5px;
                     font-size: 14px;
+                    line-height: 1.5;
                 }
 
                 .overview-title {

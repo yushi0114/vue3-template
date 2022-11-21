@@ -18,8 +18,7 @@ export type GetCityListResponse = CorpEntity[];
 
 export type GetReportPayload = {
     corpName: string,
-    corpCode: string,
-    menuName: string
+    corpCode: string
 }
 
 export type ReportDetailResponse = {

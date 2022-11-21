@@ -52,6 +52,13 @@ const initForm = (form: OperateCityEntity , val: string) => {
     form.id = val;
 };
 
+const isFocused = ref<HTMLElement | null>(null);
+const refFocus = () => {
+    nextTick(() => {
+        isFocused.value?.focus();
+    });
+};
+
 const createOrEditCity = (form: FormInstance | undefined, title: string) => {
     if (!form) return;
     form.validate((valid) => {
@@ -163,7 +170,8 @@ const cityRules = reactive<FormRules>({
         <el-dialog
             v-model="dialogVisible"
             :title="dataEdit.title"
-            :width="'500px'"
+            width='500px'
+            @open="refFocus"
             @close="cancel(cityFormRef)"
         >
             <el-form

@@ -22,8 +22,7 @@ const getCorpList = () => {
     const params = {
         corpName: searchInput.value,
         pageNo: page.currentPage,
-        pageSize: page.pageSize,
-        menuName: 'requirement'
+        pageSize: page.pageSize
     };
 
     allToogle.loading = true;

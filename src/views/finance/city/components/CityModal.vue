@@ -60,8 +60,7 @@ const createOrEditCity = (form: FormInstance | undefined, title: string) => {
                 const params = {
                     name: cityForm.name,
                     code: cityForm.code,
-                    sort: cityForm.sort,
-                    menuName: 'city'
+                    sort: cityForm.sort
                 };
                 return createCity(params)
                     .then(() => {
@@ -80,8 +79,7 @@ const createOrEditCity = (form: FormInstance | undefined, title: string) => {
                     id: cityForm.id,
                     name: cityForm.name,
                     code: cityForm.code,
-                    sort: cityForm.sort,
-                    menuName: 'city'
+                    sort: cityForm.sort
                 };
                 return updateCity(params)
                     .then(() => {

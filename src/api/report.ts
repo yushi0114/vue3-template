@@ -4,8 +4,7 @@ import { api } from './http';
 export type GetAllCorpListPayload = {
     corpName: string,
     pageNo: number,
-    pageSize: number,
-    menuName: string
+    pageSize: number
 }
 
 export interface CorpEntity {

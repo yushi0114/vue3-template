@@ -6,7 +6,6 @@ export type CityPagePayload = {
     name: string,
     pageIndex: number,
     pageSize: number,
-    menuName: string,
     sortField: string,
     sortType: string
 }
@@ -14,7 +13,6 @@ export type CityPagePayload = {
 export type AddCityPayload = {
     name: string,
     code: string,
-    menuName: string,
     sort: number | string
 }
 

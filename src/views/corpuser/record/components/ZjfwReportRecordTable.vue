@@ -36,7 +36,6 @@ const getReportRecordList = () => {
         searchInput: searchInput.value,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
-        menuName: 'zjfwrecord',
         sortField: sort.sortField,
         sortType: sort.sortType
     };
@@ -91,7 +90,6 @@ const handleSelectionChange = (val: CorpRepoteRecordTable[]) => {
 const batchDelete = () => {
     const params = {
         idArr: recordAllId,
-        menuName: 'user'
     };
     ElMessageBox.confirm(
         '确定删除已勾选的所有征信报告查询记录吗？',
@@ -120,7 +118,6 @@ const batchDelete = () => {
 const handleDelete = (row: CorpRepoteRecordTable) => {
     const params = {
         idArr: [row.id],
-        menuName: 'user'
     };
 
     ElMessageBox.confirm(

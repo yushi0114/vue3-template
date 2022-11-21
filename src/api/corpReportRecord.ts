@@ -6,8 +6,7 @@ export type GetRecordListPayload = {
     pageSize: number
     sortField: string
     sortType: string
-    searchInput: string,
-    menuName: string
+    searchInput: string
 }
 
 export interface ListResponse<T = any> {

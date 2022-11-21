@@ -1,10 +1,6 @@
 import { DMS_DOMAIN } from './const';
 import { api } from './http';
 
-export type GetFirstPageDataPayload = {
-    menuName: string
-};
-
 export type GetFirstPageDataResponse = {
     financeResolve: number,
     financeSuccess: number,
@@ -12,7 +8,7 @@ export type GetFirstPageDataResponse = {
     registerEnterprise: number
 };
 
-export type UpdateHomePageStaticPayload = GetFirstPageDataPayload & GetFirstPageDataResponse;
+export type UpdateHomePageStaticPayload = GetFirstPageDataResponse;
 
 export type GetZfFirstPageDataResponse = {
     registerEnterprise: number,
@@ -23,13 +19,11 @@ export type GetZfFirstPageDataResponse = {
     propertyFinanceResolve: number
 }
 
-export type UpdateZfHomePageStaticPayload = GetFirstPageDataPayload & GetZfFirstPageDataResponse;
+export type UpdateZfHomePageStaticPayload = GetZfFirstPageDataResponse;
 
 // 获取首页静态数据 (辽信通)
-export function getFirstPageData(params: GetFirstPageDataPayload): Promise<GetFirstPageDataResponse>{
-    return api.get(`${DMS_DOMAIN}/v1/home/page/statistics`, {
-        params
-    });
+export function getFirstPageData(): Promise<GetFirstPageDataResponse>{
+    return api.get(`${DMS_DOMAIN}/v1/home/page/statistics`);
 }
 
 // 修改首页静态数据 (辽信通)
@@ -38,10 +32,8 @@ export function updateHomePageStatic(data: UpdateHomePageStaticPayload) {
 }
 
 // 获取首页静态数据 (市综服)
-export function getZfFirstPageData(params: GetFirstPageDataPayload): Promise<GetZfFirstPageDataResponse>{
-    return api.get(`${DMS_DOMAIN}/v1/zjfw/home/page/statistics`, {
-        params
-    });
+export function getZfFirstPageData(): Promise<GetZfFirstPageDataResponse>{
+    return api.get(`${DMS_DOMAIN}/v1/zjfw/home/page/statistics`);
 }
 
 // 修改首页静态数据 (市综服)

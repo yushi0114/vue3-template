@@ -55,7 +55,6 @@ const getCorpUserList = () => {
         searchInput: searchInput.value,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
-        menuName: 'zjfwuser',
         sortField: sort.sortField,
         sortType: sort.sortType
     };
@@ -103,8 +102,7 @@ const changeUserStatus = (row: CorpUserTable, index: number) => {
     ).then(() => {
         const params = {
             status: row.status,
-            account: row.account,
-            menuName: 'zjfwuser'
+            account: row.account
         };
 
         return updateZfBusinessUserStatus(params)

@@ -55,7 +55,6 @@ const getCorpUserList = () => {
         searchInput: searchInput.value,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
-        menuName: 'user',
         sortField: sort.sortField,
         sortType: sort.sortType
     };
@@ -103,8 +102,7 @@ const changeUserStatus = (row: CorpUserTable, index: number) => {
     ).then(() => {
         const params = {
             status: row.status,
-            account: row.account,
-            menuName: 'user'
+            account: row.account
         };
 
         return updateBusinessUserStatus(params)
@@ -141,8 +139,7 @@ const handleSelectionChange = (val: CorpUserTable[]) => {
 // 批量删除
 const batchDelete = () => {
     const params = {
-        idArr: userAllId,
-        menuName: 'user'
+        idArr: userAllId
     };
     ElMessageBox.confirm(
         '确定删除已勾选的所有用户吗？',
@@ -170,8 +167,7 @@ const batchDelete = () => {
 // 单个删除
 const handleDelete = (row: CorpUserTable) => {
     const params = {
-        idArr: [row.id],
-        menuName: 'user'
+        idArr: [row.id]
     };
 
     ElMessageBox.confirm(

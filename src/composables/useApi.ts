@@ -3,10 +3,11 @@ import { isNumber } from '@/utils';
 import { ref } from 'vue';
 import type { HttpError } from '@/api/types';
 
-export type UseApiOption<T> = {
+export type UseApiOption<K> = {
     cache?: boolean | number;
-    onSuccess?: (data: T) => void;
+    onSuccess?: (data: K) => void;
     onError?: (error: HttpError) => void;
+    formatter?: <U = K>(response: K) => U
 };
 export function useApi<T extends (...args: any[]) => Promise<any>>(
     apiFunc: T,
@@ -28,13 +29,14 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
         const requestResponse = cache.value
             ? Promise.resolve(cache.value)
             : apiFunc(...args).then((res: Awaited<ReturnType<T>>) => {
+                const response = isFunction(opt.formatter) ? opt.formatter!(res) : res;
                 if (opt.cache) {
-                    cache.value = res;
+                    cache.value = response;
                     if (isNumber(opt.cache)) {
                         timer = setTimeout(clear, Number(opt.cache));
                     }
                 }
-                return res;
+                return response;
             });
         if (cache.value) {
             return Promise.resolve(cache.value);

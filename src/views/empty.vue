@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-
+import Error404 from './system/Error404.vue';
 </script>
 
 <template>
-  <div class="empty">
-    Empty
-  </div>
+  <Error404 />
 </template>
 
 <style lang="postcss">

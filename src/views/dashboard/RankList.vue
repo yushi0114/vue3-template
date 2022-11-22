@@ -1,18 +1,7 @@
 <script lang="ts" setup>
-import * as echarts from 'echarts';
+import Charts from './Charts.vue';
+import type { ECElementEvent } from 'echarts/types/src/util/types';
 import type { ApplyCountEntity } from '@/types/dashboard';
-import { useSidebar } from '@/composables';
-
-const { expand } = useSidebar();
-
-watch(
-    expand,
-    () => {
-        setTimeout(() => {
-            resizeHandler();
-        }, 150);
-    }
-);
 
 const props = withDefaults(
     defineProps<{
@@ -43,10 +32,7 @@ const handleTabChange = () => {
     loadOptions();
 };
 
-const chartDomRef = ref<HTMLElement>();
-let chartInstance: echarts.ECharts;
-
-const options = {
+const options = ref({
     grid: {
         top: 0,
         left: 134,
@@ -154,47 +140,29 @@ const options = {
             }
         }
     ]
-};
+});
 
 const loadOptions = () => {
     const data = activeName.value === 'lxt' ? props.data.countProduct : props.data.countEzjfwProduct;
-    options.yAxis.data = data.map(item => item.name);
-    options.series[0].data = data.map(item => item.count);
-    options.series[1].data = data.map(item => ({ realValue: item.count, value: data[0].count }));
-    chartInstance.setOption(options, true);
+    options.value.yAxis.data = data.map(item => item.name);
+    options.value.series[0].data = data.map(item => item.count);
+    options.value.series[1].data = data.map(item => ({ realValue: item.count, value: data[0].count }));
 };
 
-const resizeHandler = () => {
-    loadOptions();
-    chartInstance.resize();
+const mousemoveHandler = (params: ECElementEvent) => {
+    const labelTooltip = document.getElementById('label-tooltip')!;
+    if (params.componentType === 'yAxis') {
+        labelTooltip.style.display = 'block';
+        labelTooltip.style.left = params.event!.offsetX + 50 + 'px';
+        labelTooltip.style.top = params.event!.offsetY + 110 + 'px';
+        labelTooltip.innerText = params.value as string;
+    }
 };
 
-const initChart = () => {
-    let labelTooltip = document.getElementById('label-tooltip')!;
-    chartInstance = echarts.init(chartDomRef.value!);
-    chartInstance.on('mousemove', (params) => {
-        if (params.componentType === 'yAxis') {
-            labelTooltip.style.display = 'block';
-            labelTooltip.style.left = params.event!.offsetX + 50 + 'px';
-            labelTooltip.style.top = params.event!.offsetY + 110 + 'px';
-            labelTooltip.innerText = params.value as string;
-        }
-    });
-    chartInstance.on('mouseout', () => {
-        labelTooltip.style.display = 'none';
-    });
-    loadOptions();
-    window.addEventListener('resize', resizeHandler);
+const mouseoutHandler = () => {
+    const labelTooltip = document.getElementById('label-tooltip')!;
+    labelTooltip.style.display = 'none';
 };
-
-onMounted(() => {
-    initChart();
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('resize', resizeHandler);
-    chartInstance.dispose();
-});
 </script>
 
 <template>
@@ -204,7 +172,7 @@ onBeforeUnmount(() => {
             <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
             <el-tab-pane label="市综服" name="szf"></el-tab-pane>
         </el-tabs>
-        <div class="chart-wrapper" ref="chartDomRef"></div>
+        <Charts :options="options" :height="216" @chart-mousemove="mousemoveHandler" @chart-mouseout="mouseoutHandler" />
         <div id="label-tooltip"></div>
     </el-card>
 </template>
@@ -215,11 +183,6 @@ onBeforeUnmount(() => {
     margin-bottom: 16px;
     color: #1e1e1e;
     font-weight: bold;
-}
-
-.chart-wrapper {
-    width: 100%;
-    height: 216px;
 }
 
 #label-tooltip {

@@ -1,19 +1,6 @@
 <script lang="ts" setup>
-import * as echarts from 'echarts';
+import Charts from './Charts.vue';
 import type { TotalIndicatorEntity } from '@/types/dashboard';
-import { useSidebar } from '@/composables';
-
-const { expand } = useSidebar();
-
-watch(
-    expand,
-    () => {
-        setTimeout(() => {
-            resizeHandler();
-        }, 150);
-    }
-);
-
 
 const props = withDefaults(
     defineProps<{
@@ -40,9 +27,6 @@ watch(
     { deep: true }
 );
 
-const chartDomRef = ref<HTMLElement>();
-let chartInstance: echarts.ECharts;
-
 const textStyle = {
     rich: {
         a: {
@@ -65,7 +49,7 @@ const textStyle = {
         }
     }
 };
-const options = {
+const options = ref({
     title: [
         {
             text: [
@@ -172,40 +156,19 @@ const options = {
             }
         }
     ]
-};
+});
 
 const loadOptions = () => {
-    options.title[0].text = ['{a|敏捷需求}', `{b|${props.data.countSimpleReq}}`, `{c|占比${props.data.perSimpleReq}%}`].join('\n');
-    options.title[1].text = ['{a|精准需求}', `{b|${props.data.countExactReq}}`, `{c|占比${props.data.perExactReq}%}`].join('\n');
-    options.title[2].text = ['{a|产品需求}', `{b|${props.data.countProductReq}}`, `{c|占比${props.data.perProductReq}%}`].join('\n');
-    options.series[0].data[0].value = props.data.countSimpleReq;
-    options.series[0].data[1].value = props.data.countExactReq + props.data.countProductReq;
-    options.series[1].data[0].value = props.data.countExactReq;
-    options.series[1].data[1].value = props.data.countSimpleReq + props.data.countProductReq;
-    options.series[2].data[0].value = props.data.countProductReq;
-    options.series[2].data[1].value = props.data.countSimpleReq + props.data.countExactReq;
-    chartInstance.setOption(options, true);
+    options.value.title[0].text = ['{a|敏捷需求}', `{b|${props.data.countSimpleReq}}`, `{c|占比${props.data.perSimpleReq}%}`].join('\n');
+    options.value.title[1].text = ['{a|精准需求}', `{b|${props.data.countExactReq}}`, `{c|占比${props.data.perExactReq}%}`].join('\n');
+    options.value.title[2].text = ['{a|产品需求}', `{b|${props.data.countProductReq}}`, `{c|占比${props.data.perProductReq}%}`].join('\n');
+    options.value.series[0].data[0].value = props.data.countSimpleReq;
+    options.value.series[0].data[1].value = props.data.countExactReq + props.data.countProductReq;
+    options.value.series[1].data[0].value = props.data.countExactReq;
+    options.value.series[1].data[1].value = props.data.countSimpleReq + props.data.countProductReq;
+    options.value.series[2].data[0].value = props.data.countProductReq;
+    options.value.series[2].data[1].value = props.data.countSimpleReq + props.data.countExactReq;
 };
-
-const resizeHandler = () => {
-    loadOptions();
-    chartInstance.resize();
-};
-
-const initChart = () => {
-    chartInstance = echarts.init(chartDomRef.value!);
-    loadOptions();
-    window.addEventListener('resize', resizeHandler);
-};
-
-onMounted(() => {
-    initChart();
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('resize', resizeHandler);
-    chartInstance.dispose();
-});
 </script>
 
 <template>
@@ -214,7 +177,9 @@ onBeforeUnmount(() => {
             <div class="item-label">企业总人数</div>
             <div class="item-value">{{ data.countUser }}</div>
         </div>
-        <div class="chart-wrapper" ref="chartDomRef"></div>
+        <div class="chart-wrapper">
+            <Charts :options="options" :height="78" />
+        </div>
     </el-card>
 </template>
 

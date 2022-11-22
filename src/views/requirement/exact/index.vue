@@ -2,12 +2,13 @@
 import { acceptProgressTypeOptions, PlatformType, switchTypeOptions, taxGradeTypeOptions } from '@/enums';
 import { getExactReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
-import { ReqList } from '../components';
+import { ExactReqDetail, ReqList } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel } from '@/composables';
 
 const route = useRoute();
 const platform = ref(Number(route.params.type));
+const detail = ref<RequirementEntity | null>(null);
 
 const { model: listControlModel, clear: clearModel } = useListControlModel({
     numberFields: ['progress']
@@ -41,7 +42,7 @@ function handleTabChange(plat: PlatformType) {
 }
 
 function goDetail(req: RequirementEntity) {
-    console.log(req);
+    detail.value = req;
 }
 
 onMounted(() => {
@@ -92,7 +93,7 @@ onMounted(() => {
         <Text>
         </Text>
 
-        <ReqList :list="list" @click-detail="goDetail" />
+        <ReqList :list="list" @item-detail="goDetail" />
 
         <FlexRow horizontal="end">
             <el-pagination
@@ -103,6 +104,11 @@ onMounted(() => {
                 :total="count"
             />
         </FlexRow>
+
+        <ExactReqDetail
+            :modelValue="!!detail"
+            @closed="detail = null"
+            :content="detail" />
     </Board>
   </PagePanel>
 </template>

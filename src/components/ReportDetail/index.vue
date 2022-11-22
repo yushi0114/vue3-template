@@ -284,7 +284,7 @@ const print = () => {
 
                 .overview-title {
                     font-weight: bold;
-                    width: 19%;
+                    width: 12%;
                     display: inline-block;
                 }
 
@@ -295,7 +295,7 @@ const print = () => {
                 }
 
                 .overview-line-content {
-                    width: 31%;
+                    width: 38%;
                     display: inline-block;
                 }
 

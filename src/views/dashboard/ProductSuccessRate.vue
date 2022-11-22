@@ -1,18 +1,6 @@
 <script lang="ts" setup>
-import * as echarts from 'echarts';
+import Charts from './Charts.vue';
 import type { SuccessRateEntity } from '@/types/dashboard';
-import { useSidebar } from '@/composables';
-
-const { expand } = useSidebar();
-
-watch(
-    expand,
-    () => {
-        setTimeout(() => {
-            resizeHandler();
-        }, 150);
-    }
-);
 
 const props = withDefaults(
     defineProps<{
@@ -37,10 +25,7 @@ watch(
     { deep: true }
 );
 
-const chartDomRef = ref<HTMLElement>();
-let chartInstance: echarts.ECharts;
-
-const options = {
+const options = ref({
     tooltip: {
         trigger: 'axis',
         valueFormatter: (value: any) => value + '%'
@@ -82,40 +67,19 @@ const options = {
             data: [] as number[]
         }
     ]
-};
+});
 
 const loadOptions = () => {
-    options.xAxis.data = props.data.successRate.map(item => item.month);
-    options.series[0].data = props.data.successRate.map(item => item.per);
-    options.series[1].data = props.data.ezjfwSuccessRate.map(item => item.per);
-    chartInstance.setOption(options, true);
+    options.value.xAxis.data = props.data.successRate.map(item => item.month);
+    options.value.series[0].data = props.data.successRate.map(item => item.per);
+    options.value.series[1].data = props.data.ezjfwSuccessRate.map(item => item.per);
 };
-
-const resizeHandler = () => {
-    loadOptions();
-    chartInstance.resize();
-};
-
-const initChart = () => {
-    chartInstance = echarts.init(chartDomRef.value!);
-    loadOptions();
-    window.addEventListener('resize', resizeHandler);
-};
-
-onMounted(() => {
-    initChart();
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('resize', resizeHandler);
-    chartInstance.dispose();
-});
 </script>
 
 <template>
     <el-card :body-style="{ padding: '20px 24px 24px' }" shadow="never">
         <div class="card-header">产品需求受理月成功率数据趋势</div>
-        <div class="chart-wrapper" ref="chartDomRef"></div>
+        <Charts :options="options" :height="172" />
     </el-card>
     <div class="success-rate-wrapper">
         <div class="success-rate-label">当月成功率 (辽信通 / 市综服)</div>
@@ -155,10 +119,5 @@ onBeforeUnmount(() => {
         color: #fff;
         font-size: 24px;
     }
-}
-
-.chart-wrapper {
-    width: 100%;
-    height: 172px;
 }
 </style>

@@ -36,3 +36,27 @@ export function getProductReqs(payload: GetProductReqsPayload): Promise<GetProdu
 }
 
 // #endregion
+
+
+// #region 获取产品筛选项列表
+export type GetProductOptionsPayload = {
+    platform?: PlatformType
+    menuName?: string
+}
+
+export type GetProductOptionsResponse = ProductEntity[];
+
+export function getProductOptions(payload: GetProductOptionsPayload): Promise<GetProductOptionsResponse> {
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/product/dic'
+        : '/v1/zjfw/product/all';
+
+    payload.menuName = payload.platform === PlatformType.LiaoXinTong
+        ? 'requirement'
+        : 'zjfwapply';
+
+    delete payload.platform;
+
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}

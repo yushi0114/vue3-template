@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { fetchCityList, deleteCity } from '@/api/finance';
+import { fetchCityList, deleteCity } from '@/api/city';
 import type { ICityTable } from '@/types/city';
 
-import CityDetail from './cityDetail.vue';
+import CityDetail from './CityDetail.vue';
 import CityModal from './CityModal.vue';
 
 const dataSource = ref<ICityTable[]>([]);
@@ -237,11 +237,10 @@ const handleCurrentChange = (val: number) => {
             <city-modal :dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
         </div>
     </div>
-
 </template>
 
 <style lang="scss" scoped>
-.city-wrapper {
+.city-table {
 
     .table-header {
         min-height: 40px;
@@ -270,7 +269,7 @@ const handleCurrentChange = (val: number) => {
 
         .table-pagination {
             margin-top: 20px;
-            justify-content: end;
+            justify-content: flex-end;
         }
     }
 }

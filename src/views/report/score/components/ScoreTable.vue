@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { Search, View } from '@element-plus/icons-vue';
-import { getAllCorpList } from '@/api/report';
-import type { IReportTable } from '@/types/report';
+import { getAllCorpList } from '@/api/score';
+import type { IScoreTable } from '@/types/score';
 
-const dataSource = ref<IReportTable[]>([]);
+const dataSource = ref<IScoreTable[]>([]);
 
 const searchInput = ref('');
 
@@ -14,7 +14,7 @@ const allToogle = reactive({
 // 分页配置项
 const page = reactive({
     currentPage: 1,
-    pageSize: 10
+    pageSize: 15
 });
 
 // 获取企业列表
@@ -56,9 +56,9 @@ const handleSearch = (isClear: boolean) => {
 };
 
 const router = useRouter();
-const handleView = (row: IReportTable) => {
+const handleView = (row: IScoreTable) => {
     const routerUrl = router.resolve({
-        path: '/report/detail',
+        path: '/score/detail',
         query: {
             corpName: row.corpName,
             corpCode: row.corpCode
@@ -132,7 +132,7 @@ onUnmounted(() => {
             <el-table
                 v-loading="allToogle.loading"
                 :data="dataSource"
-                style="width: 100%; height: 550px;"
+                style="width: 100%; height: 650px;"
                 :header-cell-style="{
                     color: '#595959',
                     'background-color': '#f3f4f8'
@@ -183,7 +183,7 @@ onUnmounted(() => {
         }
         .table-pagination {
             margin-top: 20px;
-            justify-content: end;
+            justify-content: flex-end;
         }
     }
 }

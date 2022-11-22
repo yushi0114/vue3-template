@@ -16,38 +16,21 @@ watch(route, (val) => {
 </script>
 
 <template>
-    <PagePanel class="statistics-wrapper">
-        <Layout>
-            <el-row class="page-header">
-                <el-col :span="24">
-                    <div class="page-title">用户管理</div>
-                </el-col>
-            </el-row>
-            <Board class="board">
-                <PlatformTab />
-                <template v-if="isLxtstatistics">
-                    <LxtUserTable></LxtUserTable>
-                </template>
-                <template v-else>
-                    <ZjfwUserTable></ZjfwUserTable>
-                </template>
-            </Board>
-        </Layout>
+    <PagePanel>
+        <Board class="user">
+            <PlatformTab />
+            <template v-if="isLxtstatistics">
+                <LxtUserTable></LxtUserTable>
+            </template>
+            <template v-else>
+                <ZjfwUserTable></ZjfwUserTable>
+            </template>
+        </Board>
     </PagePanel>
 </template>
 
-<style lang="scss" scoped>
-.statistics-wrapper {
-
-    .page-header {
-        font-size: 16px;
-        line-height: 24px;
-        margin-bottom: 20px;
-    };
-
-    .board {
-        min-height: calc(100vh - 204px);
-        padding: 20px;
-    }
+<style lang="postcss" scoped>
+.user {
+    @apply  h-full;
 }
 </style>

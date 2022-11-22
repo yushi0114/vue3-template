@@ -6,6 +6,7 @@ import { genDynamicComponent, genDynamicViewConfig } from '@/views';
 import { Error404 } from '@/views/system';
 import { Base } from '@/views/base';
 import ReportDetail from '@/components/ReportDetail/index.vue';
+import ScoreDetail from '@/components/ScoreDetail/index.vue';
 
 // @/store/user signin()
 export const SIGNIN_PATH = '/signin';
@@ -45,8 +46,16 @@ const routes: RouteRecordRaw[] = [
         name: 'report',
         component: ReportDetail,
         meta: {
-            menu: 'requirement',
-            title: 'requirement'
+            menu: 'report',
+            title: 'report'
+        }
+    },{
+        path: '/score/detail',
+        name: 'score',
+        component: ScoreDetail,
+        meta: {
+            menu: 'score',
+            title: 'score'
         }
     }
 ];

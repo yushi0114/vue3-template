@@ -1,27 +1,14 @@
 <script lang="ts" setup>
 import { Top } from '@element-plus/icons-vue';
-import { getReport } from '@/api/report';
+import { getScore } from '@/api/score';
 import { useUserStore } from '@/stores';
 
-import basicIdentity from './components/basic/identity/index.vue';
-import basicStock from './components/basic/stockholder/index.vue';
-import basicLeaders from './components/basic/leaders/index.vue';
-import secPerson from './components/socSec/person/index.vue';
-import socSec from './components/socSec/socSec/index.vue';
-import socSecLateFee from './components/socSec/lateFee/index.vue';
-import accFund from './components/socSec/accFund/index.vue';
-import assLia from './components/businessInfo/assLia/index.vue';
-import proFit from './components/businessInfo/proFit/index.vue';
-import finance from './components/businessInfo/finance/index.vue';
-import tax from './components/businessInfo/tax/index.vue';
-import water from './components/businessInfo/water/index.vue';
-import electric from './components/businessInfo/electric/index.vue';
-import gasInfo from './components/businessInfo/gasInfo/index.vue';
-import realestate from './components/guaranty/realestate/index.vue';
-import chattel from './components/guaranty/chattel/index.vue';
-import close from './components/guaranty/close/index.vue';
-import punish from './components/punish/index.vue';
-import abnormal from './components/abnormal/index.vue';
+import scoreIdentity from './components/basic/identity/index.vue';
+import scoreResult from './components/business/scoreResult/index.vue';
+import basicIndicators from './components/indicatorsInfo/basicIndicators/index.vue';
+import modifyIndicators from './components/indicatorsInfo/modifyIndicators/index.vue';
+import financial from './components/indicatorsInfo/financial/index.vue';
+import Dimension from './components/indicatorsInfo/dimension/index.vue';
 
 const route = useRoute();
 const allToogle = reactive({
@@ -30,31 +17,18 @@ const allToogle = reactive({
     showCorpNotExist: false,
     showCorpStatusExist: false,
 });
-const reportList = reactive({
+const scoreList = reactive({
     identity: {
         name: ''
     },
-    stockholder: [],
-    leaders: [],
-    secPerson: [],
-    socSec: [],
-    socSecLateFee: [],
-    accFund: [],
-    assLia: {},
-    profit: {},
-    finance: {},
-    tax: {},
-    water: {},
-    electricInfo: {},
-    gas: {},
-    realestate: [],
-    chattel: [],
-    close: [],
-    punish: [],
-    abnormal: [],
+    scoreResult: [],
+    basicIndicators: [],
+    modifyIndicators: [],
+    financial: [],
+    dimension: []
 });
 
-const reportInfo = reactive({
+const scoreInfo = reactive({
     createTime: new Date().toLocaleString(),
     account: '',
     searchName: ''
@@ -78,9 +52,9 @@ onMounted(() => {
 const getUserInfo = () => {
     const { getUserInfo } = useUserStore();
     getUserInfo().then((res: any) => {
-        watermarkConfig.textAccount = reportInfo.account = res.account;
-        watermarkConfig.textName = reportInfo.searchName = res.name;
-        watermarkConfig.textTime = reportInfo.createTime;
+        watermarkConfig.textAccount = scoreInfo.account = res.account;
+        watermarkConfig.textName = scoreInfo.searchName = res.name;
+        watermarkConfig.textTime = scoreInfo.createTime;
     });
 };
 
@@ -98,7 +72,7 @@ const getReportDetail = () => {
         };
 
         allToogle.loading = true;
-        return getReport(params)
+        return getScore(params)
             .then((res) => {
                 if (res.code && res.code === 'CORP_NOT_EXIST') {
                     allToogle.showAuthority = true;
@@ -107,25 +81,12 @@ const getReportDetail = () => {
                     allToogle.showAuthority = true;
                     allToogle.showCorpStatusExist = true;
                 } else {
-                    reportList.identity = res.identity;
-                    reportList.stockholder = res.stockholder;
-                    reportList.leaders = res.leaders;
-                    reportList.secPerson = res.person;
-                    reportList.socSec = res.socsec;
-                    reportList.socSecLateFee = res.fee;
-                    reportList.accFund = res.fund;
-                    reportList.assLia = res.lia;
-                    reportList.profit = res.profit;
-                    reportList.finance = res.finance;
-                    reportList.tax = res.tax;
-                    reportList.water = res.water;
-                    reportList.electricInfo = res.electric;
-                    reportList.gas = res.gas;
-                    reportList.realestate = res.realestate;
-                    reportList.chattel = res.chattel;
-                    reportList.close = res.close;
-                    reportList.punish = res.punish;
-                    reportList.abnormal = res.abnormal;
+                    [scoreList.identity] = res.identity;
+                    scoreList.scoreResult = res.result;
+                    scoreList.basicIndicators = res.basic;
+                    scoreList.modifyIndicators = res.amend;
+                    scoreList.financial = res.financial;
+                    scoreList.dimension = res.dimension;
                 }
             })
             .finally(() => {
@@ -135,14 +96,14 @@ const getReportDetail = () => {
 };
 
 const print = () => {
-    document.title = reportList.identity.name + '(征信报告)';
+    document.title = scoreList.identity.name + '(信用评分)';
     window.print();
     document.title = '金融栈数据管理平台';
 };
 </script>
 
 <template>
-    <div class="report-page-content">
+    <div class="score-page-content">
         <div class="credit-content" v-loading="allToogle.loading" element-loading-text="加载中">
             <div v-if="allToogle.showAuthority && !allToogle.loading">
                 <el-container class="authority-content">
@@ -150,24 +111,24 @@ const print = () => {
                         <img class="mb20" src="@/assets/images/authority.png">
                         <div v-if="allToogle.showCorpNotExist || allToogle.showCorpStatusExist">
                             <div v-if="allToogle.showCorpNotExist">当前企业不存在，请重新确认企业信息</div>
-                            <div v-if="allToogle.showCorpStatusExist">当前企业登记状态为非存续状态，无法查看征信报告</div>
+                            <div v-if="allToogle.showCorpStatusExist">当前企业登记状态为非存续状态，无法查看信用评分</div>
                         </div>
                         <div v-else>访问路径缺少企业名称</div>
                     </div>
                 </el-container>
             </div>
 
-            <div class="report-body" v-else>
-                <div class="report-container" ref="printFrom" v-if="!allToogle.loading" v-watermark="watermarkConfig">
-                    <div class="report-title">企业征信报告</div>
+            <div class="score-body" v-else>
+                <div class="score-container" ref="printFrom" v-if="!allToogle.loading" v-watermark="watermarkConfig">
+                    <div class="score-title">企业信用评分</div>
                     <div style="margin-top: 10px">
                         <div class="overview-line">
                             <span class="overview-title">查询账号：</span>
-                            <span class="overview-line-content">{{ reportInfo && reportInfo.account }}</span>
+                            <span class="overview-line-content">{{ scoreInfo && scoreInfo.account }}</span>
                             <span class="overview-right-title">报告日期：</span>
-                            <span class="overview-line-content">{{ reportInfo && reportInfo.createTime }}</span>
+                            <span class="overview-line-content">{{ scoreInfo && scoreInfo.createTime }}</span>
                             <span class="overview-title">查询人：</span>
-                            <span class="overview-line-content">{{ reportInfo && reportInfo.searchName }}</span>
+                            <span class="overview-line-content">{{ scoreInfo && scoreInfo.searchName }}</span>
                         </div>
                     </div>
 
@@ -175,51 +136,35 @@ const print = () => {
                         <div class="title-line"></div>
                         <span class="title">基本信息</span>
                     </div>
-                    <basic-identity :identity="reportList.identity"></basic-identity>
-                    <basic-stock :stockholder="reportList.stockholder"></basic-stock>
-                    <basic-leaders :leaders="reportList.leaders"></basic-leaders>
+                    <score-identity :identity="scoreList.identity"></score-identity>
 
                     <div class="title-content">
                         <div class="title-line"></div>
-                        <span class="title">社保公积金缴存信息</span>
+                        <span class="title">企业评分信息</span>
                     </div>
-                    <sec-person :secPerson="reportList.secPerson"></sec-person>
-                    <soc-sec :socSec="reportList.socSec"></soc-sec>
-                    <soc-sec-late-fee :socSecLateFee="reportList.socSecLateFee"></soc-sec-late-fee>
-                    <acc-fund :accFund="reportList.accFund"></acc-fund>
+                    <span>企业评分信息</span>
+                    <score-result :scoreResult="scoreList.scoreResult"></score-result>
+                    <span>各维度指标情况解析</span>
+                    <!-- 基本指标 -->
+                    <basic-indicators :basicIndicators="scoreList.basicIndicators"></basic-indicators>
+                    <!-- 修正指标 -->
+                    <modify-indicators :modifyIndicators="scoreList.modifyIndicators"></modify-indicators>
 
-                    <div class="title-content">
-                        <div class="title-line"></div>
-                        <span class="title">经营信息</span>
+                    <!-- 主要财务指标雷达图  各维度变动情况 -->
+                    <div class="radar-change-content">
+                        <div class="child-content">
+                            <financial :financial="scoreList.financial"></financial>
+                        </div>
+                        <div class="child-content pl10">
+                            <dimension :dimension="scoreList.dimension"></dimension>
+                        </div>
                     </div>
-                    <ass-lia :assLia="reportList.assLia"></ass-lia>
-                    <pro-fit :profit="reportList.profit"></pro-fit>
-                    <finance :finance="reportList.finance"></finance>
-                    <tax :tax="reportList.tax"></tax>
-                    <water :water="reportList.water"></water>
-                    <electric :electricInfo="reportList.electricInfo"></electric>
-                    <gas-info :gas="reportList.gas"></gas-info>
-
-                    <div class="title-content">
-                        <div class="title-line"></div>
-                        <span class="title">抵押与查封信息</span>
-                    </div>
-                    <realestate :realestate="reportList.realestate"></realestate>
-                    <chattel :chattel="reportList.chattel"></chattel>
-                    <close :close="reportList.close"></close>
-
-                    <div class="title-content">
-                        <div class="title-line"></div>
-                        <span class="title">负面信息</span>
-                    </div>
-                    <punish :punish="reportList.punish"></punish>
-                    <abnormal :abnormal="reportList.abnormal"></abnormal>
 
                     <el-backtop :bottom="100">
                         <el-icon><Top /></el-icon>
                     </el-backtop>
 
-                    <img class="report-print" src="@/assets/images/print.png" @click="print()">
+                    <img class="score-print" src="@/assets/images/print.png" @click="print()">
                 </div>
             </div>
         </div>
@@ -227,7 +172,7 @@ const print = () => {
 </template>
 
 <style lang="scss" scoped>
-.report-page-content {
+.score-page-content {
     .credit-content {
         width: 100%;
         height: 100%;
@@ -257,17 +202,17 @@ const print = () => {
             text-align: center;
         }
 
-        .report-body {
+        .score-body {
             background-color: #f3f3f3;
 
-            .report-container {
+            .score-container {
                 background-color: #fff;
                 width: 720px;
                 padding: 40px 60px;
                 margin: 0 auto;
                 min-height: calc(100vh - 80px);
 
-                .report-title {
+                .score-title {
                     padding: 20px 0 30px;
                     width: 100%;
                     text-align: center;
@@ -319,13 +264,26 @@ const print = () => {
                     margin: 0 auto;
                 }
 
-                .report-print {
+                .score-print {
                     position: fixed;
                     right: 30px;
                     bottom: 30px;
                     width: 60px;
                     height: 60px;
                     cursor: pointer;
+                }
+
+                .radar-change-content {
+                    width: 100%;
+                    display: flex;
+                }
+
+                .child-content {
+                    flex: 1;
+                }
+
+                .pl10 {
+                    padding-left: 10px;
                 }
             }
         }
@@ -339,7 +297,7 @@ const print = () => {
         margin: auto 0mm;
     }
 
-    .report-print {
+    .score-print {
         display: none;
     }
 
@@ -347,7 +305,7 @@ const print = () => {
         display: none !important;
     }
 
-    .report-container {
+    .score-container {
         padding: 0 !important;
     }
 }

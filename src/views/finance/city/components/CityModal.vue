@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-import { createCity, updateCity } from '@/api/finance';
+import { createCity, updateCity } from '@/api/city';
 import type { OperateCityEntity } from '@/types/city';
 
 const props = defineProps({

@@ -3,10 +3,11 @@
  * @FilePath: \dms-web\src\components\SjcTable\types.ts
  * @Author: zys
  * @Date: 2022-11-03 14:59:33
- * @LastEditTime: 2022-11-09 14:35:59
+ * @LastEditTime: 2022-11-18 16:45:13
  * @LastEditors: zys
  * @Reference:
  */
+import type { Recordable } from '@/types/globals';
 import type { TableProps, PaginationProps } from 'element-plus';
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
 

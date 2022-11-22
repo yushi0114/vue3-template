@@ -5,8 +5,7 @@ export const routes: RouteRecordRaw[] = [
         component: New,
         path: '/new/:p',
         meta: {
-            title: '新建产品'
-        }
-    }
+            title: '新建产品',
+        },
+    },
 ];
-

@@ -4,7 +4,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { fetchCityList, deleteCity } from '@/api/finance';
 import type { ICityTable } from '@/types/city';
 
-import CityDetail from './CityDetail.vue';
+import CityDetail from './cityDetail.vue';
 import CityModal from './CityModal.vue';
 
 const dataSource = ref<ICityTable[]>([]);

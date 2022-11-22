@@ -18,8 +18,9 @@ export function dataURLtoBlob(base64Buf: string) {
 /**
  * @description: blob to file
  */
-export function blobToFile(theBlob: Blob, type: any) {
-    (theBlob as any).lastModifiedDate = new Date();
+// eslint-disable-next-line no-undef
+export function blobToFile(theBlob: Blob & { lastModifiedDate?: Date }, type: FilePropertyBag) {
+    theBlob.lastModifiedDate = new Date();
 
     return new File([theBlob], `${new Date().getTime()}.png`, type);
 }

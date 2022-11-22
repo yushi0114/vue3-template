@@ -15,9 +15,7 @@ const { model: listControlModel, clear: clearModel } = useListControlModel({
 });
 
 
-const { request: requestOrgOptions } = useApi(getTopOrgs, {
-    cache: true,
-});
+const { request: requestOrgOptions } = useApi(getTopOrgs, { cache: true });
 
 
 const count = ref(0);

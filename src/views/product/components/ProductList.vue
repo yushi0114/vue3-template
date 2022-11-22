@@ -1,15 +1,7 @@
 <script lang="ts" setup>
 import type { ProductEntity } from '@/types';
-import { List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
+import { List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption, ItemOperate } from '@/components';
 import { SwitchType } from '@/enums';
-
-enum ItemOpt {
-    corps = 1,
-    offline = 2,
-    online = 3,
-    edit = 4,
-    delete = 5,
-}
 
 withDefaults(
     defineProps<{
@@ -20,28 +12,16 @@ withDefaults(
     }
 );
 
-const router = useRouter();
-const route = useRoute();
 const emits = defineEmits<{
-    (e: 'click-detail', detail: ProductEntity): void;
+    (e: ItemOperate.detail, detail: ProductEntity): void;
+    (e: ItemOperate.delete, detail: ProductEntity): void;
+    (e: ItemOperate.edit, detail: ProductEntity): void;
+    (e: ItemOperate.online, detail: ProductEntity): void;
+    (e: ItemOperate.online, detail: ProductEntity): void;
 }>();
 
-function handleOperate(opt: ListOperatorOption<ItemOpt>, pdt: ProductEntity) {
-    if (opt.value === ItemOpt.corps) {
-        router.push(`/product-apply/${route.params.type}?corp=${pdt.id}`);
-    }
-    else if (opt.value === ItemOpt.offline) {
-        //
-    }
-    else if (opt.value === ItemOpt.online) {
-        //
-    }
-    else if (opt.value === ItemOpt.edit) {
-        //
-    }
-    else if (opt.value === ItemOpt.delete) {
-        //
-    }
+function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity) {
+    emits(opt.value as any, pdt);
 }
 </script>
 
@@ -52,22 +32,16 @@ function handleOperate(opt: ListOperatorOption<ItemOpt>, pdt: ProductEntity) {
             :key="item.id"
             class="pdt-list-item"
             :disabled="item.status === SwitchType.off"
-            @operate="(opt) => handleOperate(opt, item)"
             :variables="{
                 isOnline: item.status === SwitchType.on
             }"
             v-slot="{ isOnline }"
-            :operators="[
-                { name: '查看申请企业', value: ItemOpt.corps },
-                { name: item.status === SwitchType.off ? '上架' : '下架', value: item.status === SwitchType.off ? ItemOpt.online : ItemOpt.offline },
-                { name: '编辑', value: ItemOpt.edit, icon: 'ep-edit', disabled: isOnline },
-                { name: '删除', value: ItemOpt.delete, icon: 'ep-delete', disabled: isOnline },
-            ]">
+            >
             <RectLogo :name="item.name" />
             <div class="pdt-list-content" :disabled="isOnline">
                 <div class="pdt-list-info">
                     <div class="pdt-list-item">
-                        <ListField hoverable @click="emits('click-detail', item)">{{ item.name }}</ListField>
+                        <ListField hoverable @click="emits(ItemOperate.detail, item)">{{ item.name }}</ListField>
                         <ListField label="贷款额度" type="desc">{{ item.loanDue }}</ListField>
                     </div>
                     <div class="pdt-list-item">
@@ -90,6 +64,17 @@ function handleOperate(opt: ListOperatorOption<ItemOpt>, pdt: ProductEntity) {
                     </ListProgress>
                 </FlexRow>
             </div>
+
+            <ListOperator
+                :max-out-count="1"
+                @operate="(opt: ListOperatorOption<ItemOperate>) => handleOperate(opt, item)"
+                :operators="[
+                    { name: '查看申请企业', value: ItemOperate.detail },
+                    { name: isOnline ? '下架' : '上架', value: isOnline ? ItemOperate.offline : ItemOperate.online },
+                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit', disabled: isOnline },
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', disabled: isOnline },
+                ]"
+            />
         </ListItem>
     </List>
 </template>

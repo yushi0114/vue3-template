@@ -49,7 +49,6 @@ const getCityList = () => {
         name: searchInput.value,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
-        menuName: 'city',
         sortField: sort.sortField,
         sortType: sort.sortType
     };

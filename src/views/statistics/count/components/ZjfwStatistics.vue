@@ -120,11 +120,8 @@ onMounted(() => {
 
 // 获取首页数据
 const getHomeData = () => {
-    const params = {
-        menuName: 'zjfwcount'
-    };
     isLoading.value = true;
-    return getZfFirstPageData(params)
+    return getZfFirstPageData()
         .then((res) => {
             countForm.registerEnterprise = res.registerEnterprise;
             countForm.financialProduct = res.financialProduct;
@@ -178,8 +175,7 @@ const saveHandle = async({ field } : { field: string }, form: FormInstance | und
                 financeResolve: countForm.financeResolve,
                 registerOrg: countForm.registerOrg,
                 releaseRequirement: countForm.releaseRequirement,
-                propertyFinanceResolve: countForm.propertyFinanceResolve,
-                menuName: 'zjfwcount'
+                propertyFinanceResolve: countForm.propertyFinanceResolve
             };
             return updateZfHomePageStatic(params)
                 .then(() => {
@@ -277,7 +273,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="平台机构数量" prop="registerOrg">
                     <el-input
-                        v-model="countForm.registerOrg"
+                        v-model.number="countForm.registerOrg"
                         placeholder="请输入平台机构数"
                         :disabled="allDisabled.registerOrgDisabled"
                     >
@@ -312,7 +308,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="金融产品" prop="financialProduct">
                     <el-input
-                        v-model="countForm.financialProduct"
+                        v-model.number="countForm.financialProduct"
                         placeholder="请输入金融产品数"
                         :disabled="allDisabled.financialProductDisabled"
                     >
@@ -347,7 +343,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="平台发布需求" prop="releaseRequirement">
                     <el-input
-                        v-model="countForm.releaseRequirement"
+                        v-model.number="countForm.releaseRequirement"
                         placeholder="请输入金融产品数"
                         :disabled="allDisabled.releaseRequirementDisabled"
                     >
@@ -382,7 +378,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="解决融资" prop="financeResolve">
                     <el-input
-                        v-model="countForm.financeResolve"
+                        v-model.number="countForm.financeResolve"
                         placeholder="请输入解决融资数"
                         :disabled="allDisabled.financeResolveDisabled"
                     >
@@ -417,7 +413,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="产权交易金额" prop="propertyFinanceResolve">
                     <el-input
-                        v-model="countForm.propertyFinanceResolve"
+                        v-model.number="countForm.propertyFinanceResolve"
                         placeholder="请输入产权交易金额"
                         :disabled="allDisabled.propertyFinanceResolveDisabled"
                     >

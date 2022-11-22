@@ -4,8 +4,7 @@ import { api } from './http';
 export type GetAllCorpListPayload = {
     corpName: string,
     pageNo: number,
-    pageSize: number,
-    menuName: string
+    pageSize: number
 }
 
 export interface CorpEntity {
@@ -18,8 +17,7 @@ export type GetCityListResponse = CorpEntity[];
 
 export type GetReportPayload = {
     corpName: string,
-    corpCode: string,
-    menuName: string
+    corpCode: string
 }
 
 export type ReportDetailResponse = {

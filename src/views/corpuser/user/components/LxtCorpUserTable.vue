@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { Search } from '@element-plus/icons-vue';
+import { Search, Delete } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import type { CorpUserTable } from '@/types/corpUser';
-import { getBusinessUser, updateBusinessUserStatus } from '@/api/corpUser';
+import { getBusinessUser, updateBusinessUserStatus, deleteBatchUser } from '@/api/corpUser';
 import LxtShopDetail from './LxtShopDetail.vue';
 
 const userList = ref<CorpUserTable[]>([]);
@@ -12,6 +12,7 @@ const userId = ref('');
 const allToogle = reactive({
     loading: true,
     drawerFlag: false,
+    batchDeleteToogle: true
 });
 
 // 排序
@@ -54,7 +55,6 @@ const getCorpUserList = () => {
         searchInput: searchInput.value,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
-        menuName: 'user',
         sortField: sort.sortField,
         sortType: sort.sortType
     };
@@ -102,8 +102,7 @@ const changeUserStatus = (row: CorpUserTable, index: number) => {
     ).then(() => {
         const params = {
             status: row.status,
-            account: row.account,
-            menuName: 'user'
+            account: row.account
         };
 
         return updateBusinessUserStatus(params)
@@ -126,6 +125,70 @@ const changeUserStatus = (row: CorpUserTable, index: number) => {
 const refreshTable = () => {
     searchInput.value = '';
     getCorpUserList();
+};
+
+let userAllId: Array<string> = [];
+const handleSelectionChange = (val: CorpUserTable[]) => {
+    allToogle.batchDeleteToogle = false;
+    userAllId = val.map(item => item.id);
+    if (userAllId.length === 0) {
+        allToogle.batchDeleteToogle = true;
+    }
+};
+
+// 批量删除
+const batchDelete = () => {
+    const params = {
+        idArr: userAllId
+    };
+    ElMessageBox.confirm(
+        '确定删除已勾选的所有用户吗？',
+        '提示',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }
+    ).then(() => {
+        return deleteBatchUser(params)
+            .then(() => {
+                ElMessage({
+                    type: 'success',
+                    message: '删除用户成功',
+                });
+                refreshTable();
+            })
+            .catch(() => {});
+    }).catch(() => {
+        allToogle.batchDeleteToogle = false;
+    });
+};
+
+// 单个删除
+const handleDelete = (row: CorpUserTable) => {
+    const params = {
+        idArr: [row.id]
+    };
+
+    ElMessageBox.confirm(
+        `确定删除用户名为“${row.account}”的用户吗？`,
+        '提示',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }
+    ).then(() => {
+        return deleteBatchUser(params)
+            .then(() => {
+                ElMessage({
+                    type: 'success',
+                    message: '删除用户成功',
+                });
+                refreshTable();
+            })
+            .catch(() => {});
+    }).catch(() => {});
 };
 
 const handleSizeChange = (val: number) => {
@@ -156,6 +219,7 @@ const handleCurrentChange = (val: number) => {
                     <el-button :icon="Search" @click="searchUserList(false)" />
                 </template>
             </el-input>
+            <el-button type="danger" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
         </div>
         <div class="content">
             <el-table
@@ -163,12 +227,17 @@ const handleCurrentChange = (val: number) => {
                 :data="userList"
                 :default-sort="{ prop: 'createTime', order: 'descending' }"
                 @sort-change="handleSortChange"
+                @selection-change="handleSelectionChange"
                 style="width: 100%"
                 :header-cell-style="{
                     color: '#595959',
                     'background-color': '#f3f4f8'
                 }"
             >
+                <el-table-column
+                    type="selection"
+                    width="55">
+                </el-table-column>
                 <el-table-column prop="account" label="用户名">
                     <template #default="scope">
                         <div @click="handleToDetail(scope.row)" class="underline-text">{{ scope.row.account }}</div>
@@ -184,6 +253,17 @@ const handleCurrentChange = (val: number) => {
                             :inactive-value="0"
                             @change="changeUserStatus(scope.row, scope.$index)"
                         ></el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template #default="scope">
+                        <el-button
+                            type="danger"
+                            size="small"
+                            :icon="Delete"
+                            circle
+                            @click="handleDelete(scope.row)"
+                        ></el-button>
                     </template>
                 </el-table-column>
             </el-table>

@@ -6,8 +6,7 @@ export type GetUserListPayload = {
     pageSize: number
     sortField: string
     sortType: string
-    searchInput: string,
-    menuName: string
+    searchInput: string
 }
 
 export interface UserEntity {
@@ -26,8 +25,7 @@ export interface ListResponse<T = any> {
 export type GetUserListResponse = ListResponse<UserEntity>
 
 export type updateStatusPayload = {
-    account: string,
-    menuName: string,
+    account: string
     status: number
 }
 
@@ -43,7 +41,6 @@ export type GetShopCartInfoPayload = {
     searchInput: string,
 };
 
-
 export interface ShopEntity {
     guarantyStyle: string,
     loanDue: string,
@@ -56,6 +53,10 @@ export interface ShopEntity {
 }
 
 export type GetShopCartInfoResponse = ListResponse<ShopEntity>
+
+export type DeleteBatchUserPayload = {
+    idArr: Array<string>
+};
 
 // 查询企业用户-用户管理列表页(辽信通)
 export function getBusinessUser(params: GetUserListPayload): Promise<GetUserListResponse>{
@@ -93,4 +94,14 @@ export function getZfShopCartInfo(params: GetShopCartInfoPayload): Promise<GetSh
     return api.get(`${DMS_DOMAIN}/v1/zjfw/Cart/products`, {
         params
     });
+}
+
+// 批量删除用户(辽信通)
+export function deleteBatchUser(data: DeleteBatchUserPayload) {
+    return api.post(`${DMS_DOMAIN}/v1/del/corp/user`, data);
+}
+
+// 批量删除用户(市综服)
+export function deleteZfBatchUser(data: DeleteBatchUserPayload) {
+    return api.post(`${DMS_DOMAIN}/v1/zjfw/del/corp/user`, data);
 }

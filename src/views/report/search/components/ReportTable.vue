@@ -22,8 +22,7 @@ const getCorpList = () => {
     const params = {
         corpName: searchInput.value,
         pageNo: page.currentPage,
-        pageSize: page.pageSize,
-        menuName: 'requirement'
+        pageSize: page.pageSize
     };
 
     allToogle.loading = true;
@@ -88,9 +87,22 @@ function scrollBehavior(e: any) {
     }
 }
 
+// 防抖
+const debounce = (fn: Function, time?: number) => {
+    let timer: any;
+    return function(e: any) {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn(e);
+        }, time);
+    };
+};
+
 onMounted(() => {
     // 挂载
-    TableRef.value && TableRef.value.$refs.bodyWrapper.addEventListener('mousewheel', scrollBehavior);
+    TableRef.value && TableRef.value.$refs.bodyWrapper.addEventListener('mousewheel', debounce(scrollBehavior, 1000));
 });
 
 onUnmounted(() => {

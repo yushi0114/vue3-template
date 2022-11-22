@@ -87,11 +87,8 @@ onMounted(() => {
 
 // 获取首页数据
 const getHomeData = () => {
-    const params = {
-        menuName: 'count'
-    };
     isLoading.value = true;
-    return getFirstPageData(params)
+    return getFirstPageData()
         .then((res) => {
             countForm.registerCorp = res.registerEnterprise;
             countForm.financeProduct = res.financialProduct;
@@ -133,8 +130,7 @@ const saveHandle = async({ field } : { field: string }, form: FormInstance | und
                 registerEnterprise: countForm.registerCorp,
                 financialProduct: countForm.financeProduct,
                 financeSuccess: countForm.successFinance,
-                financeResolve: countForm.solveFinance,
-                menuName: 'count'
+                financeResolve: countForm.solveFinance
             };
             return updateHomePageStatic(params)
                 .then(() => {
@@ -220,7 +216,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="金融产品" prop="financeProduct">
                     <el-input
-                        v-model="countForm.financeProduct"
+                        v-model.number="countForm.financeProduct"
                         placeholder="请输入金融产品数"
                         :disabled="allDisabled.financeProductDisabled"
                     >
@@ -255,7 +251,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="成功融资" prop="successFinance">
                     <el-input
-                        v-model="countForm.successFinance"
+                        v-model.number="countForm.successFinance"
                         placeholder="请输入金融产品数"
                         :disabled="allDisabled.successFinanceDisabled"
                     >
@@ -290,7 +286,7 @@ const cancelHandle = ({ field } : { field: string }) => {
             <div class="formItem">
                 <el-form-item label="解决融资" prop="solveFinance">
                     <el-input
-                        v-model="countForm.solveFinance"
+                        v-model.number="countForm.solveFinance"
                         placeholder="请输入解决融资数"
                         :disabled="allDisabled.solveFinanceDisabled"
                     >

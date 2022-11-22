@@ -54,7 +54,7 @@ withDefaults(
 }
 
 .cas-title {
-    padding: $gap-xs/2 0;
+    padding: calc($gap-xs/2) 0;
 }
 
 .cas-row {

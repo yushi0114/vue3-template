@@ -62,7 +62,7 @@ function handleClick(opt: ListOperatorOption) {
 <style lang="scss">
 .i-list-operator {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   gap: $gap-xs;
   position: absolute;

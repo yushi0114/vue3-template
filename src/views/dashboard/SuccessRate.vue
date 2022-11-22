@@ -1,18 +1,6 @@
 <script lang="ts" setup>
-import * as echarts from 'echarts';
+import Charts from './Charts.vue';
 import type { SuccessRateEntity } from '@/types/dashboard';
-import { useSidebar } from '@/composables';
-
-const { expand } = useSidebar();
-
-watch(
-    expand,
-    () => {
-        setTimeout(() => {
-            resizeHandler();
-        }, 150);
-    }
-);
 
 const props = withDefaults(
     defineProps<{
@@ -37,10 +25,7 @@ watch(
     { deep: true }
 );
 
-const chartDomRef = ref<HTMLElement>();
-let chartInstance: echarts.ECharts;
-
-const options = {
+const options = ref({
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -85,34 +70,14 @@ const options = {
             data: [] as number[]
         }
     ]
-};
+});
 
 const loadOptions = () => {
-    options.xAxis.data = props.data.reqSuccessRate.map(item => item.month);
-    options.series[0].data = props.data.reqSuccessRate.map(item => item.per);
-    options.series[1].data = props.data.reqEzjfwSuccessRate.map(item => item.per);
-    chartInstance.setOption(options, true);
+    options.value.xAxis.data = props.data.reqSuccessRate.map(item => item.month);
+    options.value.series[0].data = props.data.reqSuccessRate.map(item => item.per);
+    options.value.series[1].data = props.data.reqEzjfwSuccessRate.map(item => item.per);
 };
 
-const resizeHandler = () => {
-    loadOptions();
-    chartInstance.resize();
-};
-
-const initChart = () => {
-    chartInstance = echarts.init(chartDomRef.value!);
-    loadOptions();
-    window.addEventListener('resize', resizeHandler);
-};
-
-onMounted(() => {
-    initChart();
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('resize', resizeHandler);
-    chartInstance.dispose();
-});
 </script>
 
 <template>
@@ -124,7 +89,7 @@ onBeforeUnmount(() => {
             /
             {{ data.reqEzjfwSuccessRate[data.reqEzjfwSuccessRate.length - 1]?.per }}%
         </div>
-        <div class="chart-wrapper" ref="chartDomRef"></div>
+        <Charts :options="options" :height="209" />
     </el-card>
 </template>
 
@@ -146,10 +111,5 @@ onBeforeUnmount(() => {
     line-height: 38px;
     color: #1e1e1e;
     font-size: 24px;
-}
-
-.chart-wrapper {
-    width: 100%;
-    height: 209px;
 }
 </style>

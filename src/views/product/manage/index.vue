@@ -81,7 +81,7 @@ onBeforeMount(() => {
         <Text>
         </Text>
 
-        <ProductList :list="list" @click-detail="goDetail" />
+        <ProductList :list="list" @item-detail="goDetail" />
 
         <FlexRow horizontal="end">
             <el-pagination

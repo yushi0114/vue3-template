@@ -304,3 +304,21 @@ export const productRecommandTypeOptions: PlainOption<ProductRecommandType>[] = 
     { name: productRecommandTypeMap[ProductRecommandType.secondary], value: ProductRecommandType.secondary },
 ];
 // #endregion
+
+
+// #region 贷款期限
+export enum LoanTermType {
+    f1t6 = 0,
+    f6t12 = 1,
+    f12t24 = 2,
+    over24 = 3,
+}
+
+
+export const loanTermTypeMap: Record<LoanTermType, string> = Object.freeze({
+    [LoanTermType.f1t6]: '1-6个月',
+    [LoanTermType.f6t12]: '6-12个月',
+    [LoanTermType.f12t24]: '12-24个月',
+    [LoanTermType.over24]: '24个月以上',
+});
+// #endregion

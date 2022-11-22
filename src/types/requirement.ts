@@ -1,4 +1,5 @@
-import type { AcceptProgressType, ExpectTimeType } from '@/enums';
+import type { AcceptProgressType, ExpectTimeType, LoanTermType } from '@/enums';
+import type { OrgAcceptProgress } from './org';
 
 export interface RequirementEntity {
     barCode: number
@@ -13,6 +14,13 @@ export interface RequirementEntity {
     id: string
     progress: AcceptProgressType
     updateTime: string
+    dataFirst: OrgAcceptProgress[]
+    dataSecond: OrgAcceptProgress[]
+    firstEnd: boolean
+    loanAmount: string
+    loanRate: string
+    loanTerm: LoanTermType
+    productName: string
 }
 
 export interface AgileReqEntity extends RequirementEntity {

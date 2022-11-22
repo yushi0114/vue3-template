@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ProductRequirementEntity } from '@/types';
-import { List, ListField, ListItem, ListProgress, RectLogo } from '@/components';
+import { ItemOperate, List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
 import { AcceptProgressType, expectTimeTypeMap, requirmentProgressTypeMap } from '@/enums';
 
 withDefaults(
@@ -13,7 +13,7 @@ withDefaults(
 );
 
 const emits = defineEmits<{
-    (e: 'click-detail', detail: ProductRequirementEntity): void;
+    (e: ItemOperate.delete, detail: ProductRequirementEntity): void;
 }>();
 
 const colorStatusMap: Record<AcceptProgressType, string> = {
@@ -24,6 +24,11 @@ const colorStatusMap: Record<AcceptProgressType, string> = {
     [AcceptProgressType.refuse]: 'exception',
     [AcceptProgressType.undoIn48]: 'warning'
 };
+
+function handleOperate(opt: ListOperatorOption<ItemOperate>, item: ProductRequirementEntity) {
+    if (opt.disabled) return;
+    emits(opt.value as any, item);
+}
 </script>
 
 <template>
@@ -36,7 +41,7 @@ const colorStatusMap: Record<AcceptProgressType, string> = {
                         <ListField
                             label="企业名称"
                             hoverable
-                            @click="emits('click-detail', item)"
+                            @click="emits(ItemOperate.detail, item)"
                         >{{ item.corpName }}</ListField>
                         <ListField label="期望融资金额" type="desc">{{ item.expectFinancing }}万元</ListField>
                     </div>
@@ -63,6 +68,13 @@ const colorStatusMap: Record<AcceptProgressType, string> = {
                     </ListProgress>
                 </FlexRow>
             </div>
+
+            <ListOperator
+                @operate="(opt: ListOperatorOption<ItemOperate>) => handleOperate(opt, item)"
+                :operators="[
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', disabled: item.progress !== 0 },
+                ]"
+            />
         </ListItem>
     </List>
 </template>

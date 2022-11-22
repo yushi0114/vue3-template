@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { AcceptProgressType, expectTimeTypeMap, requirmentProgressTypeMap } from '@/enums';
 import type { RequirementEntity } from '@/types';
-import { List, ListField, ListItem, ListProgress, RectLogo } from '@/components';
+import { ItemOperate, List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
+
 
 withDefaults(
     defineProps<{
@@ -13,7 +14,8 @@ withDefaults(
 );
 
 const emits = defineEmits<{
-    (e: 'click-detail', detail: RequirementEntity): void;
+    (e: ItemOperate.detail, detail: RequirementEntity): void;
+    (e: ItemOperate.delete, detail: RequirementEntity): void;
 }>();
 
 const colorStatusMap: Record<AcceptProgressType, string> = {
@@ -24,16 +26,21 @@ const colorStatusMap: Record<AcceptProgressType, string> = {
     [AcceptProgressType.refuse]: 'exception',
     [AcceptProgressType.undoIn48]: 'warning'
 };
+
+function handleOperate(opt: ListOperatorOption<ItemOperate>, item: RequirementEntity) {
+    if (opt.disabled) return;
+    emits(ItemOperate.delete as any, item);
+}
 </script>
 
 <template>
   <List class="req-list">
-        <ListItem v-for="item in list" :key="item.id" class="req-list-item">
+        <ListItem v-for="(item, i) in list" :key="i" class="req-list-item">
             <RectLogo :name="item.corpName" />
             <div class="req-list-content">
                 <div class="req-list-info">
                     <div class="req-list-item">
-                        <ListField label="企业名称" hoverable @click="emits('click-detail', item)">{{ item.corpName }}</ListField>
+                        <ListField label="企业名称" hoverable @click="emits(ItemOperate.detail, item)">{{ item.corpName }}</ListField>
                         <ListField label="联系人" type="desc">{{ item.contactPerson }}</ListField>
                     </div>
                     <div class="req-list-item">
@@ -53,6 +60,13 @@ const colorStatusMap: Record<AcceptProgressType, string> = {
                     {{ requirmentProgressTypeMap[item.progress] }}
                 </ListProgress>
             </div>
+
+            <ListOperator
+                @operate="(opt: ListOperatorOption<ItemOperate>) => handleOperate(opt, item)"
+                :operators="[
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', disabled: item.progress !== 0 },
+                ]"
+            />
         </ListItem>
     </List>
 </template>

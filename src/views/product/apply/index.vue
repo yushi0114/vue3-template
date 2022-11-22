@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { acceptProgressTypeOptions, PlatformType } from '@/enums';
-import { getProductReqs } from '@/api';
-import type { ProductRequirementEntity } from '@/types';
+import { getProductOptions, getProductReqs, getTopOrgs } from '@/api';
+import type { PlainOption, ProductRequirementEntity } from '@/types';
 import { ApplyList } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel } from '@/composables';
+import { useListControlModel, useApi } from '@/composables';
 
 const route = useRoute();
 const platform = ref(Number(route.params.type));
@@ -13,6 +13,11 @@ const { model: listControlModel, clear: clearModel } = useListControlModel({
 });
 const count = ref(0);
 const list = ref<ProductRequirementEntity[]>([]);
+const topOrgOptions = ref<PlainOption[]>([]);
+const productOptions = ref<PlainOption[]>([]);
+
+const { request: requestOrgOptions } = useApi(getTopOrgs, { cache: true });
+const { request: requestPdtOptions } = useApi(getProductOptions, { cache: true });
 
 function getList() {
     getProductReqs(Object.assign({ platform: platform.value }, listControlModel))
@@ -42,6 +47,16 @@ function goDetail(req: ProductRequirementEntity) {
     console.log(req);
 }
 
+onBeforeMount(() => {
+    requestOrgOptions()
+        .then(res => topOrgOptions.value = res.map(({ id, orgName }) => ({ name: orgName, value: id })));
+
+    requestPdtOptions({ platform: platform.value })
+        .then(res => {
+            productOptions.value = res.map(({ id, name }) => ({ name, value: id }));
+        });
+});
+
 onMounted(() => {
     getList();
 });
@@ -52,22 +67,29 @@ onMounted(() => {
     <PagePanel>
         <Board class="product-apply">
             <PlatformTab @tab-change="handleTabChange" />
-            <ListQueryControl v-model="listControlModel" :searchConfig="{
-                label: '请输入产品名称',
-                field: 'searchInput'
-            }" :filterOptionsConfigs="[
-    // { label: '机构名称', field: 'org', options: [] },
-    { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
-]" :sortConfigs="[
-    { label: '申请时间', field: 'createTime', },
-]" :dateRangeConfig="{
-    label: '申请时间',
-    field: '',
-    options: [
-        { name: '开始月份', value: 'startTime', },
-        { name: '结束月份', value: 'endTime', },
-    ]
-}">
+            <ListQueryControl
+                v-model="listControlModel"
+                :searchConfig="{
+                    label: '请输入产品名称',
+                    field: 'searchInput'
+                }"
+                :filterOptionsConfigs="[
+                    { label: '产品名称', field: 'orgId', options: productOptions },
+                    { label: '机构名称', field: 'orgId', options: topOrgOptions },
+                    { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
+                ]"
+                :sortConfigs="[
+                    { label: '申请时间', field: 'createTime', },
+                ]"
+                :dateRangeConfig="{
+                    label: '申请时间',
+                    field: '',
+                    options: [
+                        { name: '开始月份', value: 'startTime', },
+                        { name: '结束月份', value: 'endTime', },
+                    ]
+                }"
+            >
                 <template v-slot:search-rest>
                     <RouterLink :to="`${route.path}/new/1`">
                         <el-button type="primary">新建</el-button>

@@ -183,7 +183,7 @@ onUnmounted(() => {
         }
         .table-pagination {
             margin-top: 20px;
-            justify-content: end;
+            justify-content: flex-end;
         }
     }
 }

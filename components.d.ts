@@ -76,8 +76,6 @@ declare module '@vue/runtime-core' {
     IEpFold: typeof import('~icons/ep/fold')['default']
     IEpMoreFilled: typeof import('~icons/ep/more-filled')['default']
     IEpPlus: typeof import('~icons/ep/plus')['default']
-    IEpPush: typeof import('~icons/ep/push')['default']
-    IEpSave: typeof import('~icons/ep/save')['default']
     IEpSell: typeof import('~icons/ep/sell')['default']
     IEpSoldOut: typeof import('~icons/ep/sold-out')['default']
     IEpSort: typeof import('~icons/ep/sort')['default']

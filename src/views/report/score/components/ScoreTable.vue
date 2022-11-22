@@ -14,7 +14,7 @@ const allToogle = reactive({
 // 分页配置项
 const page = reactive({
     currentPage: 1,
-    pageSize: 10
+    pageSize: 15
 });
 
 // 获取企业列表
@@ -132,7 +132,7 @@ onUnmounted(() => {
             <el-table
                 v-loading="allToogle.loading"
                 :data="dataSource"
-                style="width: 100%; height: 550px;"
+                style="width: 100%; height: 650px;"
                 :header-cell-style="{
                     color: '#595959',
                     'background-color': '#f3f4f8'

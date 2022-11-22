@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { TabsPaneContext } from 'element-plus';
 import { TAB_LIST } from '../constants';
 import ArticleList from './ArticleList.vue';
 import { ARTICLE_MODULE, ARTICLE_STATUS } from '@/enums';
@@ -15,10 +14,11 @@ const props = withDefaults(
     }
 );
 
+const emits = defineEmits<{
+    (e: 'tab-change', v: ARTICLE_STATUS): void;
+}>();
+
 const activeName = ref(props.tabValue);
-const handleTabClick = (tab: TabsPaneContext, event: Event) => {
-    console.log(tab, event);
-};
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const handleTabClick = (tab: TabsPaneContext, event: Event) => {
         <el-tabs
             class="h-full flex flex-col"
             v-model="activeName"
-            @tab-click="handleTabClick">
+            @tab-change="(name: ARTICLE_STATUS) => emits('tab-change', name)">
             <el-tab-pane
                 class="h-full"
                 v-for="tab in TAB_LIST"

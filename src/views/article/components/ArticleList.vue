@@ -134,81 +134,85 @@ watch(listControlModel, () => {
                         <div class="flex-1">{{ getDate(scope.row.publishDate).yearAndMonth }}</div>
                     </div>
                 </template>
-                <template #content="{ scope }">
+                <template #append="{ props }">
                     <el-row>
                         <el-col
                             :span="24"
                             class="flex items-center gap-2">
                             <list-field
+                                truncate
                                 hoverable
-                                @click="handleToDetail({ row: scope.row, status: params.status })">
-                                {{ scope.row.title }}
+                                @click="handleToDetail({ row: props.row, status: params.status })">
+                                {{ props.row.title }}
                             </list-field>
                             <el-tag
-                                :type="ARTICLE_STATUS_TAG_MAP[scope.row.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
+                                :type="ARTICLE_STATUS_TAG_MAP[props.row.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
                                 {{
-                                    ARTICLE_STATUS_TAG_MAP[scope.row.status as keyof typeof ARTICLE_STATUS_TAG_MAP]
+                                    ARTICLE_STATUS_TAG_MAP[props.row.status as keyof typeof ARTICLE_STATUS_TAG_MAP]
                                         .label
                                 }}
                             </el-tag>
                             <el-tag
-                                v-if="isNewsModule && scope.row.hotNews === NEWS_TYPE.HOT"
+                                v-if="isNewsModule && props.row.hotNews === NEWS_TYPE.HOT"
                                 type="danger">
                                 热点新闻
                             </el-tag>
                         </el-col>
-                        <el-col>
+                        <el-col
+                            :span="24"
+                            class="flex">
                             <list-field
+                                truncate
                                 label="摘要"
                                 type="desc">
-                                {{ scope.row.summary }}
+                                {{ props.row.summary }}
                             </list-field>
                         </el-col>
-                        <template v-if="scope.row.status === ARTICLE_STATUS.PUBLISHED">
+                        <template v-if="props.row.status === ARTICLE_STATUS.PUBLISHED">
                             <el-col :span="8">
                                 <list-field
                                     label="发布者"
                                     type="desc">
-                                    {{ scope.row.updateBy }}
+                                    {{ props.row.updateBy }}
                                 </list-field>
                             </el-col>
                             <el-col :span="16">
                                 <list-field
                                     label="发布日期"
                                     type="desc">
-                                    {{ scope.row.createTime }}
+                                    {{ props.row.createTime }}
                                 </list-field>
                             </el-col>
                         </template>
-                        <template v-if="scope.row.status === ARTICLE_STATUS.OFFLINE">
+                        <template v-if="props.row.status === ARTICLE_STATUS.OFFLINE">
                             <el-col :span="8">
                                 <list-field
                                     label="下线者"
                                     type="desc">
-                                    {{ scope.row.updateBy }}
+                                    {{ props.row.updateBy }}
                                 </list-field>
                             </el-col>
                             <el-col :span="16">
                                 <list-field
                                     label="下线时间"
                                     type="desc">
-                                    {{ scope.row.updateTime }}
+                                    {{ props.row.updateTime }}
                                 </list-field>
                             </el-col>
                         </template>
-                        <template v-if="scope.row.status === ARTICLE_STATUS.DRAFT">
+                        <template v-if="props.row.status === ARTICLE_STATUS.DRAFT">
                             <el-col :span="8">
                                 <list-field
                                     label="更新者"
                                     type="desc">
-                                    {{ scope.row.updateBy }}
+                                    {{ props.row.updateBy }}
                                 </list-field>
                             </el-col>
                             <el-col :span="16">
                                 <list-field
                                     label="更新时间"
                                     type="desc">
-                                    {{ scope.row.updateTime }}
+                                    {{ props.row.updateTime }}
                                 </list-field>
                             </el-col>
                         </template>

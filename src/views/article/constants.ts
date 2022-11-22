@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\constants.ts
  * @Author: zys
  * @Date: 2022-11-14 11:26:22
- * @LastEditTime: 2022-11-18 16:20:58
+ * @LastEditTime: 2022-11-22 11:52:37
  * @LastEditors: zys
  * @Reference:
  */
@@ -122,11 +122,6 @@ export const TABLE_COLUMNS = [
         keyName: 'thumbnail',
         slotName: 'thumbnail',
         width: 100,
-    },
-    {
-        keyName: 'title',
-        label: '内容',
-        slotName: 'content',
     },
 ];
 
@@ -319,28 +314,6 @@ export const ARTICLE_FORM_MAP: { [key in ARTICLE_TYPE_LABEL]: DefItem[] } = {
             ], // 验证
         },
         {
-            type: FormType.UPLOAD,
-            label: '新闻缩略图',
-            keyName: 'thumbnail',
-            disabled: false,
-            span: 8, // 参考el-col
-            style: { height: '63px' },
-            uploadObj: {
-                fileType: FILE_TYPE.IMAGE,
-                limit: 1, // 上传长度限制
-                hideUpload: false, // 是否隐藏上传框
-                listType: 'picture',
-                showFileList: true,
-                tips: '只能上传jpg/jpeg/png文件，且不超过2MB',
-            },
-            rules: [
-                {
-                    required: true,
-                    message: '新闻缩略图不能为空',
-                },
-            ],
-        },
-        {
             type: FormType.INPUT,
             label: '信息来源', // 字段
             keyName: 'origin', // 字段名
@@ -375,25 +348,6 @@ export const ARTICLE_FORM_MAP: { [key in ARTICLE_TYPE_LABEL]: DefItem[] } = {
                     required: true,
                     message: '发布日期不能为空',
                     trigger: 'blur',
-                },
-            ],
-        },
-        {
-            type: FormType.RADIO,
-            label: '热点新闻',
-            keyName: 'hotNews',
-            placeholder: '请选择',
-            span: 8, // 参考el-col
-            disabled: false,
-            radioOptions: [
-                { label: '是', value: 1 },
-                { label: '否', value: 0 },
-            ],
-            rules: [
-                {
-                    required: true,
-                    message: '热点新闻不能为空',
-                    trigger: ['blur', 'change'],
                 },
             ],
         },

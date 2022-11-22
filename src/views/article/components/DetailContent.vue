@@ -23,11 +23,31 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
 <template>
     <div class="detail">
         <template v-if="data.id">
-            <div class="text-center text-2xl">{{ data.title }}</div>
-            <div class="text-center">{{ data.subTitle }}</div>
+            <Text
+                class="px-10"
+                size="xl"
+                :bold="true"
+                truncate
+                block
+                align="center">
+                {{ data.title }}
+            </Text>
+            <Text
+                class="px-30"
+                size="lg"
+                truncate
+                block
+                align="center">
+                {{ data.subTitle }}
+            </Text>
             <div class="flex-between px-20">
-                <div>信息来源：{{ data.origin }}</div>
-                <div>发布日期：{{ data.publishDate }}</div>
+                <ListField
+                    class="flex-1 min-w-0"
+                    label="信息来源"
+                    truncate
+                    >{{ data.origin }}</ListField
+                >
+                <ListField label="发布日期">{{ data.publishDate }}</ListField>
             </div>
             <el-divider class="!border-t-$el-color-error"></el-divider>
             <sjc-editor

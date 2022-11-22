@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\editor\useEditor.ts
  * @Author: zys
  * @Date: 2022-11-17 15:19:05
- * @LastEditTime: 2022-11-21 15:45:38
+ * @LastEditTime: 2022-11-22 16:02:43
  * @LastEditors: zys
  * @Reference:
  */
@@ -154,7 +154,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 // 用户自定义上传
                 async customUpload(file: File, insertFn: InsertAttachmentFnType) {
                     // file 即选中的文件
-                    if (!beforeUploadFile(file, FILE_TYPE.VIDEO)) {
+                    if (!beforeUploadFile(file)) {
                         return false;
                     }
                     editorLoading.value = true;
@@ -197,14 +197,18 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
     const isFullScreen = ref(false);
     const TEXT_LENGTH = ref(0);
 
-    const beforeUploadFile = (file: File, type: FILE_TYPE) => {
+    const beforeUploadFile = (file: File, type?: FILE_TYPE) => {
         const FILE_NAME_SUFFIX = checkFileType(file.name);
-        if (FILE_NAME_SUFFIX !== type) {
+        if (!FILE_NAME_SUFFIX) {
+            ElMessage.error('上传的文件格式不支持，请重新上传！');
+            return false;
+        }
+        if (type && FILE_NAME_SUFFIX !== type) {
             ElMessage.error(FILE_TYPE_ERROR_MAP[type]);
             return false;
         }
         if (!file.size || file.size > FILE_TYPE_LIMIT_MAP[FILE_NAME_SUFFIX]) {
-            ElMessage.error(FILE_SIZE_ERROR_MAP[type]);
+            ElMessage.error(FILE_SIZE_ERROR_MAP[FILE_NAME_SUFFIX]);
             return false;
         }
         return true;
@@ -319,7 +323,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 return false;
             }
             // TODO：此处可以将图片上传到自己的服务器上
-            const promise: Promise<any>[] = rtfImageData.map(async(rtfImage) => {
+            const promise: Promise<any>[] = rtfImageData.map(async (rtfImage) => {
                 const file = dataURLToFile(`data:${rtfImage.type};base64,${_convertHexToBase64(rtfImage.hex)}`);
                 const [, url = ''] = await to(editorConfig.MENU_CONF!.uploadImage.customUpload(file, () => {}));
                 return url || '';
@@ -350,7 +354,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
         const deleteImageList = uploadImgList.value.filter((item) => !imageSrcList.includes(item));
         const deleteVideoList = uploadVideoList.value.filter((item) => !videoSrcList.includes(item));
         const deleteAttachmentList = uploadAttachmentList.value.filter((item) => !attachmentSrcList.includes(item));
-        deleteImageList.forEach(async(item) => {
+        deleteImageList.forEach(async (item) => {
             const { data = false } = await API_MAP[ARTICLE_API.IS_THUMBNAIL]({ id: getFileIdByUrl(item) });
             if (data) {
                 return false;
@@ -365,7 +369,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 })
                 .catch(() => {});
         });
-        deleteVideoList.forEach(async(item) => {
+        deleteVideoList.forEach(async (item) => {
             const { data: isExist = false } = await API_MAP[ARTICLE_API.IS_EXIST_FILE]({ id: getFileIdByUrl(item) });
             if (!isExist) {
                 return false;
@@ -376,7 +380,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 })
                 .catch(() => {});
         });
-        deleteAttachmentList.forEach(async(item) => {
+        deleteAttachmentList.forEach(async (item) => {
             const { data: isExist = false } = await API_MAP[ARTICLE_API.IS_EXIST_FILE]({ id: getFileIdByUrl(item) });
             if (!isExist) {
                 return false;

@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\file\util.ts
  * @Author: zys
  * @Date: 2022-11-15 17:15:55
- * @LastEditTime: 2022-11-18 11:41:50
+ * @LastEditTime: 2022-11-22 16:53:46
  * @LastEditors: zys
  * @Reference:
  */
@@ -45,4 +45,22 @@ export const getUrlListFromText = (string = ''): string[] => {
     const srcList = string.match(imgVideoSrcRegExp) ?? [];
     const unitSrcList = [...new Set(srcList)];
     return unitSrcList.filter((item) => item.includes(FILE_SERVER.LXT) || item.includes(FILE_SERVER.ZJFW));
+};
+
+// 替换a标签的链接
+function replaceCallback(m: any, g1: string) {
+    return `<a href="/leave?target=${g1}">`;
+}
+/**
+ * 替换富文本中的链接
+ * 将富文本中的不是本站的链接前追加 "/clib/leave?target="
+ * @param    html  传入富文本
+ * @returns  html  处理后的富文本
+ */
+export const replaceHTMLHref = (html: string) => {
+    /**
+     * 替换链接
+     */
+    const result = html.replace(/<a\s*href="(.*?)"\s*?>/gms, replaceCallback);
+    return result;
 };

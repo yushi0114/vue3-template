@@ -149,7 +149,7 @@ onMounted(() => {
                     @click="back"
                     ><i-ep-back></i-ep-back>返回</el-button
                 >
-                <div v-if="state.laseUpdateTime">最近一次编辑时间：{{ state.laseUpdateTime }}</div>
+                <div class="text-$el-text-color-secondary" v-if="state.laseUpdateTime">最近一次编辑时间：{{ state.laseUpdateTime }}</div>
             </div>
 
             <div>

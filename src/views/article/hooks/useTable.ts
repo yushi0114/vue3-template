@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-11-22 10:40:51
+ * @LastEditTime: 2022-11-22 11:47:08
  * @LastEditors: zys
  * @Reference:
  */
@@ -134,6 +134,7 @@ export const useTable = (
     // 表格配置项
     const tableConfig = reactive({
         showHandler: true,
+        showAppend: true,
         handlerConfig: {
             width: 120,
         },

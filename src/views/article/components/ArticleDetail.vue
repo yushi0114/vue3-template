@@ -8,7 +8,7 @@ import { ARTICLE_MODULE, ARTICLE_STATUS, ARTICLE_API, ARTICLE_PAGE } from '@/enu
 import { useApi } from '@/composables';
 import type { ICommonResult } from '@/api/types';
 import type { NewsItem } from '@/types';
-import { useTable, useArticleDetail } from '../hooks';
+import { useApiManage, useArticleDetail } from '../hooks';
 import { isArray } from 'lodash';
 const { back } = useRouter();
 
@@ -17,7 +17,7 @@ const props = defineProps<{
     module: ARTICLE_MODULE;
 }>();
 
-const { ARTICLE_API_MAP } = useTable(tabItem!, props.module, ARTICLE_PAGE.DETAIL);
+const ARTICLE_API_MAP = useApiManage(props.module);
 
 // eslint-disable-next-line no-undef
 const state: { data: (ICommonResult & NewsItem) | Recordable } = reactive({
@@ -40,7 +40,7 @@ const { loading: loadingDetail, request: getArticleDetail } = useApi(
     }
 );
 
-const publish = async() => {
+const publish = async () => {
     await detailListMap.value
         .get(tabItem?.value)
         ._updateNewsStatus({ id: activeId.value, status: ARTICLE_STATUS.PUBLISHED });
@@ -66,16 +66,18 @@ onBeforeMount(() => {
 
 <template>
     <div class="article-detail">
-        <el-row
-            :gutter="16"
-            class="!mx-0 h-full">
-            <el-col :span="6">
-                <el-card class="h-full">
+        <div class="h-full flex gap-2">
+            <div class="w-350px">
+                <el-card
+                    class="h-full"
+                    :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
                     <article-wrapper
+                        class="h-full"
                         :module="module"
                         :tab-value="tabItem?.value">
                         <template #default="{ tab, module }">
                             <detail-left-list
+                                class="h-full flex flex-col"
                                 :ref="(el) => bindDetailListRef(el, tab.value)"
                                 v-model:active-id="activeId"
                                 :tab="tab"
@@ -85,21 +87,24 @@ onBeforeMount(() => {
                         </template>
                     </article-wrapper>
                 </el-card>
-            </el-col>
+            </div>
 
-            <el-col :span="18">
-                <el-card class="h-full">
+            <div class="flex-1">
+                <el-card
+                    class="h-full overflow-y-auto"
+                    :body-style="{ height: '100%', 'box-sizing': 'border-box', 'overflow-y': 'auto' }">
                     <div class="flex justify-between">
                         <el-button
                             class="mr-2"
-                            @click="back"
-                            >返回</el-button
+                            @click="back">
+                            <i-ep-back></i-ep-back>
+                            返回</el-button
                         >
                         <el-button
                             v-if="state.data.id && state.data.status !== ARTICLE_STATUS.PUBLISHED"
                             type="primary"
                             @click="publish"
-                            >发布</el-button
+                            ><span class="i-ic-sharp-publish"></span>发布</el-button
                         >
                     </div>
                     <detail-content
@@ -107,8 +112,8 @@ onBeforeMount(() => {
                         :data="state.data"
                         :module="module"></detail-content>
                 </el-card>
-            </el-col>
-        </el-row>
+            </div>
+        </div>
     </div>
 </template>
 

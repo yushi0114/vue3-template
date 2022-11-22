@@ -23,7 +23,7 @@
                                 :placeholder="item.placeholder || ''"
                                 :disabled="item.disabled || false"
                                 :readonly="item.readonly || false"
-                                :show-word-limit="item.showWordLimit || false"
+                                :show-word-limit="item.showWordLimit ?? true"
                                 :maxlength="item.maxlength || 255"
                                 :style="item.style || { width: '100%' }" />
 

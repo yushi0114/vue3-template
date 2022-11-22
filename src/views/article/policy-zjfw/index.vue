@@ -13,6 +13,6 @@ import { ARTICLE_MODULE } from '../../../enums';
 
 <style lang="postcss">
 .publish {
-    @apply;
+    @apply  h-full;
 }
 </style>

@@ -3,11 +3,11 @@
  * @FilePath: \dms-web\src\components\editor\useEditor.ts
  * @Author: zys
  * @Date: 2022-11-17 15:19:05
- * @LastEditTime: 2022-11-18 11:50:57
+ * @LastEditTime: 2022-11-21 15:45:38
  * @LastEditors: zys
  * @Reference:
  */
-import type { IDomEditor } from '@wangeditor/editor';
+import type { IDomEditor, IEditorConfig } from '@wangeditor/editor';
 
 import {
     customParseLinkUrl,
@@ -38,15 +38,16 @@ import { useApiManage } from './useApiManage';
 type MessageType = 'success' | 'warning' | 'info' | 'error';
 type EditorProps = {
     modelValue: string;
-    readOnly: boolean;
-    fileServer: FILE_SERVER;
+    maxTextLength: number;
+    readOnly?: boolean;
+    fileServer?: FILE_SERVER;
 };
 type EditorEmits = {
     (e: 'update:modelValue', value: string): void;
 };
 
 export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
-    const API_MAP = useApiManage(props.fileServer);
+    const API_MAP = useApiManage(props.fileServer!);
     const uploadImgList = ref<string[]>([]);
     const uploadVideoList = ref<string[]>([]);
     const uploadAttachmentList = ref<string[]>([]);
@@ -65,7 +66,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
         },
     });
 
-    const editorConfig = reactive({
+    const editorConfig: Partial<IEditorConfig> = reactive({
         placeholder: '请输入内容',
         autoFocus: false,
         readOnly: props.readOnly,
@@ -257,8 +258,8 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
     const validate = (label = '') => {
         const text = editorRef.value?.getText() ?? '';
         TEXT_LENGTH.value = getTextWords(text);
-        if (TEXT_LENGTH.value > 10000) {
-            customAlert(`${label}不能超过10000字`, 'warning');
+        if (TEXT_LENGTH.value > props.maxTextLength) {
+            customAlert(`${label}不能超过${props.maxTextLength}字`, 'warning');
             return false;
         }
         return true;
@@ -318,9 +319,9 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 return false;
             }
             // TODO：此处可以将图片上传到自己的服务器上
-            const promise = rtfImageData.map(async(rtfImage) => {
+            const promise: Promise<any>[] = rtfImageData.map(async(rtfImage) => {
                 const file = dataURLToFile(`data:${rtfImage.type};base64,${_convertHexToBase64(rtfImage.hex)}`);
-                const [, url = ''] = await to(editorConfig.MENU_CONF.uploadImage.customUpload(file, () => {}));
+                const [, url = ''] = await to(editorConfig.MENU_CONF!.uploadImage.customUpload(file, () => {}));
                 return url || '';
             });
             Promise.all(promise).then((urlList) => {

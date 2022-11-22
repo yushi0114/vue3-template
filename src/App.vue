@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Boot } from '@wangeditor/editor';
+import attachmentModule from '@wangeditor/plugin-upload-attachment';
 import { RouterView } from 'vue-router';
 import { useRouteGuard } from './composables';
 // @ts-ignore
@@ -9,6 +11,9 @@ const buttonConfig = reactive({
 });
 
 const locale = zhCn;
+
+// 注册上传附件插件。要在创建编辑器之前注册，且只能注册一次，不可重复注册。
+Boot.registerModule(attachmentModule);
 
 useRouteGuard();
 </script>

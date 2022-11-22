@@ -13,6 +13,6 @@ import { ARTICLE_MODULE } from '@/enums';
 
 <style lang="postcss">
 .article-create {
-    @apply;
+    @apply  h-full;
 }
 </style>

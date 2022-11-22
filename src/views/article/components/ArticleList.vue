@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 // import { Search } from '@element-plus/icons-vue';
+import { ListField } from '@/components';
 import { NEWS_TYPE, ARTICLE_STATUS, ARTICLE_OPERATE_MODE_LABEL, ARTICLE_OPERATE_MODE, ARTICLE_MODULE } from '@/enums';
 // import ArticleFilter from './ArticleFilter.vue';
 import { useTable, useJumpLink, useArticleModule } from '../hooks';
@@ -111,15 +112,16 @@ watch(listControlModel, () => {
                 :loading="state.loading"
                 :columns="TABLE_COLUMNS"
                 :show-header="false"
+                row-class-name="tr-item"
                 :table-config="tableConfig"
                 :pagination-config="pageConfig"
                 @page-change="pageSizeChange">
                 <template #thumbnail="{ scope }">
                     <div
-                        class="w-67px h-60px border border-$el-fill-color"
+                        class="w-70px h-60px border border-$el-fill-color overflow-hidden"
                         v-if="isNewsModule">
                         <img
-                            class="w-full h-full"
+                            class="w-full h-full thumbnail"
                             v-real-img="{ img: scope.row.thumbnail, errImg }"
                             alt="" />
                     </div>
@@ -134,14 +136,15 @@ watch(listControlModel, () => {
                 </template>
                 <template #content="{ scope }">
                     <el-row>
-                        <el-col :span="24">
-                            <span
-                                class="cursor-pointer hover:text-$el-color-primary"
-                                @click="handleToDetail({ row: scope.row, status: params.status })"
-                                >{{ scope.row.title }}</span
-                            >
+                        <el-col
+                            :span="24"
+                            class="flex items-center gap-2">
+                            <list-field
+                                hoverable
+                                @click="handleToDetail({ row: scope.row, status: params.status })">
+                                {{ scope.row.title }}
+                            </list-field>
                             <el-tag
-                                class="mx-2"
                                 :type="ARTICLE_STATUS_TAG_MAP[scope.row.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
                                 {{
                                     ARTICLE_STATUS_TAG_MAP[scope.row.status as keyof typeof ARTICLE_STATUS_TAG_MAP]
@@ -154,18 +157,60 @@ watch(listControlModel, () => {
                                 热点新闻
                             </el-tag>
                         </el-col>
-                        <el-col>摘要：{{ scope.row.summary }}</el-col>
+                        <el-col>
+                            <list-field
+                                label="摘要"
+                                type="desc">
+                                {{ scope.row.summary }}
+                            </list-field>
+                        </el-col>
                         <template v-if="scope.row.status === ARTICLE_STATUS.PUBLISHED">
-                            <el-col :span="8">发布者：{{ scope.row.updateBy }}</el-col>
-                            <el-col :span="16">发布日期：{{ scope.row.createTime }}</el-col>
+                            <el-col :span="8">
+                                <list-field
+                                    label="发布者"
+                                    type="desc">
+                                    {{ scope.row.updateBy }}
+                                </list-field>
+                            </el-col>
+                            <el-col :span="16">
+                                <list-field
+                                    label="发布日期"
+                                    type="desc">
+                                    {{ scope.row.createTime }}
+                                </list-field>
+                            </el-col>
                         </template>
                         <template v-if="scope.row.status === ARTICLE_STATUS.OFFLINE">
-                            <el-col :span="8">下线者：{{ scope.row.updateBy }}</el-col>
-                            <el-col :span="16">下线时间：{{ scope.row.updateTime }}</el-col>
+                            <el-col :span="8">
+                                <list-field
+                                    label="下线者"
+                                    type="desc">
+                                    {{ scope.row.updateBy }}
+                                </list-field>
+                            </el-col>
+                            <el-col :span="16">
+                                <list-field
+                                    label="下线时间"
+                                    type="desc">
+                                    {{ scope.row.updateTime }}
+                                </list-field>
+                            </el-col>
                         </template>
                         <template v-if="scope.row.status === ARTICLE_STATUS.DRAFT">
-                            <el-col :span="8">更新者：{{ scope.row.updateBy }}</el-col>
-                            <el-col :span="16">更新时间：{{ scope.row.updateTime }}</el-col>
+                            <el-col :span="8">
+                                <list-field
+                                    label="更新者"
+                                    type="desc">
+                                    {{ scope.row.updateBy }}
+                                </list-field>
+                            </el-col>
+                            <el-col :span="16">
+                                <list-field
+                                    label="更新时间"
+                                    type="desc">
+                                    {{ scope.row.updateTime }}
+                                </list-field>
+                            </el-col>
                         </template>
                     </el-row>
                 </template>
@@ -213,8 +258,15 @@ watch(listControlModel, () => {
     </div>
 </template>
 
-<style lang="postcss">
-.article-list {
-    @apply;
+<style lang="scss">
+.tr-item {
+    .thumbnail {
+        transition: all 0.5s ease-in-out;
+    }
+}
+.tr-item:hover {
+    .thumbnail {
+        transform: scale(1.1);
+    }
 }
 </style>

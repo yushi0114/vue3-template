@@ -3,13 +3,13 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-11-18 15:56:37
+ * @LastEditTime: 2022-11-22 10:40:51
  * @LastEditors: zys
  * @Reference:
  */
 import type { IPaginationConfig } from '@/components/SjcTable/types';
 import { ElMessageBox } from 'element-plus';
-import { debounce } from 'lodash';
+import { debounce, cloneDeep } from 'lodash';
 import {
     SORT_TYPE,
     ARTICLE_STATUS,
@@ -42,15 +42,16 @@ export const useTable = (
     activeId?: ComputedRef<string>
 ) => {
     const { tabItem, articleStatus } = useArticleDetail();
-    const params = reactive({
+    const INITIAL_PARAMS = {
         status: ARTICLE_STATUS.ALL,
         ...tab.queryParams,
         searchInput: ref(''),
         sortType: SORT_TYPE.NONE,
         sortField: 'sort',
         pageIndex: 1,
-        pageSize: 10,
-    });
+        pageSize: 20,
+    };
+    const params = reactive(cloneDeep(INITIAL_PARAMS));
 
     const ARTICLE_API_MAP = useApiManage(module);
     const { handleToEdit } = useJumpLink({
@@ -59,9 +60,23 @@ export const useTable = (
     });
     const ARTICLE_TYPE_LABEL = ARTICLE_TYPE[module];
     const { loading, request: loadNewsList } = useApi(ARTICLE_API_MAP[ARTICLE_API.LOAD_LIST], {
-        onSuccess(data) {
-            state.data = data.data;
-            pageConfig.total = data.pageTotal;
+        onSuccess(data, [params]) {
+            if (page === ARTICLE_PAGE.DETAIL) {
+                if (params.pageIndex === INITIAL_PARAMS.pageIndex) {
+                    state.data = [];
+                    state.disabled = false;
+                    state.noMore = false;
+                }
+                state.data.push(...(data.data as any));
+                if (state.data.length >= data.pageTotal) {
+                    state.disabled = true;
+                    state.noMore = true;
+                }
+                pageConfig.total = data.pageTotal;
+            } else {
+                state.data = data.data;
+                pageConfig.total = data.pageTotal;
+            }
         },
         onError() {},
     });
@@ -123,18 +138,37 @@ export const useTable = (
             width: 120,
         },
     });
+
     const state: {
         data: NewsItem[] | PolicyItem[];
         loading: boolean;
+        loadingMore: boolean;
+        disabled: boolean;
+        noMore: boolean;
     } = reactive({
         data: [],
         loading,
+        loadingMore: false,
+        disabled: false,
+        noMore: false,
     });
     const pageConfig = reactive({
         currentPage: 1,
         pageSize: 10,
         total: 0,
     });
+
+    const initParams = (all: boolean = false, fields: (keyof typeof params)[] = []) => {
+        if (all) {
+            Object.assign(params, cloneDeep(INITIAL_PARAMS));
+        } else {
+            fields.forEach((field) => {
+                if (params[field]) {
+                    (params as any)[field] = INITIAL_PARAMS[field];
+                }
+            });
+        }
+    };
 
     const clearArticleActiveId = () => {
         if (page === ARTICLE_PAGE.DETAIL) {
@@ -143,6 +177,7 @@ export const useTable = (
     };
 
     const handleSearch = () => {
+        initParams(false, ['pageIndex']);
         fetchTableData();
     };
 
@@ -180,10 +215,15 @@ export const useTable = (
         fetchTableData();
     }
 
+    const loadMore = () => {
+        params.pageIndex += 1;
+        fetchTableData(true);
+    };
+
     // 筛选项变化
     const handleFilterChange = (filter?: { status: ARTICLE_STATUS }) => {
         Object.assign(params, filter);
-        params.searchInput = '';
+        initParams(false, ['searchInput', 'pageIndex']);
         clearArticleActiveId();
         fetchTableData();
     };
@@ -191,10 +231,12 @@ export const useTable = (
     const handleSortChange = (sort: Omit<ArticleSortItem, 'label'>) => {
         params.sortType = sort.sortType;
         params.sortField = sort.sortField;
+        initParams(false, ['pageIndex']);
         fetchTableData();
     };
     // 加载数据
-    function fetchTableData() {
+    function fetchTableData(isLoadingMore: boolean = false) {
+        state.loadingMore = isLoadingMore;
         const queryParams: NewsListParams = {};
         if (params.status === ARTICLE_STATUS.MY_PUBLISHED) {
             queryParams.status = ARTICLE_STATUS.PUBLISHED;
@@ -232,7 +274,7 @@ export const useTable = (
         }
     };
 
-    const updateArticleStatus = async({ row, status, operateLabel }: any) => {
+    const updateArticleStatus = async ({ row, status, operateLabel }: any) => {
         try {
             await ElMessageBox.confirm(`确定${operateLabel}标题为“${row.title}”的${ARTICLE_TYPE_LABEL}吗？`, {
                 type: 'warning',
@@ -243,7 +285,7 @@ export const useTable = (
         }
     };
 
-    const updateArticleSort = async({ row }: any) => {
+    const updateArticleSort = async ({ row }: any) => {
         try {
             const { value } = await ElMessageBox.prompt('请输入新的序号', '修改排序', {
                 showInput: true,
@@ -268,6 +310,7 @@ export const useTable = (
         if (page === ARTICLE_PAGE.DETAIL && tabItem!.value === tab.value) {
             params.status = articleStatus.value ? Number(articleStatus.value) : articleStatus.value;
         }
+        console.log('==========：', '==========');
         fetchTableData();
     });
     return {
@@ -283,6 +326,7 @@ export const useTable = (
         handleDelete,
         pageSizeChange,
         fetchTableData,
+        loadMore,
         handleMoreOperate,
         _updateNewsStatus,
     };

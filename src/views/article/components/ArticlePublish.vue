@@ -139,27 +139,40 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="article-publish" v-loading="loadingDetail">
+    <div
+        class="article-publish"
+        v-loading="loadingDetail">
         <div class="flex justify-between">
             <div class="flex-center">
-                <el-button class="mr-2" @click="back">返回</el-button>
+                <el-button
+                    class="mr-2"
+                    @click="back"
+                    ><i-ep-back></i-ep-back>返回</el-button
+                >
                 <div v-if="state.laseUpdateTime">最近一次编辑时间：{{ state.laseUpdateTime }}</div>
             </div>
 
             <div>
-                <el-button v-loading="loadingCreate || loadingUpdate" @click="publish(ARTICLE_STATUS.DRAFT)"
-                    >保存</el-button
+                <el-button
+                    v-loading="loadingCreate || loadingUpdate"
+                    @click="publish(ARTICLE_STATUS.DRAFT)">
+                    <div class="i-ic-round-save"></div>
+                    保存</el-button
                 >
                 <el-button
                     v-loading="loadingCreate || loadingUpdate"
                     type="primary"
-                    @click="publish(ARTICLE_STATUS.PUBLISHED)"
-                    >发布</el-button
+                    @click="publish(ARTICLE_STATUS.PUBLISHED)">
+                    <span class="i-ic-sharp-publish"></span>
+                    发布</el-button
                 >
             </div>
         </div>
         <el-divider />
-        <sjc-form :def="ARTICLE_FORM" :update-submit="updateSubmit" @search="handleSubmit"></sjc-form>
+        <sjc-form
+            :def="ARTICLE_FORM"
+            :update-submit="updateSubmit"
+            @search="handleSubmit"></sjc-form>
     </div>
 </template>
 

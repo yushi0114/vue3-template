@@ -31,13 +31,8 @@ const getActiveId = computed(() => {
 });
 const { isNewsModule } = useArticleModule(props.module);
 
-const { params, state, _updateNewsStatus, handleDebounceSearch, handleMoreOperate, handleFilterChange } = useTable(
-    props.tab,
-    props.module,
-    ARTICLE_PAGE.DETAIL,
-    emit,
-    getActiveId
-);
+const { params, state, _updateNewsStatus, handleDebounceSearch, handleMoreOperate, handleFilterChange, loadMore } =
+    useTable(props.tab, props.module, ARTICLE_PAGE.DETAIL, emit, getActiveId);
 
 const { handleToCreate } = useJumpLink({
     tab: props.tab,
@@ -50,95 +45,123 @@ defineExpose({
 </script>
 
 <template>
-    <div class="article-list-wrapper">
-        <el-space direction="vertical" :size="20" fill class="!w-full">
-            <div class="flex-between">
-                <div class="flex flex-1">
-                    <el-input
-                        placeholder="请输入关键字进行查询"
-                        v-model.trim="params.searchInput"
-                        clearable
-                        @input="handleDebounceSearch">
-                    </el-input>
-                    <el-select
-                        v-if="tab.value === ARTICLE_STATUS.ALL"
-                        class="ml-2 w-150px"
-                        v-model="params.status"
-                        @change="() => handleFilterChange()">
-                        <el-option
-                            v-for="item in ARTICLE_STATUS_SELECT_OPTIONS"
-                            :key="item.value"
-                            :label="item.name"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-
-                <el-tooltip content="新建" placement="top">
-                    <i-ep-plus class="cursor-pointer ml-2" @click="handleToCreate"></i-ep-plus>
-                </el-tooltip>
+    <div
+        class="article-list-wrapper"
+        v-loading="state.loading && !state.loadingMore">
+        <div class="flex-between">
+            <div class="flex flex-1">
+                <el-input
+                    placeholder="请输入关键字进行查询"
+                    v-model.trim="params.searchInput"
+                    clearable
+                    @input="handleDebounceSearch">
+                </el-input>
+                <el-select
+                    v-if="tab.value === ARTICLE_STATUS.ALL"
+                    class="ml-2 w-150px"
+                    v-model="params.status"
+                    clearable
+                    @change="() => handleFilterChange()">
+                    <el-option
+                        v-for="item in ARTICLE_STATUS_SELECT_OPTIONS"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
             </div>
-            <template v-if="!state.loading && state.data.length > 0">
-                <ul class="article-list">
-                    <li
-                        v-for="(item, index) in state.data"
-                        :key="item.id + index"
-                        class="article-list-item"
-                        :class="{ active: activeId === item.id }"
-                        @click="handleActiveIdChange(item.id)">
-                        <div class="article-title-wrap">
-                            <i-ep-document class="mr-1"></i-ep-document>
-                            <span class="article-title" :class="{ 'text-$el-color-primary': activeId === item.id }">
-                                {{ item.title }}
-                            </span>
-                            <el-tag
-                                class="mx-2"
-                                :type="ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
-                                {{ ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].label }}
-                            </el-tag>
-                            <el-tag v-if="isNewsModule && item.hotNews === NEWS_TYPE.HOT" type="danger">
-                                热点新闻
-                            </el-tag>
-                        </div>
-                        <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
-                            <i-ep-more-filled class="icon-more"></i-ep-more-filled>
-                            <template #dropdown>
-                                <el-dropdown-menu>
-                                    <el-dropdown-item
-                                        :disabled="item.status === ARTICLE_STATUS.PUBLISHED"
-                                        :command="ARTICLE_OPERATE_MODE.EDIT"
-                                        ><i-ep-edit />{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item
-                                        v-if="item.status === ARTICLE_STATUS.PUBLISHED"
-                                        :command="ARTICLE_OPERATE_MODE.OFFLINE"
-                                        ><i-ep-sold-out />{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item v-else :command="ARTICLE_OPERATE_MODE.PUBLISH">
-                                        <i-ep-sell />{{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"
-                                        ><i-ep-sort />{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE"
-                                        ><i-ep-delete />{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </template>
-                        </el-dropdown>
-                    </li>
-                    <!-- <p v-if="loadMore">更多...</p>
-                    <p v-if="isNoMoreShow">没有更多了</p> -->
-                </ul>
-            </template>
-            <el-empty v-else-if="!state.loading && state.data.length === 0" :image="emptyImg"></el-empty>
-        </el-space>
+
+            <el-tooltip
+                content="新建"
+                placement="top">
+                <i-ep-plus
+                    class="cursor-pointer ml-2"
+                    @click="handleToCreate"></i-ep-plus>
+            </el-tooltip>
+        </div>
+        <template v-if="state.data.length > 0">
+            <ul
+                class="article-list"
+                v-infinite-scroll="loadMore"
+                :infinite-scroll-disabled="state.disabled">
+                <li
+                    v-for="(item, index) in state.data"
+                    :key="item.id + index"
+                    class="article-list-item"
+                    :class="{ active: activeId === item.id }"
+                    @click="handleActiveIdChange(item.id)">
+                    <div class="article-title-wrap">
+                        <i-ep-document></i-ep-document>
+                        <list-field
+                            class="flex-1"
+                            :class="{ 'text-$el-color-primary': activeId === item.id }"
+                            hoverable
+                            truncate>
+                            {{ item.title }}
+                        </list-field>
+                        <el-tag
+                            :type="ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
+                            {{ ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].label }}
+                        </el-tag>
+                        <el-tag
+                            v-if="isNewsModule && item.hotNews === NEWS_TYPE.HOT"
+                            type="danger">
+                            热点新闻
+                        </el-tag>
+                    </div>
+                    <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
+                        <i-ep-more-filled class="icon-more"></i-ep-more-filled>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                    :disabled="item.status === ARTICLE_STATUS.PUBLISHED"
+                                    :command="ARTICLE_OPERATE_MODE.EDIT"
+                                    ><i-ep-edit />{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
+                                </el-dropdown-item>
+                                <el-dropdown-item
+                                    v-if="item.status === ARTICLE_STATUS.PUBLISHED"
+                                    :command="ARTICLE_OPERATE_MODE.OFFLINE"
+                                    ><i-ep-sold-out />{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
+                                </el-dropdown-item>
+                                <el-dropdown-item
+                                    v-else
+                                    :command="ARTICLE_OPERATE_MODE.PUBLISH">
+                                    <i-ep-sell />{{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
+                                </el-dropdown-item>
+                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"
+                                    ><i-ep-sort />{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
+                                </el-dropdown-item>
+                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE"
+                                    ><i-ep-delete />{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </li>
+                <p
+                    class="text-center text-sm text-$el-text-color-regular"
+                    v-if="state.loading"
+                    >加载中...</p
+                >
+                <p
+                    class="text-center text-sm text-$el-text-color-regular"
+                    v-if="state.noMore"
+                    >没有更多了</p
+                >
+            </ul>
+        </template>
+        <el-empty
+            v-else-if="!state.loading && state.data.length === 0"
+            :image="emptyImg"></el-empty>
     </div>
 </template>
 
 <style lang="postcss" scoped>
+.article-list-wrapper {
+    @apply h-full;
+}
 .article-list {
-    @apply box-border my-4 overflow-y-auto;
+    @apply flex-1 box-border mt-4 overflow-y-auto;
 
     &::-webkit-scrollbar {
         width: 0;
@@ -166,7 +189,7 @@ defineExpose({
     @apply display-block;
 }
 .article-title-wrap {
-    @apply flex items-center;
+    @apply flex items-center flex-1 min-w-0 gap-2;
 }
 .text {
     @apply cursor-pointer flex-1 mr-2;

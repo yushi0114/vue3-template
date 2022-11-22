@@ -4,7 +4,7 @@ import { ARTICLE_MODULE } from '@/enums';
 </script>
 
 <template>
-    <PagePanel>
+    <PagePanel full>
         <Board class="article-create">
             <article-publish :module="ARTICLE_MODULE.NEWS_LXT"></article-publish>
         </Board>
@@ -13,6 +13,6 @@ import { ARTICLE_MODULE } from '@/enums';
 
 <style lang="postcss">
 .article-create {
-    @apply;
+    @apply  h-full;
 }
 </style>

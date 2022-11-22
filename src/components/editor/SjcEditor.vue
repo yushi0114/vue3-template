@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
-import { Boot } from '@wangeditor/editor';
-import attachmentModule from '@wangeditor/plugin-upload-attachment';
 import { useEditorControl } from './useEditor';
 import { FILE_SERVER } from '@/enums';
 
 type EditorProps = {
     modelValue: string;
-    readOnly: boolean;
-    fileServer: FILE_SERVER;
+    maxTextLength?: number;
+    readOnly?: boolean;
+    fileServer?: FILE_SERVER;
 };
 
 type EditorEmits = {
@@ -16,12 +15,12 @@ type EditorEmits = {
 };
 const props = withDefaults(defineProps<EditorProps>(), {
     modelValue: '',
+    maxTextLength: 10000,
     readOnly: false,
     fileServer: FILE_SERVER.LXT,
 });
 
 const emit = defineEmits<EditorEmits>();
-Boot.registerModule(attachmentModule);
 const {
     editorRef,
     editorLoading,
@@ -56,7 +55,10 @@ defineExpose({
         v-loading="editorLoading"
         element-loading-text="加载中"
         element-loading-spinner="el-icon-loading">
-        <div class="wangeditor" :style="getFullScreenStyle" v-if="!readOnly">
+        <div
+            class="wangeditor"
+            :style="getFullScreenStyle"
+            v-if="!readOnly">
             <!-- 工具栏 -->
             <Toolbar
                 class="wangeditor__toolbar"
@@ -76,7 +78,9 @@ defineExpose({
                 @customAlert="customAlert"
                 @customPaste="customPaste" />
             <!-- 显示 headers -->
-            <div class="wangeditor__headers" :class="{ 'wangeditor__headers--full': isFullScreen }">
+            <div
+                class="wangeditor__headers"
+                :class="{ 'wangeditor__headers--full': isFullScreen }">
                 <div class="title">标题目录</div>
                 <ul id="header-container">
                     <li
@@ -90,9 +94,11 @@ defineExpose({
                     </li>
                 </ul>
             </div>
-            <div class="wangeditor__limit">{{ TEXT_LENGTH }}/10000</div>
+            <div class="wangeditor__limit">{{ TEXT_LENGTH }}/{{ props.maxTextLength }}</div>
         </div>
-        <div class="wangeditor wangeditor--disabled" v-else>
+        <div
+            class="wangeditor wangeditor--disabled"
+            v-else>
             <!-- 编辑器 -->
             <Editor
                 class="wangeditor__editor wangeditor__editor--readonly"
@@ -103,17 +109,17 @@ defineExpose({
     </div>
 </template>
 <style src="@wangeditor/editor/dist/css/style.css"></style>
-<style lang="scss">
+<style lang="scss" scoped>
 .wangeditor-wrapper {
-    margin-top: 10px;
+    margin-top: $gap-sm;
     .wangeditor {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-        border: 1px solid #ccc;
+        border: $border;
         z-index: 3;
         line-height: 1.3;
-        background-color: var(--w-e-textarea-bg-color);
+        background-color: $bg-color;
 
         ol {
             list-style-type: decimal;
@@ -129,7 +135,7 @@ defineExpose({
         &__toolbar {
             flex-grow: 1;
             flex-basis: 100%;
-            border-bottom: 1px solid #ccc;
+            border-bottom: $border;
         }
 
         &__toolbar--full {
@@ -140,7 +146,8 @@ defineExpose({
         &__editor {
             width: 75%;
             min-height: 400px !important;
-            padding-bottom: 20px;
+            display: grid;
+            padding-bottom: $gap-lg;
             h1 {
                 font-size: 2em !important;
                 margin-block-start: 0.67em !important;
@@ -158,14 +165,14 @@ defineExpose({
             }
 
             .w-e-text-placeholder {
-                top: 16px;
-                left: 12px;
+                top: $gap-md;
+                left: $gap-sm;
             }
 
             &--full {
                 width: 76%;
                 overflow-y: auto;
-                background-color: #ffffff;
+                background-color: $bg-color;
                 .w-e-text-container {
                     height: auto !important;
                 }
@@ -178,47 +185,48 @@ defineExpose({
 
         &__headers {
             width: 24%;
-            border-left: 1px solid #ccc;
+            border-left: $border;
 
             .title {
-                padding: 20px;
+                @include font(18px);
+                padding: $gap-lg;
                 text-align: center;
-                font-size: 18px;
+                color: $text-color-primary;
             }
             #header-container {
                 list-style-type: none;
-                padding: 0 20px;
+                padding: 0 $gap-lg;
                 li {
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    color: #333;
-                    margin: 10px 0;
+                    color: $text-color-primary;
+                    margin: $gap-sm 0;
                     cursor: pointer;
                     &:hover {
                         text-decoration: underline;
                     }
                 }
                 li[type='header1'] {
-                    font-size: 24px;
+                    @include font(24px);
                     font-weight: bold;
                 }
                 li[type='header2'] {
-                    font-size: 20px;
+                    @include font(20px);
                     padding-left: 15px;
                     font-weight: bold;
                 }
                 li[type='header3'] {
-                    font-size: 16px;
+                    @include font(16px);
                     padding-left: 30px;
                     font-weight: bold;
                 }
                 li[type='header4'] {
-                    font-size: 14px;
+                    @include font(14px);
                     padding-left: 45px;
                     font-weight: bold;
                 }
                 li[type='header5'] {
-                    font-size: 12px;
+                    @include font(12px);
                     padding-left: 60px;
                     font-weight: bold;
                 }
@@ -229,8 +237,8 @@ defineExpose({
             position: absolute;
             right: 0;
             top: 40px;
-            background-color: #fff;
-            border-top: 1px solid #ccc;
+            background-color: $bg-color;
+            border-top: $border;
             height: 100%;
             overflow-y: auto;
         }
@@ -239,7 +247,7 @@ defineExpose({
             position: absolute;
             bottom: 10px;
             right: 25%;
-            color: #ccc;
+            color: $text-color-placeholder;
         }
     }
 }

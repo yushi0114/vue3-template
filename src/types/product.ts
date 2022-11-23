@@ -1,11 +1,16 @@
+import type { ProductRecommandType, SwitchType } from '@/enums';
 import type { RequirementEntity } from './requirement';
 
-export interface ProductFilter {
-    filterId: string,
+export interface ProductFilterEntity {
+    id: string
+    filterId: ProductFilterEntity['id'],
     filterValue: string,
     filterCode: number
     typeCode: number,
-    typeValue: string
+    typeValue: string,
+    editable: boolean,
+    isFilterShow: SwitchType,
+    filter?: ProductFilterEntity[]
 }
 
 export interface ProductEntity {
@@ -36,10 +41,19 @@ export interface ProductEntity {
     createTime: string
     updateBy: string
     updateTime: string
-    filterList: ProductFilter[]
+    filterList: ProductFilterEntity[]
 }
 
 export interface ProductRequirementEntity extends RequirementEntity {
     productName: string,
     orgName: ProductEntity['orgName'],
+}
+
+export interface ProductRecommandEntity {
+    id: string
+    name: string
+    orgProductId: string
+    productPoster: string
+    productType: ProductRecommandType
+    status: SwitchType
 }

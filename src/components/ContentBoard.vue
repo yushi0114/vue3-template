@@ -4,17 +4,19 @@ withDefaults(
         label: string,
         cols?: number,
         background?: boolean,
+        hoverable?: boolean,
     }>(),
     {
         label: '',
         cols: 1,
-        background: true,
+        background: false,
+        hoverable: false,
     }
 );
 </script>
 
 <template>
-    <div class="i-content-board" :class="{ background }">
+    <div class="i-content-board" :class="{ background, hoverable }">
         <!-- -->
         <div class="icb-label">
             <Text color="paragraph" bold>{{ label }}</Text>
@@ -35,8 +37,8 @@ withDefaults(
         background-color: var(--light-bg-color);
     }
 
-    & + & {
-        margin-top: $gap-md;
+    &.hoverable:hover {
+        background-color: var(--light-bg-color);
     }
 }
 

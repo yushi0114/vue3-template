@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getProduct } from '@/api';
-import type { ProductEntity, ProductFilter } from '@/types';
+import type { ProductEntity, ProductFilterEntity } from '@/types';
 import { useApi } from '@/composables';
 
 const fixFilterTexts = ['贷款额度', '贷款期限', '担保方式'];
@@ -19,8 +19,8 @@ const emits = defineEmits<{
 }>();
 
 const detail = ref<ProductEntity | null>(null);
-const filters = ref<ProductFilter[]>([]);
-const fixFilters = ref<ProductFilter[]>([]);
+const filters = ref<ProductFilterEntity[]>([]);
+const fixFilters = ref<ProductFilterEntity[]>([]);
 
 const { request } = useApi(getProduct);
 

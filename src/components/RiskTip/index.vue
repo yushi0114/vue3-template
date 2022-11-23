@@ -64,7 +64,7 @@ onMounted(() => {
     padding: 30px 40px 0;
     box-sizing: border-box;
     border: $border;
-    border-radius: 2px;
+    border-radius: var(--el-border-radius-small);
 }
 
 .box .tip-box .logo {

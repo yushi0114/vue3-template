@@ -48,8 +48,8 @@ defineExpose({
     <div
         class="article-list-wrapper"
         v-loading="state.loading && !state.loadingMore">
-        <div class="flex-between">
-            <div class="flex flex-1">
+        <div class="flex-between space-x-2">
+            <div class="flex flex-1 space-x-2">
                 <el-input
                     placeholder="请输入关键字进行查询"
                     v-model.trim="params.searchInput"
@@ -58,7 +58,7 @@ defineExpose({
                 </el-input>
                 <el-select
                     v-if="tab.value === ARTICLE_STATUS.ALL"
-                    class="ml-2 w-150px"
+                    class="w-160px"
                     v-model="params.status"
                     clearable
                     @change="() => handleFilterChange()">
@@ -75,7 +75,7 @@ defineExpose({
                 content="新建"
                 placement="top">
                 <i-ep-plus
-                    class="cursor-pointer ml-2"
+                    class="cursor-pointer"
                     @click="handleToCreate"></i-ep-plus>
             </el-tooltip>
         </div>

@@ -88,6 +88,7 @@ const handleSubmit = async(values: any) => {
     const queryParams: CreateNewsParams | UpdateNewsParams = {
         ...values,
         status: params.status,
+        sort: 1,
     };
 
     if (getArticleTypeLabel.value === ARTICLE_TYPE_LABEL.NEWS) {

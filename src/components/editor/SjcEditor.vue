@@ -109,7 +109,7 @@ defineExpose({
     </div>
 </template>
 <style src="@wangeditor/editor/dist/css/style.css"></style>
-<style lang="scss" scoped>
+<style lang="scss">
 .wangeditor-wrapper {
     margin-top: $gap-sm;
     .wangeditor {
@@ -164,8 +164,12 @@ defineExpose({
                 height: auto;
             }
 
-            :deep(.w-e-text-container span[data-w-e-type='attachment']) {
-                background-color: var(--w-e-toolbar-active-bg-color) !important;
+            a {
+                color: $color-primary-light-3;
+                cursor: pointer;
+                &:hover {
+                    color: $color-primary;
+                }
             }
 
             &--full {

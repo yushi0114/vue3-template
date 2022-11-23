@@ -2,7 +2,7 @@
 import { acceptProgressTypeOptions, PlatformType } from '@/enums';
 import { getProductOptions, getProductReqs, getTopOrgs } from '@/api';
 import type { PlainOption, ProductRequirementEntity } from '@/types';
-import { ApplyList, ProductReqDetail } from '../components';
+import { ProductReqList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel, useApi } from '@/composables';
 
@@ -99,7 +99,7 @@ onMounted(() => {
             <Text>
             </Text>
 
-            <ApplyList :list="list" @item-detail="goDetail" />
+            <ProductReqList :list="list" @item-detail="goDetail" />
 
             <FlexRow horizontal="end">
                 <el-pagination v-model:current-page="listControlModel.pageIndex"

@@ -14,6 +14,7 @@ withDefaults(
 
 const emits = defineEmits<{
     (e: ItemOperate.delete, detail: ProductRequirementEntity): void;
+    (e: ItemOperate.detail, detail: ProductRequirementEntity): void;
 }>();
 
 const colorStatusMap: Record<AcceptProgressType, string> = {

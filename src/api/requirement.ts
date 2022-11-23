@@ -108,16 +108,16 @@ export function getExactReq(payload: GetExactReqPayload): Promise<GetExactReqRes
 
 // #region 查询信用评分
 
-export type GetScorePayload = {
+export type GetExactReqScorePayload = {
     corpName: string,
     corpCode: string
 }
 
-export type GetScoreResponse = {
+export type GetExactReqScoreResponse = {
 
 }
 
-export function getExactReqScore(payload: GetScorePayload) : Promise<GetScoreResponse> {
+export function getExactReqScore(payload: GetExactReqScorePayload) : Promise<GetExactReqScoreResponse> {
     return api.post(`${DMS_DOMAIN}/v1/exact/req/score`, payload);
 }
 

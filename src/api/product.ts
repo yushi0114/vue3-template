@@ -79,16 +79,16 @@ export function getProductOptions(payload: GetProductOptionsPayload): Promise<Ge
 
 // #region 查询信用评分
 
-export type GetScorePayload = {
+export type GetProductReqScorePayload = {
     corpName: string,
     corpCode: string
 }
 
-export type GetScoreResponse = {
+export type GetProductReqScoreResponse = {
 
 }
 
-export function getProductReqScore(payload: GetScorePayload) : Promise<GetScoreResponse> {
+export function getProductReqScore(payload: GetProductReqScorePayload) : Promise<GetProductReqScoreResponse> {
     return api.post(`${DMS_DOMAIN}/v1/product/req/score`, payload);
 }
 

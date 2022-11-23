@@ -2,7 +2,7 @@
 import { acceptProgressTypeOptions, PlatformType } from '@/enums';
 import { getProductOptions, getProductReqs, getTopOrgs } from '@/api';
 import type { PlainOption, ProductRequirementEntity } from '@/types';
-import { ApplyList } from '../components';
+import { ApplyList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel, useApi } from '@/composables';
 
@@ -15,7 +15,7 @@ const count = ref(0);
 const list = ref<ProductRequirementEntity[]>([]);
 const topOrgOptions = ref<PlainOption[]>([]);
 const productOptions = ref<PlainOption[]>([]);
-
+const detail = ref<ProductRequirementEntity | null>(null);
 const { request: requestOrgOptions } = useApi(getTopOrgs, { cache: true });
 const { request: requestPdtOptions } = useApi(getProductOptions, { cache: true });
 
@@ -44,17 +44,17 @@ function handleTabChange(plat: PlatformType) {
 }
 
 function goDetail(req: ProductRequirementEntity) {
-    console.log(req);
+    detail.value = req;
 }
 
 onBeforeMount(() => {
     requestOrgOptions()
         .then(res => topOrgOptions.value = res.map(({ id, orgName }) => ({ name: orgName, value: id })));
 
-    requestPdtOptions({ platform: platform.value })
-        .then(res => {
-            productOptions.value = res.map(({ id, name }) => ({ name, value: id }));
-        });
+    // requestPdtOptions({ platform: platform.value })
+    //     .then(res => {
+    //         productOptions.value = res.map(({ id, name }) => ({ name, value: id }));
+    //     });
 });
 
 onMounted(() => {
@@ -99,7 +99,7 @@ onMounted(() => {
             <Text>
             </Text>
 
-            <ApplyList :list="list" @click-detail="goDetail" />
+            <ApplyList :list="list" @item-detail="goDetail" />
 
             <FlexRow horizontal="end">
                 <el-pagination v-model:current-page="listControlModel.pageIndex"
@@ -107,6 +107,11 @@ onMounted(() => {
                     layout="total, sizes, prev, pager, next, jumper" :total="count" />
             </FlexRow>
         </Board>
+
+        <ProductReqDetail
+            :modelValue="!!detail"
+            @closed="detail = null"
+            :content="detail" />
     </PagePanel>
 </template>
 <style lang="postcss">

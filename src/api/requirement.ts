@@ -33,7 +33,6 @@ export function getAligeReqs(payload: GetAgileReqsPayload)
 }
 // #endregion
 
-
 // #region 获取敏捷需求详情
 export type GetAgileReqPayload = {
     id: AgileReqEntity['id'],
@@ -75,7 +74,6 @@ export function getExactReqs(payload: GetExactReqsPayload)
 }
 // #endregion
 
-
 // #region 获取精准需求详情
 export type GetExactReqPayload = {
     id: ExactReqEntity['id'],
@@ -87,8 +85,6 @@ export function getExactReq(payload: GetExactReqPayload): Promise<GetExactReqRes
     return api.get(`${DMS_DOMAIN}/v1/exact/req`, { params: payload })
         .then((res: any) => {
             const entity = res[0];
-            console.log(entity);
-            console.log(entity.reqProgress[1].typeTwo);
             entity.dataFirst = (entity.reqProgress[0].typeOne || []).map((p: any) => {
                 return {
                     ...p,
@@ -110,3 +106,19 @@ export function getExactReq(payload: GetExactReqPayload): Promise<GetExactReqRes
 }
 // #endregion
 
+// #region 查询信用评分
+
+export type GetScorePayload = {
+    corpName: string,
+    corpCode: string
+}
+
+export type GetScoreResponse = {
+
+}
+
+export function getExactReqScore(payload: GetScorePayload) : Promise<GetScoreResponse> {
+    return api.post(`${DMS_DOMAIN}/v1/exact/req/score`, payload);
+}
+
+// #endregion

@@ -49,10 +49,9 @@ export function downloadByBase64(buf: string, filename: string, mime: string, bo
  * @param bom
  */
 export function downloadByOnlineUrl(url: string, filename: string, mime: string, bom: string) {
-    urlToBase64(url)
-        .then((base64) => {
-            downloadByBase64(base64, filename, mime, bom);
-        });
+    urlToBase64(url).then((base64) => {
+        downloadByBase64(base64, filename, mime, bom);
+    });
 }
 
 /**

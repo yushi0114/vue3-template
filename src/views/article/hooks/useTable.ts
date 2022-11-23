@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-11-22 10:40:51
+ * @LastEditTime: 2022-11-23 10:07:30
  * @LastEditors: zys
  * @Reference:
  */
@@ -112,14 +112,14 @@ export const useTable = (
     });
 
     const { request: deleteArticle } = useApi(ARTICLE_API_MAP[ARTICLE_API.DELETE_ARTICLE], {
-        onSuccess(data, [params]) {
+        onSuccess(data) {
             ElMessage({
                 type: 'success',
                 message: '操作成功',
             });
-            deleteFileOnServer(params);
             clearArticleActiveId();
             fetchTableData();
+            return Promise.resolve(data);
         },
         onError(error) {
             console.log('error: ', error);
@@ -134,6 +134,7 @@ export const useTable = (
     // 表格配置项
     const tableConfig = reactive({
         showHandler: true,
+        showAppend: true,
         handlerConfig: {
             width: 120,
         },
@@ -188,23 +189,27 @@ export const useTable = (
 
     // 删除静态服务器的文件
     const deleteFileOnServer = (params: any) => {
+        console.log('params: ', params);
         // 删除新闻成功后清除文件服务器中的静态文件
         params.thumbnail && deleteFile({ id: getFileIdByUrl(params.thumbnail) });
         const deleteList = getUrlListFromText(params.content);
+        console.log('deleteList: ', deleteList);
         deleteList.forEach((src: string) => {
             deleteFile({ id: getFileIdByUrl(src) });
         });
     };
 
     // 删除操作
-    function handleDelete({ row }: { row: NewsItem | PolicyItem }) {
-        ElMessageBox.confirm(`确认删除“${row.title}”的${ARTICLE_TYPE_LABEL}？`, '删除', {
-            type: 'warning',
-        })
-            .then(() => {
-                deleteArticle({ id: row.id });
-            })
-            .catch(noop);
+    async function handleDelete({ row }: { row: NewsItem | PolicyItem }) {
+        try {
+            await ElMessageBox.confirm(`确认删除“${row.title}”的${ARTICLE_TYPE_LABEL}？`, '删除', {
+                type: 'warning',
+            });
+            await deleteArticle({ id: row.id });
+            deleteFileOnServer(row);
+        } catch {
+            noop;
+        }
     }
     // 切换分页
     function pageSizeChange({ currentPage, pageSize }: IPaginationConfig) {
@@ -274,7 +279,7 @@ export const useTable = (
         }
     };
 
-    const updateArticleStatus = async ({ row, status, operateLabel }: any) => {
+    const updateArticleStatus = async({ row, status, operateLabel }: any) => {
         try {
             await ElMessageBox.confirm(`确定${operateLabel}标题为“${row.title}”的${ARTICLE_TYPE_LABEL}吗？`, {
                 type: 'warning',
@@ -285,7 +290,7 @@ export const useTable = (
         }
     };
 
-    const updateArticleSort = async ({ row }: any) => {
+    const updateArticleSort = async({ row }: any) => {
         try {
             const { value } = await ElMessageBox.prompt('请输入新的序号', '修改排序', {
                 showInput: true,

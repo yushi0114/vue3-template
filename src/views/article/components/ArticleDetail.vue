@@ -4,12 +4,13 @@ import ArticleWrapper from '../components/ArticleWrapper.vue';
 import DetailContent from './DetailContent.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DetailLeftList from './DetailLeftList.vue';
-import { ARTICLE_MODULE, ARTICLE_STATUS, ARTICLE_API, ARTICLE_PAGE } from '@/enums';
+import { ARTICLE_MODULE, ARTICLE_STATUS, ARTICLE_API } from '@/enums';
 import { useApi } from '@/composables';
 import type { ICommonResult } from '@/api/types';
 import type { NewsItem } from '@/types';
 import { useApiManage, useArticleDetail } from '../hooks';
 import { isArray } from 'lodash';
+import { xss, replaceHTMLHref } from '@/utils';
 const { back } = useRouter();
 
 const { activeId, tabItem, bindDetailListRef, detailListMap } = useArticleDetail();
@@ -28,11 +29,13 @@ const { loading: loadingDetail, request: getArticleDetail } = useApi(
     () => ARTICLE_API_MAP[ARTICLE_API.LOAD_ARTICLE_DETAIL]({ id: activeId.value }),
     {
         onSuccess(data) {
+            let temp: any = {};
             if (isArray(data)) {
-                state.data = data[0];
+                temp = data[0];
             } else {
-                state.data = data;
+                temp = data;
             }
+            state.data = { ...temp, content: replaceHTMLHref(xss.process(temp.content)) };
         },
         onError() {
             state.data = {};
@@ -40,7 +43,7 @@ const { loading: loadingDetail, request: getArticleDetail } = useApi(
     }
 );
 
-const publish = async () => {
+const publish = async() => {
     await detailListMap.value
         .get(tabItem?.value)
         ._updateNewsStatus({ id: activeId.value, status: ARTICLE_STATUS.PUBLISHED });
@@ -89,7 +92,7 @@ onBeforeMount(() => {
                 </el-card>
             </div>
 
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
                 <el-card
                     class="h-full overflow-y-auto"
                     :body-style="{ height: '100%', 'box-sizing': 'border-box', 'overflow-y': 'auto' }">

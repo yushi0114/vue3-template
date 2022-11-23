@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { TabsPaneContext } from 'element-plus';
 import { TAB_LIST } from '../constants';
 import ArticleList from './ArticleList.vue';
 import { ARTICLE_MODULE, ARTICLE_STATUS } from '@/enums';
@@ -16,17 +15,13 @@ const props = withDefaults(
 );
 
 const activeName = ref(props.tabValue);
-const handleTabClick = (tab: TabsPaneContext, event: Event) => {
-    console.log(tab, event);
-};
 </script>
 
 <template>
     <div class="article-wrapper">
         <el-tabs
             class="h-full flex flex-col"
-            v-model="activeName"
-            @tab-click="handleTabClick">
+            v-model="activeName">
             <el-tab-pane
                 class="h-full"
                 v-for="tab in TAB_LIST"

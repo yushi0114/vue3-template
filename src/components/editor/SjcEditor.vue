@@ -109,7 +109,7 @@ defineExpose({
     </div>
 </template>
 <style src="@wangeditor/editor/dist/css/style.css"></style>
-<style lang="scss" scoped>
+<style lang="scss">
 .wangeditor-wrapper {
     margin-top: $gap-sm;
     .wangeditor {
@@ -119,7 +119,7 @@ defineExpose({
         border: $border;
         z-index: 3;
         line-height: 1.3;
-        background-color: $bg-color;
+        background-color: var(--w-e-textarea-bg-color);
 
         ol {
             list-style-type: decimal;
@@ -164,9 +164,12 @@ defineExpose({
                 height: auto;
             }
 
-            .w-e-text-placeholder {
-                top: $gap-md;
-                left: $gap-sm;
+            a {
+                color: $color-primary-light-3;
+                cursor: pointer;
+                &:hover {
+                    color: $color-primary;
+                }
             }
 
             &--full {

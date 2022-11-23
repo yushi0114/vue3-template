@@ -6,6 +6,7 @@ import { genDynamicComponent, genDynamicViewConfig } from '@/views';
 import { Error404 } from '@/views/system';
 import { Base } from '@/views/base';
 import ReportDetail from '@/components/ReportDetail/index.vue';
+import RiskTip from '@/components/RiskTip/index.vue';
 import ScoreDetail from '@/components/ScoreDetail/index.vue';
 
 // @/store/user signin()
@@ -41,7 +42,13 @@ const routes: RouteRecordRaw[] = [
         path: SIGNIN_PATH,
         name: 'signin',
         component: Signin
-    },{
+    },
+    {
+        path: '/leave',
+        name: 'leave',
+        component: RiskTip,
+    },
+    {
         path: '/report/detail',
         name: 'report',
         component: ReportDetail,

@@ -37,7 +37,7 @@ export function dataURLToFile(base64Buf: string) {
  * img url to base64
  * @param url
  */
-export function urlToBase64(url: string, mineType = 'image/png') {
+export function urlToBase64(url: string, mineType = 'image/png'): Promise<string> {
     return new Promise((resolve, reject) => {
         let canvas = document.createElement('CANVAS') as HTMLCanvasElement | null;
         const ctx = canvas ? canvas.getContext('2d') : '';

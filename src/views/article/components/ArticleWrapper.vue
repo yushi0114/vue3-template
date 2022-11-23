@@ -14,10 +14,6 @@ const props = withDefaults(
     }
 );
 
-const emits = defineEmits<{
-    (e: 'tab-change', v: ARTICLE_STATUS): void;
-}>();
-
 const activeName = ref(props.tabValue);
 </script>
 
@@ -25,8 +21,7 @@ const activeName = ref(props.tabValue);
     <div class="article-wrapper">
         <el-tabs
             class="h-full flex flex-col"
-            v-model="activeName"
-            @tab-change="(name: ARTICLE_STATUS) => emits('tab-change', name)">
+            v-model="activeName">
             <el-tab-pane
                 class="h-full"
                 v-for="tab in TAB_LIST"

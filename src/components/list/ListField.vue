@@ -20,6 +20,7 @@ const size = computed(() => {
 
 <template>
     <Text
+        v-bind="$attrs"
         class="list-field"
         :class="{ hoverable }"
         :color="color"

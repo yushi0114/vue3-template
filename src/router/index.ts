@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from 'vue-router';
-import Home from '@/views/home/Home.vue';
+import { Home } from '@/views/home/Home.vue';
 import { Signin } from '@/views/access';
 import type { DynamicNavEntity } from '@/types';
 import { genDynamicComponent, genDynamicViewConfig } from '@/views';
 import { Error404 } from '@/views/system';
 import { Base } from '@/views/base';
+import ReportDetail from '@/components/ReportDetail/index.vue';
+import RiskTip from '@/components/RiskTip/index.vue';
+import ScoreDetail from '@/components/ScoreDetail/index.vue';
 
 // @/store/user signin()
 export const SIGNIN_PATH = '/signin';
@@ -33,29 +36,35 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: 'Home'
                 }
-            },
-            // {
-            //     path: '/routerList',
-            //     name: 'routerList',
-            //     component: () => import('@/views/system/menu/index.vue')
-            // },
-            // {
-            //     path: '/roleList',
-            //     name: 'roleList',
-            //     component: () => import('@/views/system/role/index.vue')
-            // },
-            // {
-            //     path: '/userList',
-            //     name: 'userList',
-            //     component: () => import('@/views/system/user/index.vue')
-            // }
+            }
         ],
     },{
         path: SIGNIN_PATH,
         name: 'signin',
         component: Signin
     },
-
+    {
+        path: '/leave',
+        name: 'leave',
+        component: RiskTip,
+    },
+    {
+        path: '/report/detail',
+        name: 'report',
+        component: ReportDetail,
+        meta: {
+            menu: 'report',
+            title: 'report'
+        }
+    },{
+        path: '/score/detail',
+        name: 'score',
+        component: ScoreDetail,
+        meta: {
+            menu: 'score',
+            title: 'score'
+        }
+    }
 ];
 
 

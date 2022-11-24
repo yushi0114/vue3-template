@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-import { createCity, updateCity } from '@/api/finance';
+import { createCity, updateCity } from '@/api/city';
 import type { OperateCityEntity } from '@/types/city';
 
 const props = defineProps({
@@ -34,11 +34,13 @@ watch(props.dataEdit, (val) => {
 });
 
 const emit = defineEmits<{
-  (e: 'close', flag: Boolean): void,
+  (e: 'close', flag: boolean): void,
   (e: 'refresh'): void
 }>();
 
-const cancel = () => {
+const cancel = (form: FormInstance | undefined) => {
+    if (!form) return;
+    form.resetFields();
     initForm(cityForm, '');
     emit('close', false);
 };
@@ -50,6 +52,13 @@ const initForm = (form: OperateCityEntity , val: string) => {
     form.id = val;
 };
 
+const isFocused = ref<HTMLElement | null>(null);
+const refFocus = () => {
+    nextTick(() => {
+        isFocused.value?.focus();
+    });
+};
+
 const createOrEditCity = (form: FormInstance | undefined, title: string) => {
     if (!form) return;
     form.validate((valid) => {
@@ -58,8 +67,7 @@ const createOrEditCity = (form: FormInstance | undefined, title: string) => {
                 const params = {
                     name: cityForm.name,
                     code: cityForm.code,
-                    sort: cityForm.sort,
-                    menuName: 'city'
+                    sort: cityForm.sort
                 };
                 return createCity(params)
                     .then(() => {
@@ -78,8 +86,7 @@ const createOrEditCity = (form: FormInstance | undefined, title: string) => {
                     id: cityForm.id,
                     name: cityForm.name,
                     code: cityForm.code,
-                    sort: cityForm.sort,
-                    menuName: 'city'
+                    sort: cityForm.sort
                 };
                 return updateCity(params)
                     .then(() => {
@@ -163,8 +170,9 @@ const cityRules = reactive<FormRules>({
         <el-dialog
             v-model="dialogVisible"
             :title="dataEdit.title"
-            :width="'500px'"
-            @close="cancel"
+            width='500px'
+            @open="refFocus"
+            @close="cancel(cityFormRef)"
         >
             <el-form
                 ref="cityFormRef"
@@ -204,7 +212,7 @@ const cityRules = reactive<FormRules>({
             </el-form>
             <template #footer>
               <span class="dialog-footer">
-                <el-button @click="cancel">取 消</el-button>
+                <el-button @click="cancel(cityFormRef)">取 消</el-button>
                 <el-button type="primary" @click="createOrEditCity(cityFormRef, dataEdit.title)">
                   确 定
                 </el-button>

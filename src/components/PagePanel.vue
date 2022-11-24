@@ -3,8 +3,8 @@ import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 withDefaults(
-    defineProps<{ title?: string }>(),
-    {}
+    defineProps<{ title?: string; full?: boolean }>(),
+    {full: false}
 );
 
 const route = useRoute();
@@ -26,7 +26,7 @@ onMounted(() => {
                 <button>edit</button>
             </div>
         </header>
-        <div class="page-panel-content">
+        <div class="page-panel-content" :class="{'h-full': full}">
             <slot />
         </div>
     </Layout>

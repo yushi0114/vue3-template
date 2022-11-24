@@ -12,9 +12,9 @@ const props = withDefaults(defineProps<{ pageConfig: Partial<IPaginationConfig> 
     pageConfig: () => reactive({}),
 });
 const emit = defineEmits<{
-    (e: 'page-change', values: Partial<IPaginationConfig>): void;
+    (e: 'page-change', values: IPaginationConfig): void;
 }>();
-const page: Partial<IPaginationConfig> = reactive({
+const page: any = reactive({
     ...props.pageConfig,
 });
 watch(page, () => {

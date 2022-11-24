@@ -18,8 +18,9 @@ export function dataURLtoBlob(base64Buf: string) {
 /**
  * @description: blob to file
  */
-export function blobToFile(theBlob: Blob, type: any) {
-    (theBlob as any).lastModifiedDate = new Date();
+// eslint-disable-next-line no-undef
+export function blobToFile(theBlob: Blob & { lastModifiedDate?: Date }, type: FilePropertyBag) {
+    theBlob.lastModifiedDate = new Date();
 
     return new File([theBlob], `${new Date().getTime()}.png`, type);
 }
@@ -36,7 +37,7 @@ export function dataURLToFile(base64Buf: string) {
  * img url to base64
  * @param url
  */
-export function urlToBase64(url: string, mineType = 'image/png') {
+export function urlToBase64(url: string, mineType = 'image/png'): Promise<string> {
     return new Promise((resolve, reject) => {
         let canvas = document.createElement('CANVAS') as HTMLCanvasElement | null;
         const ctx = canvas ? canvas.getContext('2d') : '';

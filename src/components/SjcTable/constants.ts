@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\SjcTable\constants.ts
  * @Author: zys
  * @Date: 2022-11-04 09:12:54
- * @LastEditTime: 2022-11-09 14:28:25
+ * @LastEditTime: 2022-11-17 09:19:11
  * @LastEditors: zys
  * @Reference:
  */
@@ -13,7 +13,7 @@ export const INIT_PAGINATION_CONFIG: Partial<IPaginationConfig> = {
     total: 0,
     currentPage: 1,
     pageSize: 10,
-    pageSizes: [10, 20, 30, 50],
+    pageSizes: [10, 20, 50],
     layout: 'total, sizes, prev, pager, next, jumper',
 };
 

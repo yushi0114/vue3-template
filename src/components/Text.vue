@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { useDark } from '@vueuse/core';
+import type { Placement } from 'element-plus';
+
 export type TextColor = 'primary' | 'danger' | 'success' | 'warning' | 'info' | 'exception' | 'error' |
         'paragraph' | 'regular' | 'secondary' | 'placeholder' | 'disbled' |
         'current';
@@ -13,7 +16,12 @@ export interface ITextProps {
     bold?: boolean,
     uppercase?: boolean,
     underline?: boolean,
+    content?: string;
+    placement?: Placement;
 }
+const isDark = useDark();
+
+const text = ref<HTMLElement | null>();
 
 const props = withDefaults(
     defineProps<ITextProps>(),
@@ -27,26 +35,64 @@ const props = withDefaults(
         bold: false,
         uppercase: false,
         underline: false,
+        content: '',
+        placement: 'top'
     }
 );
 
+const effect = computed(() => {
+    return isDark ? 'dark' : 'light';
+});
+
+const isDisabledTooltip = ref(true);
+
+const onMouseEnter = () => {
+    const clientWidth = text?.value?.clientWidth ?? 0;
+
+    const scrollWidth = text?.value?.scrollWidth ?? 0;
+    if (clientWidth && scrollWidth) {
+        isDisabledTooltip.value = (clientWidth >= scrollWidth);
+    }
+};
+
 </script>
 <template>
-    <span class="i-text" v-bind="$attrs" :class="[
-        props.italic ? 'i-text-italic' : '',
-        props.truncate ? 'i-text-truncate' : '',
-        props.block ? 'i-text-block' : '',
-        props.uppercase ? 'i-text-uppercase' : '',
-        props.underline ? 'i-text-underline' : '',
-        props.bold ? 'i-text-bold' : '',
-        'i-text-' + props.align,
-        props.size === 'current' ? '' : 'i-text-' + props.size,
-        props.color === 'current' ? '' : 'i-text-color-' + props.color,
-    ]">
-        <slot />
-    </span>
+    <el-tooltip
+        popper-class="sjc-tooltip"
+        :effect="effect"
+        :disabled="isDisabledTooltip"
+        :placement="placement"
+    >
+            <template #content>
+                <slot name="content">
+                    <template v-if="content">
+                        {{ content }}
+                    </template>
+                    <slot v-else />
+                </slot>
+            </template>
+            <span class="i-text" v-bind="$attrs" :class="[
+                props.italic ? 'i-text-italic' : '',
+                props.truncate ? 'i-text-truncate' : '',
+                props.block ? 'i-text-block' : '',
+                props.uppercase ? 'i-text-uppercase' : '',
+                props.underline ? 'i-text-underline' : '',
+                props.bold ? 'i-text-bold' : '',
+                'i-text-' + props.align,
+                props.size === 'current' ? '' : 'i-text-' + props.size,
+                props.color === 'current' ? '' : 'i-text-color-' + props.color,
+            ]"
+            ref="text"
+            @mouseover="onMouseEnter"
+            >
+                <slot />
+            </span>
+        </el-tooltip>
 </template>
 <style lang="postcss">
+.sjc-tooltip {
+    @apply max-w-50%;
+}
 .i-text {
     @apply inline text-current;
 }

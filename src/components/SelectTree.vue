@@ -54,7 +54,7 @@ watch(selfSltIds, () => {
         <li v-for="opt in options" :key="opt.id">
             <div>
               <Checkbox v-model="selfSltIds" :value="opt.id">
-                {{ opt.label }} | {{ opt.id }}
+                {{ opt.title }} | {{ opt.id }}
               </Checkbox>
             </div>
             <SelectTree

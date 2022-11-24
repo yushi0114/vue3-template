@@ -8,11 +8,11 @@ import { dataURLtoBlob, urlToBase64 } from './base64Conver';
  * @param {*} mime
  * @param {*} bom
  */
-export function downloadByData(data, filename, mime, bom) {
+export function downloadByData(data: Blob, filename: string, mime: string, bom: string) {
     const blobData = typeof bom !== 'undefined' ? [bom, data] : [data];
     const blob = new Blob(blobData, { type: mime || 'application/octet-stream' });
-    if (typeof window.navigator.msSaveBlob !== 'undefined') {
-        window.navigator.msSaveBlob(blob, filename);
+    if (typeof (window.navigator as any).msSaveBlob !== 'undefined') {
+        (window.navigator as any).msSaveBlob(blob, filename);
     } else {
         const blobURL = window.URL.createObjectURL(blob);
         const tempLink = document.createElement('a');
@@ -36,7 +36,7 @@ export function downloadByData(data, filename, mime, bom) {
  * @param mime
  * @param bom
  */
-export function downloadByBase64(buf, filename, mime, bom) {
+export function downloadByBase64(buf: string, filename: string, mime: string, bom: string) {
     const base64Buf = dataURLtoBlob(buf);
     downloadByData(base64Buf, filename, mime, bom);
 }
@@ -48,7 +48,7 @@ export function downloadByBase64(buf, filename, mime, bom) {
  * @param mime
  * @param bom
  */
-export function downloadByOnlineUrl(url, filename, mime, bom) {
+export function downloadByOnlineUrl(url: string, filename: string, mime: string, bom: string) {
     urlToBase64(url).then((base64) => {
         downloadByBase64(base64, filename, mime, bom);
     });

@@ -1,13 +1,22 @@
 <template>
-    <div v-loading="loading" class="common-table">
+    <div
+        v-loading="loading"
+        class="common-table">
         <!--批量操作栏，勾选行时显示-->
-        <el-row v-if="$tableConfig.showSelection && state.selection.length" justify="space-between" align="middle">
+        <el-row
+            v-if="$tableConfig.showSelection && state.selection.length"
+            justify="space-between"
+            align="middle">
             <div class="multi-menu">
                 <span style="font-size: 12px">已选中{{ state.selection.length }}项</span>
                 <el-divider direction="vertical" />
-                <slot name="multiSelectMenu" :selection="state.selection" />
+                <slot
+                    name="multiSelectMenu"
+                    :selection="state.selection" />
             </div>
-            <a class="close" @click="clearSelection"></a>
+            <a
+                class="close"
+                @click="clearSelection"></a>
         </el-row>
         <!-- 数据表格 -->
         <el-table
@@ -17,9 +26,13 @@
             :row-key="$tableConfig.rowKey"
             @selection-change="selectionChange">
             <!-- 是否是展开行 -->
-            <el-table-column v-if="$tableConfig.showExpand" type="expand">
+            <el-table-column
+                v-if="$tableConfig.showExpand"
+                type="expand">
                 <template #default="props">
-                    <slot name="expand" :props="props" />
+                    <slot
+                        name="expand"
+                        :props="props" />
                 </template>
             </el-table-column>
             <!-- 多选 -->
@@ -30,7 +43,11 @@
                 :reserve-selection="$tableConfig.isCheckMemory"
                 align="center"></el-table-column>
             <!-- 显示自定义索引 -->
-            <el-table-column v-if="$tableConfig.showIndexColumn" type="index" :index="typeIndex" width="60">
+            <el-table-column
+                v-if="$tableConfig.showIndexColumn"
+                type="index"
+                :index="typeIndex"
+                width="60">
                 <!-- 自定义序列号 -->
                 <template #header>
                     <span>{{ $tableConfig.indexLabel }}</span>
@@ -42,28 +59,49 @@
                     v-if="column.children && column.children.length"
                     :key="column.prop"
                     :column="column"></multistage-column>
-                <el-table-column v-else :key="column.id" v-bind="column" show-overflow-tooltip>
-                    <template v-if="column.slotName" #default="scope">
-                        <slot :name="column.slotName" :scope="scope"></slot>
+                <el-table-column
+                    v-else
+                    :key="column.id"
+                    v-bind="column"
+                    show-overflow-tooltip>
+                    <template
+                        v-if="column.slotName"
+                        #default="scope">
+                        <slot
+                            :name="column.slotName"
+                            :scope="scope"></slot>
                     </template>
                 </el-table-column>
             </template>
             <!-- 操作栏 -->
-            <el-table-column v-if="$tableConfig.showHandler" v-bind="$tableConfig.handlerConfig">
+            <el-table-column
+                v-if="$tableConfig.showHandler"
+                v-bind="$tableConfig.handlerConfig">
                 <template #default="scope">
-                    <slot name="handler" :scope="scope"></slot>
+                    <slot
+                        name="handler"
+                        :scope="scope"></slot>
                 </template>
             </el-table-column>
             <!-- 自定义默认内容 -->
-            <el-table-column v-if="$tableConfig.showAppend" type="append" :label="$tableConfig.appendLabel">
+            <el-table-column
+                v-if="$tableConfig.showAppend"
+                type="append"
+                :label="$tableConfig.appendLabel">
                 <template #default="props">
-                    <slot name="append" :props="props" />
+                    <slot
+                        name="append"
+                        :props="props" />
                 </template>
             </el-table-column>
         </el-table>
         <!-- 分页配置 -->
-        <div v-if="showPagination" class="pagination">
-            <pagination :page-config="$paginationConfig" @page-change="pageChange"></pagination>
+        <div
+            v-if="showPagination"
+            class="pagination">
+            <pagination
+                :page-config="$paginationConfig"
+                @page-change="pageChange"></pagination>
         </div>
     </div>
 </template>
@@ -80,6 +118,7 @@ import MultistageColumn from './components/MultistageColumn.vue'; // 递归多�
 import Pagination from './components/Pagination.vue'; // 分页组件
 import type { ITableConfig, IColumn, ITableData, IPaginationConfig } from './types';
 import { INIT_PAGINATION_CONFIG, INIT_TABLE_CONFIG } from './constants';
+import { cloneDeep } from 'lodash';
 
 type IProps = {
     tableData: ITableData;
@@ -104,18 +143,19 @@ const state: { selection: ITableData } = reactive({
     selection: [],
 });
 const commonTableRef = ref<HTMLElement | null>(null); // 表格ref
+const TABLE_CONFIG = cloneDeep(INIT_TABLE_CONFIG);
 // 合并表格配置项
 const $tableConfig = computed(() => {
     let result: Partial<ITableConfig> = {};
     const $tableConfig: IColumn = { label: '操作', minWidth: 100, width: 120, fixed: 'right', align: 'center' };
     // eslint-disable-next-line no-unused-expressions
     prop.tableConfig.handlerConfig && Object.assign($tableConfig, prop.tableConfig.handlerConfig);
-    result = Object.assign(INIT_TABLE_CONFIG, prop.tableConfig);
+    result = Object.assign(TABLE_CONFIG, prop.tableConfig);
     result.handlerConfig = $tableConfig;
     return result;
 });
 
-const PAGINATION_CONFIG = reactive(INIT_PAGINATION_CONFIG);
+const PAGINATION_CONFIG = reactive(cloneDeep(INIT_PAGINATION_CONFIG));
 // 合并分页配置
 const $paginationConfig = computed(() => {
     return Object.assign(PAGINATION_CONFIG, prop.paginationConfig) ?? {};

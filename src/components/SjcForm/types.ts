@@ -3,34 +3,21 @@
  * @FilePath: \dms-web\src\components\SjcForm\types.ts
  * @Author: zys
  * @Date: 2022-10-28 10:51:15
- * @LastEditTime: 2022-11-11 09:56:53
+ * @LastEditTime: 2022-11-18 11:33:38
  * @LastEditors: zys
  * @Reference:
  */
 import type { CSSProperties } from 'vue';
-import type { FILE_TYPE } from '@/enums';
+import type { FILE_TYPE, FormType, FILE_SERVER } from '@/enums';
+import type { FormItemRule } from 'element-plus';
 
-type DefItemType =
-    | 'select'
-    | 'input'
-    | 'date-picker'
-    | 'tree'
-    | 'input-number'
-    | 'textarea'
-    | 'time-picker'
-    | 'switch'
-    | 'radio'
-    | 'checkbox'
-    | 'text'
-    | 'unit'
-    | 'upload';
-type DefItemValue = string | number | string[] | null | undefined;
+type DefItemType = FormType;
+type DefItemValue = any;
 interface Tree {
     id: number | string;
     label: string;
     children?: Tree[];
 }
-import type { FormItemRule } from 'element-plus';
 
 type InputForm = {
     maxlength?: number | string;
@@ -55,7 +42,16 @@ type SelectForm = {
     selectOptions?: { title: string; value: string | number }[];
 };
 type DatePicker = {
-    datePickerType?: string;
+    datePickerType?:
+        | 'year'
+        | 'month'
+        | 'date'
+        | 'dates'
+        | 'datetime'
+        | 'week'
+        | 'datetimerange'
+        | 'daterange'
+        | 'monthrange';
     valueFormat?: string;
     disabledDate?: (time: Date) => boolean;
     startPlaceholder?: string;
@@ -110,6 +106,7 @@ export type DefItem = InputForm &
         defaultValue?: DefItemValue;
         value?: DefItemValue;
         rules?: FormItemRule[];
+        fileServer?: FILE_SERVER;
     };
 
 type IFormValues<K extends string = string> = Record<K, DefItemValue>;

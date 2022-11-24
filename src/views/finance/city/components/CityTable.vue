@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { fetchCityList, deleteCity } from '@/api/finance';
+import { fetchCityList, deleteCity } from '@/api/city';
 import type { ICityTable } from '@/types/city';
 
-import cityDetail from './CityDetail.vue';
-import cityModal from './CityModal.vue';
+import CityDetail from './CityDetail.vue';
+import CityModal from './CityModal.vue';
 
 const dataSource = ref<ICityTable[]>([]);
 
@@ -35,8 +35,8 @@ const page = reactive({
 
 // 排序
 const sort = reactive({
-    sortField: '',
-    sortType: ''
+    sortField: 'sort',
+    sortType: 'asc'
 });
 
 onMounted(() => {
@@ -49,7 +49,6 @@ const getCityList = () => {
         name: searchInput.value,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
-        menuName: 'city',
         sortField: sort.sortField,
         sortType: sort.sortType
     };
@@ -72,9 +71,21 @@ const refreshTable = () => {
     getCityList();
 };
 
-const handleSearch = () => {
-    page.currentPage = 1;
-    getCityList();
+const handleSearch = (isClear: boolean) => {
+    if (isClear) {
+        page.currentPage = 1;
+        getCityList();
+    } else {
+        if (searchInput.value.length >= 2) {
+            page.currentPage = 1;
+            getCityList();
+        } else {
+            ElMessage({
+                type: 'error',
+                message: '输入内容不能少于2个字符',
+            });
+        }
+    }
 };
 
 const handleSortChange = ({ prop, order } : { prop: string, order: string }) => {
@@ -139,6 +150,7 @@ const handleDialogClose = (val: boolean) => {
 };
 
 const handleSizeChange = (val: number) => {
+    page.currentPage = 1;
     page.pageSize = val;
     getCityList();
 };
@@ -158,11 +170,11 @@ const handleCurrentChange = (val: number) => {
                 placeholder="请输入关键字进行查询"
                 v-model.trim="searchInput"
                 clearable
-                @clear="handleSearch"
-                @keyup.enter="handleSearch"
+                @clear="handleSearch(true)"
+                @keyup.enter="handleSearch(false)"
             >
                 <template #append>
-                    <el-button :icon="Search" @click="handleSearch" />
+                    <el-button :icon="Search" @click="handleSearch(false)" />
                 </template>
             </el-input>
             <el-button type="primary" :icon="Plus" @click="handleCreateCity">新建</el-button>
@@ -225,11 +237,10 @@ const handleCurrentChange = (val: number) => {
             <city-modal :dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
         </div>
     </div>
-
 </template>
 
 <style lang="scss" scoped>
-.city-wrapper {
+.city-table {
 
     .table-header {
         min-height: 40px;
@@ -244,6 +255,10 @@ const handleCurrentChange = (val: number) => {
     }
 
     .table-content {
+        :deep(.el-table__cell) {
+            padding: 12px;
+        }
+
         .underline-text {
             text-decoration: underline;
             cursor: pointer;
@@ -254,7 +269,7 @@ const handleCurrentChange = (val: number) => {
 
         .table-pagination {
             margin-top: 20px;
-            justify-content: end;
+            justify-content: flex-end;
         }
     }
 }

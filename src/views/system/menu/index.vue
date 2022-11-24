@@ -1,14 +1,14 @@
 <template>
     <PageContent :title="'菜单管理'">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="金融端" name="fin">
-                <menu-config v-if="activeName === 'fin'"></menu-config>
-            </el-tab-pane>
             <el-tab-pane label="DMS" name="dms">
                 <menu-config v-if="activeName === 'dms'"></menu-config>
             </el-tab-pane>
             <el-tab-pane label="征信端" name="cre">
                 <menu-config v-if="activeName === 'cre'"></menu-config>
+            </el-tab-pane>
+            <el-tab-pane label="金融端" name="fin">
+                <menu-config v-if="activeName === 'fin'"></menu-config>
             </el-tab-pane>
         </el-tabs>
     </PageContent>
@@ -39,7 +39,6 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-
 .el-tabs {
     position: relative;
     width: 100%;
@@ -52,27 +51,21 @@ onMounted(async () => {
     flex: 1;
     background: #ffffff;
     overflow-y: auto;
-}
 
-.el-tabs ::v-deep .el-tabs__header {
-    height: 40px;
-    min-height: 40px;
-    width: 100%;
-}
+    &::v-deep(.el-tabs__header) {
+        height: 40px;
+        min-height: 40px;
+        width: 100%;
+    }
 
-.el-tabs ::v-deep .el-tabs__content {
-    flex: 1;
-    width: 100%;
+    &::v-deep(.el-tabs__content) {
+        flex: 1;
+        width: 100%;
+    }
 }
 
 .el-tab-pane {
     height: 100%;
 }
 
-
-</style>
-<style>
-.el-popover {
-    min-width: 100px;
-}
 </style>

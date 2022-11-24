@@ -5,17 +5,22 @@
         </div>
         <div class="menu-content" v-if="institutionItemData">
             <institution-desc style="margin-bottom: 24px;"></institution-desc>
-            <el-tabs v-model="activeInstitutionName" type="card" @tab-click="handleInstitutionTabClick" class="list-tab">
+            <el-tabs v-model="activeInstitutionName" type="card" @tab-click="handleInstitutionTabClick"
+                     class="list-tab">
                 <el-tab-pane label="机构菜单" name="menuList">
                     <institution-menu></institution-menu>
                 </el-tab-pane>
                 <el-tab-pane label="角色列表" name="roleList">
-
+                    <institution-role></institution-role>
                 </el-tab-pane>
                 <el-tab-pane label="用户列表" name="userList">
-
+                    <institution-user></institution-user>
                 </el-tab-pane>
             </el-tabs>
+        </div>
+        <div v-else class="noDataContainer">
+            <div class="noData"></div>
+            <div>请在左侧选择机构~</div>
         </div>
     </div>
 </template>
@@ -24,7 +29,9 @@
 import InstitutionMenu from './institution-menu/index.vue';
 import InstitutionTree from '@/views/finance/institution/components/institution-tree.vue';
 import InstitutionDesc from '@/views/finance/institution/components/institution-desc.vue';
-import { institutionItemData, activeInstitutionName } from './finance-institution';
+import InstitutionRole from '@/views/finance/institution/components/institution-role/index.vue';
+import InstitutionUser from '@/views/finance/institution/components/institution-user/index.vue';
+import { activeInstitutionName, institutionItemData } from './finance-institution';
 
 function handleInstitutionTabClick() {
 
@@ -51,11 +58,12 @@ function handleInstitutionTabClick() {
     }
 
     .menu-content {
-        margin-left: 24px;
+        padding-left: 24px;
         height: 100%;
-        border-radius: 4px;
         flex: 1;
         box-sizing: border-box;
+        display: flex;
+        flex-flow: column nowrap;
         overflow-y: auto;
 
         .el-tabs {
@@ -82,5 +90,27 @@ function handleInstitutionTabClick() {
             border-radius: 0 4px 4px 4px;
         }
     }
+
+    .noDataContainer {
+        width: 100%;
+        height: 100%;
+        flex: 1;
+        box-sizing: border-box;
+        margin-left: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column nowrap;
+        font-size: 14px;
+        color: #909399;
+
+        .noData {
+            background-size: 100% 100%;
+            width: 483px;
+            height: 430px;
+        }
+    }
+
+
 }
 </style>

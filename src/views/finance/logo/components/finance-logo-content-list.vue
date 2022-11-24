@@ -20,11 +20,17 @@
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }">
-        <el-table-column prop="orgName" label="机构名称" />
-        <el-table-column prop="inquiry" label="查询账号" />
-        <el-table-column prop="corpName" label="企业名称" />
-        <el-table-column prop="corpCode" label="统一信用代码"/>
-        <el-table-column prop="createTime" sortable label="查询时间"/>
+        <el-table-column prop="orgName" label="所属机构"/>
+        <el-table-column prop="account" label="手机号码"/>
+        <el-table-column prop="name" label="姓名"/>
+        <el-table-column prop="status" label="状态">
+            <template #default="scope">
+                <el-image :src="scope.row.logoContent" style="width: 100px; height: 100px"></el-image>
+            </template>
+        </el-table-column>
+        <el-table-column prop="createBy" label="创建人"/>
+        <el-table-column prop="createTime" sortable label="创建时间"/>
+        <el-table-column prop="updateTime" sortable label="更新时间"/>
     </el-table>
     <div class="page-content">
         <el-pagination
@@ -41,18 +47,13 @@
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
 import { LoadingService } from '@/views/system/loading-service';
-import {
-    filterObject,
-    getPageList,
-    listData,
-    resetFilterObject
-} from './finance-score';
+import { filterObject, getPageList, listData, resetFilterObject } from './finance-logo';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
-async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
+async function handleSortChange(params: { prop: 'create_time', order: string }) {
     console.log(params);
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;

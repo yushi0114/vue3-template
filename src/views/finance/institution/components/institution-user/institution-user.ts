@@ -1,10 +1,12 @@
-import { reactive, ref } from 'vue';
-import type { RoleListItemType } from '@/views/system/type/role-list.type';
-import type { UserFormType, UserListItemType, UserTabType } from '@/views/system/type/user-list.type';
-import { addUserApi, deleteUserApi, getTotalRoleListApi, getUserListApi, updateUserApi } from '@/api/system-manage';
+import { ref } from 'vue';
+import { getFinanceOrgUserRoleList } from '@/api/finance/finance-institution';
+import { currentMenuId } from '@/views/finance/institution/components/finance-institution';
+import type { UserFormType, UserTabType } from '@/views/system/type/user-list.type';
+import { activeName, getUserListData } from '@/views/system/user/components/user-list';
+import { addUserApi, deleteUserApi, getTotalRoleListApi, updateUserApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
+import type { RoleListItemType } from '@/views/system/type/role-list.type';
 
-export const activeName = ref<UserTabType>('dms');
 export const mode = ref<'form' | 'list'>('list');
 export const currentUserId = ref();
 export const form = ref<UserFormType>({
@@ -13,37 +15,41 @@ export const form = ref<UserFormType>({
     account: '',
     status: false
 });
+
 export const formType = ref<'create' | 'edit'>('edit');
 export const totalRoleList = ref<RoleListItemType[]>();
 
-export const userTableData = reactive<{
-    list: UserListItemType[],
-    total: number
+export const listData = ref<{
+    total: number;
+    list: any[];
 }>({
-    list: [],
-    total: 0
+    total: 0,
+    list: []
 });
 
-// export const userForm = ref<UserFormType>({
-//     account: '',
-//     name: '',
-//     roleId: '',
-//     status: false
-// });
-
-export const userFilterObject = ref<{
+export const filterObject = ref<{
     currentSize: number;
     currentPage: number;
     searchInput: string;
-    sortField: 'updateTime' | 'createTime',
+    sortField: 'create_time' | 'update_time',
     sortType: 'asc' | 'desc'
 }>({
-    sortField: 'updateTime',
+    sortField: 'create_time',
     sortType: 'desc',
     searchInput: '',
     currentSize: 0,
     currentPage: 0
 });
+
+export function resetFilterObject() {
+    filterObject.value = {
+        sortField: 'create_time',
+        sortType: 'desc',
+        searchInput: '',
+        currentSize: 0,
+        currentPage: 0
+    };
+}
 
 export function resetUserForm() {
     form.value = {
@@ -52,6 +58,7 @@ export function resetUserForm() {
         status: false
     };
 }
+
 export const roleUIList = computed(() => totalRoleList.value?.map(item => ({
     ...item,
     label: item.name,
@@ -67,30 +74,19 @@ export async function handleGoBack() {
     });
 }
 
-export function resetUserFilterObject() {
-    userFilterObject.value = {
-        sortField: 'updateTime',
-        sortType: 'desc',
-        searchInput: '',
-        currentSize: 0,
-        currentPage: 0
-    };
-}
-
-export async function getUserListData(params: {
-    tab: UserTabType,
-}): Promise<void> {
+export async function getUserPageList(): Promise<void> {
     return new Promise((resolve) => {
-        getUserListApi({
-            ...params,
-            pageIndex: userFilterObject.value.currentPage + 1,
-            pageSize: userFilterObject.value.currentSize,
-            searchInput: userFilterObject.value.searchInput,
-            sortField: userFilterObject.value.sortField,
-            sortType: userFilterObject.value.sortType
+        getFinanceOrgUserRoleList({
+            pageIndex: filterObject.value.currentPage + 1,
+            pageSize: filterObject.value.currentSize,
+            searchInput: filterObject.value.searchInput,
+            sortField: filterObject.value.sortField,
+            sortType: filterObject.value.sortType,
+            menuName: '',
+            orgId: currentMenuId.value,
         }).then(data => {
-            userTableData.list = data.data;
-            userTableData.total = data.pageTotal;
+            listData.value.list = data.data;
+            listData.value.total = data.pageTotal;
             resolve();
         }).catch(() => {
             resolve();
@@ -154,8 +150,8 @@ export async function updateUser(): Promise<void> {
 
 export async function deleteUser(params: {
     account: string;
-    id:string;
-}): Promise<void>{
+    id: string;
+}): Promise<void> {
     return new Promise((resolve) => {
         deleteUserApi({
             menuName: '',
@@ -173,3 +169,4 @@ export async function deleteUser(params: {
         });
     });
 }
+

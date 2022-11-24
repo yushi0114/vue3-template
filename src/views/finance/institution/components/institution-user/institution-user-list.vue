@@ -6,7 +6,7 @@
             @clear="handleClear"
             clearable
             @keyup.enter="handleSearchList"
-            v-model="userFilterObject.searchInput">
+            v-model="filterObject.searchInput">
             <template #append>
                 <el-button @click="handleSearchList">
                     <template #icon>
@@ -21,7 +21,7 @@
             </template>
         </el-button>
     </div>
-    <el-table :data="userTableData.list" style="width: 100%"
+    <el-table :data="listData.list" style="width: 100%"
               @sort-change="handleSortChange"
               :default-sort="{ prop: 'updateTime', order: 'descending' }">
         <el-table-column prop="name" label="姓名" width="180"/>
@@ -59,9 +59,9 @@
             class="margin-20-20"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="userFilterObject.currentPage"
+            :current-page="filterObject.currentPage"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="userTableData.total">
+            :total="listData.total">
         </el-pagination>
     </div>
 </template>
@@ -70,16 +70,17 @@
 import Icon from '@/components/Icon.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
-    activeName,
-    currentUserId, deleteUser,
-    formType,
-    getUserListData,
-    mode,
-    resetUserFilterObject, resetUserForm,
-    userFilterObject,
+    currentUserId,
+    deleteUser,
+    filterObject,
     form,
-    userTableData
-} from '@/views/system/user/components/user-list';
+    formType,
+    getUserPageList,
+    listData,
+    mode,
+    resetFilterObject,
+    resetUserForm
+} from './institution-user';
 import type { UserListItemType } from '@/views/system/type/user-list.type';
 import { LoadingService } from '@/views/system/loading-service';
 
@@ -87,35 +88,29 @@ function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
-async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
+async function handleSortChange(params: { prop: 'update_time' | 'create_time', order: string }) {
     console.log(params);
     LoadingService.getInstance().loading();
-    userFilterObject.value.currentPage = 0;
-    userFilterObject.value.currentSize = 10;
-    userFilterObject.value.sortField = params.prop;
-    userFilterObject.value.sortType = formatSortType(params.order);
-    await getUserListData({
-        tab: activeName.value
-    });
+    filterObject.value.currentPage = 0;
+    filterObject.value.currentSize = 10;
+    filterObject.value.sortField = params.prop;
+    filterObject.value.sortType = formatSortType(params.order);
+    await getUserPageList();
     LoadingService.getInstance().stop();
 }
 
 async function handleSearchList() {
     LoadingService.getInstance().loading();
-    userFilterObject.value.currentPage = 0;
-    userFilterObject.value.currentSize = 10;
-    await getUserListData({
-        tab: activeName.value
-    });
+    filterObject.value.currentPage = 0;
+    filterObject.value.currentSize = 10;
+    await getUserPageList();
     LoadingService.getInstance().stop();
 }
 
 async function handleClear() {
     LoadingService.getInstance().loading();
-    resetUserFilterObject();
-    await getUserListData({
-        tab: activeName.value
-    });
+    resetFilterObject();
+    await getUserPageList();
     LoadingService.getInstance().stop();
 }
 
@@ -136,11 +131,11 @@ async function handleCreateNewItem() {
 }
 
 function handleCurrentChange(item: number) {
-    userFilterObject.value.currentPage = item;
+    filterObject.value.currentPage = item;
 }
 
 function handleSizeChange(item: number) {
-    userFilterObject.value.currentSize = item;
+    filterObject.value.currentSize = item;
 }
 
 function handleRemoveItem(item: UserListItemType) {
@@ -153,14 +148,12 @@ function handleRemoveItem(item: UserListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
+        .then(async () => {
             await deleteUser({
                 account: item.account,
                 id: item.id
             });
-            await getUserListData({
-                tab: activeName.value
-            });
+            await getUserPageList();
         })
         .catch(() => {
             ElMessage({

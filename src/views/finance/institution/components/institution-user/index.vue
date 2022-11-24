@@ -1,19 +1,18 @@
 <template>
     <div class="pane-container">
         <div class="list-content" v-if="mode === 'list'">
-            <role-list-content></role-list-content>
+            <user-list-content></user-list-content>
         </div>
         <div class="form-content" v-if="mode === 'form'">
-            <role-form></role-form>
+            <user-form></user-form>
         </div>
     </div>
-
 </template>
 
 <script lang="ts" setup>
-import RoleForm from './role-form.vue';
-import RoleListContent from '@/views/system/role/components/role-list-content.vue';
-import { mode } from './role-list';
+import UserForm from './institution-user-form.vue';
+import UserListContent from './institution-user-list.vue';
+import { mode } from './institution-user';
 </script>
 
 <style scoped lang="scss">

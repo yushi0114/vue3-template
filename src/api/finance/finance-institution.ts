@@ -26,3 +26,46 @@ export async function getFinanceInstitutionMenuTree(params: { id: string }): Pro
         params
     });
 }
+
+
+export async function getFinanceOrgRoleList(params: {
+    searchInput?: string;
+    sortField: 'create_time' | 'update_time';
+    sortType: 'desc' | 'asc';
+    pageIndex: number;
+    pageSize: number;
+    menuName: string;
+    orgId: string;
+}): Promise<{
+    pageTotal: number;
+    data: any[];
+}> {
+    return api.get(`${DMS_DOMAIN}/v1/org/role/list`, {
+        params
+    });
+}
+
+export async function getFinanceOrgUserRoleList(params: {
+    searchInput?: string;
+    sortField: 'create_time' | 'update_time';
+    sortType: 'desc' | 'asc';
+    pageIndex: number;
+    pageSize: number;
+    menuName: string;
+    orgId: string;
+    name?: string;
+}): Promise<{
+    pageTotal: number;
+    data: any[];
+}> {
+    return api.get(`${DMS_DOMAIN}/v1/org/user/role/list`, {
+        params
+    });
+}
+
+export async function getFinanceOrgAllRoleById(params: { roleId: string }): Promise<FinanceInstitutionType[]> {
+    return api.get(`${DMS_DOMAIN}/v1/org/role/all`, {
+        params
+    });
+}
+

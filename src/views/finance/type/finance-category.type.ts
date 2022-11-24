@@ -44,6 +44,10 @@ export type FinanceCategoryListItemType = {
     updateTime: string
 }
 
+export type FinanceCategoryItemType = FinanceCategoryListItemType & {
+    menuIdArr: string[];
+}
+
 
 export type AllSystemMenuTreeItem = {
     id: string;

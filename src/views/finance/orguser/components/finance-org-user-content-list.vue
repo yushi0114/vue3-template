@@ -20,11 +20,15 @@
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }">
-        <el-table-column prop="orgName" label="机构名称" />
-        <el-table-column prop="inquiry" label="查询账号" />
-        <el-table-column prop="corpName" label="企业名称" />
-        <el-table-column prop="corpCode" label="统一信用代码"/>
-        <el-table-column prop="createTime" sortable label="查询时间"/>
+        <el-table-column prop="orgName" label="所属机构" />
+        <el-table-column prop="account" label="手机号码" />
+        <el-table-column prop="name" label="姓名" />
+        <el-table-column prop="status" label="状态">
+
+        </el-table-column>
+        <el-table-column prop="createBy" label="创建人"/>
+        <el-table-column prop="createTime" sortable label="创建时间"/>
+        <el-table-column prop="updateTime" sortable label="更新时间"/>
     </el-table>
     <div class="page-content">
         <el-pagination
@@ -46,7 +50,7 @@ import {
     getPageList,
     listData,
     resetFilterObject
-} from './finance-score';
+} from './finance-org-user';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';

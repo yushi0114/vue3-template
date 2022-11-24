@@ -46,12 +46,13 @@ import type { FormInstance, FormRules } from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import {
     activeName,
-    createMenu,
     currentMenuId,
-    editMenu,
     formType,
+    menuForm,
+    editMenu,
+    createMenu,
     getTreeData,
-    menuForm, resetMenuForm,
+    resetMenuForm,
     setFormType
 } from './menu-list';
 import type { MenuFormType } from '@/views/system/type/menu-list.type';
@@ -72,7 +73,6 @@ const rules = reactive<FormRules>({
         { max: 255, message: '菜单路径不能超过255个字符', trigger: 'blur' },
     ],
     desc: [
-        // { required: true, message: '请输入菜单描述', trigger: 'blur' },
         { max: 255, message: '菜单描述不能超过255个字符', trigger: 'blur' },
     ],
     sort: [
@@ -113,6 +113,7 @@ async function handleSaveForm(params: {
     }
     if (params.type === 'edit' && params.id) {
         await editMenu(params.id, params.form);
+        await getTreeData({ tab: activeName.value });
     }
     LoadingService.getInstance().stop();
 }

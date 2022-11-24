@@ -62,7 +62,7 @@
                             </el-button>
                         </div>
                         <template #reference>
-                            <Icon :name="'ep:more'"></Icon>
+                            <Icon :name="'ep:more'" style="transform: rotate(90deg)"></Icon>
                         </template>
                     </el-popover>
                 </div>

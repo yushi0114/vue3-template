@@ -1,7 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" clearable   >
+            <el-input placeholder="请输入搜索内容" clearable>
                 <template #append>
                     <el-button @click="handleSearchMenuTree">
                         <template #icon>
@@ -75,10 +75,12 @@
 import { ref } from 'vue';
 import type { TreeItemType } from '@/views/system/type/menu-list.type';
 import Icon from '@/components/Icon.vue';
-import { getInstitutionTree, institutionTreeData, getInstitutionItem } from './finance-institution';
+import { getInstitutionItem, getInstitutionTree, institutionTreeData, setCurrentMenuId } from './finance-institution';
 import {
     setFinanceInstitutionMenuTree
 } from "@/views/finance/institution/components/institution-menu/institution-menu";
+import { getRolePageList } from "@/views/finance/institution/components/institution-role/institution-role";
+import { getUserPageList } from "@/views/finance/institution/components/institution-user/institution-user";
 
 
 const activeId = ref();
@@ -111,8 +113,11 @@ function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'cr
 
 async function handleNodeClick(data: TreeItemType) {
     // todo
+    setCurrentMenuId(data.id);
     await getInstitutionItem(data.id);
-    await setFinanceInstitutionMenuTree({id: data.id})
+    await setFinanceInstitutionMenuTree({ id: data.id });
+    await getRolePageList();
+    await getUserPageList();
 }
 
 function handleMouseEnter(event: string) {

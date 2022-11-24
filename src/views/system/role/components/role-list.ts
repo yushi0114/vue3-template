@@ -31,6 +31,7 @@ export function resetRoleForm() {
         menuIdArr: []
     };
 }
+
 export const roleFilterObject = ref<{
     currentSize: number;
     currentPage: number;
@@ -97,7 +98,7 @@ export async function getRolePageList(params: {
     });
 }
 
-export async function addRole(checkedNodeIds: string[]): Promise<void>{
+export async function addRole(checkedNodeIds: string[]): Promise<void> {
     return new Promise((resolve) => {
         addRoleApi({
             ...roleForm.value,
@@ -117,7 +118,7 @@ export async function addRole(checkedNodeIds: string[]): Promise<void>{
 
 }
 
-export async function updateRole(checkedNodeIds: string[]): Promise<void>{
+export async function updateRole(checkedNodeIds: string[]): Promise<void> {
     return new Promise((resolve) => {
         updateRoleApi({
             roleId: currentRoleId.value,

@@ -44,7 +44,7 @@ import {
     roleUIList,
     updateUser,
     form
-} from '@/views/system/user/components/user-list';
+} from './institution-user';
 import { LoadingService } from '@/views/system/loading-service';
 
 const ruleFormRef = ref<FormInstance>();

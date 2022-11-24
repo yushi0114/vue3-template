@@ -45,7 +45,7 @@ import {
     roleForm,
     roleMenuTreeData,
     updateRole
-} from './role-list';
+} from './institution-role';
 import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 

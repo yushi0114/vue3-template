@@ -1,11 +1,11 @@
 import { ref } from 'vue';
-import type { FinanceReportListItemType } from '@/views/finance/type/finance-record.type';
-import { getFinanceReportList } from '@/api/finance/finance-report';
+import { getFinanceOrgUserList } from '@/api/finance/finance-org-user';
+import type { FinanceOrgUserListItemType } from '@/views/finance/type/finance-org-user.type';
 
 
 export const listData = ref<{
     total: number;
-    list: FinanceReportListItemType[];
+    list: FinanceOrgUserListItemType[];
 }>({
     total: 0,
     list: []
@@ -21,7 +21,7 @@ export const filterObject = ref<{
     sortField: 'create_time',
     sortType: 'desc',
     searchInput: '',
-    currentSize: 10,
+    currentSize: 0,
     currentPage: 0
 });
 
@@ -30,14 +30,14 @@ export function resetFilterObject() {
         sortField: 'create_time',
         sortType: 'desc',
         searchInput: '',
-        currentSize: 10,
+        currentSize: 0,
         currentPage: 0
     };
 }
 
 export async function getPageList(): Promise<void> {
     return new Promise((resolve) => {
-        getFinanceReportList({
+        getFinanceOrgUserList({
             pageIndex: filterObject.value.currentPage + 1,
             pageSize: filterObject.value.currentSize,
             searchInput: filterObject.value.searchInput,

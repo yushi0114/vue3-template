@@ -10,7 +10,7 @@ export type FinanceReportListItemType = {
 
 
 export type GetFinanceReportListType = {
-    sortField: 'updateTime' | 'createTime',
+    sortField: 'create_time',
     sortType: 'asc' | 'desc'
     searchInput?: string,
     menuName: string;

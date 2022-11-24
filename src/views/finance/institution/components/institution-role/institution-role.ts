@@ -1,9 +1,10 @@
 import { ref } from 'vue';
 import type { RoleFormType, RoleListItemType, RoleTabType } from '@/views/system/type/role-list.type';
-import { addRoleApi, getMenuTreeApi, getRoleListApi, updateRoleApi } from '@/api/system-manage';
+import { addRoleApi, getMenuTreeApi, updateRoleApi } from '@/api/system-manage';
 import type { TreeItemType } from '@/views/system/type/menu-list.type';
-import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
+import { getFinanceOrgRoleList } from '@/api/finance/finance-institution';
+import { currentMenuId } from '@/views/finance/institution/components/finance-institution';
 
 export const activeName = ref<RoleTabType>('dms');
 export const roleMenuTreeData = ref<TreeItemType[]>();
@@ -31,26 +32,27 @@ export function resetRoleForm() {
         menuIdArr: []
     };
 }
+
 export const roleFilterObject = ref<{
     currentSize: number;
     currentPage: number;
     searchInput: string;
-    sortField: 'updateTime' | 'createTime',
+    sortField: 'update_time' | 'create_time',
     sortType: 'asc' | 'desc'
 }>({
-    sortField: 'updateTime',
+    sortField: 'update_time',
     sortType: 'desc',
     searchInput: '',
-    currentSize: 0,
+    currentSize: 10,
     currentPage: 0
 });
 
 export function resetRoleFilterObject() {
     roleFilterObject.value = {
-        sortField: 'updateTime',
+        sortField: 'update_time',
         sortType: 'desc',
         searchInput: '',
-        currentSize: 0,
+        currentSize: 10,
         currentPage: 0
     };
 }
@@ -58,11 +60,6 @@ export function resetRoleFilterObject() {
 export async function handleGoBack() {
     mode.value = 'list';
     currentRoleId.value = undefined;
-    LoadingService.getInstance().loading();
-    await getRolePageList({
-        tab: activeName.value
-    });
-    LoadingService.getInstance().stop();
 }
 
 export async function getTreeData(name?: RoleTabType): Promise<void> {
@@ -76,17 +73,16 @@ export async function getTreeData(name?: RoleTabType): Promise<void> {
     });
 }
 
-export async function getRolePageList(params: {
-    tab: RoleTabType,
-}): Promise<void> {
+export async function getRolePageList(): Promise<void> {
     return new Promise((resolve) => {
-        getRoleListApi({
-            ...params,
+        getFinanceOrgRoleList({
+            orgId: currentMenuId.value,
             pageIndex: roleFilterObject.value.currentPage + 1,
             pageSize: roleFilterObject.value.currentSize,
             searchInput: roleFilterObject.value.searchInput,
             sortField: roleFilterObject.value.sortField,
-            sortType: roleFilterObject.value.sortType
+            sortType: roleFilterObject.value.sortType,
+            menuName: ''
         }).then(data => {
             roleList.value.list = data.data as unknown as RoleListItemType[];
             roleList.value.total = 1;
@@ -97,7 +93,7 @@ export async function getRolePageList(params: {
     });
 }
 
-export async function addRole(checkedNodeIds: string[]): Promise<void>{
+export async function addRole(checkedNodeIds: string[]): Promise<void> {
     return new Promise((resolve) => {
         addRoleApi({
             ...roleForm.value,
@@ -117,7 +113,7 @@ export async function addRole(checkedNodeIds: string[]): Promise<void>{
 
 }
 
-export async function updateRole(checkedNodeIds: string[]): Promise<void>{
+export async function updateRole(checkedNodeIds: string[]): Promise<void> {
     return new Promise((resolve) => {
         updateRoleApi({
             roleId: currentRoleId.value,

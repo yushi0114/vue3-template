@@ -15,10 +15,10 @@ export const filterObject = ref<{
     currentSize: number;
     currentPage: number;
     searchInput: string;
-    sortField: 'updateTime' | 'createTime',
+    sortField: 'create_time',
     sortType: 'asc' | 'desc'
 }>({
-    sortField: 'updateTime',
+    sortField: 'create_time',
     sortType: 'desc',
     searchInput: '',
     currentSize: 0,
@@ -27,7 +27,7 @@ export const filterObject = ref<{
 
 export function resetFilterObject() {
     filterObject.value = {
-        sortField: 'updateTime',
+        sortField: 'create_time',
         sortType: 'desc',
         searchInput: '',
         currentSize: 0,

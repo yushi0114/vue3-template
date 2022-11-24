@@ -59,7 +59,6 @@ const { loading: loadingDetail, request: getArticleDetail } = useApi(ARTICLE_API
         } else {
             temp = data;
         }
-        console.log('temp：', temp);
         state.laseUpdateTime = temp.updateTime;
         if (getArticleTypeLabel.value === ARTICLE_TYPE_LABEL.NEWS) {
             state.thumbnailUrl = (temp as NewsItem).thumbnail;

@@ -51,10 +51,8 @@ const publish = async() => {
 };
 
 watch(activeId, () => {
-    console.log('activeId: ', activeId);
     if (!activeId.value) {
         state.data = {};
-        console.log('state.data: ', state.data);
         return false;
     }
     getArticleDetail();

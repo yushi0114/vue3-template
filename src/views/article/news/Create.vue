@@ -4,7 +4,7 @@ import { ARTICLE_MODULE } from '@/enums';
 </script>
 
 <template>
-    <PagePanel full>
+    <PagePanel>
         <Board class="article-create">
             <article-publish :module="ARTICLE_MODULE.NEWS_LXT"></article-publish>
         </Board>

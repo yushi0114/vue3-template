@@ -29,11 +29,10 @@ function handleClick(opt: ListOperatorOption) {
   <div class="i-list-operator">
     <!-- -->
     <div
-        class="ili-operator"
+        :class="['ili-operator', outer.disabled && 'cursor-not-allowed']"
         v-for="(outer, i) in outerOperators"
-        :key="i"
-        @click="handleClick(outer)">
-        <TextHoverable size="sm" color="regular">
+        :key="i">
+        <TextHoverable size="sm" :color="outer.disabled ? 'disabled' : 'regular'" @click="handleClick(outer)">
             <Icon v-if="outer.icon" :name="outer.icon"/> {{ outer.name }}
         </TextHoverable>
     </div>

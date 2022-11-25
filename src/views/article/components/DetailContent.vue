@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { Recordable } from '@/types/globals';
 import SjcEditor from '@/components/editor/SjcEditor.vue';
 import type { NewsItem } from '@/types';
 import { ARTICLE_MODULE } from '@/enums';

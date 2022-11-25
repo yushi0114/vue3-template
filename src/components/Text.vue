@@ -77,7 +77,7 @@ const onMouseEnter = () => {
             :disabled="isDisabledTooltip"
             :placement="placement"
             virtual-triggering
-            :virtual-ref="text"
+            :virtual-ref="text!"
         >
             <template #content>
                 <slot name="content">

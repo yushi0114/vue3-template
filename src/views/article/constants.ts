@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\constants.ts
  * @Author: zys
  * @Date: 2022-11-14 11:26:22
- * @LastEditTime: 2022-11-23 11:37:54
+ * @LastEditTime: 2022-11-25 16:40:19
  * @LastEditors: zys
  * @Reference:
  */
@@ -169,7 +169,6 @@ export const ARTICLE_FORM_MAP: { [key in ARTICLE_TYPE_LABEL]: DefItem[] } = {
             keyName: 'thumbnail',
             disabled: false,
             span: 8, // 参考el-col
-            style: { height: '63px' },
             uploadObj: {
                 fileType: FILE_TYPE.IMAGE,
                 limit: 1, // 上传长度限制

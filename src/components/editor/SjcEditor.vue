@@ -3,14 +3,14 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import { useEditorControl } from './useEditor';
 import { FILE_SERVER } from '@/enums';
 
-type EditorProps = {
+export type EditorProps = {
     modelValue: string;
     maxTextLength?: number;
     readOnly?: boolean;
     fileServer?: FILE_SERVER;
 };
 
-type EditorEmits = {
+export type EditorEmits = {
     (e: 'update:modelValue', value: string): void;
 };
 const props = withDefaults(defineProps<EditorProps>(), {
@@ -22,6 +22,7 @@ const props = withDefaults(defineProps<EditorProps>(), {
 
 const emit = defineEmits<EditorEmits>();
 const {
+    isFocus,
     editorRef,
     editorLoading,
     toolbarConfig,
@@ -56,7 +57,7 @@ defineExpose({
         element-loading-text="加载中"
         element-loading-spinner="el-icon-loading">
         <div
-            class="wangeditor"
+            :class="['wangeditor', isFocus && 'is-focus']"
             :style="getFullScreenStyle"
             v-if="!readOnly">
             <!-- 工具栏 -->
@@ -76,7 +77,9 @@ defineExpose({
                 @onChange="handleChange"
                 @onCreated="handleCreated"
                 @customAlert="customAlert"
-                @customPaste="customPaste" />
+                @customPaste="customPaste"
+                @onFocus="isFocus = true"
+                @onBlur="isFocus = false" />
             <!-- 显示 headers -->
             <div
                 class="wangeditor__headers"
@@ -117,9 +120,15 @@ defineExpose({
         justify-content: space-between;
         flex-wrap: wrap;
         border: $border;
+        border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
         z-index: 3;
         line-height: 1.3;
         background-color: var(--w-e-textarea-bg-color);
+        transition: var(--el-transition-border);
+
+        &.is-focus {
+            border-color: $color-primary;
+        }
 
         ol {
             list-style-type: decimal;
@@ -133,6 +142,7 @@ defineExpose({
         }
 
         &__toolbar {
+            padding: 0 2px;
             flex-grow: 1;
             flex-basis: 100%;
             border-bottom: $border;

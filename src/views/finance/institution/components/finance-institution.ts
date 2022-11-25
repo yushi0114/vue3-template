@@ -7,6 +7,7 @@ import type {
 import { getOrgTypeDic } from '@/api/finance/finance-category';
 import {
     getFinanceInstitution,
+    getFinanceInstitutionDicApi,
     getFinanceInstitutionTree,
     getFinanceTypeMenuTreeById,
     updateOrgApi
@@ -49,6 +50,13 @@ export const activeName = ref();
 export const parentId = ref();
 export const currentMenuId = ref();
 
+export const orgDic = ref<{
+    id: string;
+    orgName: string;
+    orgCode: string;
+}[]>([]);
+
+
 export function setParentId(value?: string) {
     parentId.value = value;
 }
@@ -63,6 +71,16 @@ export async function getInstitutionTree(type?: string): Promise<void> {
     return new Promise((resolve) => {
         getFinanceInstitutionTree({ typeCode: id }).then(data => {
             institutionTreeData.value = data;
+            resolve();
+        });
+    });
+}
+
+export async function getInstitutionDic(type?: string): Promise<void> {
+    const id = type ? type : activeName.value;
+    return new Promise((resolve) => {
+        getFinanceInstitutionDicApi({ orgTypeCode: id }).then(data => {
+            orgDic.value = data;
             resolve();
         });
     });

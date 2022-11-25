@@ -1,6 +1,7 @@
 <template>
-    <el-form ref="institutionForm1" :model="institutionForm" :rules="institutionRules" label-width="100px">
-        <el-form-item label="机构名称" prop="instiName">
+    <el-form style="width: 100%" ref="institutionForm1" :model="institutionForm" :rules="institutionRules"
+             label-width="100px">
+        <el-form-item label="机构名称" prop="orgId">
             <el-select
                 v-model="institutionForm.orgId"
                 style="width: 100%"
@@ -8,10 +9,9 @@
                 clearable
                 @change="getInstitutionCode"
                 @clear="resetInstitutionCode"
-                placeholder="请选择机构"
-            >
+                placeholder="请选择机构">
                 <el-option
-                    v-for="item in institutionList"
+                    v-for="item in orgUIList"
                     :key="item.id"
                     :label="item.orgName"
                     :value="item.id"
@@ -20,12 +20,12 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="机构编码" prop="institutionCode">
+        <el-form-item label="机构编码" prop="orgCode">
             <el-input v-model="institutionForm.orgCode" placeholder="请输入机构编码" disabled
                       ref="institutionCode">
             </el-input>
         </el-form-item>
-        <el-form-item label="排序" prop="institutionSort">
+        <el-form-item label="排序" prop="sort">
             <el-input
                 v-model.number.trim="institutionForm.sort"
                 placeholder="请输入序号"
@@ -35,7 +35,7 @@
             >
             </el-input>
         </el-form-item>
-        <el-form-item label="描述" prop="institutionDesc">
+        <el-form-item label="描述" prop="desc">
             <el-input
                 v-model="institutionForm.desc"
                 type="textarea"
@@ -78,7 +78,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { mode, typeMenuTree, institutionForm, institutionItemData } from './finance-institution';
+import { institutionForm, institutionItemData, mode, orgDic, typeMenuTree } from './finance-institution';
 
 const validateSort = (rule, value, callback) => {
     if (!value) {
@@ -90,6 +90,11 @@ const validateSort = (rule, value, callback) => {
         callback();
     }
 };
+const orgUIList = computed(() => orgDic.value.map(item => ({
+    ...item,
+    value: item.id,
+    label: item.orgName
+})));
 const institutionMenuTree = ref();
 const institutionRules = ref({
     orgId: [{ required: true, trigger: 'change', message: '请选择机构' }],
@@ -102,9 +107,9 @@ const institutionRules = ref({
         { min: 0, max: 255, message: '描述长度不能超过255个字符', trigger: 'change' }
     ]
 });
-const institutionList = [];
 
-function getInstitutionCode() {
+function getInstitutionCode(value: string) {
+    institutionForm.value.orgCode = orgDic.value.find(item => item.id === value)?.orgCode!;
 
 }
 

@@ -16,6 +16,19 @@ export async function getFinanceInstitutionTree(params: { typeCode: string }): P
 }
 
 
+export async function getFinanceInstitutionDicApi(params: {
+    orgTypeCode: string
+}): Promise<{
+    id: string;
+    orgName: string;
+    orgCode: string;
+}[]> {
+    return api.get(`${DMS_DOMAIN}/v1/org/dic`, {
+        params
+    });
+}
+
+
 export async function getFinanceInstitution(params: { id: string }): Promise<FinanceInstitutionType[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/by/id`, {
         params

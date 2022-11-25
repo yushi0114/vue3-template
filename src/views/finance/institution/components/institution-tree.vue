@@ -76,6 +76,7 @@ import { ref } from 'vue';
 import type { TreeItemType } from '@/views/system/type/menu-list.type';
 import Icon from '@/components/Icon.vue';
 import {
+    getInstitutionDic,
     getInstitutionItem,
     getInstitutionTree,
     institutionTreeData,
@@ -90,9 +91,10 @@ import { LoadingService } from '@/views/system/loading-service';
 
 const activeId = ref();
 
-function handleAddNewMenu() {
+async function handleAddNewMenu() {
     mode.value = 'form';
     resetInstitutionForm();
+    await getInstitutionDic();
 }
 
 async function handleSearchMenuTree() {

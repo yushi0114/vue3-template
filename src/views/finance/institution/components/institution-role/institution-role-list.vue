@@ -14,6 +14,7 @@
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
             </template>
+            新建
         </el-button>
     </div>
     <el-table
@@ -63,7 +64,6 @@ import Icon from '@/components/Icon.vue';
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
-    activeName,
     currentRoleId,
     formType,
     getRolePageList,
@@ -71,9 +71,8 @@ import {
     mode, resetRoleFilterObject, resetRoleForm,
     roleFilterObject,
     roleForm,
-    roleList
+    roleList, deleteRole, getOrgRoleMenuIds
 } from './institution-role';
-import { deleteRoleApi, getRoleMenuIdsApi } from '@/api/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 
 function formatSortType(value: string) {
@@ -112,10 +111,7 @@ async function handleEditRoleItem(item: RoleListItemType) {
     formType.value = 'edit';
     currentRoleId.value = item.id;
     await getTreeData();
-    const menuList = await getRoleMenuIdsApi({
-        tab: activeName.value,
-        roleId: item.id
-    });
+    const menuList = await getOrgRoleMenuIds(currentRoleId.value);
     roleForm.value = {
         name: item.name,
         desc: item.desc ?? '',
@@ -124,12 +120,14 @@ async function handleEditRoleItem(item: RoleListItemType) {
     LoadingService.getInstance().stop();
 }
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     roleFilterObject.value.currentPage = item;
+    await getRolePageList();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     roleFilterObject.value.currentSize = item;
+    await getRolePageList();
 }
 
 async function handleCreateNewRole() {
@@ -152,11 +150,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
         }
     )
         .then(async() => {
-            await deleteRoleApi({
-                roleId: item.id,
-                tab: activeName.value,
-                menuName: ''
-            });
+            await deleteRole(item.id);
             ElMessage({
                 type: 'success',
                 message: '删除成功',

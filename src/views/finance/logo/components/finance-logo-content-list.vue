@@ -15,22 +15,44 @@
                 </el-button>
             </template>
         </el-input>
+        <el-button @click="showDialog" type="primary">
+            <template #icon>
+                <Icon :name="'ep:plus'"></Icon>
+            </template>
+            新建
+        </el-button>
     </div>
     <el-table
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }">
         <el-table-column prop="orgName" label="所属机构"/>
-        <el-table-column prop="account" label="手机号码"/>
-        <el-table-column prop="name" label="姓名"/>
-        <el-table-column prop="status" label="状态">
+        <el-table-column label="logo">
             <template #default="scope">
-                <el-image :src="scope.row.logoContent" style="width: 100px; height: 100px"></el-image>
+                <el-image :src="scope.row.logoContent" style="width: 40px; height: 40px"></el-image>
             </template>
         </el-table-column>
-        <el-table-column prop="createBy" label="创建人"/>
-        <el-table-column prop="createTime" sortable label="创建时间"/>
-        <el-table-column prop="updateTime" sortable label="更新时间"/>
+        <el-table-column label="操作" width="180">
+            <template #default="scope">
+                <el-button
+                    type="primary"
+                    size="small"
+                    @click.prevent="handleEditItem(scope.row)"
+                >
+                    <template #icon>
+                        <Icon :name="'ep:edit'"></Icon>
+                    </template>
+                </el-button>
+                <el-button
+                    type="danger"
+                    size="small"
+                    @click.prevent="handleRemoveItem(scope.row)">
+                    <template #icon>
+                        <Icon :name="'ep:delete'"></Icon>
+                    </template>
+                </el-button>
+            </template>
+        </el-table-column>
     </el-table>
     <div class="page-content">
         <el-pagination
@@ -42,19 +64,93 @@
             :total="listData.total">
         </el-pagination>
     </div>
+    <logo-form-modal
+        v-if="isDialogShow"
+        :dialog-visible="isDialogShow"
+        :currentLogo="currentLogo"
+        @close="handleDialogClose"></logo-form-modal>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import Icon from '@/components/Icon.vue';
 import { LoadingService } from '@/views/system/loading-service';
 import { filterObject, getPageList, listData, resetFilterObject } from './finance-logo';
+import LogoFormModal from '@/views/finance/logo/components/logo-form-modal.vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { deleteLogoApi } from '@/api/finance/finance-logo';
+
+const isDialogShow = ref<boolean>(false);
+const currentLogo = ref<{
+    logoContent: string;
+    orgId: string;
+    orgName: string;
+    orgLogoId: string;
+    sort: number;
+}>();
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
+function showDialog() {
+    isDialogShow.value = true;
+}
+
+async function handleDialogClose() {
+    isDialogShow.value = false;
+    await handleClear();
+}
+
+function handleEditItem(params: {
+    logoContent: string;
+    orgId: string;
+    orgName: string;
+    orgLogoId: string;
+    sort: number;
+}) {
+    isDialogShow.value = true;
+    currentLogo.value = params;
+}
+
+function handleRemoveItem(params: {
+    logoContent: string;
+    orgId: string;
+    orgName: string;
+    orgLogoId: string;
+    sort: number;
+}) {
+    ElMessageBox.confirm(
+        '确定要删除当前logo吗？',
+        '警告',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(async () => {
+            await deleteLogoApi({
+                id: params.orgLogoId,
+                orgId: params.orgId
+            });
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+            LoadingService.getInstance().loading();
+            await getPageList();
+            LoadingService.getInstance().stop();
+        })
+        .catch(() => {
+            ElMessage({
+                type: 'info',
+                message: '取消删除',
+            });
+        });
+}
+
 async function handleSortChange(params: { prop: 'create_time', order: string }) {
-    console.log(params);
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
@@ -80,12 +176,18 @@ async function handleClear() {
 }
 
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
+    await getPageList();
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
+    await getPageList();
+    LoadingService.getInstance().stop();
 }
 
 </script>

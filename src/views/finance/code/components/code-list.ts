@@ -1,8 +1,10 @@
-import {reactive, ref} from 'vue';
-import {getFinanceCodeListApi} from '@/api/finance/finance-code';
-import type {FinanceCodeFormType, FinanceCodeListItemType} from '@/views/finance/type/finance-code.type';
-import { getAllCityList} from '@/api/finance/finance-city';
-import {getOrgTypeDic} from '@/api/finance/finance-category';
+import { reactive, ref } from 'vue';
+import { addFinanceCodeApi, getFinanceCodeListApi, updateFinanceCodeApi } from '@/api/finance/finance-code';
+import type { FinanceCodeFormType, FinanceCodeListItemType } from '@/views/finance/type/finance-code.type';
+import { getAllCityList } from '@/api/finance/finance-city';
+import { getOrgTypeDic } from '@/api/finance/finance-category';
+import { LoadingService } from '@/views/system/loading-service';
+import { ElMessage } from 'element-plus';
 
 export const mode = ref<'form' | 'list'>('list');
 export const cityCodeList = ref();
@@ -32,42 +34,95 @@ export const financeCodeFilterObject = reactive({
 export async function handleGoBack() {
     mode.value = 'list';
     currentCodeId.value = undefined;
+    LoadingService.getInstance().loading();
     await setFinanceCodeList();
+    LoadingService.getInstance().stop();
 }
 
 
-export async function setCityCodeList(){
-    getAllCityList().then(data => {
-        cityCodeList.value = data.data.map(item => ({
-            ...item,
-            label: item.name,
-            value: item.id
-        }));
+export async function setCityCodeList(): Promise<void> {
+    return new Promise((resolve) => {
+        getAllCityList().then(data => {
+            cityCodeList.value = data.data.map(item => ({
+                ...item,
+                label: item.name,
+                value: item.code
+            }));
+        }).finally(() => {
+            resolve();
+        });
+    });
+
+}
+
+export async function setOrgTypeCodeList(): Promise<void> {
+    return new Promise((resolve) => {
+        getOrgTypeDic().then(data => {
+            orgTypeCodeList.value = data.map(item => ({
+                ...item,
+                label: item.name,
+                value: item.id
+            }));
+        }).finally(() => {
+            resolve();
+        });
+    });
+
+}
+
+export async function addFinanceCode(): Promise<void> {
+    return new Promise((resolve) => {
+        addFinanceCodeApi({
+            ...codeForm.value,
+            menuName: ''
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '创建成功',
+            });
+        }).finally(() => {
+            resolve();
+        });
     });
 }
 
-export async function setOrgTypeCodeList(){
-    getOrgTypeDic().then(data => {
-        orgTypeCodeList.value = data.map(item => ({
-            ...item,
-            label: item.name,
-            value: item.id
-        }));
+export async function updateFinanceCode(): Promise<void> {
+    return new Promise((resolve) => {
+        if (!currentCodeId.value) {
+            return;
+        }
+        updateFinanceCodeApi({
+            id: currentCodeId.value,
+            ...codeForm.value,
+            menuName: ''
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '更新成功',
+            });
+        }).finally(() => {
+            resolve();
+        });
     });
 }
 
-export async function setFinanceCodeList(){
-    getFinanceCodeListApi({
-        pageIndex: financeCodeFilterObject.currentPage + 1,
-        pageSize: financeCodeFilterObject.currentSize,
-        cityCodeArr: [],
-        orgTypeCodeArr: [],
-        searchInput: financeCodeFilterObject.searchInput,
-        sortField: 'create_time',
-        sortType: 'desc',
-        menuName: ''
-    }).then(data => {
-        codeList.list = data.data;
-        codeList.total = data.pageTotal;
+export async function setFinanceCodeList(): Promise<void> {
+    return new Promise((resolve) => {
+        getFinanceCodeListApi({
+            pageIndex: financeCodeFilterObject.currentPage + 1,
+            pageSize: financeCodeFilterObject.currentSize,
+            cityCodeArr: [],
+            orgTypeCodeArr: [],
+            searchInput: financeCodeFilterObject.searchInput,
+            sortField: 'create_time',
+            sortType: 'desc',
+            menuName: ''
+        }).then(data => {
+            codeList.list = data.data;
+            codeList.total = data.pageTotal;
+        }).finally(() => {
+            resolve();
+        });
     });
+
 }

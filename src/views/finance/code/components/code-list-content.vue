@@ -12,8 +12,8 @@
         <el-button type="primary" @click="handleCreateNewRole">
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
-                新建
             </template>
+            新建
         </el-button>
     </div>
     <el-table :data="codeList.list" style="width: 100%">
@@ -30,14 +30,18 @@
                     size="small"
                     @click.prevent="handleEditRoleItem(scope.row)"
                 >
-                    编辑
+                    <template #icon>
+                        <Icon :name="'ep:edit'"></Icon>
+                    </template>
                 </el-button>
                 <el-button
                     type="danger"
                     size="small"
                     @click.prevent="handleRemoveRoleItem(scope.row)"
                 >
-                    删除
+                    <template #icon>
+                        <Icon :name="'ep:delete'"></Icon>
+                    </template>
                 </el-button>
             </template>
         </el-table-column>
@@ -70,7 +74,7 @@ import {
 } from './code-list';
 import { LoadingService } from '@/views/system/loading-service';
 import type { FinanceCodeListItemType } from '@/views/finance/type/finance-code.type';
-import { deleteFinanceCode } from '@/api/finance/finance-code';
+import { deleteFinanceCodeApi } from '@/api/finance/finance-code';
 
 async function handleEditRoleItem(item: FinanceCodeListItemType) {
     LoadingService.getInstance().loading();
@@ -90,12 +94,18 @@ async function handleEditRoleItem(item: FinanceCodeListItemType) {
 
 }
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     financeCodeFilterObject.currentPage = item;
+    LoadingService.getInstance().loading();
+    await setFinanceCodeList();
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     financeCodeFilterObject.currentSize = item;
+    LoadingService.getInstance().loading();
+    await setFinanceCodeList();
+    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewRole() {
@@ -107,7 +117,7 @@ async function handleCreateNewRole() {
 
 function handleRemoveRoleItem(item: RoleListItemType) {
     ElMessageBox.confirm(
-        '确定要删除当前角色吗？',
+        '确定要删除当前机构编码吗？',
         '警告',
         {
             confirmButtonText: '确认',
@@ -116,7 +126,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
         }
     )
         .then(async () => {
-            await deleteFinanceCode({
+            await deleteFinanceCodeApi({
                 id: item.id,
                 menuName: ''
             });
@@ -124,7 +134,9 @@ function handleRemoveRoleItem(item: RoleListItemType) {
                 type: 'success',
                 message: '删除成功',
             });
+            LoadingService.getInstance().loading();
             await setFinanceCodeList();
+            LoadingService.getInstance().stop();
         })
         .catch(() => {
             ElMessage({

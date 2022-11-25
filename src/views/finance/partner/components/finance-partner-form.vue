@@ -3,8 +3,24 @@
         <el-form-item label="姓名:" required prop="name">
             <el-input v-model="form.name" placeholder="请输入姓名"/>
         </el-form-item>
-        <el-form-item label="手机号:" required prop="account">
-            <el-input v-model="form.imgUrl" placeholder="请输入手机号"/>
+        <el-form-item label="上传图片" prop="imageUrl">
+            <el-upload
+                :accept="'PNG,JPEG'"
+                :file-list="fileList"
+                class="upload-demo"
+                :limit="1"
+                :before-upload="beforeUpload"
+                :http-request="handleUpload"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove"
+                list-type="picture">
+                <el-button type="primary">点击上传</el-button>
+                <template #tip>
+                    <div class="el-upload__tip">
+                        只能上传jpg/jpeg/png文件，且不超过2MB
+                    </div>
+                </template>
+            </el-upload>
         </el-form-item>
         <el-form-item label="状态:" required prop="status">
             <el-switch v-model="form.status"/>
@@ -26,14 +42,61 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import type { FormInstance, FormRules } from 'element-plus';
+import type { FormInstance, FormRules, UploadFile, UploadRequestOptions } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import { LoadingService } from '@/views/system/loading-service';
-import { add,
-    handleGoBack,
-    update,
+import {
+    add,
+    fileList,
     form,
-    formType } from '@/views/finance/partner/components/finance-partner';
+    formType,
+    handleGoBack,
+    update
+} from '@/views/finance/partner/components/finance-partner';
+import { blobToDataURL } from '@/utils';
+
+
+const dialogImageUrl = ref();
+const previewImageDialogVisible = ref(false);
+
+// 文件预览
+function handlePictureCardPreview(file: UploadFile) {
+    dialogImageUrl.value = file.url;
+    previewImageDialogVisible.value = true;
+}
+
+// 文件上传
+async function handleUpload(options: UploadRequestOptions) {
+    const content = await blobToDataURL(options.file, () => {
+    });
+    form.value.imgUrl = content as string;
+    ruleFormRef.value?.validateField('logoContent');
+}
+
+function handleRemove() {
+    form.value.imgUrl = '';
+    ruleFormRef.value?.validateField('logoContent');
+}
+
+// 文件上传之前的钩子函数
+function beforeUpload(file: File) {
+    if (!/\.(png|jpg|jpeg)$/.test(file.name)) {
+        ElMessage({
+            message: '只支持png、jpeg或jpg格式的文件',
+            type: 'error',
+        });
+        return false;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+        ElMessage({
+            message: '文件大小不能超过2MB',
+            type: 'error',
+        });
+        return false;
+    }
+    return true;
+}
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
@@ -45,7 +108,7 @@ const rules = reactive<FormRules>({
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async(valid, fields) => {
+    await formElement.validate(async (valid, fields) => {
         if (valid) {
             LoadingService.getInstance().loading();
             if (formType.value === 'create') {

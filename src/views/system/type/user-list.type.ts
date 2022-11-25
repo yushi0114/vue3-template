@@ -8,7 +8,7 @@ export type UserListItemType = {
 
 
 export type UserFormType = {
-    account?: string;
+    account: string;
     name: string;
     roleId: string;
     status: boolean;

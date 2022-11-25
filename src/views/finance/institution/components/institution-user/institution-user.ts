@@ -1,9 +1,13 @@
 import { ref } from 'vue';
-import { getFinanceOrgUserRoleList } from '@/api/finance/finance-institution';
+import {
+    addFinanceOrgUserApi,
+    deleteFinanceOrgUserApi,
+    getFinanceOrgAllRoleById,
+    getFinanceOrgUserRoleList,
+    updateFinanceOrgUserApi
+} from '@/api/finance/finance-institution';
 import { currentMenuId } from '@/views/finance/institution/components/finance-institution';
-import type { UserFormType, UserTabType } from '@/views/system/type/user-list.type';
-import { activeName, getUserListData } from '@/views/system/user/components/user-list';
-import { addUserApi, deleteUserApi, getTotalRoleListApi, updateUserApi } from '@/api/system-manage';
+import type { UserFormType } from '@/views/system/type/user-list.type';
 import { ElMessage } from 'element-plus';
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
 
@@ -53,6 +57,7 @@ export function resetFilterObject() {
 
 export function resetUserForm() {
     form.value = {
+        account: '',
         name: '',
         roleId: '',
         status: false
@@ -69,9 +74,7 @@ export async function handleGoBack() {
     mode.value = 'list';
     currentUserId.value = undefined;
     resetUserForm();
-    await getUserListData({
-        tab: activeName.value
-    });
+    await getUserPageList();
 }
 
 export async function getUserPageList(): Promise<void> {
@@ -94,12 +97,10 @@ export async function getUserPageList(): Promise<void> {
     });
 }
 
-export async function getRoleListData(params: {
-    tab: UserTabType,
-}): Promise<void> {
+export async function getRoleListData(): Promise<void> {
     return new Promise((resolve) => {
-        getTotalRoleListApi({
-            ...params
+        getFinanceOrgAllRoleById({
+            orgId: currentMenuId.value
         }).then(data => {
             totalRoleList.value = data.data;
             resolve();
@@ -111,11 +112,10 @@ export async function getRoleListData(params: {
 
 export async function addUser(): Promise<void> {
     return new Promise((resolve) => {
-        addUserApi({
+        addFinanceOrgUserApi({
             ...form.value,
+            orgId: currentMenuId.value,
             status: form.value.status ? 1 : 0,
-            tab: activeName.value,
-            menuName: ''
         }).then(() => {
             ElMessage({
                 type: 'success',
@@ -130,12 +130,10 @@ export async function addUser(): Promise<void> {
 
 export async function updateUser(): Promise<void> {
     return new Promise((resolve) => {
-        updateUserApi({
+        updateFinanceOrgUserApi({
             id: currentUserId.value,
             ...form.value,
-            status: form.value.status ? 1 : 0,
-            tab: activeName.value,
-            menuName: ''
+            status: form.value.status ? 1 : 0
         }).then(() => {
             ElMessage({
                 type: 'success',
@@ -153,11 +151,9 @@ export async function deleteUser(params: {
     id: string;
 }): Promise<void> {
     return new Promise((resolve) => {
-        deleteUserApi({
-            menuName: '',
+        deleteFinanceOrgUserApi({
             accountList: [params.account],
             idList: [params.id],
-            tab: activeName.value
         }).then(() => {
             ElMessage({
                 type: 'success',

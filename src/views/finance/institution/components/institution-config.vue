@@ -1,5 +1,5 @@
 <template>
-    <div class="menu-container">
+    <div class="menu-container" v-if="mode === 'board'">
         <div class="menu-tree">
             <institution-tree></institution-tree>
         </div>
@@ -23,6 +23,9 @@
             <div>请在左侧选择机构~</div>
         </div>
     </div>
+    <div class="menu-container" style="overflow-y: auto" v-if="mode === 'form'">
+        <institution-form></institution-form>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -31,7 +34,8 @@ import InstitutionTree from '@/views/finance/institution/components/institution-
 import InstitutionDesc from '@/views/finance/institution/components/institution-desc.vue';
 import InstitutionRole from '@/views/finance/institution/components/institution-role/index.vue';
 import InstitutionUser from '@/views/finance/institution/components/institution-user/index.vue';
-import { activeInstitutionName, institutionItemData } from './finance-institution';
+import { activeInstitutionName, institutionItemData, mode } from './finance-institution';
+import InstitutionForm from '@/views/finance/institution/components/institution-form.vue';
 
 function handleInstitutionTabClick() {
 

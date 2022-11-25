@@ -56,7 +56,7 @@ function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
-async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
+async function handleSortChange(params: { prop: 'update_time' | 'create_ime', order: string }) {
     console.log(params);
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;

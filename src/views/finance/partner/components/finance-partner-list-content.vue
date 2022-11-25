@@ -19,28 +19,25 @@
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
             </template>
+            新建
         </el-button>
     </div>
     <el-table
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }">
-        <el-table-column prop="name" label="姓名" width="180"/>
-        <el-table-column prop="imgUrl" label="图片" width="180">
+        <el-table-column prop="name" label="伙伴名称" width="180"/>
+        <el-table-column prop="imgUrl" label="图片">
             <template #default="scope">
-                <el-image :src="scope.row.imgUrl"></el-image>
+                <el-image style="height: 40px;" :src="scope.row.imgUrl"></el-image>
             </template>
         </el-table-column>
-        <el-table-column prop="createTime" sortable label="创建时间"/>
-        <el-table-column prop="updateTime" sortable label="更新时间"/>
-        <el-table-column prop="createBy" label="创建人"/>
         <el-table-column label="操作" width="180">
             <template #default="scope">
                 <el-button
                     type="primary"
                     size="small"
-                    @click.prevent="handleEditItem(scope.row)"
-                >
+                    @click.prevent="handleEditItem(scope.row)">
                     <template #icon>
                         <Icon :name="'ep:edit'"></Icon>
                     </template>
@@ -48,9 +45,7 @@
                 <el-button
                     type="danger"
                     size="small"
-                    @click.prevent="handleRemoveItem(scope.row
-            )"
-                >
+                    @click.prevent="handleRemoveItem(scope.row)">
                     <template #icon>
                         <Icon :name="'ep:delete'"></Icon>
                     </template>
@@ -77,6 +72,7 @@ import { LoadingService } from '@/views/system/loading-service';
 import {
     activeName,
     currentId,
+    fileList,
     filterObject,
     form,
     formType,
@@ -88,6 +84,7 @@ import {
     resetForm
 } from '@/views/finance/partner/components/finance-partner';
 import type { FinancePartnerListItemType } from '@/views/finance/type/finance-parnter.type';
+import { dataURLToFile } from '@/utils';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -128,6 +125,13 @@ async function handleClear() {
 function handleEditItem(item: FinancePartnerListItemType) {
     mode.value = 'form';
     form.value.name = item.name;
+    form.value.imgUrl = item.imgUrl;
+    fileList.value = [
+        {
+            name: dataURLToFile(item.imgUrl).name,
+            url: item.imgUrl
+        }
+    ];
     form.value.status = item.status === 1;
     currentId.value = item.id;
 }

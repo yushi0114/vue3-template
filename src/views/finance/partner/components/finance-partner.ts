@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
+import type { UploadUserFile } from 'element-plus';
 import { FinancePartnerService } from '@/api/finance/finance-partner';
 import type {
     FinancePartnerFormType,
@@ -18,7 +19,7 @@ export const form = ref<FinancePartnerFormType>({
     status: false
 });
 export const formType = ref<'create' | 'edit'>('edit');
-
+export const fileList = ref<UploadUserFile[]>([]);
 export const listData = ref<{
     total: number;
     list: FinancePartnerListItemType[];
@@ -28,6 +29,7 @@ export const listData = ref<{
 });
 
 export function resetForm() {
+    fileList.value = [];
     form.value = {
         name: '',
         imgUrl: '',
@@ -145,7 +147,4 @@ export async function remove(params: { id: string }): Promise<void> {
         });
     });
 }
-
-
-
 

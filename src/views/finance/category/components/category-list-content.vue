@@ -12,8 +12,8 @@
         <el-button type="primary" @click="handleCreateNewRole">
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
-                新建
             </template>
+            新建
         </el-button>
     </div>
     <el-table :data="categoryList.list" style="width: 100%">
@@ -30,14 +30,18 @@
                     size="small"
                     @click.prevent="handleEditRoleItem(scope.row)"
                 >
-                    编辑
+                    <template #icon>
+                        <Icon :name="'ep:edit'"></Icon>
+                    </template>
                 </el-button>
                 <el-button
                     type="danger"
                     size="small"
                     @click.prevent="handleRemoveRoleItem(scope.row)"
                 >
-                    删除
+                    <template #icon>
+                        <Icon :name="'ep:delete'"></Icon>
+                    </template>
                 </el-button>
             </template>
         </el-table-column>
@@ -91,19 +95,27 @@ async function handleEditRoleItem(item: FinanceCategoryListItemType) {
 
 }
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     financeFilterObject.currentPage = item;
+    LoadingService.getInstance().loading();
+    await setFinanceCategoryList();
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     financeFilterObject.currentSize = item;
+    LoadingService.getInstance().loading();
+    await setFinanceCategoryList();
+    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewRole() {
     mode.value = 'form';
     formType.value = 'create';
+    LoadingService.getInstance().loading();
     await setOrgTypeModuleList();
     await setAllSystemMenuTree();
+    LoadingService.getInstance().stop();
 }
 
 function handleRemoveRoleItem(item: RoleListItemType) {
@@ -125,7 +137,9 @@ function handleRemoveRoleItem(item: RoleListItemType) {
                 type: 'success',
                 message: '删除成功',
             });
+            LoadingService.getInstance().loading();
             await setFinanceCategoryList();
+            LoadingService.getInstance().stop();
         })
         .catch(() => {
             ElMessage({

@@ -1,13 +1,13 @@
 <template>
   <el-form :model="categoryForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
-    <el-form-item label="分类名称:" required prop="name">
-      <el-input v-model="categoryForm.name" placeholder="请输入分类名称"/>
+    <el-form-item label="机构分类:" required prop="name">
+      <el-input v-model="categoryForm.name"  placeholder="请输入分类名称" show-word-limit   maxlength="255"/>
     </el-form-item>
-    <el-form-item label="分类描述:" prop="desc">
-      <el-input v-model="categoryForm.desc" placeholder="请输入分类描述" />
+    <el-form-item label="描述:" prop="desc">
+      <el-input type="textarea" v-model="categoryForm.desc" placeholder="请输入分类描述" show-word-limit   maxlength="255"/>
     </el-form-item>
     <el-form-item label="分类排序:"  required prop="sort">
-      <el-input v-model="categoryForm.sort" placeholder="请输入分类描述" />
+      <el-input v-model="categoryForm.sort" placeholder="请输入分类描述" show-word-limit   maxlength="3"/>
     </el-form-item>
     <el-form-item label="展现形式:"  required prop="typeModuleId">
       <el-select v-model="categoryForm.typeModuleId" placeholder="请选择展现形式" >
@@ -46,18 +46,72 @@ import {categoryForm, formType, allSystemMenuTree, handleGoBack, currentCategory
 import {LoadingService} from '@/views/system/loading-service';
 import type {TreeNodeData} from 'element-plus/lib/components/tree/src/tree.type';
 import {addFinanceCategory, updateFinanceCategory} from '@/api/finance/finance-category';
+import { illegalSymbolRegExp, regexOrgType } from '@/utils/regExp';
 
 const menuTree = ref<InstanceType<typeof ElTree>>();
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
     name: [
-        { required: true, message: '请输入角色名称', trigger: 'blur' },
-        { min: 3, max: 255, message: '角色名称不能超过255个字符', trigger: 'blur' },
+        {
+            required: true,
+            trigger: ['blur', 'change'],
+            validator: (rule, value, callback) => {
+                if (!value && value !== 0) {
+                    return callback(new Error('机构分类不能为空！'));
+                }
+                if (illegalSymbolRegExp.test(value)) {
+                    callback(new Error('输入内容不支持SQL和JS代码类型'));
+                } else if (!regexOrgType.test(value)) {
+                    callback(new Error('机构分类只能为中文、数字、英文及-、（）()·，,特殊字符'));
+                } else {
+                    callback();
+                }
+            }
+        }
     ],
     desc: [
-        { required: true, message: '请输入角色描述', trigger: 'blur' },
-        { min: 3, max: 255, message: '角色描述不能超过255个字符', trigger: 'blur' },
+        {
+            trigger: ['blur', 'change'],
+            validator: (rule, value, callback) => {
+                if (illegalSymbolRegExp.test(value)) {
+                    callback(new Error('输入内容不支持SQL和JS代码类型'));
+                } else {
+                    callback();
+                }
+            }
+        }
     ],
+    sort: [
+        {
+            required: true,
+            trigger: ['change', 'blur'],
+            validator: (rule, value, callback) => {
+                if (!value && value !== 0) {
+                    return callback(new Error('排序不能为空！'));
+                }
+                if (!/^[1-9]\d*$/.test(value)) {
+                    callback(new Error('排序只能为1-999的整数！'));
+                } else {
+                    callback();
+                }
+            }
+        }
+    ],
+    typeModuleId: [
+        {
+            required: true,
+            trigger: 'blur',
+            message: '展现形式不能为空！'
+        }
+    ],
+    menuIdArr: [
+        {
+            type: 'array',
+            required: true,
+            trigger: 'change',
+            message: '请至少选择一个菜单项！'
+        }
+    ]
 });
 
 const submitForm = async(formEl: FormInstance | undefined) => {
@@ -70,7 +124,7 @@ const submitForm = async(formEl: FormInstance | undefined) => {
                 return;
             }
             LoadingService.getInstance().loading();
-            if (formType.value === 'create'){
+            if (formType.value === 'create') {
                 await addFinanceCategory({
                     ...categoryForm.value,
                     menuIdArr: checkedNodeIds,

@@ -1,9 +1,14 @@
 import { ref } from 'vue';
 import type { RoleFormType, RoleListItemType, RoleTabType } from '@/views/system/type/role-list.type';
-import { addRoleApi, getMenuTreeApi, updateRoleApi } from '@/api/system-manage';
+import { getMenuTreeApi } from '@/api/system-manage';
 import type { TreeItemType } from '@/views/system/type/menu-list.type';
 import { ElMessage } from 'element-plus';
-import { getFinanceOrgRoleList } from '@/api/finance/finance-institution';
+import {
+    addFinanceOrgRoleApi,
+    deleteFinanceOrgRoleApi, getFinanceInstitutionMenuTree,
+    getFinanceOrgRoleList, getOrgRoleMenuIdsApi,
+    updateFinanceOrgRoleApi
+} from '@/api/finance/finance-institution';
 import { currentMenuId } from '@/views/finance/institution/components/finance-institution';
 
 export const activeName = ref<RoleTabType>('dms');
@@ -60,11 +65,14 @@ export function resetRoleFilterObject() {
 export async function handleGoBack() {
     mode.value = 'list';
     currentRoleId.value = undefined;
+    await getRolePageList();
 }
 
-export async function getTreeData(name?: RoleTabType): Promise<void> {
+export async function getTreeData(): Promise<void> {
     return new Promise((resolve) => {
-        getMenuTreeApi(name ? name : activeName.value).then(data => {
+        getFinanceInstitutionMenuTree({
+            id: currentMenuId.value
+        }).then(data => {
             roleMenuTreeData.value = data as unknown as TreeItemType[];
             resolve();
         }).catch(() => {
@@ -95,11 +103,10 @@ export async function getRolePageList(): Promise<void> {
 
 export async function addRole(checkedNodeIds: string[]): Promise<void> {
     return new Promise((resolve) => {
-        addRoleApi({
+        addFinanceOrgRoleApi({
             ...roleForm.value,
+            orgId: currentMenuId.value,
             menuIdArr: checkedNodeIds,
-            tab: activeName.value,
-            menuName: ''
         }).then(() => {
             ElMessage({
                 type: 'success',
@@ -113,14 +120,12 @@ export async function addRole(checkedNodeIds: string[]): Promise<void> {
 
 }
 
-export async function updateRole(checkedNodeIds: string[]): Promise<void> {
+export async function updateRole(): Promise<void> {
     return new Promise((resolve) => {
-        updateRoleApi({
+        updateFinanceOrgRoleApi({
             roleId: currentRoleId.value,
+            orgId: currentMenuId.value,
             ...roleForm.value,
-            menuIdArr: checkedNodeIds,
-            tab: activeName.value,
-            menuName: ''
         }).then(() => {
             ElMessage({
                 type: 'success',
@@ -129,6 +134,36 @@ export async function updateRole(checkedNodeIds: string[]): Promise<void> {
             resolve();
         }).catch(() => {
             resolve();
+        });
+    });
+
+}
+
+export async function deleteRole(id: string): Promise<void> {
+    return new Promise((resolve) => {
+        deleteFinanceOrgRoleApi({
+            roleId: id,
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+            resolve();
+        }).catch(() => {
+            resolve();
+        });
+    });
+
+}
+
+export async function getOrgRoleMenuIds(id: string): Promise<string[] | undefined> {
+    return new Promise((resolve) => {
+        getOrgRoleMenuIdsApi({
+            roleId: id,
+        }).then((data) => {
+            resolve(data);
+        }).catch(() => {
+            resolve(undefined);
         });
     });
 

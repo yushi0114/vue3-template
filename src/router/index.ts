@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from 'vue-router';
-import { Home } from '@/views/home/Home.vue';
+import Home from '@/views/home/Home.vue';
 import { Signin } from '@/views/access';
 import type { DynamicNavEntity } from '@/types';
 import { genDynamicComponent, genDynamicViewConfig } from '@/views';

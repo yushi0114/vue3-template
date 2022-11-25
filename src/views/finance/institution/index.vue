@@ -9,21 +9,36 @@
 </template>
 
 <script lang="ts" setup>
-import { activeName, categoryList, getCategoryList, getInstitutionTree } from './components/finance-institution';
+import {
+    activeName,
+    categoryList,
+    getCategoryList,
+    getInstitutionTree, mode,
+    setTypeMenuTree
+} from './components/finance-institution';
 import type { TabsPaneContext } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
 import { onMounted } from 'vue';
 import InstitutionConfig from '@/views/finance/institution/components/institution-config.vue';
 
 async function handleClick(tab: TabsPaneContext) {
+    mode.value = 'board';
     LoadingService.getInstance().loading();
     await getInstitutionTree(tab.paneName as string);
+    await setTypeMenuTree({
+        id: categoryList.value?.find(item => item.code === tab.paneName as string)?.id!
+    });
     LoadingService.getInstance().stop();
 }
 
 onMounted(async () => {
     LoadingService.getInstance().loading();
     await getCategoryList();
+    if (categoryList.value) {
+        await setTypeMenuTree({
+            id: categoryList.value[0].id
+        });
+    }
     activeName.value = categoryList.value ? categoryList.value[0].code : '';
     await getInstitutionTree();
     LoadingService.getInstance().stop();

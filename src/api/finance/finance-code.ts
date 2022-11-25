@@ -8,15 +8,15 @@ import type {
 } from '@/views/finance/type/finance-code.type';
 
 
-export function addFinanceCode(params: AddFinanceCodeType) {
+export function addFinanceCodeApi(params: AddFinanceCodeType) {
     return api.post(`${DMS_DOMAIN}/v1/add/org/dic`, params);
 }
 
-export function updateFinanceCode(params: UpdateFinanceCodeType) {
+export function updateFinanceCodeApi(params: UpdateFinanceCodeType) {
     return api.post(`${DMS_DOMAIN}/v1/update/org/dic`, params);
 }
 
-export function deleteFinanceCode(params: DeleteFinanceCodeType) {
+export function deleteFinanceCodeApi(params: DeleteFinanceCodeType) {
     return api.post(`${DMS_DOMAIN}/v1/del/org/dic`, params);
 }
 

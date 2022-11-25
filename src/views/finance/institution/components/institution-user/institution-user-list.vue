@@ -75,6 +75,7 @@ import {
     filterObject,
     form,
     formType,
+    getRoleListData,
     getUserPageList,
     listData,
     mode,
@@ -114,13 +115,15 @@ async function handleClear() {
     LoadingService.getInstance().stop();
 }
 
-function handleEditItem(item: UserListItemType) {
+async function handleEditItem(item: UserListItemType) {
     mode.value = 'form';
+    formType.value = 'edit';
     form.value.roleId = item.roleId;
     form.value.account = item.account;
     form.value.name = item.name;
     form.value.status = item.status === 1;
     currentUserId.value = item.id;
+    await getRoleListData();
 }
 
 async function handleCreateNewItem() {
@@ -128,6 +131,7 @@ async function handleCreateNewItem() {
     formType.value = 'create';
     currentUserId.value = '';
     resetUserForm();
+    await getRoleListData();
 }
 
 function handleCurrentChange(item: number) {

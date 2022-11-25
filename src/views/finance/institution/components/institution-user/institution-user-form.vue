@@ -3,7 +3,7 @@
         <el-form-item label="姓名:" required prop="name">
             <el-input v-model="form.name" placeholder="请输入姓名"/>
         </el-form-item>
-        <el-form-item label="手机号:" required prop="account" >
+        <el-form-item label="手机号:" required prop="account">
             <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'"/>
         </el-form-item>
         <el-form-item label="角色:" required prop="roleId">

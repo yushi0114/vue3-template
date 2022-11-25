@@ -1,15 +1,17 @@
-import { getFinanceInstitutionMenuTree } from '@/api/finance/finance-institution';
-import type { FinanceInstitutionMenuTreeItemType } from '@/views/finance/type/finance-institution.type';
+import { getFinanceTypeMenuTreeById } from '@/api/finance/finance-institution';
+import type { OrgTypeMenuItem } from '@/views/finance/type/finance-category.type';
 
-export const financeInstitutionMenuTree = ref<FinanceInstitutionMenuTreeItemType[]>();
+export const financeInstitutionMenuTree = ref<OrgTypeMenuItem[]>();
 
 export function setFinanceInstitutionMenuTree(params: { id: string }): Promise<void> {
     return new Promise((resolve) => {
-        getFinanceInstitutionMenuTree(params).then((res) => {
+        getFinanceTypeMenuTreeById(params).then((res) => {
             financeInstitutionMenuTree.value = res;
             resolve();
         });
     });
-
 }
+
+
+
 

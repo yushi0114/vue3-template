@@ -1,84 +1,84 @@
 <template>
-    <div
-        class="institution-create-content"
-        v-loading="loading"
-        element-loading-text="加载中"
-        element-loading-spinner="el-icon-loading"
-    >
-        <div class="header">新建机构</div>
-        <div class="content">
-            <el-form ref="institutionForm" :model="institutionForm" :rules="institutionRules" label-width="100px">
-                <el-form-item label="机构名称" prop="instiName">
-                    <el-select
-                        v-model="institutionForm.institutionName"
-                        style="width: 100%"
-                        filterable
-                        clearable
-                        @change="getInstitutionCode"
-                        @clear="resetInstitutionCode"
-                        placeholder="请选择机构"
-                    >
-                        <el-option
-                            v-for="item in institutionList"
-                            :key="item.id"
-                            :label="item.orgName"
-                            :value="item.id"
-                            :title="item.orgName"
-                        >
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="机构编码" prop="institutionCode">
-                    <el-input v-model="institutionForm.institutionCode" placeholder="请输入机构编码" disabled
-                              ref="institutionCode">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="排序" prop="institutionSort">
-                    <el-input
-                        v-model.number.trim="institutionForm.institutionSort"
-                        placeholder="请输入序号"
-                        :maxlength="3"
-                        show-word-limit
-                        ref="institutionSort"
-                    >
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="描述" prop="institutionDesc">
-                    <el-input
-                        v-model="institutionForm.institutionDesc"
-                        type="textarea"
-                        maxlength="255"
-                        show-word-limit
-                        placeholder="请输入机构描述"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="状态" prop="status">
-                    <el-switch v-model="institutionForm.status" :active-value="1" :inactive-value="0"></el-switch>
-                </el-form-item>
-                <el-form-item label="配置菜单" required>
-                    <div style="margin-top: 10px">
-                        <el-tree
-                            ref="institutionMenuTree"
-                            :data="typeMenuList"
-                            show-checkbox
-                            node-key="id"
-                            :default-expand-all="true"
-                        >
-                        </el-tree>
-                    </div>
-                </el-form-item>
-                <div class="footer">
-                    <el-button size="small" @click="cancel">取 消</el-button>
-                    <el-button size="small" type="primary" :loading="loading" @click="createInstitution">确 定</el-button>
-                </div>
-            </el-form>
-        </div>
-    </div>
+    <el-form ref="institutionForm1" :model="institutionForm" :rules="institutionRules" label-width="100px">
+        <el-form-item label="机构名称" prop="instiName">
+            <el-select
+                v-model="institutionForm.orgId"
+                style="width: 100%"
+                filterable
+                clearable
+                @change="getInstitutionCode"
+                @clear="resetInstitutionCode"
+                placeholder="请选择机构"
+            >
+                <el-option
+                    v-for="item in institutionList"
+                    :key="item.id"
+                    :label="item.orgName"
+                    :value="item.id"
+                    :title="item.orgName"
+                >
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="机构编码" prop="institutionCode">
+            <el-input v-model="institutionForm.orgCode" placeholder="请输入机构编码" disabled
+                      ref="institutionCode">
+            </el-input>
+        </el-form-item>
+        <el-form-item label="排序" prop="institutionSort">
+            <el-input
+                v-model.number.trim="institutionForm.sort"
+                placeholder="请输入序号"
+                :maxlength="3"
+                show-word-limit
+                ref="institutionSort"
+            >
+            </el-input>
+        </el-form-item>
+        <el-form-item label="描述" prop="institutionDesc">
+            <el-input
+                v-model="institutionForm.desc"
+                type="textarea"
+                maxlength="255"
+                show-word-limit
+                placeholder="请输入机构描述"
+                autocomplete="off"
+            ></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+            <el-switch v-model="institutionForm.status" :active-value="1" :inactive-value="0"></el-switch>
+        </el-form-item>
+        <el-form-item label="配置菜单" required>
+            <div style="margin-top: 10px">
+                <el-tree
+                    ref="institutionMenuTree"
+                    :data="typeMenuTree"
+                    :default-checked-keys="institutionForm.menuIdArr"
+                    show-checkbox
+                    node-key="id"
+                    :default-expand-all="true"
+                >
+                </el-tree>
+            </div>
+        </el-form-item>
+        <el-form-item>
+            <el-button @click="goBack()">
+                <template #icon>
+                    <Icon :name="'ep:back'"></Icon>
+                </template>
+            </el-button>
+            <el-button type="primary" @click="submitForm">
+                <template #icon>
+                    <Icon :name="'ep:edit'"></Icon>
+                </template>
+            </el-button>
+        </el-form-item>
+    </el-form>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { mode, typeMenuTree, institutionForm, institutionItemData } from './finance-institution';
 
 const validateSort = (rule, value, callback) => {
     if (!value) {
@@ -91,28 +91,18 @@ const validateSort = (rule, value, callback) => {
     }
 };
 const institutionMenuTree = ref();
-const institutionForm = ref({
-    institutionName: '',
-    institutionCode: '',
-    status: 1,
-    institutionSort: '',
-    institutionDesc: '',
-    institutionId: ''
-});
 const institutionRules = ref({
-    institutionName: [{ required: true, trigger: 'change', message: '请选择机构' }],
-    institutionCode: [{ required: true, trigger: 'change', message: '请输入机构编码' }],
-    institutionSort: [
+    orgId: [{ required: true, trigger: 'change', message: '请选择机构' }],
+    orgCode: [{ required: true, trigger: 'change', message: '请输入机构编码' }],
+    sort: [
         { required: true, trigger: 'change', message: '请输入序号' },
         { required: true, validator: validateSort, trigger: 'change' }
     ],
-    institutionDesc: [
+    desc: [
         { min: 0, max: 255, message: '描述长度不能超过255个字符', trigger: 'change' }
     ]
 });
-const typeMenuList = ref([]);
 const institutionList = [];
-const loading = false;
 
 function getInstitutionCode() {
 
@@ -122,11 +112,12 @@ function resetInstitutionCode() {
 
 }
 
-function cancel() {
-
+function goBack() {
+    mode.value = 'board';
+    institutionItemData.value = undefined;
 }
 
-function createInstitution() {
+function submitForm() {
 
 }
 
@@ -145,7 +136,6 @@ function createInstitution() {
 }
 
 .institution-create-content {
-    position: relative;
     width: 40%;
     max-width: 40%;
     margin: 0 auto;
@@ -156,15 +146,15 @@ function createInstitution() {
     margin: 20px 0 30px;
 }
 
-.content {
-    height: 100%;
-    width: 100%;
-    flex: 1;
-    padding-top: 15px;
-}
+/*.content {*/
+/*    height: 100%;*/
+/*    width: 100%;*/
+/*    flex: 1;*/
+/*    padding-top: 15px;*/
+/*}*/
 
-.footer {
-    text-align: center;
-    margin: 50px 0;
-}
+/*.footer {*/
+/*    text-align: center;*/
+/*    margin: 50px 0;*/
+/*}*/
 </style>

@@ -10,7 +10,7 @@
                     </el-button>
                 </template>
             </el-input>
-            <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建路由">
+            <el-button class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
                 <template #icon>
                     <Icon :name="'ep:plus'"></Icon>
                 </template>
@@ -75,18 +75,24 @@
 import { ref } from 'vue';
 import type { TreeItemType } from '@/views/system/type/menu-list.type';
 import Icon from '@/components/Icon.vue';
-import { getInstitutionItem, getInstitutionTree, institutionTreeData, setCurrentMenuId } from './finance-institution';
 import {
-    setFinanceInstitutionMenuTree
-} from "@/views/finance/institution/components/institution-menu/institution-menu";
-import { getRolePageList } from "@/views/finance/institution/components/institution-role/institution-role";
-import { getUserPageList } from "@/views/finance/institution/components/institution-user/institution-user";
+    getInstitutionItem,
+    getInstitutionTree,
+    institutionTreeData,
+    mode,
+    resetInstitutionForm,
+    setCurrentMenuId
+} from './finance-institution';
+import { getRolePageList } from '@/views/finance/institution/components/institution-role/institution-role';
+import { getUserPageList } from '@/views/finance/institution/components/institution-user/institution-user';
+import { LoadingService } from '@/views/system/loading-service';
 
 
 const activeId = ref();
 
 function handleAddNewMenu() {
-    // todo
+    mode.value = 'form';
+    resetInstitutionForm();
 }
 
 async function handleSearchMenuTree() {
@@ -106,18 +112,24 @@ function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'cr
     let willDeleteList: { id: string }[] | undefined;
     if (type === 'remove') {
         willDeleteList = lookForAllId([item], []);
+        console.log(willDeleteList, '--------待删除');
+    }
+    if (type === 'edit') {
+        getInstitutionItem(item.id);
+        mode.value = 'form';
     }
     // todo
 }
 
 
 async function handleNodeClick(data: TreeItemType) {
-    // todo
     setCurrentMenuId(data.id);
+    LoadingService.getInstance().loading();
     await getInstitutionItem(data.id);
-    await setFinanceInstitutionMenuTree({ id: data.id });
+    // await setFinanceInstitutionMenuTree({ id: data.id });
     await getRolePageList();
     await getUserPageList();
+    LoadingService.getInstance().stop();
 }
 
 function handleMouseEnter(event: string) {

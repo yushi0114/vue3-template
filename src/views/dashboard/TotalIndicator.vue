@@ -172,7 +172,7 @@ const loadOptions = () => {
 </script>
 
 <template>
-    <el-card :body-style="{ display: 'flex', padding: '24px 32px 28px' }" shadow="never">
+    <Board :style="{ 'flex-direction': 'row', padding: '24px 32px 28px' }">
         <div class="count-user">
             <div class="item-label">企业总人数</div>
             <div class="item-value">{{ data.countUser }}</div>
@@ -180,7 +180,7 @@ const loadOptions = () => {
         <div class="chart-wrapper">
             <Charts :options="options" :height="78" />
         </div>
-    </el-card>
+    </Board>
 </template>
 
 <style lang="scss" scoped>

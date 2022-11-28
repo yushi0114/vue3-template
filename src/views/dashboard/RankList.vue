@@ -166,7 +166,7 @@ const mouseoutHandler = () => {
 </script>
 
 <template>
-    <el-card :body-style="{ position: 'relative', padding: '20px 28px 24px' }" shadow="never">
+    <Board :style="{ position: 'relative', padding: '20px 28px 24px' }">
         <div class="card-header">
             <Text color="paragraph" bold size="md">产品申请数量排行榜</Text>
         </div>
@@ -176,7 +176,7 @@ const mouseoutHandler = () => {
         </el-tabs>
         <Charts :options="options" :height="216" @chart-mousemove="mousemoveHandler" @chart-mouseout="mouseoutHandler" />
         <div id="label-tooltip"></div>
-    </el-card>
+    </Board>
 </template>
 
 <style lang="scss" scoped>

@@ -19,7 +19,7 @@ withDefaults(
 </script>
 
 <template>
-    <Board bordered :style="{ padding: '20px 24px 24px' }" shadow="never">
+    <Board :style="{ padding: '20px 24px 24px', 'border-radius': '8px' }">
         <div>
             <div class="card-header">
                 <Text color="paragraph" bold size="md">今日核心指标</Text>

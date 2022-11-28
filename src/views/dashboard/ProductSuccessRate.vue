@@ -42,7 +42,8 @@ const options = ref({
         type: 'category',
         axisLabel: {
             interval: 0,
-            rotate: 30
+            rotate: 30,
+            margin: 12
         },
         axisTick: {
             alignWithLabel: true

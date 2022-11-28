@@ -25,8 +25,9 @@ export default {
             cans.fillStyle = textColor;
             cans.textAlign = 'left';
             cans.textBaseline = 'Middle';
-            cans.fillText(textAccount, width / 6, can.height);
-            cans.fillText(textName + ' ' + textTime, width / 8, can.height + 22);
+            cans.fillText(textAccount, width / 4.3, can.height);
+            cans.fillText(textName, width / 3.5, can.height + 22);
+            cans.fillText(textTime, width / 4.8, can.height + 44);
             parentNode.style.backgroundImage = 'url(' + can.toDataURL('image/png') + ')';
         };
         addWaterMarker(el);

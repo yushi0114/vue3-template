@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\types\article.ts
  * @Author: zys
  * @Date: 2022-11-14 15:13:12
- * @LastEditTime: 2022-11-16 14:41:36
+ * @LastEditTime: 2022-11-23 11:34:55
  * @LastEditors: zys
  * @Reference:
  */
@@ -75,7 +75,7 @@ export type PolicyListParams = IListQueryParams<{
 
 export type PolicyListResponse = IListCommonResult<PolicyItem>;
 
-export type PolicyDetailResponse = (ICommonResult & PolicyItem)[];
+export type PolicyDetailResponse = ICommonResult & PolicyItem;
 
 export type CreatePolicyParams = Omit<PolicyItem, 'id'>;
 

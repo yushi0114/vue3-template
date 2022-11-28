@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\SjcForm\hooks\useUpload.ts
  * @Author: zys
  * @Date: 2022-11-10 10:34:30
- * @LastEditTime: 2022-11-18 17:07:20
+ * @LastEditTime: 2022-11-24 11:33:48
  * @LastEditors: zys
  * @Reference:
  */
@@ -39,7 +39,6 @@ export const useUpload = (form: Ref<FormInstance>) => {
 
     // 文件预览
     const handlePictureCardPreview = (file: any) => {
-        console.log('file: ', file);
         dialogImageUrl.value = file.url ?? '';
         dialogVisible.value = true;
     };

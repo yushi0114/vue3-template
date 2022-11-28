@@ -78,7 +78,9 @@ const loadOptions = () => {
 
 <template>
     <el-card :body-style="{ padding: '20px 24px 24px' }" shadow="never">
-        <div class="card-header">产品需求受理月成功率数据趋势</div>
+        <div class="card-header">
+            <Text color="paragraph" bold size="md">产品需求受理月成功率数据趋势</Text>
+        </div>
         <Charts :options="options" :height="172" />
     </el-card>
     <div class="success-rate-wrapper">
@@ -93,10 +95,7 @@ const loadOptions = () => {
 
 <style lang="scss" scoped>
 .card-header {
-    @include font(16px);
     margin-bottom: 12px;
-    color: #1e1e1e;
-    font-weight: bold;
 }
 
 .success-rate-wrapper {

@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-11-23 10:07:30
+ * @LastEditTime: 2022-11-24 11:34:17
  * @LastEditors: zys
  * @Reference:
  */
@@ -83,7 +83,6 @@ export const useTable = (
 
     const { request: _updateNewsStatus } = useApi(ARTICLE_API_MAP[ARTICLE_API.UPDATE_ARTICLE_STATUS], {
         onSuccess(data, params) {
-            console.log('params: ', params);
             ElMessage({
                 type: 'success',
                 message: '操作成功',
@@ -189,11 +188,9 @@ export const useTable = (
 
     // 删除静态服务器的文件
     const deleteFileOnServer = (params: any) => {
-        console.log('params: ', params);
         // 删除新闻成功后清除文件服务器中的静态文件
         params.thumbnail && deleteFile({ id: getFileIdByUrl(params.thumbnail) });
         const deleteList = getUrlListFromText(params.content);
-        console.log('deleteList: ', deleteList);
         deleteList.forEach((src: string) => {
             deleteFile({ id: getFileIdByUrl(src) });
         });
@@ -315,7 +312,6 @@ export const useTable = (
         if (page === ARTICLE_PAGE.DETAIL && tabItem!.value === tab.value) {
             params.status = articleStatus.value ? Number(articleStatus.value) : articleStatus.value;
         }
-        console.log('==========：', '==========');
         fetchTableData();
     });
     return {

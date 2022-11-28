@@ -78,6 +78,7 @@ function clear() {
         <el-form-item label="请输入新的用户名" prop="username">
             <el-input
                 v-model="formModel.username"
+                size="large"
                 />
         </el-form-item>
     </el-form>

@@ -169,6 +169,7 @@ const handleCurrentChange = (val: number) => {
                 class="searchInput"
                 placeholder="请输入关键字进行查询"
                 v-model.trim="searchInput"
+                size="large"
                 clearable
                 @clear="handleSearch(true)"
                 @keyup.enter="handleSearch(false)"
@@ -250,7 +251,6 @@ const handleCurrentChange = (val: number) => {
         margin-bottom: 20px;
         .searchInput {
             width: 350px;
-            height: 40px;
         }
     }
 

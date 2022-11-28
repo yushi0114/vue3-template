@@ -182,6 +182,7 @@ function handleRadioClick(tField: string, tValue: any) {
         <div v-if="searchConfig">
             <el-input
                 v-model="model[searchConfig.field]"
+                size="large"
                 :placeholder="searchConfig.label"
                 class="input-with-select"
                 >

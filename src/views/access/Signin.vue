@@ -5,9 +5,8 @@ import LoginFooter from './components/footer/index.vue';
 
 <template>
     <div class="login">
-        <Logo class="app-logo login-logo" />
         <div class="form">
-            <div class="form-title">金融栈数据管理平台</div>
+            <div class="form-title"> <Logo class="app-logo" /></div>
             <div class="form-title-line"></div>
             <account-password-login></account-password-login>
         </div>
@@ -33,19 +32,11 @@ import LoginFooter from './components/footer/index.vue';
     flex-wrap: nowrap;
 }
 
-.login-logo {
-    position: fixed;
-    top: 58px;
-    left: 81px;
-    height: 32px;
-}
-
 .form-title {
     width: 335px;
     font-size: 36px;
     font-weight: 400;
     color: var(--el-color-primary);
-    line-height: 67px;
     white-space: nowrap;
 }
 

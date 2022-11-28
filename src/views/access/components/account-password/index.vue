@@ -1,9 +1,15 @@
 <template>
     <div class="apl-container">
-        <el-form :rules="COUNT_PASSWORD_FORM_RULES" ref="formRef" :model="countAndPasswordForm" label-position="top">
-            <el-form-item label="用户名" prop="phoneNumber">
+        <el-form
+            :rules="COUNT_PASSWORD_FORM_RULES"
+            ref="formRef"
+            :model="countAndPasswordForm"
+            label-position="top">
+            <el-form-item
+                label="手机号码"
+                prop="phoneNumber">
                 <el-input
-                    placeholder="请输入您的用户名"
+                    placeholder="请输入您的手机号码"
                     v-model.trim="countAndPasswordForm.phoneNumber"
                     :maxlength="11"
                     class="login-input"
@@ -11,7 +17,9 @@
                     @input="handleInputChange($event, 'phoneNumber')">
                 </el-input>
             </el-form-item>
-            <el-form-item label="登录密码" prop="password">
+            <el-form-item
+                label="登录密码"
+                prop="password">
                 <el-input
                     v-if="visible"
                     type="password"
@@ -48,7 +56,9 @@
                 </el-input>
             </el-form-item>
 
-            <el-form-item label="验证码" prop="inputVerifyCode">
+            <el-form-item
+                label="验证码"
+                prop="inputVerifyCode">
                 <div class="flex">
                     <div class="flex-1">
                         <el-input
@@ -61,7 +71,10 @@
                     </div>
 
                     <div class="verify-code-container">
-                        <div @click="getVerifyCode" class="verify-code" v-html="countAndPasswordForm.verifyCode"></div>
+                        <div
+                            @click="getVerifyCode"
+                            class="verify-code"
+                            v-html="countAndPasswordForm.verifyCode"></div>
                     </div>
                 </div>
             </el-form-item>
@@ -181,7 +194,7 @@ onMounted(() => {
 .login-btn {
     margin-top: 40px;
     width: 100%;
-    height: 62px;
+    height: 55px;
     font-size: 20px;
     background-color: var(--el-color-primary);
 }
@@ -227,6 +240,7 @@ onMounted(() => {
         padding: 1px 0;
     }
     :deep(.el-form-item.is-error .el-input__wrapper) {
+        box-shadow: none;
         border-bottom: var(--el-border-width) var(--el-border-style) var(--el-color-danger);
     }
 

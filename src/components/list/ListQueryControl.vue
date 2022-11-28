@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 // import { useQueryParams } from '@/composables';
+import { UseMouseInElement } from '@vueuse/components';
+import { useTemplateRefsList } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
+import type { ElDropdown } from 'element-plus';
 import { getNextMonth } from '@/utils';
 // TODO
 export type ControlConfig = {
@@ -37,7 +40,9 @@ const emits = defineEmits<{
 }>();
 
 type ModelType = any
+type DropdownLabelMapType = any
 const model = reactive<ModelType>({});
+const dropdownLabelMap = reactive<DropdownLabelMapType>({});
 
 watch(() => props.searchConfig, () => {
     if (props.searchConfig) {
@@ -173,6 +178,25 @@ function handleRadioClick(tField: string, tValue: any) {
     model[tField] = model[tField] === tValue ? '' : tValue;
     wrapGo();
 }
+
+const refs = useTemplateRefsList<typeof ElDropdown>();
+const handleDropdownChange = ({ option, fConf }: { option: PlainOption<any>;fConf: ControlOptionConfig<any> }) => {
+    model[fConf.field] = option.value;
+    dropdownLabelMap[fConf.field] = option.name;
+    wrapGo();
+};
+
+const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => {
+    if (refs.value[index]) {
+        nextTick(() => {
+            refs.value[index].handleClose();
+        });
+    }
+    model[fConf.field] = undefined;
+    dropdownLabelMap[fConf.field] = undefined;
+    wrapGo();
+};
+
 </script>
 
 <template>
@@ -182,6 +206,7 @@ function handleRadioClick(tField: string, tValue: any) {
         <div v-if="searchConfig">
             <el-input
                 v-model="model[searchConfig.field]"
+                size="large"
                 :placeholder="searchConfig.label"
                 class="input-with-select"
                 >
@@ -218,8 +243,30 @@ function handleRadioClick(tField: string, tValue: any) {
     </FlexRow>
     <FlexRow
         class="lqc-filter-row">
-        <div class="lqc-filter-item" v-for="fConf in filterOptionsConfigs" :key="fConf.field">
-            <el-select
+        <div class="lqc-filter-item" v-for="(fConf, index) in filterOptionsConfigs" :key="fConf.field">
+            <el-dropdown
+                :ref="refs.set"
+                trigger="click"
+                @command="handleDropdownChange">
+                <UseMouseInElement v-slot="{ isOutside }">
+                    <FlexRow class="cursor-pointer">
+                        {{ dropdownLabelMap[fConf.field] || fConf.label }}
+                        <i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/>
+                        <i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/>
+                    </FlexRow>
+                </UseMouseInElement>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item
+                            v-for="option in fConf.options"
+                            :key="option.name"
+                            :command="{option, fConf}">
+                            {{ option.name }}
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
+            <!-- <el-select
                 clearable
                 :placeholder="fConf.label"
                 v-model="model[fConf.field]"
@@ -231,7 +278,7 @@ function handleRadioClick(tField: string, tValue: any) {
                     :label="opt.name"
                     :value="opt.value"
                 />
-            </el-select>
+            </el-select> -->
         </div>
         <div class="lqc-date-item" v-if="dateRangeConfig">
             <el-date-picker

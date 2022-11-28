@@ -175,11 +175,11 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 
 .sidebar-root-icon {
-    @apply h-6 w-6 mt-0.5;
+    @apply h-5 w-5 mt-0.5;
 }
 
 .sidebar-sub-icon {
-    @apply h-5 w-5 mt-1;
+    @apply h-4 w-4 mt-1;
 }
 
 .sidebar-root-link {

@@ -79,7 +79,7 @@ watch(listControlModel, () => {
                 <el-button
                     type="primary"
                     @click="handleToCreate"
-                    >新建</el-button
+                    ><i-ep-plus />新建</el-button
                 >
             </template>
         </ListQueryControl>
@@ -95,7 +95,7 @@ watch(listControlModel, () => {
             @page-change="pageSizeChange">
             <template #thumbnail="{ scope }">
                 <div
-                    class="w-70px h-60px border border-$el-fill-color overflow-hidden"
+                    class="w-70px h-60px border border-$el-fill-color rounded-lg overflow-hidden"
                     v-if="isNewsModule">
                     <img
                         class="w-full h-full thumbnail"
@@ -196,19 +196,37 @@ watch(listControlModel, () => {
                 <div class="flex-center items-end gap-2">
                     <div
                         :class="['flex-center', scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
-                        <TextHoverable
+                        <!-- <TextHoverable
                             size="sm"
                             :color="scope.row.status === ARTICLE_STATUS.PUBLISHED ? 'disabled' : 'regular'"
                             @click="handleToEdit(scope)">
                             编辑
-                        </TextHoverable>
+                        </TextHoverable> -->
+                        <el-button
+                            type="primary"
+                            circle
+                            :disabled="scope.row.status === ARTICLE_STATUS.PUBLISHED"
+                            @click="handleToEdit(scope)">
+                            <el-tooltip
+                                placement="top"
+                                content="编辑">
+                                <i-ep-edit />
+                            </el-tooltip>
+                        </el-button>
                     </div>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, scope.row)">
-                        <TextHoverable
+                        <!-- <TextHoverable
                             size="sm"
                             color="regular">
                             更多
-                        </TextHoverable>
+                        </TextHoverable> -->
+                        <el-button circle>
+                            <el-tooltip
+                                placement="top"
+                                content="更多">
+                                <i-ep-more />
+                            </el-tooltip>
+                        </el-button>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item

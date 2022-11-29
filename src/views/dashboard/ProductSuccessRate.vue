@@ -82,7 +82,7 @@ const loadOptions = () => {
         <div class="card-header">
             <Text color="paragraph" bold size="md">产品需求受理月成功率数据趋势</Text>
         </div>
-        <Charts :options="options" :height="172" />
+        <Charts :options="options" :height="176" />
     </Board>
     <div class="success-rate-wrapper">
         <div class="success-rate-label">当月成功率 (辽信通 / 市综服)</div>
@@ -100,7 +100,7 @@ const loadOptions = () => {
 }
 
 .success-rate-wrapper {
-    margin-top: 24px;
+    margin-top: 20px;
     padding: 11.5px 24px;
     box-sizing: border-box;
     width: 100%;

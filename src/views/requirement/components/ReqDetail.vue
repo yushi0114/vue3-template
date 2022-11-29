@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import type { RequirementEntity } from '@/types';
-import { loanTermTypeMap } from '@/enums';
+import type { ExactReqEntity } from '@/types';
+import { AcceptProgressType, loanEndTypeMap, loanTermTypeMap, longestOverdueTypeMap, steTypeMap, switchTypeMap, taxGradeTypeMap } from '@/enums';
 
 withDefaults(
     defineProps<{
-        content?: RequirementEntity | null
+        content?: ExactReqEntity | null,
+        exact?: boolean
     }>(),
     {
-        content: null
+        content: null,
+        exact: false,
     }
 );
 </script>
@@ -25,12 +27,26 @@ withDefaults(
             <ContentBoardField label="联系电话">{{ content?.contactMobile }}</ContentBoardField>
         </ContentBoard>
 
+        <ContentBoard label="详细信息" :cols="3" v-if="content">
+            <ContentBoardField label="是否为小微企业">{{ switchTypeMap[content.mseType] }}</ContentBoardField>
+            <ContentBoardField label="是否有抵押物">{{ switchTypeMap[content.pawnType] }}</ContentBoardField>
+            <ContentBoardField label="是否可提供担保">{{ switchTypeMap[content.guaranteeType] }}</ContentBoardField>
+
+            <ContentBoardField label="企业纳税信用等级">{{ taxGradeTypeMap[content.taxGrade] }}</ContentBoardField>
+            <ContentBoardField label="是否为科技型企业">{{ steTypeMap[content.steType] }}</ContentBoardField>
+            <ContentBoardField label="是否有政府采购订单">{{ switchTypeMap[content.gpType] }}</ContentBoardField>
+
+            <ContentBoardField label="在银行是否有过融资行为">{{ switchTypeMap[content.financingType] }}</ContentBoardField>
+            <ContentBoardField label="目前尚未结清贷款金额">{{ loanEndTypeMap[content.loanEnd] }}</ContentBoardField>
+            <ContentBoardField label="近24个月内最长逾期天数">{{ longestOverdueTypeMap[content.longestOverdue] }}</ContentBoardField>
+        </ContentBoard>
+
         <ContentBoard label="贷款需求" :cols="2">
             <ContentBoardField label="期望融资金额">{{ content?.corpName }}</ContentBoardField>
             <ContentBoardField label="期望放款时间">{{ content?.corpCode }}</ContentBoardField>
         </ContentBoard>
 
-        <ContentBoard label="放款信息" :cols="4">
+        <ContentBoard label="放款信息" :cols="4" v-if="content?.progress === AcceptProgressType.done">
             <ContentBoardField label="产品名称">{{ content?.productName }}</ContentBoardField>
             <ContentBoardField label="实际放款金额">{{ content?.loanAmount }}万元</ContentBoardField>
             <ContentBoardField label="实际贷款期限">{{ loanTermTypeMap[content?.loanTerm!] }}</ContentBoardField>

@@ -3,6 +3,7 @@ withDefaults(
     defineProps<{
         vertical?: 'start' | 'center' | 'end' | 'stretch',
         horizontal?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'
+        gap?: 'none' | 'line' | 'xs' | 'sm' | 'md' | 'lg'
     }>(),
     {
         horizontal: 'start',
@@ -16,6 +17,7 @@ withDefaults(
     <div class="i-flex-row" v-bind="$attrs" :class="[
         'i-flex-row-vertical-' + vertical,
         'i-flex-row-horizontal-' + horizontal,
+        'i-flex-row-gap-' + gap,
     ]">
         <slot />
     </div>
@@ -63,5 +65,25 @@ withDefaults(
 
 .i-flex-row-horizontal-evenly {
     @apply justify-evenly;
+}
+
+.i-flex-row-gap-line {
+    gap: 2px;
+}
+.i-flex-row-gap-xs {
+    @apply gap-2;
+}
+.i-flex-row-gap-sm {
+    @apply gap-3
+}
+.i-flex-row-gap-md {
+    @apply gap-4
+}
+.i-flex-row-gap-lg {
+    @apply gap-5
+}
+
+.i-flex-row-gap-xl {
+    @apply gap-6
 }
 </style>

@@ -3,13 +3,16 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="product-manage-new">
-    <!--  -->
-    新建产品
+  <PagePanel class="product-manage-new">
+    <Board full>
+      <PlatformTab />
+      <!--  -->
+        新建产品
 
     platform: {{ route.params.type }}
     self: {{ route.params.p }}
-  </div>
+    </Board>
+  </PagePanel>
 </template>
 
 <style lang="postcss">

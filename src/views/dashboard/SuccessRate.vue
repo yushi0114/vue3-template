@@ -82,12 +82,18 @@ const loadOptions = () => {
 
 <template>
     <el-card :body-style="{ padding: '20px 24px 28px' }" shadow="never">
-        <div class="card-header">需求受理月成功率数据趋势</div>
-        <div class="success-rate-label">当月成功率 (辽信通 / 市综服)</div>
+        <div class="card-header">
+            <Text color="paragraph" bold size="md">需求受理月成功率数据趋势</Text>
+        </div>
+        <div class="success-rate-label">
+            <Text color="secondary" size="xs">当月成功率 (辽信通 / 市综服)</Text>
+        </div>
         <div class="success-rate-value">
-            {{ data.reqSuccessRate[data.reqSuccessRate.length - 1]?.per }}%
-            /
-            {{ data.reqEzjfwSuccessRate[data.reqEzjfwSuccessRate.length - 1]?.per }}%
+            <Text color="paragraph" size="xl">
+                {{ data.reqSuccessRate[data.reqSuccessRate.length - 1]?.per }}%
+                /
+                {{ data.reqEzjfwSuccessRate[data.reqEzjfwSuccessRate.length - 1]?.per }}%
+            </Text>
         </div>
         <Charts :options="options" :height="209" />
     </el-card>
@@ -95,21 +101,14 @@ const loadOptions = () => {
 
 <style lang="scss" scoped>
 .card-header {
-    @include font(16px);
     margin-bottom: 16px;
-    color: #1e1e1e;
-    font-weight: bold;
 }
 
 .success-rate-label {
-    @include font(12px);
     margin-bottom: 1px;
-    color: #5e5e5e;
 }
 
 .success-rate-value {
     line-height: 38px;
-    color: #1e1e1e;
-    font-size: 24px;
 }
 </style>

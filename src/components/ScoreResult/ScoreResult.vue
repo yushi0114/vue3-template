@@ -11,11 +11,12 @@ const props = withDefaults(
     }
 );
 
-const scoreLine = ref();
+const scoreLineRef = ref();
 
 function initScoreTrendsLine() {
-    if (scoreLine.value) {
-        const chartScoreLine = echarts.init(scoreLine.value);
+    console.log('????', props.scoreResult, scoreLineRef.value);
+    if (scoreLineRef.value) {
+        const chartScoreLine = echarts.init(scoreLineRef.value);
         let xData: any = [];
         let seriesData: any = [];
         props.scoreResult.forEach((item: any) => {
@@ -36,14 +37,19 @@ function initScoreTrendsLine() {
     }
 }
 
-onMounted(initScoreTrendsLine);
+watch(() => props.scoreResult, (val) => {
+    if (val.length === 0) return;
+    nextTick(() => {
+        initScoreTrendsLine();
+    });
+});
 
 </script>
 <template>
     <div>
-        <div v-if="scoreResult.length > 0">
+        <div v-if="scoreResult.length > 0" class="score-result">
             <div class="left">
-                <table class="mt10 table">
+                <table class="table">
                     <tr>
                         <td class="header-item">年份</td>
                         <td class="header-item">评分</td>
@@ -57,10 +63,10 @@ onMounted(initScoreTrendsLine);
                         <td class="content-item">{{ item.pji }}</td>
                     </tr>
                 </table>
-                <div ref="scoreLine" class="line-content mt20"></div>
+                <div ref="scoreLineRef" class="line-content"></div>
             </div>
             <div class="right">
-                <table class="mt10 table">
+                <table class="table">
                     <tr>
                         <td class="right-header-item">评价</td>
                         <td class="right-header-item">评级</td>
@@ -122,6 +128,10 @@ onMounted(initScoreTrendsLine);
     </div>
 </template>
 <style lang="scss" scoped>
+
+.score-result {
+    padding-top: $gap-md;
+}
 .left {
     width: 60%;
     float: left;
@@ -156,6 +166,7 @@ onMounted(initScoreTrendsLine);
 
 .line-content {
     height: 300px;
+    margin-top: $gap-xs;
 }
 
 .right {
@@ -177,7 +188,7 @@ onMounted(initScoreTrendsLine);
     border-bottom: 1px solid #d8d5d5;
     border-left: 1px solid #d8d5d5;
     text-align: center;
-    padding: 7px 0;
+    padding: 11px 0;
 }
 
 </style>

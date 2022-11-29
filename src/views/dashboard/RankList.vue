@@ -167,7 +167,9 @@ const mouseoutHandler = () => {
 
 <template>
     <el-card :body-style="{ position: 'relative', padding: '20px 28px 24px' }" shadow="never">
-        <div class="card-header">产品申请数量排行榜</div>
+        <div class="card-header">
+            <Text color="paragraph" bold size="md">产品申请数量排行榜</Text>
+        </div>
         <el-tabs v-model="activeName" @tab-change="handleTabChange">
             <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
             <el-tab-pane label="市综服" name="szf"></el-tab-pane>
@@ -179,10 +181,7 @@ const mouseoutHandler = () => {
 
 <style lang="scss" scoped>
 .card-header {
-    @include font(16px);
     margin-bottom: 16px;
-    color: #1e1e1e;
-    font-weight: bold;
 }
 
 #label-tooltip {

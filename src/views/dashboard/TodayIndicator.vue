@@ -25,25 +25,47 @@ withDefaults(
                 <Text color="paragraph" bold size="md">今日核心指标</Text>
             </div>
             <div class="indicator">
-                <div class="item-label">企业新用户</div>
-                <div class="item-value">{{ data.countTodayElibUser }} <span>/</span> {{ data.countTodayEzjfwUser }}</div>
-                <div class="item-desc">辽信通 <span>/</span> 市综服</div>
+                <div class="item-label">
+                    <Text color="secondary" size="sm">企业新用户</Text>
+                </div>
+                <div class="item-value">
+                    <Text color="paragraph" size="current">{{ data.countTodayElibUser }} / {{ data.countTodayEzjfwUser }}</Text>
+                </div>
+                <div class="item-desc">
+                    <Text color="secondary" size="xs">辽信通 / 市综服</Text>
+                </div>
             </div>
             <div class="indicator">
-                <div class="item-label">辽信通需求</div>
-                <div class="item-value">{{ data.countTodayExactReq }}</div>
+                <div class="item-label">
+                    <Text color="secondary" size="sm">辽信通需求</Text>
+                </div>
+                <div class="item-value">
+                    <Text color="paragraph" size="current">{{ data.countTodayExactReq }}</Text>
+                </div>
             </div>
             <div class="indicator">
-                <div class="item-label">辽信通产品需求</div>
-                <div class="item-value">{{ data.countTodayProductReq }}</div>
+                <div class="item-label">
+                    <Text color="secondary" size="sm">辽信通产品需求</Text>
+                </div>
+                <div class="item-value">
+                    <Text color="paragraph" size="current">{{ data.countTodayProductReq }}</Text>
+                </div>
             </div>
             <div class="indicator">
-                <div class="item-label">市综服需求</div>
-                <div class="item-value">{{ data.countTodayEzjfwExactReq }}</div>
+                <div class="item-label">
+                    <Text color="secondary" size="sm">市综服需求</Text>
+                </div>
+                <div class="item-value">
+                    <Text color="paragraph" size="current">{{ data.countTodayEzjfwExactReq }}</Text>
+                </div>
             </div>
             <div class="indicator">
-                <div class="item-label">市综服产品需求</div>
-                <div class="item-value">{{ data.countTodayEzjfwProductReq }}</div>
+                <div class="item-label">
+                    <Text color="secondary" size="sm">市综服产品需求</Text>
+                </div>
+                <div class="item-value">
+                    <Text color="paragraph" size="current">{{ data.countTodayEzjfwProductReq }}</Text>
+                </div>
             </div>
         </div>
     </Board>
@@ -70,21 +92,16 @@ withDefaults(
     }
 
     .item-label {
-        @include font(14px);
         margin-bottom: 2px;
-        color: #5e5e5e;
     }
 
     .item-value {
         line-height: 38px;
-        color: #1e1e1e;
         font-size: 30px;
     }
 
     .item-desc {
-        @include font(12px);
         margin-top: 11px;
-        color: #5e5e5e;
     }
 }
 </style>

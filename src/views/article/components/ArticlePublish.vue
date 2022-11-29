@@ -2,10 +2,12 @@
 import { ARTICLE_MODULE, ARTICLE_TYPE_LABEL, ARTICLE_STATUS, ARTICLE_API, UPLOAD_FILE_TYPE } from '@/enums';
 import { ARTICLE_FORM_MAP } from '../constants';
 import { useApi } from '@/composables';
+import { isArray, cloneDeep } from 'lodash';
 import type { CreateNewsParams, UpdateNewsParams, NewsItem } from '@/types';
 import { useApiManage, useArticleModule } from '../hooks';
 import type { UploadFile } from 'element-plus';
 import { getFileIdByUrl, to } from '@/utils';
+import type { Recordable } from '@/types/globals';
 
 const { back } = useRouter();
 const {
@@ -50,16 +52,22 @@ const { loading: loadingUpdate, request: updateArticle } = useApi(ARTICLE_API_MA
 });
 
 const { loading: loadingDetail, request: getArticleDetail } = useApi(ARTICLE_API_MAP[ARTICLE_API.LOAD_ARTICLE_DETAIL], {
-    onSuccess([data]) {
-        state.laseUpdateTime = data.updateTime;
-        if (getArticleTypeLabel.value === ARTICLE_TYPE_LABEL.NEWS) {
-            state.thumbnailUrl = (data as NewsItem).thumbnail;
+    onSuccess(data) {
+        let temp: typeof data | Recordable = {};
+        if (isArray(data)) {
+            temp = data[0];
+        } else {
+            temp = data;
         }
-        ARTICLE_FORM.value.forEach((item: any) => {
+        state.laseUpdateTime = temp.updateTime;
+        if (getArticleTypeLabel.value === ARTICLE_TYPE_LABEL.NEWS) {
+            state.thumbnailUrl = (temp as NewsItem).thumbnail;
+        }
+        ARTICLE_FORM.value.forEach((item) => {
             if (item.keyName === 'thumbnail') {
-                item.defaultValue = [{ url: data[item.keyName as keyof typeof data], name: '缩略图' }];
+                item.defaultValue = [{ url: temp[item.keyName as keyof typeof data], name: '缩略图' }];
             } else {
-                item.defaultValue = data[item.keyName as keyof typeof data];
+                item.defaultValue = temp[item.keyName as keyof typeof data];
             }
         });
     },
@@ -150,7 +158,11 @@ onMounted(() => {
                     @click="back"
                     ><i-ep-back></i-ep-back>返回</el-button
                 >
-                <div class="text-$el-text-color-secondary" v-if="state.laseUpdateTime">最近一次编辑时间：{{ state.laseUpdateTime }}</div>
+                <div
+                    class="text-$el-text-color-secondary"
+                    v-if="state.laseUpdateTime"
+                    >最近一次编辑时间：{{ state.laseUpdateTime }}</div
+                >
             </div>
 
             <div>

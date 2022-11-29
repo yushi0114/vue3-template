@@ -40,9 +40,7 @@ const handleSortChange = (item: ArticleSortItem) => {
             break;
     }
     state.sortType = item.sortType;
-    console.log('item: ', ARTICLE_SORT_LIST);
     state.sortField = item.sortField;
-    console.log('state: ', state);
     emit('sort-change', pick(state, ['sortType', 'sortField']));
 };
 </script>

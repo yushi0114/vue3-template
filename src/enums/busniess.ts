@@ -289,8 +289,8 @@ export const orgProgressStatusTypeMap: Record<OrgProgressStatusType, string> = O
 
 // #region 推荐产品类型
 export enum ProductRecommandType {
-    primary = '0',
-    secondary = '1'
+    primary = '1',
+    secondary = '2'
 }
 
 

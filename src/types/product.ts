@@ -1,4 +1,17 @@
+import type { ProductRecommandType, SwitchType } from '@/enums';
 import type { RequirementEntity } from './requirement';
+
+export interface ProductFilterEntity {
+    id: string
+    filterId: ProductFilterEntity['id'],
+    filterValue: string,
+    filterCode: number
+    typeCode: number,
+    typeValue: string,
+    editable: boolean,
+    isFilterShow: SwitchType,
+    filter?: ProductFilterEntity[]
+}
 
 export interface ProductEntity {
     guarantyStyle: string
@@ -11,9 +24,36 @@ export interface ProductEntity {
     referenceRate: string
     status: number
     successRate: string
+
+    loan: string
+    loanEnd: string
+    guarantee: string
+    logoContent: string
+    description: string
+    feature: string
+    customer: string
+    repayment: string
+    applicationConditions: string
+    requiredMaterials: string
+    supportTel: string
+
+    createBy: string
+    createTime: string
+    updateBy: string
+    updateTime: string
+    filterList: ProductFilterEntity[]
 }
 
 export interface ProductRequirementEntity extends RequirementEntity {
     productName: string,
     orgName: ProductEntity['orgName'],
+}
+
+export interface ProductRecommandEntity {
+    id: string
+    name: string
+    orgProductId: string
+    productPoster: string
+    productType: ProductRecommandType
+    status: SwitchType
 }

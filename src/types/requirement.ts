@@ -1,4 +1,4 @@
-import type { AcceptProgressType, ExpectTimeType, LoanTermType } from '@/enums';
+import type { AcceptProgressType, ExpectTimeType, LoanTermType, SwitchType, TaxGradeType, SteType, LoanEndType, LongestOverdueType, ExpectRateType } from '@/enums';
 import type { OrgAcceptProgress } from './org';
 
 export interface RequirementEntity {
@@ -11,6 +11,7 @@ export interface RequirementEntity {
     createTime: string
     expectFinancing: string
     expectTime: ExpectTimeType
+    expectRate: ExpectRateType,
     id: string
     progress: AcceptProgressType
     updateTime: string
@@ -21,6 +22,16 @@ export interface RequirementEntity {
     loanRate: string
     loanTerm: LoanTermType
     productName: string
+
+    mseType: SwitchType,
+    pawnType: SwitchType,
+    guaranteeType: SwitchType,
+    taxGrade: TaxGradeType,
+    steType: SteType,
+    gpType: SwitchType,
+    financingType: SwitchType,
+    loanEnd: LoanEndType,
+    longestOverdue: LongestOverdueType,
 }
 
 export interface AgileReqEntity extends RequirementEntity {

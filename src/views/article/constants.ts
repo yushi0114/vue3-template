@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\constants.ts
  * @Author: zys
  * @Date: 2022-11-14 11:26:22
- * @LastEditTime: 2022-11-22 11:52:37
+ * @LastEditTime: 2022-11-23 11:37:54
  * @LastEditors: zys
  * @Reference:
  */
@@ -208,6 +208,7 @@ export const ARTICLE_FORM_MAP: { [key in ARTICLE_TYPE_LABEL]: DefItem[] } = {
         {
             type: FormType.DATA_PICKER,
             label: '发布日期',
+            valueFormat: 'YYYY-MM-DD',
             keyName: 'publishDate',
             placeholder: '请选择',
             span: 8, // 参考el-col

@@ -3,7 +3,7 @@ import { useDark } from '@vueuse/core';
 import type { Placement } from 'element-plus';
 
 export type TextColor = 'primary' | 'danger' | 'success' | 'warning' | 'info' | 'exception' | 'error' |
-        'paragraph' | 'regular' | 'secondary' | 'placeholder' | 'disbled' |
+        'paragraph' | 'regular' | 'secondary' | 'placeholder' | 'disabled' |
         'current';
 
 export interface ITextProps {
@@ -57,37 +57,41 @@ const onMouseEnter = () => {
 
 </script>
 <template>
-    <el-tooltip
-        popper-class="sjc-tooltip"
-        :effect="effect"
-        :disabled="isDisabledTooltip"
-        :placement="placement"
+    <span class="i-text" v-bind="$attrs" :class="[
+        props.italic ? 'i-text-italic' : '',
+        props.truncate ? 'i-text-truncate' : '',
+        props.block ? 'i-text-block' : '',
+        props.uppercase ? 'i-text-uppercase' : '',
+        props.underline ? 'i-text-underline' : '',
+        props.bold ? 'i-text-bold' : '',
+        'i-text-' + props.align,
+        props.size === 'current' ? '' : 'i-text-' + props.size,
+        props.color === 'current' ? '' : 'i-text-color-' + props.color,
+    ]"
+    ref="text"
+    @mouseover="onMouseEnter"
     >
+        <el-tooltip
+            popper-class="sjc-tooltip"
+            :effect="effect"
+            :disabled="isDisabledTooltip"
+            :placement="placement"
+            virtual-triggering
+            :virtual-ref="text"
+        >
             <template #content>
                 <slot name="content">
                     <template v-if="content">
                         {{ content }}
                     </template>
-                    <slot v-else />
+                    <template  v-else>
+                        <slot />
+                    </template>
                 </slot>
             </template>
-            <span class="i-text" v-bind="$attrs" :class="[
-                props.italic ? 'i-text-italic' : '',
-                props.truncate ? 'i-text-truncate' : '',
-                props.block ? 'i-text-block' : '',
-                props.uppercase ? 'i-text-uppercase' : '',
-                props.underline ? 'i-text-underline' : '',
-                props.bold ? 'i-text-bold' : '',
-                'i-text-' + props.align,
-                props.size === 'current' ? '' : 'i-text-' + props.size,
-                props.color === 'current' ? '' : 'i-text-color-' + props.color,
-            ]"
-            ref="text"
-            @mouseover="onMouseEnter"
-            >
-                <slot />
-            </span>
         </el-tooltip>
+        <slot />
+    </span>
 </template>
 <style lang="postcss">
 .sjc-tooltip {
@@ -195,7 +199,7 @@ const onMouseEnter = () => {
     color: var(--el-text-color-placeholder);
 }
 
-.i-text-color-disbled {
-    color: var(--el-text-color-disbled);
+.i-text-color-disabled {
+    color: var(--el-text-color-disabled);
 }
 </style>

@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  <Text class="i-texthoverable">
+  <Text class="i-texthoverable" :class="[
+    $attrs.color !== 'disabled' ? '' : 'i-texthoverable--' + $attrs.color,
+  ]" v-bind="$attrs">
     <!-- -->
     <slot />
   </Text>
@@ -15,6 +17,14 @@
 
   &:hover {
     color: var(--el-color-primary);
+  }
+}
+
+.i-texthoverable--disabled {
+  @apply pointer-events-none;
+
+  &:hover {
+    @apply text-$el-text-color-disabled;
   }
 }
 </style>

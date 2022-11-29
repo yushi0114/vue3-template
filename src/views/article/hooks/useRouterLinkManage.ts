@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useRouterLinkManage.ts
  * @Author: zys
  * @Date: 2022-11-15 09:46:15
- * @LastEditTime: 2022-11-16 17:36:17
+ * @LastEditTime: 2022-11-24 11:34:08
  * @LastEditors: zys
  * @Reference:
  */
@@ -14,7 +14,6 @@ export const useRouterLinkManage = (module: ARTICLE_MODULE) => {
     const { path } = useRoute();
     const [base, listUrl] = path.split('/');
     const _path = `${base}/${listUrl}`;
-    console.log('path: ', path);
     const LINK_MAP = {
         [ARTICLE_MODULE.NEWS_LXT]: {
             [LINK_TYPE.ADD]: _path + LINK_TYPE.ADD,
@@ -51,13 +50,11 @@ export const useJumpLink = (params: { tab: TAB_ITEM; module: ARTICLE_MODULE }) =
 
     // 编辑操作
     const handleToEdit = ({ row }: { row: NewsItem | PolicyItem }) => {
-        console.log(row);
         push({ path: LINK_MAP[LINK_TYPE.EDIT], query: { id: row.id } });
     };
 
     // 详情页面
     const handleToDetail = ({ row, status }: { row: NewsItem | PolicyItem; status: ARTICLE_STATUS }) => {
-        console.log(row);
         push({ path: LINK_MAP[LINK_TYPE.DETAIL], query: { id: row.id, tab: params.tab.value, status } });
     };
 

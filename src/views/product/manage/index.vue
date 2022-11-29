@@ -2,13 +2,14 @@
 import { onlineTypeOptions, PlatformType } from '@/enums';
 import { getProducts, getTopOrgs } from '@/api';
 import type { PlainOption, ProductEntity } from '@/types';
-import { ProductList } from '../components';
+import { ProductDetail, ProductList } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel, useApi } from '@/composables';
 
 const route = useRoute();
 const platform = ref(Number(route.params.type));
 const topOrgOptions = ref<PlainOption[]>([]);
+const detail = ref<ProductEntity | null>(null);
 
 const { model: listControlModel, clear: clearModel } = useListControlModel({
     numberFields: ['status']
@@ -42,6 +43,7 @@ function handleTabChange(plat: PlatformType) {
 
 function goDetail(req: ProductEntity) {
     console.log(req);
+    detail.value = req;
 }
 
 watch(listControlModel, () => {
@@ -93,6 +95,11 @@ onBeforeMount(() => {
             />
         </FlexRow>
     </Board>
+
+    <ProductDetail
+        :modelValue="!!detail"
+        @closed="detail = null"
+        :content="detail" />
   </PagePanel>
 </template>
 <style lang="postcss">

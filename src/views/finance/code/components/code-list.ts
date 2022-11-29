@@ -24,10 +24,18 @@ export const codeList = reactive<{
     list: []
 });
 
-export const financeCodeFilterObject = reactive({
+export const financeCodeFilterObject = reactive<{
+    currentSize: number;
+    currentPage: number;
+    searchInput: string;
+    sortField: 'update_time' | 'create_time',
+    sortType: 'asc' | 'desc'
+}>({
     searchInput: '',
-    currentSize: 0,
-    currentPage: 0
+    currentSize: 10,
+    currentPage: 1,
+    sortField: 'update_time',
+    sortType: 'desc',
 });
 
 
@@ -73,8 +81,7 @@ export async function setOrgTypeCodeList(): Promise<void> {
 export async function addFinanceCode(): Promise<void> {
     return new Promise((resolve) => {
         addFinanceCodeApi({
-            ...codeForm.value,
-            menuName: ''
+            ...codeForm.value
         }).then(() => {
             ElMessage({
                 type: 'success',
@@ -93,8 +100,7 @@ export async function updateFinanceCode(): Promise<void> {
         }
         updateFinanceCodeApi({
             id: currentCodeId.value,
-            ...codeForm.value,
-            menuName: ''
+            ...codeForm.value
         }).then(() => {
             ElMessage({
                 type: 'success',
@@ -109,14 +115,13 @@ export async function updateFinanceCode(): Promise<void> {
 export async function setFinanceCodeList(): Promise<void> {
     return new Promise((resolve) => {
         getFinanceCodeListApi({
-            pageIndex: financeCodeFilterObject.currentPage + 1,
+            pageIndex: financeCodeFilterObject.currentPage,
             pageSize: financeCodeFilterObject.currentSize,
             cityCodeArr: [],
             orgTypeCodeArr: [],
             searchInput: financeCodeFilterObject.searchInput,
-            sortField: 'create_time',
-            sortType: 'desc',
-            menuName: ''
+            sortField: financeCodeFilterObject.sortField,
+            sortType: financeCodeFilterObject.sortType,
         }).then(data => {
             codeList.list = data.data;
             codeList.total = data.pageTotal;

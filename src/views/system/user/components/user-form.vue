@@ -1,10 +1,16 @@
 <template>
     <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
         <el-form-item label="姓名:" required prop="name">
-            <el-input v-model="form.name" placeholder="请输入姓名"/>
+            <el-input v-model="form.name"
+                      :maxlength="50"
+                      show-word-limit
+                      placeholder="请输入姓名"/>
         </el-form-item>
-        <el-form-item label="手机号:" required prop="account" >
-            <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'"/>
+        <el-form-item label="手机号:" required prop="account">
+            <el-input v-model="form.account"
+                      :maxlength="11"
+                      show-word-limit
+                      placeholder="请输入手机号" :disabled="formType === 'edit'"/>
         </el-form-item>
         <el-form-item label="角色:" required prop="roleId">
             <el-select v-model="form.roleId" placeholder="请选择角色">
@@ -39,25 +45,41 @@ import type { FormInstance, FormRules } from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import {
     addUser,
+    form,
     formType,
     handleGoBack,
     roleUIList,
-    updateUser,
-    form
+    updateUser
 } from '@/views/system/user/components/user-list';
 import { LoadingService } from '@/views/system/loading-service';
+import type { ValidateCallback } from '@/utils';
+import { isPhoneNumber, validateIllegalSymbol } from '@/utils';
+
+const validatePhoneId = (rule: any, value: any, callback: ValidateCallback) => {
+    if (!isPhoneNumber(value)) {
+        callback(new Error('请输入正确的手机号码！'));
+    } else {
+        callback();
+    }
+};
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
     name: [
-        { required: true, message: '请输入用户姓名', trigger: 'blur' },
-        { min: 3, max: 255, message: '用户姓名不能超过255个字符', trigger: 'blur' },
+        { min: 0, max: 50, message: '姓名长度不能超过50个字符', trigger: 'change' },
+        validateIllegalSymbol
     ],
+    account: [
+        { required: true, message: '手机号码不能为空！', trigger: 'change' },
+        { required: true, validator: validatePhoneId, trigger: 'change' },
+        validateIllegalSymbol
+    ],
+    roleId: [{ required: true, message: '请选择角色', trigger: 'change' }]
 });
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async(valid, fields) => {
+    await formElement.validate(async (valid, fields) => {
         if (valid) {
             LoadingService.getInstance().loading();
             if (formType.value === 'create') {

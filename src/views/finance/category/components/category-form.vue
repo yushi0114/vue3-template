@@ -127,8 +127,7 @@ const submitForm = async(formEl: FormInstance | undefined) => {
             if (formType.value === 'create') {
                 await addFinanceCategory({
                     ...categoryForm.value,
-                    menuIdArr: checkedNodeIds,
-                    menuName: ''
+                    menuIdArr: checkedNodeIds
                 });
             } else {
                 if (!currentCategoryId.value){
@@ -137,8 +136,7 @@ const submitForm = async(formEl: FormInstance | undefined) => {
                 await updateFinanceCategory({
                     id: currentCategoryId.value,
                     ...categoryForm.value,
-                    menuIdArr: checkedNodeIds,
-                    menuName: ''
+                    menuIdArr: checkedNodeIds
                 });
             }
             LoadingService.getInstance().stop();

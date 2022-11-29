@@ -7,36 +7,30 @@ export type FinanceCodeFormType = {
 }
 
 export type GetFinanceCodeListType = {
-    sortField: 'create_time',
-    sortType: 'desc',
+    sortField: 'create_time' | 'update_time',
+    sortType: 'desc' | 'asc',
     searchInput?: string,
     orgTypeCodeArr: number[],
     cityCodeArr: string[];
-    menuName: string;
     pageIndex: number;
     pageSize: number;
 }
 
 export type DeleteFinanceCodeType = {
     id: string;
-    menuName: string;
 }
 
 
-export type AddFinanceCodeType = FinanceCodeFormType & {
-    menuName: string;
-};
+export type AddFinanceCodeType = FinanceCodeFormType;
 
 
 export type UpdateFinanceCodeType = AddFinanceCodeType & {
     id: string;
-    menuName: string;
 }
 
 
 export type ImportFinanceCodeType = {
     file: File;
-    menuName: string;
 }
 
 export type ExportFinanceCodeType = {
@@ -45,7 +39,6 @@ export type ExportFinanceCodeType = {
     sortType: 'desc';
     pageIndex: number;
     pageSize: number;
-    menuName: string;
     orgTypeCodeArr: number[],
     cityCodeArr: string[]
 };

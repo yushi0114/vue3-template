@@ -19,7 +19,11 @@
     <el-table
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }">
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        :header-cell-style="{
+                    color: '#595959',
+                    'background-color': '#f3f4f8'
+                }">
         <el-table-column prop="orgName" label="所属机构" />
         <el-table-column prop="account" label="手机号码" />
         <el-table-column prop="name" label="姓名" />

@@ -7,5 +7,5 @@ export function getFinanceScoreList(params: GetFinanceScoreListType): Promise<{
     data: FinanceScoreListItemType[],
     total: number
 }> {
-    return api.get(`${DMS_DOMAIN}/v1/org/report/log/list`, { params });
+    return api.get(`${DMS_DOMAIN}/v1/org/score/log/list`, { params });
 }

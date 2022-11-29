@@ -118,7 +118,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScoreDetail: typeof import('./src/components/ScoreDetail/index.vue')['default']
-    ScoreResult: typeof import('./src/components/ScoreResult/index.vue')['default']
+    ScoreResult: typeof import('./src/components/ScoreResult/ScoreResult.vue')['default']
     SelectTree: typeof import('./src/components/SelectTree.vue')['default']
     SjcEditor: typeof import('./src/components/editor/SjcEditor.vue')['default']
     SjcForm: typeof import('./src/components/SjcForm/index.vue')['default']

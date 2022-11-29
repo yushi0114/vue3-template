@@ -21,8 +21,8 @@ export const filterObject = ref<{
     sortField: 'create_time',
     sortType: 'desc',
     searchInput: '',
-    currentSize: 0,
-    currentPage: 0
+    currentSize: 10,
+    currentPage: 1
 });
 
 export function resetFilterObject() {
@@ -30,20 +30,19 @@ export function resetFilterObject() {
         sortField: 'create_time',
         sortType: 'desc',
         searchInput: '',
-        currentSize: 0,
-        currentPage: 0
+        currentSize: 10,
+        currentPage: 1
     };
 }
 
 export async function getPageList(): Promise<void> {
     return new Promise((resolve) => {
         getFinanceScoreList({
-            pageIndex: filterObject.value.currentPage + 1,
+            pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
             searchInput: filterObject.value.searchInput,
             sortField: filterObject.value.sortField,
-            sortType: filterObject.value.sortType,
-            menuName: ''
+            sortType: filterObject.value.sortType
         }).then(data => {
             listData.value.list = data.data;
             listData.value.total = data.total;

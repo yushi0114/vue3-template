@@ -47,8 +47,8 @@ export const filterObject = ref<{
     sortField: 'updateTime',
     sortType: 'desc',
     searchInput: '',
-    currentSize: 0,
-    currentPage: 0
+    currentSize: 10,
+    currentPage: 1
 });
 
 export function resetFilterObject() {
@@ -56,8 +56,8 @@ export function resetFilterObject() {
         sortField: 'updateTime',
         sortType: 'desc',
         searchInput: '',
-        currentSize: 0,
-        currentPage: 0
+        currentSize: 10,
+        currentPage: 1
     };
 }
 
@@ -77,7 +77,7 @@ export async function getPageList(params: {
     return new Promise((resolve) => {
         new FinancePartnerService(params.tab).getInstance().getList({
             ...params,
-            pageIndex: filterObject.value.currentPage + 1,
+            pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
             searchInput: filterObject.value.searchInput,
             sortField: filterObject.value.sortField,

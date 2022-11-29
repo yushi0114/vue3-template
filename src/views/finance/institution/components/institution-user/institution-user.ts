@@ -6,7 +6,7 @@ import {
     getFinanceOrgUserRoleList,
     updateFinanceOrgUserApi
 } from '@/api/finance/finance-institution';
-import { currentMenuId } from '@/views/finance/institution/components/finance-institution';
+import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
 import type { UserFormType } from '@/views/system/type/user-list.type';
 import { ElMessage } from 'element-plus';
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
@@ -86,7 +86,7 @@ export async function getUserPageList(): Promise<void> {
             sortField: filterObject.value.sortField,
             sortType: filterObject.value.sortType,
             menuName: '',
-            orgId: currentMenuId.value,
+            orgId: currentInstitutionId.value,
         }).then(data => {
             listData.value.list = data.data;
             listData.value.total = data.pageTotal;
@@ -100,7 +100,7 @@ export async function getUserPageList(): Promise<void> {
 export async function getRoleListData(): Promise<void> {
     return new Promise((resolve) => {
         getFinanceOrgAllRoleById({
-            orgId: currentMenuId.value
+            orgId: currentInstitutionId.value
         }).then(data => {
             totalRoleList.value = data.data;
             resolve();
@@ -114,7 +114,7 @@ export async function addUser(): Promise<void> {
     return new Promise((resolve) => {
         addFinanceOrgUserApi({
             ...form.value,
-            orgId: currentMenuId.value,
+            orgId: currentInstitutionId.value,
             status: form.value.status ? 1 : 0,
         }).then(() => {
             ElMessage({

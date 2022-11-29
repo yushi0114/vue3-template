@@ -11,7 +11,7 @@ export const menuForm = ref<MenuFormType>({
     title: '',
     path: '',
     desc: '',
-    sort: 0,
+    sort: 1,
     component: '',
     status: false
 });
@@ -39,7 +39,7 @@ export function resetMenuForm() {
         title: '',
         path: '',
         desc: '',
-        sort: 0,
+        sort: 1,
         component: '',
         status: false
     };

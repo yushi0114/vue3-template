@@ -25,7 +25,11 @@
     <el-table
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }">
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        :header-cell-style="{
+                    color: '#595959',
+                    'background-color': '#f3f4f8'
+                }">
         <el-table-column prop="name" label="伙伴名称" width="180"/>
         <el-table-column prop="imgUrl" label="图片">
             <template #default="scope">
@@ -143,12 +147,22 @@ async function handleCreateNewItem() {
     resetForm();
 }
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
+    await getPageList({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
+    await getPageList({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
 }
 
 function handleRemoveItem(item: FinancePartnerListItemType) {

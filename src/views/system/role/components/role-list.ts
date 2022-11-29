@@ -42,8 +42,8 @@ export const roleFilterObject = ref<{
     sortField: 'updateTime',
     sortType: 'desc',
     searchInput: '',
-    currentSize: 0,
-    currentPage: 0
+    currentSize: 10,
+    currentPage: 1
 });
 
 export function resetRoleFilterObject() {
@@ -51,8 +51,8 @@ export function resetRoleFilterObject() {
         sortField: 'updateTime',
         sortType: 'desc',
         searchInput: '',
-        currentSize: 0,
-        currentPage: 0
+        currentSize: 10,
+        currentPage: 1
     };
 }
 
@@ -83,7 +83,7 @@ export async function getRolePageList(params: {
     return new Promise((resolve) => {
         getRoleListApi({
             ...params,
-            pageIndex: roleFilterObject.value.currentPage + 1,
+            pageIndex: roleFilterObject.value.currentPage,
             pageSize: roleFilterObject.value.currentSize,
             searchInput: roleFilterObject.value.searchInput,
             sortField: roleFilterObject.value.sortField,

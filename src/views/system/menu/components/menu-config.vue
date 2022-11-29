@@ -23,9 +23,10 @@ import {
     removeMenus,
     setCurrentMenuId,
     setParentId,
-    resetMenuForm, setFormType
+    resetMenuForm, setFormType, getTreeData, activeName
 } from './menu-list';
 import { LoadingService } from '@/views/system/loading-service';
+import { MenuTabType } from '@/views/system/type/menu-list.type';
 
 async function handleOperateTreeItem(params: {
     id: string,
@@ -53,10 +54,10 @@ async function handleOperateTreeItem(params: {
                     return;
                 }
                 await removeMenus(params.willDeleteList.map(item => item.id));
-                ElMessage({
-                    type: 'success',
-                    message: '删除成功',
-                });
+                LoadingService.getInstance().loading();
+                setFormType('empty');
+                await getTreeData({ tab: activeName.value });
+                LoadingService.getInstance().stop();
             })
             .catch(() => {
                 ElMessage({

@@ -1,26 +1,52 @@
 <template>
-    <el-form class="custom-form" :model="menuForm" :rules="rules" label-width="120px" ref="ruleFormRef"
-             style="width: 700px;">
+    <el-form
+        class="custom-form"
+        :model="menuForm"
+        :rules="rules"
+        label-width="120px"
+        ref="ruleFormRef"
+        style="width: 700px;">
         <el-form-item label="菜单名称:" required prop="name">
-            <el-input v-model="menuForm.name" placeholder="请输入菜单名称"/>
+            <el-input v-model="menuForm.name"
+                      :maxlength="255"
+                      show-word-limit
+                      placeholder="请输入菜单名称"/>
         </el-form-item>
         <el-form-item label="菜单标题:" required prop="title">
-            <el-input v-model="menuForm.title" placeholder="请输入菜单标题"/>
+            <el-input v-model="menuForm.title"
+                      :maxlength="32"
+                      show-word-limit
+                      placeholder="请输入菜单标题"/>
         </el-form-item>
         <el-form-item label="菜单路径:" required prop="path">
-            <el-input v-model="menuForm.path" placeholder="请输入菜单路径"/>
+            <el-input v-model="menuForm.path"
+                      :maxlength="255"
+                      show-word-limit
+                      placeholder="请输入菜单路径"/>
         </el-form-item>
         <el-form-item label="菜单描述:" prop="desc">
-            <el-input v-model="menuForm.desc" placeholder="请输入菜单描述"/>
+            <el-input v-model="menuForm.desc"
+                      :maxlength="255"
+                      show-word-limit
+                      type="textarea"
+                      placeholder="请输入菜单描述"/>
         </el-form-item>
-        <el-form-item label="菜单图标:" prop="desc">
-            <el-input v-model="menuForm.icon" placeholder="请输入菜单图标"/>
+        <el-form-item label="菜单图标:" prop="icon">
+            <el-input v-model="menuForm.icon"
+                      :maxlength="255"
+                      show-word-limit
+                      placeholder="请输入菜单图标"/>
         </el-form-item>
         <el-form-item label="排序字段:" required prop="sort">
-            <el-input v-model.number="menuForm.sort" placeholder="请输入排序字段"/>
+            <el-input v-model.number="menuForm.sort"
+                      :maxlength="3"
+                      show-word-limit placeholder="请输入排序字段"/>
         </el-form-item>
         <el-form-item label="组件名称:" required prop="component">
-            <el-input v-model="menuForm.component" placeholder="请输入菜组件称"/>
+            <el-input v-model="menuForm.component"
+                      :maxlength="255"
+                      show-word-limit
+                      placeholder="请输入菜组件称"/>
         </el-form-item>
         <el-form-item label="是否启用:" required prop="status">
             <el-switch v-model="menuForm.status"/>
@@ -46,42 +72,66 @@ import type { FormInstance, FormRules } from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import {
     activeName,
-    currentMenuId,
-    formType,
-    menuForm,
-    editMenu,
     createMenu,
+    currentMenuId,
+    editMenu,
+    formType,
     getTreeData,
+    menuForm,
     resetMenuForm,
     setFormType
 } from './menu-list';
 import type { MenuFormType } from '@/views/system/type/menu-list.type';
 import { LoadingService } from '@/views/system/loading-service';
+import type { ValidateCallback } from '@/utils';
+import { validateIllegalSymbol } from '@/utils';
+
+const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
+    if (!value) {
+        return callback(new Error('排序只能为1-999的整数！'));
+    }
+    if (!Number.isInteger(Number(value))) {
+        callback(new Error('排序只能为1-999的整数！'));
+    } else {
+        callback();
+    }
+};
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
     name: [
         { required: true, message: '请输入菜单名称', trigger: 'blur' },
-        { max: 255, message: '菜单名称不能超过255个字符', trigger: 'blur' },
+        { min: 0, max: 255, message: '菜单名称不能超过255个字符', trigger: 'blur' },
+        validateIllegalSymbol
     ],
     title: [
         { required: true, message: '请输入菜单标题', trigger: 'blur' },
-        { max: 32, message: '菜单标题不能超过32个字符', trigger: 'blur' },
+        { min: 0, max: 32, message: '菜单标题不能超过32个字符', trigger: 'blur' },
+        validateIllegalSymbol
     ],
     path: [
         { required: true, message: '请输入菜单路径', trigger: 'blur' },
-        { max: 255, message: '菜单路径不能超过255个字符', trigger: 'blur' },
+        { min: 0, max: 255, message: '菜单路径不能超过255个字符', trigger: 'blur' },
+        validateIllegalSymbol
     ],
     desc: [
-        { max: 255, message: '菜单描述不能超过255个字符', trigger: 'blur' },
+        { min: 0, max: 255, message: '菜单描述不能超过255个字符', trigger: 'blur' },
+        validateIllegalSymbol
+    ],
+    icon: [
+        { min: 0, max: 255, message: '图标不能超过255个字符', trigger: 'blur' },
+        validateIllegalSymbol
     ],
     sort: [
         { required: true, message: '请输入排序字段', trigger: 'blur' },
         { type: 'number', message: '排序字段只能是数字' },
+        { required: true, validator: validateSort, trigger: 'change' },
+        validateIllegalSymbol
     ],
     component: [
         { required: true, message: '请输入组件名称', trigger: 'blur' },
-        { max: 255, message: '组件名称不能超过255个字符', trigger: 'blur' },
+        { min: 0, max: 255, message: '组件名称不能超过255个字符', trigger: 'blur' },
+        validateIllegalSymbol
     ],
 });
 

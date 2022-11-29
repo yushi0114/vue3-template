@@ -1,7 +1,7 @@
 <template>
     <el-form :model="codeForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
         <el-form-item label="机构分类:" required prop="orgTypeCode">
-            <el-select v-model="codeForm.orgTypeCode" placeholder="请选择展现形式">
+            <el-select v-model="codeForm.orgTypeCode" placeholder="请选择机构分类">
                 <el-option
                     v-for="item in orgTypeCodeList"
                     :key="item.value"
@@ -10,7 +10,7 @@
             </el-select>
         </el-form-item>
         <el-form-item label="所属城市:" prop="cityCode">
-            <el-select v-model="codeForm.cityCode" placeholder="请选择展现形式">
+            <el-select v-model="codeForm.cityCode" placeholder="请选择城市">
                 <el-option
                     v-for="item in cityCodeList"
                     :key="item.value"
@@ -19,10 +19,10 @@
             </el-select>
         </el-form-item>
         <el-form-item label="机构名称:" required prop="orgName">
-            <el-input v-model="codeForm.orgName" show-word-limit   maxlength="255" placeholder="请输入分类描述"/>
+            <el-input v-model="codeForm.orgName" show-word-limit   maxlength="255" placeholder="请输入机构名称"/>
         </el-form-item>
         <el-form-item label="机构编码:" required prop="orgCode">
-            <el-input v-model="codeForm.orgCode" show-word-limit   maxlength="15" placeholder="请输入分类描述"/>
+            <el-input v-model="codeForm.orgCode" show-word-limit   maxlength="15" placeholder="请输入机构编码"/>
         </el-form-item>
         <el-form-item label="机构地址:" required prop="address">
             <el-input
@@ -30,7 +30,7 @@
                 v-model="codeForm.address"
                 show-word-limit
                 maxlength="255"
-                placeholder="请输入分类描述"/>
+                placeholder="请输入机构地址"/>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -48,14 +48,12 @@ import {
     addFinanceCode,
     cityCodeList,
     codeForm,
-    currentCodeId,
     formType,
     handleGoBack,
     orgTypeCodeList,
     updateFinanceCode
 } from './code-list';
 import { LoadingService } from '@/views/system/loading-service';
-import { addFinanceCodeApi, updateFinanceCodeApi } from '@/api/finance/finance-code';
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({

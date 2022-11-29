@@ -19,7 +19,11 @@
     <el-table
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }">
+        :default-sort="{ prop: 'createTime', order: 'descending' }"
+        :header-cell-style="{
+                    color: '#595959',
+                    'background-color': '#f3f4f8'
+                }">
         <el-table-column prop="orgName" label="机构名称" />
         <el-table-column prop="inquiry" label="查询账号" />
         <el-table-column prop="corpName" label="企业名称" />
@@ -52,12 +56,12 @@ function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
-async function handleSortChange(params: { prop: 'create_time', order: string }) {
+async function handleSortChange(params: { prop: 'createTime', order: string }) {
     console.log(params);
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
-    filterObject.value.sortField = params.prop;
+    filterObject.value.sortField = 'create_time';
     filterObject.value.sortType = formatSortType(params.order);
     await getPageList();
     LoadingService.getInstance().stop();
@@ -79,12 +83,18 @@ async function handleClear() {
 }
 
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
+    await getPageList();
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
+    await getPageList();
+    LoadingService.getInstance().stop();
 }
 
 </script>

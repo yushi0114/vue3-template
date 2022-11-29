@@ -9,7 +9,7 @@ import {
     getFinanceOrgRoleList, getOrgRoleMenuIdsApi,
     updateFinanceOrgRoleApi
 } from '@/api/finance/finance-institution';
-import { currentMenuId } from '@/views/finance/institution/components/finance-institution';
+import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
 
 export const activeName = ref<RoleTabType>('dms');
 export const roleMenuTreeData = ref<TreeItemType[]>();
@@ -71,7 +71,7 @@ export async function handleGoBack() {
 export async function getTreeData(): Promise<void> {
     return new Promise((resolve) => {
         getFinanceInstitutionMenuTree({
-            id: currentMenuId.value
+            id: currentInstitutionId.value
         }).then(data => {
             roleMenuTreeData.value = data as unknown as TreeItemType[];
             resolve();
@@ -84,7 +84,7 @@ export async function getTreeData(): Promise<void> {
 export async function getRolePageList(): Promise<void> {
     return new Promise((resolve) => {
         getFinanceOrgRoleList({
-            orgId: currentMenuId.value,
+            orgId: currentInstitutionId.value,
             pageIndex: roleFilterObject.value.currentPage + 1,
             pageSize: roleFilterObject.value.currentSize,
             searchInput: roleFilterObject.value.searchInput,
@@ -105,7 +105,7 @@ export async function addRole(checkedNodeIds: string[]): Promise<void> {
     return new Promise((resolve) => {
         addFinanceOrgRoleApi({
             ...roleForm.value,
-            orgId: currentMenuId.value,
+            orgId: currentInstitutionId.value,
             menuIdArr: checkedNodeIds,
         }).then(() => {
             ElMessage({
@@ -124,7 +124,7 @@ export async function updateRole(): Promise<void> {
     return new Promise((resolve) => {
         updateFinanceOrgRoleApi({
             roleId: currentRoleId.value,
-            orgId: currentMenuId.value,
+            orgId: currentInstitutionId.value,
             ...roleForm.value,
         }).then(() => {
             ElMessage({

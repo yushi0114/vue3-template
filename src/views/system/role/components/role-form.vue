@@ -1,10 +1,17 @@
 <template>
     <el-form class="custom-form" :model="roleForm" :rules="rules" label-width="120px" ref="ruleFormRef">
         <el-form-item label="角色名称:" required prop="name">
-            <el-input v-model="roleForm.name" placeholder="请输入角色名称"/>
+            <el-input v-model="roleForm.name"
+                      :maxlength="100"
+                      show-word-limit
+                      placeholder="请输入角色名称"/>
         </el-form-item>
-        <el-form-item label="角色描述:" required prop="desc">
-            <el-input v-model="roleForm.desc" placeholder="请输入角色描述"/>
+        <el-form-item label="角色描述:" prop="desc">
+            <el-input v-model="roleForm.desc"
+                      :maxlength="255"
+                      show-word-limit
+                      type="textarea"
+                      placeholder="请输入角色描述"/>
         </el-form-item>
         <el-form-item label="配置菜单:" required>
             <div style="margin-top: 10px">
@@ -37,8 +44,10 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { ElTree, FormInstance, FormRules } from 'element-plus';
+import {ElMessage} from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import {
+    activeName,
     addRole,
     formType,
     handleGoBack,
@@ -48,17 +57,19 @@ import {
 } from './role-list';
 import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
+import { validateIllegalSymbol } from '@/utils';
 
 const menuTree = ref<InstanceType<typeof ElTree>>();
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
     name: [
-        { required: true, message: '请输入角色名称', trigger: 'blur' },
-        { min: 0, max: 100, message: '角色名称不能超过100个字符', trigger: 'blur' },
+        { required: true, trigger: 'change', message: '角色名称不能为空' },
+        { min: 0, max: 100, message: '角色名称长度不能超过100个字符', trigger: 'change' },
+        validateIllegalSymbol
     ],
     desc: [
-        { required: true, message: '请输入角色描述', trigger: 'blur' },
-        { min: 0, max: 255, message: '角色描述不能超过255个字符', trigger: 'blur' },
+        { min: 0, max: 255, message: '描述长度不能超过255个字符', trigger: 'change' },
+        validateIllegalSymbol
     ],
 });
 
@@ -68,22 +79,25 @@ async function submitForm(formElement: FormInstance | undefined) {
         if (valid) {
             let checkedNodeIds = menuTree.value?.getCheckedNodes(false, true)
                 .map((item: TreeNodeData) => item.id as string);
-            if (!checkedNodeIds) {
+            if (!checkedNodeIds || checkedNodeIds.length === 0) {
+                ElMessage({
+                    type: 'error',
+                    message: '请至少配置一个菜单'
+                });
                 return;
             }
             LoadingService.getInstance().loading();
             if (formType.value === 'create') {
+                console.log(activeName.value);
                 await addRole(checkedNodeIds);
             } else {
                 await updateRole(checkedNodeIds);
             }
             LoadingService.getInstance().stop();
             await handleGoBack();
-        } else {
-            // todo
         }
     });
-};
+}
 
 async function goBack() {
     await handleGoBack();

@@ -19,11 +19,16 @@
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
             </template>
+            新建
         </el-button>
     </div>
     <el-table :data="userTableData.list" style="width: 100%"
               @sort-change="handleSortChange"
-              :default-sort="{ prop: 'updateTime', order: 'descending' }">
+              :default-sort="{ prop: 'updateTime', order: 'descending' }"
+              :header-cell-style="{
+                    color: '#595959',
+                    'background-color': '#f3f4f8'
+                }">
         <el-table-column prop="name" label="姓名" width="180"/>
         <el-table-column prop="account" label="手机号" width="180"/>
         <el-table-column prop="roleName" label="角色" width="180"></el-table-column>
@@ -135,12 +140,22 @@ async function handleCreateNewItem() {
     resetUserForm();
 }
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     userFilterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
+    await getUserListData({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     userFilterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
+    await getUserListData({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
 }
 
 function handleRemoveItem(item: UserListItemType) {

@@ -50,7 +50,8 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, defineProps, PropType, reactive, ref } from 'vue';
+import type { PropType } from 'vue';
+import { defineEmits, defineProps, reactive, ref } from 'vue';
 import type { FormInstance, FormRules, UploadFile, UploadRequestOptions, UploadUserFile } from 'element-plus';
 import { ElMessage } from 'element-plus';
 import { addLogoApi, getFirstLevelOrgAll, updateLogoApi } from '@/api/finance/finance-logo';

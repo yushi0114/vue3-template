@@ -1,6 +1,10 @@
 <template>
     <div class="search-box">
-        <el-input class="search-input" placeholder="请输入搜索内容" @clear="handleClear" clearable
+        <el-input class="search-input"
+                  placeholder="请输入搜索内容"
+                  @clear="handleClear"
+                  @keyup.enter="handleSearchRoleList"
+                  clearable
                   v-model="roleFilterObject.searchInput">
             <template #append>
                 <el-button @click="handleSearchRoleList">
@@ -14,12 +18,17 @@
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
             </template>
+            新建
         </el-button>
     </div>
     <el-table
         :data="roleList.list" style="width: 100%"
         @sort-change="handleSortChange"
-              :default-sort="{ prop: 'updateTime', order: 'descending' }">
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        :header-cell-style="{
+                    color: '#595959',
+                    'background-color': '#f3f4f8'
+                }">
         <el-table-column prop="name" label="名称" width="180"/>
         <el-table-column prop="desc" label="描述" width="180"/>
         <el-table-column prop="createTime" sortable label="创建时间"/>
@@ -68,7 +77,9 @@ import {
     formType,
     getRolePageList,
     getTreeData,
-    mode, resetRoleFilterObject, resetRoleForm,
+    mode,
+    resetRoleFilterObject,
+    resetRoleForm,
     roleFilterObject,
     roleForm,
     roleList
@@ -83,7 +94,7 @@ function formatSortType(value: string) {
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
     console.log(params);
     LoadingService.getInstance().loading();
-    roleFilterObject.value.currentPage = 0;
+    roleFilterObject.value.currentPage = 1;
     roleFilterObject.value.currentSize = 10;
     roleFilterObject.value.sortField = params.prop;
     roleFilterObject.value.sortType = formatSortType(params.order);
@@ -95,7 +106,7 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
 
 async function handleSearchRoleList() {
     LoadingService.getInstance().loading();
-    roleFilterObject.value.currentPage = 0;
+    roleFilterObject.value.currentPage = 1;
     roleFilterObject.value.currentSize = 10;
     await getRolePageList({
         tab: activeName.value
@@ -130,12 +141,22 @@ async function handleEditRoleItem(item: RoleListItemType) {
     LoadingService.getInstance().stop();
 }
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     roleFilterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
+    await getRolePageList({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     roleFilterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
+    await getRolePageList({
+        tab: activeName.value
+    });
+    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewRole() {
@@ -157,7 +178,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
+        .then(async () => {
             await deleteRoleApi({
                 roleId: item.id,
                 tab: activeName.value,

@@ -5,11 +5,10 @@ import type {
     FinanceInstitutionTreeItemType,
     FinanceInstitutionType
 } from '@/views/finance/type/finance-institution.type';
-import type { OrgTypeMenuItem } from '@/views/finance/type/finance-category.type';
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
 
 
-export async function getFinanceInstitutionTree(params: { typeCode: string }): Promise<FinanceInstitutionTreeItemType[]> {
+export async function getFinanceInstitutionTreeApi(params: { typeCode: string }): Promise<FinanceInstitutionTreeItemType[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/tree`, {
         params
     });
@@ -42,15 +41,45 @@ export async function getOrgMenuCheckedIds(params: { id: string }): Promise<stri
     });
 }
 
+export async function addOrgApi(params: {
+    orgDictionaryId: string;
+    orgLevel: number;
+    desc: string;
+    sort: number;
+    status: number;
+    parentId?: string;
+    menuArr: {
+        id: string;
+        parentId: string;
+        selected: number;
+    }[]
+}): Promise<FinanceInstitutionType[]> {
+    return api.post(`${DMS_DOMAIN}/v1/add/org`, params);
+}
+
 export async function updateOrgApi(params: {
     id: string;
+    orgLevel: number;
     orgDictionaryId: string;
     desc: string;
     sort: number;
     status: number;
-    menuIdArr: string[]
+    menuArr: {
+        id: string;
+        parentId: string;
+        selected: number;
+    }[]
 }): Promise<FinanceInstitutionType[]> {
     return api.post(`${DMS_DOMAIN}/v1/update/org`, params);
+}
+
+export async function deleteOrgApi(params: {
+    orgIdArr: {
+        id: string;
+        orgLevel: number;
+    }[]
+}): Promise<void> {
+    return api.post(`${DMS_DOMAIN}/v1/del/org`, params);
 }
 
 
@@ -113,7 +142,7 @@ export async function getFinanceOrgAllRoleById(params: { orgId: string }): Promi
 }
 
 
-export async function getFinanceTypeMenuTreeById(params: { id: string }): Promise<OrgTypeMenuItem[]> {
+export async function getFinanceTypeMenuTreeByIdApi(params: { id: string }): Promise<FinanceInstitutionMenuTreeItemType[]> {
     return api.get(`${DMS_DOMAIN}/v1/type/menu/tree`, {
         params
     });
@@ -167,5 +196,4 @@ export async function getOrgRoleMenuIdsApi(params: {
 }): Promise<string[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/role/menu/ids`, { params });
 }
-
 

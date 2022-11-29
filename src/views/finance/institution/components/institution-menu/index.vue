@@ -15,21 +15,11 @@
             确定
         </el-button>
     </div>
-    <!--    <div class="user-manage-container">-->
-    <!--        -->
-    <!--        <div class="footer">-->
-    <!--            <template >-->
-    <!--                <el-button size="small" >重 置</el-button>-->
-    <!--                <el-button size="small" type="primary" >确 定</el-button>-->
-    <!--            </template>-->
-    <!--        </div>-->
-    <!--    </div>-->
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { financeInstitutionMenuTree } from './institution-menu';
-import { institutionItemData, updateOrg, typeMenuTree } from '../finance-institution';
+import { institutionItemData, updateOrg, typeMenuTree, treeToArr } from '../finance-institution';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 import { LoadingService } from '@/views/system/loading-service';
 
@@ -41,14 +31,23 @@ async function handleUpdate() {
     if (!checkedNodeIds || !institutionItemData.value) {
         return;
     }
+    const newTreeData = treeToArr(typeMenuTree.value);
+    const newTreeMenu = newTreeData.map((items) => {
+        let selected = 0;
+        if (checkedNodeIds.includes(items.id)) {
+            selected = 1;
+        }
+        return { ...items, selected };
+    });
     LoadingService.getInstance().loading();
     await updateOrg({
         id: institutionItemData.value?.id,
+        orgLevel: institutionItemData.value?.orgLevel,
         orgDictionaryId: institutionItemData.value?.orgDictionaryId,
         desc: institutionItemData.value?.desc,
         sort: institutionItemData.value?.sort,
         status: institutionItemData.value?.status,
-        menuIdArr: checkedNodeIds
+        menuArr: newTreeMenu
     });
     LoadingService.getInstance().stop();
 }

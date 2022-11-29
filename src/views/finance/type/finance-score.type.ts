@@ -13,7 +13,6 @@ export type GetFinanceScoreListType = {
     sortField: 'create_time',
     sortType: 'asc' | 'desc'
     searchInput?: string,
-    menuName: string;
     pageIndex: number;
     pageSize: number;
 }

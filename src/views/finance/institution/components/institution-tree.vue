@@ -10,7 +10,7 @@
                     </el-button>
                 </template>
             </el-input>
-            <el-button class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
+            <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
                 <template #icon>
                     <Icon :name="'ep:plus'"></Icon>
                 </template>
@@ -62,73 +62,104 @@
                             </el-button>
                         </div>
                         <template #reference>
-                            <Icon :name="'ep:more'"></Icon>
+                            <Icon style="transform: rotate(90deg)" :name="'ep:more'"></Icon>
                         </template>
                     </el-popover>
                 </div>
             </template>
         </el-tree>
+        <institution-remove-dialog
+            v-if="isDeleteOrgModelShow"
+            :org-name="willDeleteOrgName"></institution-remove-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { TreeItemType } from '@/views/system/type/menu-list.type';
 import Icon from '@/components/Icon.vue';
 import {
     getInstitutionDic,
     getInstitutionItem,
     getInstitutionTree,
+    institutionItemData,
     institutionTreeData,
+    isDeleteOrgModelShow,
+    lookForAllId,
     mode,
+    resetDeleteMessage,
     resetInstitutionForm,
-    setCurrentMenuId
+    setCurrentMenuId,
+    setInstitutionForm,
+    willCreateOrEditInstitutionData,
+    willDeleteOrgIdList,
+    willDeleteOrgName
 } from './finance-institution';
 import { getRolePageList } from '@/views/finance/institution/components/institution-role/institution-role';
 import { getUserPageList } from '@/views/finance/institution/components/institution-user/institution-user';
 import { LoadingService } from '@/views/system/loading-service';
+import InstitutionRemoveDialog from '@/views/finance/institution/components/institution-remove-dialog.vue';
+import type { FinanceInstitutionTreeItemType } from '@/views/finance/type/finance-institution.type';
 
 
 const activeId = ref();
 
 async function handleAddNewMenu() {
     mode.value = 'form';
+    LoadingService.getInstance().loading();
+    willCreateOrEditInstitutionData.value = {
+        level: 1
+    };
     resetInstitutionForm();
     await getInstitutionDic();
+    LoadingService.getInstance().stop();
 }
 
 async function handleSearchMenuTree() {
     await getInstitutionTree();
-
 }
 
-function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {
-    for (let item of data) {
-        arr.push({ id: item.id });
-        if (item.children && item.children.length) lookForAllId(item.children, arr);
-    }
-    return arr;
-}
-
-function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'create') {
-    let willDeleteList: { id: string }[] | undefined;
+async function handleOperateTreeItem(item: FinanceInstitutionTreeItemType, type: 'edit' | 'remove' | 'create') {
     if (type === 'remove') {
-        willDeleteList = lookForAllId([item], []);
-        console.log(willDeleteList, '--------待删除');
+        resetDeleteMessage();
+        willDeleteOrgIdList.value = lookForAllId([item], []);
+        isDeleteOrgModelShow.value = true;
+        willDeleteOrgName.value = item.orgName;
     }
     if (type === 'edit') {
-        getInstitutionItem(item.id);
+        resetInstitutionForm();
+        LoadingService.getInstance().loading();
+        await getInstitutionItem(item.id);
+        if (institutionItemData.value) {
+            setInstitutionForm(institutionItemData.value);
+            willCreateOrEditInstitutionData.value = {
+                id: institutionItemData.value?.id,
+                level: institutionItemData.value?.orgLevel
+            };
+        }
+        await getInstitutionDic();
         mode.value = 'form';
+        LoadingService.getInstance().stop();
     }
-    // todo
+    if (type === 'create') {
+        resetInstitutionForm();
+        LoadingService.getInstance().loading();
+        await getInstitutionItem(item.id);
+        if (institutionItemData.value) {
+            willCreateOrEditInstitutionData.value = {
+                parentId: item.id,
+                level: institutionItemData.value?.orgLevel + 1
+            };
+        }
+        mode.value = 'form';
+        await getInstitutionDic();
+        LoadingService.getInstance().stop();
+    }
 }
 
-
-async function handleNodeClick(data: TreeItemType) {
+async function handleNodeClick(data: FinanceInstitutionTreeItemType) {
     setCurrentMenuId(data.id);
     LoadingService.getInstance().loading();
     await getInstitutionItem(data.id);
-    // await setFinanceInstitutionMenuTree({ id: data.id });
     await getRolePageList();
     await getUserPageList();
     LoadingService.getInstance().stop();

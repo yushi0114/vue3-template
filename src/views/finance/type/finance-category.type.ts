@@ -8,27 +8,22 @@ export type FinanceCategoryFormType = {
     menuIdArr: string[];
 };
 
-export type AddFinanceCategoryType = FinanceCategoryFormType & {
-    menuName: string;
-};
+export type AddFinanceCategoryType = FinanceCategoryFormType;
 
 export type DeleteFinanceCategoryType = {
     id: string;
-    menuName: string;
 }
 
 export type UpdateFinanceCategoryType = AddFinanceCategoryType & {
     id: string;
-    menuName: string;
 }
 
 export type GetFinanceCategoryListType = {
     searchInput?: string;
-    sortField: 'create_time';
-    sortType: 'desc';
+    sortField: 'create_time' | 'update_time';
+    sortType: 'desc' | 'asc';
     pageIndex: number;
     pageSize: number;
-    menuName: string;
 }
 
 export type FinanceCategoryListItemType = {

@@ -24,13 +24,6 @@ export const userTableData = reactive<{
     total: 0
 });
 
-// export const userForm = ref<UserFormType>({
-//     account: '',
-//     name: '',
-//     roleId: '',
-//     status: false
-// });
-
 export const userFilterObject = ref<{
     currentSize: number;
     currentPage: number;
@@ -41,14 +34,15 @@ export const userFilterObject = ref<{
     sortField: 'updateTime',
     sortType: 'desc',
     searchInput: '',
-    currentSize: 0,
-    currentPage: 0
+    currentSize: 10,
+    currentPage: 1
 });
 
 export function resetUserForm() {
     form.value = {
         name: '',
         roleId: '',
+        account: '',
         status: false
     };
 }
@@ -72,8 +66,8 @@ export function resetUserFilterObject() {
         sortField: 'updateTime',
         sortType: 'desc',
         searchInput: '',
-        currentSize: 0,
-        currentPage: 0
+        currentSize: 10,
+        currentPage: 1
     };
 }
 
@@ -83,7 +77,7 @@ export async function getUserListData(params: {
     return new Promise((resolve) => {
         getUserListApi({
             ...params,
-            pageIndex: userFilterObject.value.currentPage + 1,
+            pageIndex: userFilterObject.value.currentPage,
             pageSize: userFilterObject.value.currentSize,
             searchInput: userFilterObject.value.searchInput,
             sortField: userFilterObject.value.sortField,

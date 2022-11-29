@@ -25,7 +25,11 @@
     <el-table
         :data="listData.list" style="width: 100%"
         @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }">
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        :header-cell-style="{
+                    color: '#595959',
+                    'background-color': '#f3f4f8'
+                }">
         <el-table-column prop="orgName" label="所属机构"/>
         <el-table-column label="logo">
             <template #default="scope">
@@ -152,7 +156,7 @@ function handleRemoveItem(params: {
 
 async function handleSortChange(params: { prop: 'create_time', order: string }) {
     LoadingService.getInstance().loading();
-    filterObject.value.currentPage = 0;
+    filterObject.value.currentPage = 1;
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = params.prop;
     filterObject.value.sortType = formatSortType(params.order);
@@ -162,7 +166,7 @@ async function handleSortChange(params: { prop: 'create_time', order: string }) 
 
 async function handleSearchList() {
     LoadingService.getInstance().loading();
-    filterObject.value.currentPage = 0;
+    filterObject.value.currentPage = 1;
     filterObject.value.currentSize = 10;
     await getPageList();
     LoadingService.getInstance().stop();

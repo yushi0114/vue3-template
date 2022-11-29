@@ -174,8 +174,12 @@ const loadOptions = () => {
 <template>
     <Board :style="{ 'flex-direction': 'row', padding: '24px 32px 28px' }">
         <div class="count-user">
-            <div class="item-label">企业总人数</div>
-            <div class="item-value">{{ data.countUser }}</div>
+            <div class="item-label">
+                <Text color="regular" size="sm">企业总人数</Text>
+            </div>
+            <div class="item-value">
+                <Text color="paragraph" size="current">{{ data.countUser }}</Text>
+            </div>
         </div>
         <div class="chart-wrapper">
             <Charts :options="options" :height="78" />
@@ -191,14 +195,12 @@ const loadOptions = () => {
     border-right: 1px solid #dcdfe6;
 
     .item-label {
-        @include font(14px);
         margin-bottom: 7px;
         color: #5e5e5e;
     }
 
     .item-value {
         line-height: 38px;
-        color: #1e1e1e;
         font-size: 30px;
     }
 }

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { Recordable } from '@/types/globals';
 import ArticleWrapper from '../components/ArticleWrapper.vue';
 import DetailContent from './DetailContent.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -3,12 +3,12 @@
  * @FilePath: \dms-web\src\components\editor\useEditor.ts
  * @Author: zys
  * @Date: 2022-11-17 15:19:05
- * @LastEditTime: 2022-11-22 16:02:43
+ * @LastEditTime: 2022-11-25 17:03:05
  * @LastEditors: zys
  * @Reference:
  */
 import type { IDomEditor, IEditorConfig } from '@wangeditor/editor';
-
+import type { EditorProps, EditorEmits } from './SjcEditor.vue';
 import {
     customParseLinkUrl,
     customCheckLinkFn,
@@ -36,15 +36,6 @@ import { FILE_TYPE, UPLOAD_FILE_TYPE, FILE_SERVER, ARTICLE_API } from '@/enums';
 import { useApiManage } from './useApiManage';
 
 type MessageType = 'success' | 'warning' | 'info' | 'error';
-type EditorProps = {
-    modelValue: string;
-    maxTextLength: number;
-    readOnly?: boolean;
-    fileServer?: FILE_SERVER;
-};
-type EditorEmits = {
-    (e: 'update:modelValue', value: string): void;
-};
 
 export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
     const API_MAP = useApiManage(props.fileServer!);
@@ -52,6 +43,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
     const uploadVideoList = ref<string[]>([]);
     const uploadAttachmentList = ref<string[]>([]);
     const isFirst = ref<boolean>(true);
+    const isFocus = ref(false);
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef<IDomEditor>();
 
@@ -262,7 +254,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
     const validate = (label = '') => {
         const text = editorRef.value?.getText() ?? '';
         TEXT_LENGTH.value = getTextWords(text);
-        if (TEXT_LENGTH.value > props.maxTextLength) {
+        if (TEXT_LENGTH.value > props.maxTextLength!) {
             customAlert(`${label}不能超过${props.maxTextLength}字`, 'warning');
             return false;
         }
@@ -323,7 +315,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 return false;
             }
             // TODO：此处可以将图片上传到自己的服务器上
-            const promise: Promise<any>[] = rtfImageData.map(async (rtfImage) => {
+            const promise: Promise<any>[] = rtfImageData.map(async(rtfImage) => {
                 const file = dataURLToFile(`data:${rtfImage.type};base64,${_convertHexToBase64(rtfImage.hex)}`);
                 const [, url = ''] = await to(editorConfig.MENU_CONF!.uploadImage.customUpload(file, () => {}));
                 return url || '';
@@ -354,7 +346,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
         const deleteImageList = uploadImgList.value.filter((item) => !imageSrcList.includes(item));
         const deleteVideoList = uploadVideoList.value.filter((item) => !videoSrcList.includes(item));
         const deleteAttachmentList = uploadAttachmentList.value.filter((item) => !attachmentSrcList.includes(item));
-        deleteImageList.forEach(async (item) => {
+        deleteImageList.forEach(async(item) => {
             const { data = false } = await API_MAP[ARTICLE_API.IS_THUMBNAIL]({ id: getFileIdByUrl(item) });
             if (data) {
                 return false;
@@ -369,7 +361,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 })
                 .catch(() => {});
         });
-        deleteVideoList.forEach(async (item) => {
+        deleteVideoList.forEach(async(item) => {
             const { data: isExist = false } = await API_MAP[ARTICLE_API.IS_EXIST_FILE]({ id: getFileIdByUrl(item) });
             if (!isExist) {
                 return false;
@@ -380,7 +372,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 })
                 .catch(() => {});
         });
-        deleteAttachmentList.forEach(async (item) => {
+        deleteAttachmentList.forEach(async(item) => {
             const { data: isExist = false } = await API_MAP[ARTICLE_API.IS_EXIST_FILE]({ id: getFileIdByUrl(item) });
             if (!isExist) {
                 return false;
@@ -411,6 +403,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
     });
 
     return {
+        isFocus,
         editorRef,
         editorLoading,
         toolbarConfig,

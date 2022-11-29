@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\types\globals.d.ts
  * @Author: zys
  * @Date: 2022-11-07 16:13:20
- * @LastEditTime: 2022-11-18 16:10:56
+ * @LastEditTime: 2022-11-25 14:12:35
  * @LastEditors: zys
  * @Reference:
  */
@@ -23,4 +23,4 @@ declare module '*.svg' {
     export default CONTENT;
 }
 
-export declare type Recordable<T = any> = Record<string, T>;
+declare type Recordable<T = any> = Record<string, T>;

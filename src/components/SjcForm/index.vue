@@ -204,11 +204,10 @@
                                         :src="dialogImageUrl"
                                         alt="" />
                                 </el-dialog>
-
                                 <sjc-editor
                                     v-if="item.type === FormType.EDITOR"
                                     :file-server="item.fileServer"
-                                    v-model:model-value="item.value"></sjc-editor>
+                                    v-model="item.value"></sjc-editor>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -375,6 +374,11 @@ defineExpose({
 
 <style lang="scss" scoped>
 .sjc-form {
+    :deep(.el-form-item.is-error) {
+        .wangeditor {
+            border-color: var(--el-color-danger);
+        }
+    }
     :deep(.el-date-editor) {
         .el-input__wrapper {
             display: flex;

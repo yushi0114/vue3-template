@@ -30,19 +30,19 @@ watch(
 const textStyle = {
     rich: {
         a: {
-            color: '#5e5e5e',
+            color: '',
             fontFamily: 'sans-regular, "Microsoft YaHei", "黑体", sans-serif',
             fontSize: 14,
             lineHeight: 22
         },
         b: {
-            color: '#1e1e1e',
+            color: '',
             fontSize: 20,
             lineHeight: 28,
             padding: [14, 0, 0, 0]
         },
         c: {
-            color: '#5e5e5e',
+            color: '',
             fontSize: 12,
             lineHeight: 18,
             padding: [18, 0, 0, 0]
@@ -168,6 +168,11 @@ const loadOptions = () => {
     options.value.series[1].data[1].value = props.data.countSimpleReq + props.data.countProductReq;
     options.value.series[2].data[0].value = props.data.countProductReq;
     options.value.series[2].data[1].value = props.data.countSimpleReq + props.data.countExactReq;
+    options.value.title.map(item => {
+        item.textStyle.rich.a.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-secondary');
+        item.textStyle.rich.b.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-primary');
+        item.textStyle.rich.c.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-secondary');
+    });
 };
 </script>
 

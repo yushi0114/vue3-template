@@ -67,36 +67,36 @@ const options = ref({
             },
             rich: {
                 a: {
-                    color: '#fff',
+                    color: '',
                     fontFamily: 'sans-regular, "Microsoft YaHei", "黑体", sans-serif',
                     fontSize: 12,
                     lineHeight: 18,
-                    backgroundColor: '#1e1e1e',
+                    backgroundColor: '',
                     borderRadius: 10,
                     padding: [3, 5],
                     width: 8,
                     height: 12
                 },
                 b: {
-                    color: '#1e1e1e',
+                    color: '',
                     fontFamily: 'sans-regular, "Microsoft YaHei", "黑体", sans-serif',
                     fontSize: 14,
                     lineHeight: 18,
                     padding: [0, 12]
                 },
                 c: {
-                    color: '#fff',
+                    color: '',
                     fontFamily: 'sans-regular, "Microsoft YaHei", "黑体", sans-serif',
                     fontSize: 12,
                     lineHeight: 18,
-                    backgroundColor: '#d9d9d9',
+                    backgroundColor: '',
                     borderRadius: 10,
                     padding: [3, 5],
                     width: 8,
                     height: 12
                 },
                 d: {
-                    color: '#5e5e5e',
+                    color: '',
                     fontFamily: 'sans-regular, "Microsoft YaHei", "黑体", sans-serif',
                     fontSize: 14,
                     lineHeight: 18,
@@ -145,6 +145,12 @@ const options = ref({
 const loadOptions = () => {
     const data = activeName.value === 'lxt' ? props.data.countProduct : props.data.countEzjfwProduct;
     options.value.yAxis.data = data.map(item => item.name);
+    options.value.yAxis.axisLabel.rich.a.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-disabled');
+    options.value.yAxis.axisLabel.rich.a.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-primary');
+    options.value.yAxis.axisLabel.rich.b.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-primary');
+    options.value.yAxis.axisLabel.rich.c.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-disabled');
+    options.value.yAxis.axisLabel.rich.c.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-placeholder');
+    options.value.yAxis.axisLabel.rich.d.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-secondary');
     options.value.series[0].data = data.map(item => item.count);
     options.value.series[1].data = data.map(item => ({ realValue: item.count, value: data[0].count }));
 };

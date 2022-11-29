@@ -78,23 +78,29 @@ const loadOptions = () => {
 </script>
 
 <template>
-    <Board :style="{ padding: '20px 24px 24px' }">
-        <div class="card-header">
-            <Text color="paragraph" bold size="md">产品需求受理月成功率数据趋势</Text>
-        </div>
-        <Charts :options="options" :height="176" />
-    </Board>
-    <div class="success-rate-wrapper">
-        <div class="success-rate-label">当月成功率 (辽信通 / 市综服)</div>
-        <div class="success-rate-value">
-            {{ data.successRate[data.successRate.length - 1]?.per }}%
-            /
-            {{ data.ezjfwSuccessRate[data.ezjfwSuccessRate.length - 1]?.per }}%
+    <div class="board-wrapper">
+        <Board :style="{ padding: '20px 24px 24px' }">
+            <div class="card-header">
+                <Text color="paragraph" bold size="md">产品需求受理月成功率数据趋势</Text>
+            </div>
+            <Charts :options="options" :height="176" />
+        </Board>
+        <div class="success-rate-wrapper">
+            <div class="success-rate-label">当月成功率 (辽信通 / 市综服)</div>
+            <div class="success-rate-value">
+                {{ data.successRate[data.successRate.length - 1]?.per }}%
+                /
+                {{ data.ezjfwSuccessRate[data.ezjfwSuccessRate.length - 1]?.per }}%
+            </div>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+.board-wrapper {
+    display: flex;
+    flex-direction: column;
+}
 .card-header {
     margin-bottom: 12px;
 }

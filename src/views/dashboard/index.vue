@@ -29,9 +29,7 @@ onBeforeMount(() => {
             <TotalIndicator :data="count" />
             <div style="display: flex; width: 100%">
                 <SuccessRate style="flex: 1 1 30%" :data="count" />
-                <div style="flex: 1 1 30%; margin-left: 20px; display: flex; flex-direction: column;">
-                    <ProductSuccessRate :data="count" />
-                </div>
+                <ProductSuccessRate style="flex: 1 1 30%; margin-left: 20px" :data="count" />
                 <RankList style="flex: 1 1 40%; margin-left: 20px" :data="count" />
             </div>
         </el-space>

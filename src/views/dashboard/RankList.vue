@@ -184,7 +184,7 @@ const mouseoutHandler = () => {
 </script>
 
 <template>
-    <Board :style="{ position: 'relative', padding: '20px 28px 24px' }">
+    <Board :style="{ position: 'relative', overflow: 'hidden', padding: '20px 28px 24px' }">
         <div class="card-header">
             <Text color="paragraph" bold size="md">产品申请数量排行榜</Text>
         </div>

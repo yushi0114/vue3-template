@@ -175,8 +175,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
     )
         .then(async () => {
             await deleteFinanceCategory({
-                id: item.id,
-                menuName: ''
+                id: item.id
             });
             ElMessage({
                 type: 'success',

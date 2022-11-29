@@ -258,13 +258,13 @@ const handleCurrentChange = (val: number) => {
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button
-                            type="danger"
-                            size="small"
-                            :icon="Delete"
-                            circle
-                            @click="handleDelete(scope.row)"
-                        ></el-button>
+                        <el-tooltip content="删除" placement="top-start">
+                            <el-button
+                                :icon="Delete"
+                                text
+                                @click="handleDelete(scope.row)"
+                            ></el-button>
+                        </el-tooltip>
                     </template>
                 </el-table-column>
             </el-table>

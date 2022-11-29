@@ -210,7 +210,7 @@ watch(listControlModel, () => {
                             <el-tooltip
                                 placement="top"
                                 content="编辑">
-                                <i-ep-edit />
+                                <Icon name="ep-edit" />
                             </el-tooltip>
                         </el-button>
                     </div>
@@ -224,7 +224,7 @@ watch(listControlModel, () => {
                             <el-tooltip
                                 placement="top"
                                 content="更多">
-                                <i-ep-more />
+                                <Icon name="ep-more-filled" />
                             </el-tooltip>
                         </el-button>
                         <template #dropdown>

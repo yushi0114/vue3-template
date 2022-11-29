@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { acceptProgressTypeOptions, PlatformType, switchTypeOptions, taxGradeTypeOptions } from '@/enums';
+import { acceptProgressTypeOptions, PlatformType, switchTypeOptions, taxGradeTypeOptions, steTypeOptions, loanEndTypeOptions, longestOverdueTypeOptions } from '@/enums';
 import { getExactReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
 import { ExactReqDetail, ReqList } from '../components';
@@ -52,10 +52,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <PagePanel>
+  <PagePanel full>
     <Board class="req-agile">
         <PlatformTab @tab-change="handleTabChange" />
         <ListQueryControl
+            class="flex-1 overflow-hidden"
             v-model="listControlModel"
             :searchConfig="{
                 label: '请输入企业名称',
@@ -71,7 +72,10 @@ onMounted(() => {
                 { label: '可提供担保', field: 'guaranteeType', options: switchTypeOptions },
                 { label: '在银行有过融资行为', field: 'financingType', options: switchTypeOptions },
                 { label: '有政府采购订单', field: 'gpType', options: switchTypeOptions },
-                { label: '企业纳税信用等级', field: 'taxGrade', options: taxGradeTypeOptions },
+                { label: '企业纳税信用等级', field: 'taxGradeArr', options: taxGradeTypeOptions },
+                { label: '科技型企业', field: 'steTypeArr', options: steTypeOptions },
+                { label: '目前尚未结清贷款金额', field: 'loanEndArr', options: loanEndTypeOptions },
+                { label: '近24个月内最长逾期天数', field: 'longestOverdueArr', options: longestOverdueTypeOptions },
             ]"
             :sortConfigs="[
                 { label: '发布时间', field: 'updateTime', },
@@ -89,21 +93,22 @@ onMounted(() => {
             <template v-slot:search-rest>
                 <el-button type="primary">下载</el-button>
             </template>
+            <div class="flex-1 overflow-y-auto">
+            <ReqList :list="list" @item-detail="goDetail" />
+
+            <FlexRow horizontal="end">
+                <el-pagination
+                    v-model:current-page="listControlModel.pageIndex"
+                    v-model:page-size="listControlModel.pageSize"
+                    :page-sizes="[10, 20, 50]"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="count"
+                />
+            </FlexRow>
+            </div>
         </ListQueryControl>
         <Text>
         </Text>
-
-        <ReqList :list="list" @item-detail="goDetail" />
-
-        <FlexRow horizontal="end">
-            <el-pagination
-                v-model:current-page="listControlModel.pageIndex"
-                v-model:page-size="listControlModel.pageSize"
-                :page-sizes="[10, 20, 50]"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="count"
-            />
-        </FlexRow>
 
         <ExactReqDetail
             :modelValue="!!detail"
@@ -114,6 +119,6 @@ onMounted(() => {
 </template>
 <style lang="postcss">
 .req-agile {
-  @apply;
+  @apply h-full flex;
 }
 </style>

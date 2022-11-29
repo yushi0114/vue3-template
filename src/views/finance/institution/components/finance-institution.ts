@@ -39,7 +39,7 @@ export const institutionForm = ref<any>({
     orgDictionaryId: '',
     orgCode: '',
     status: 1,
-    sort: 0,
+    sort: 1,
     desc: '',
     menuIdArr: []
 });
@@ -58,7 +58,7 @@ export function resetInstitutionForm() {
         orgDictionaryId: '',
         orgCode: '',
         status: 1,
-        sort: 0,
+        sort: 1,
         desc: '',
         menuIdArr: []
     };

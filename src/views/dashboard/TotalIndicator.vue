@@ -1,6 +1,18 @@
 <script lang="ts" setup>
 import Charts from './Charts.vue';
 import type { TotalIndicatorEntity } from '@/types/dashboard';
+import { useTheme } from '@/composables';
+
+const { isDark } = useTheme();
+
+watch(
+    isDark,
+    () => {
+        setTimeout(() => {
+            loadOptions();
+        }, 0);
+    }
+);
 
 const props = withDefaults(
     defineProps<{

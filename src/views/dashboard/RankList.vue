@@ -2,6 +2,18 @@
 import Charts from './Charts.vue';
 import type { ECElementEvent } from 'echarts/types/src/util/types';
 import type { ApplyCountEntity } from '@/types/dashboard';
+import { useTheme } from '@/composables';
+
+const { isDark } = useTheme();
+
+watch(
+    isDark,
+    () => {
+        setTimeout(() => {
+            loadOptions();
+        }, 0);
+    }
+);
 
 const props = withDefaults(
     defineProps<{

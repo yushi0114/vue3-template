@@ -19,14 +19,14 @@ withDefaults(
 </script>
 
 <template>
-    <Board bordered :style="{ padding: '20px 24px 24px' }" shadow="never">
+    <Board :style="{ padding: '20px 24px 24px', 'border-radius': '8px' }">
         <div>
             <div class="card-header">
                 <Text color="paragraph" bold size="md">今日核心指标</Text>
             </div>
             <div class="indicator">
                 <div class="item-label">
-                    <Text color="secondary" size="sm">企业新用户</Text>
+                    <Text color="regular" size="sm">企业新用户</Text>
                 </div>
                 <div class="item-value">
                     <Text color="paragraph" size="current">{{ data.countTodayElibUser }} / {{ data.countTodayEzjfwUser }}</Text>
@@ -37,7 +37,7 @@ withDefaults(
             </div>
             <div class="indicator">
                 <div class="item-label">
-                    <Text color="secondary" size="sm">辽信通需求</Text>
+                    <Text color="regular" size="sm">辽信通需求</Text>
                 </div>
                 <div class="item-value">
                     <Text color="paragraph" size="current">{{ data.countTodayExactReq }}</Text>
@@ -45,7 +45,7 @@ withDefaults(
             </div>
             <div class="indicator">
                 <div class="item-label">
-                    <Text color="secondary" size="sm">辽信通产品需求</Text>
+                    <Text color="regular" size="sm">辽信通产品需求</Text>
                 </div>
                 <div class="item-value">
                     <Text color="paragraph" size="current">{{ data.countTodayProductReq }}</Text>
@@ -53,7 +53,7 @@ withDefaults(
             </div>
             <div class="indicator">
                 <div class="item-label">
-                    <Text color="secondary" size="sm">市综服需求</Text>
+                    <Text color="regular" size="sm">市综服需求</Text>
                 </div>
                 <div class="item-value">
                     <Text color="paragraph" size="current">{{ data.countTodayEzjfwExactReq }}</Text>
@@ -61,7 +61,7 @@ withDefaults(
             </div>
             <div class="indicator">
                 <div class="item-label">
-                    <Text color="secondary" size="sm">市综服产品需求</Text>
+                    <Text color="regular" size="sm">市综服产品需求</Text>
                 </div>
                 <div class="item-value">
                     <Text color="paragraph" size="current">{{ data.countTodayEzjfwProductReq }}</Text>

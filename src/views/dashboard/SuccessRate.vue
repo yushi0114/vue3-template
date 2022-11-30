@@ -45,7 +45,8 @@ const options = ref({
         type: 'category',
         axisLabel: {
             interval: 0,
-            rotate: 30
+            rotate: 30,
+            margin: 12
         },
         axisTick: {
             alignWithLabel: true
@@ -81,7 +82,7 @@ const loadOptions = () => {
 </script>
 
 <template>
-    <el-card :body-style="{ padding: '20px 24px 28px' }" shadow="never">
+    <Board :style="{ padding: '20px 24px 28px' }">
         <div class="card-header">
             <Text color="paragraph" bold size="md">需求受理月成功率数据趋势</Text>
         </div>
@@ -96,7 +97,7 @@ const loadOptions = () => {
             </Text>
         </div>
         <Charts :options="options" :height="209" />
-    </el-card>
+    </Board>
 </template>
 
 <style lang="scss" scoped>

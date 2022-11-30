@@ -3,15 +3,16 @@
  * @FilePath: \dms-web\src\components\SjcTable\types.ts
  * @Author: zys
  * @Date: 2022-11-03 14:59:33
- * @LastEditTime: 2022-11-18 16:45:13
+ * @LastEditTime: 2022-11-25 14:16:56
  * @LastEditors: zys
  * @Reference:
  */
-import type { Recordable } from '@/types/globals';
 import type { TableProps, PaginationProps } from 'element-plus';
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
 
+// eslint-disable-next-line no-undef
 export type ITableData<T = Recordable> = T[];
+// eslint-disable-next-line no-undef
 export interface ITableConfig<DataType = Recordable> extends TableProps<DataType> {
     rowKey: string | ((row: DataType) => string);
     showSelection?: boolean;
@@ -31,6 +32,7 @@ export type ITableColumnCtx<T> = Partial<
         children?: ITableColumnCtx<T>[];
     }
 >;
+// eslint-disable-next-line no-undef
 export type IColumn<ColumnTypes = Recordable> = Omit<ITableColumnCtx<ColumnTypes>, 'children'> & {
     slotName?: string;
     children?: IColumn<ColumnTypes>[];

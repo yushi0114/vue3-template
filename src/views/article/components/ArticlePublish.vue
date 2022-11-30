@@ -7,7 +7,6 @@ import type { CreateNewsParams, UpdateNewsParams, NewsItem } from '@/types';
 import { useApiManage, useArticleModule } from '../hooks';
 import type { UploadFile } from 'element-plus';
 import { getFileIdByUrl, to } from '@/utils';
-import type { Recordable } from '@/types/globals';
 
 const { back } = useRouter();
 const {
@@ -53,6 +52,7 @@ const { loading: loadingUpdate, request: updateArticle } = useApi(ARTICLE_API_MA
 
 const { loading: loadingDetail, request: getArticleDetail } = useApi(ARTICLE_API_MAP[ARTICLE_API.LOAD_ARTICLE_DETAIL], {
     onSuccess(data) {
+        // eslint-disable-next-line no-undef
         let temp: typeof data | Recordable = {};
         if (isArray(data)) {
             temp = data[0];

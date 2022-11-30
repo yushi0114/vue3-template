@@ -185,3 +185,7 @@ html.dark {
     --w-e-modal-button-bg-color: #fafafa;
     --w-e-modal-button-border-color: #d9d9d9;
 }
+
+.el-table {
+    --el-table-row-hover-bg-color: transparent !important;
+}

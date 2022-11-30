@@ -52,21 +52,9 @@ const getReportRecordList = () => {
         });
 };
 
-const searchRecordList = (isClear: boolean) => {
-    if (isClear) {
-        page.currentPage = 1;
-        getReportRecordList();
-    } else {
-        if (searchInput.value.length >= 2) {
-            page.currentPage = 1;
-            getReportRecordList();
-        } else {
-            ElMessage({
-                type: 'error',
-                message: '输入内容不能少于2个字符',
-            });
-        }
-    }
+const searchRecordList = () => {
+    page.currentPage = 1;
+    getReportRecordList();
 };
 
 const handleSortChange = ({ prop, order } : { prop: string, order: string }) => {
@@ -169,11 +157,11 @@ const handleCurrentChange = (val: number) => {
                 v-model.trim="searchInput"
                 size="large"
                 clearable
-                @clear="searchRecordList(true)"
-                @keyup.enter="searchRecordList(false)"
+                @clear="searchRecordList"
+                @keyup.enter="searchRecordList"
             >
                 <template #append>
-                    <el-button :icon="Search" @click="searchRecordList(false)" />
+                    <el-button :icon="Search" @click="searchRecordList" />
                 </template>
             </el-input>
             <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>

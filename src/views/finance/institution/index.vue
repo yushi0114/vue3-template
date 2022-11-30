@@ -11,9 +11,9 @@
 <script lang="ts" setup>
 import {
     activeName,
-    categoryList,
+    categoryList, currentInstitutionId, activeInstitutionName,
     getCategoryList,
-    getInstitutionTree, mode,
+    getInstitutionTree, institutionItemData, mode, resetInstitutionForm,
     setTypeMenuTree
 } from './components/finance-institution';
 import type { TabsPaneContext } from 'element-plus';
@@ -23,6 +23,10 @@ import InstitutionConfig from '@/views/finance/institution/components/institutio
 
 async function handleClick(tab: TabsPaneContext) {
     mode.value = 'board';
+    currentInstitutionId.value = undefined;
+    institutionItemData.value = undefined;
+    activeInstitutionName.value = 'menuList';
+    resetInstitutionForm();
     LoadingService.getInstance().loading();
     await getInstitutionTree(tab.paneName as string);
     await setTypeMenuTree({

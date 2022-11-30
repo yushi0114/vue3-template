@@ -49,7 +49,7 @@ export const roleFilterObject = ref<{
     sortType: 'desc',
     searchInput: '',
     currentSize: 10,
-    currentPage: 0
+    currentPage: 1
 });
 
 export function resetRoleFilterObject() {
@@ -58,7 +58,7 @@ export function resetRoleFilterObject() {
         sortType: 'desc',
         searchInput: '',
         currentSize: 10,
-        currentPage: 0
+        currentPage: 1
     };
 }
 
@@ -85,7 +85,7 @@ export async function getRolePageList(): Promise<void> {
     return new Promise((resolve) => {
         getFinanceOrgRoleList({
             orgId: currentInstitutionId.value,
-            pageIndex: roleFilterObject.value.currentPage + 1,
+            pageIndex: roleFilterObject.value.currentPage,
             pageSize: roleFilterObject.value.currentSize,
             searchInput: roleFilterObject.value.searchInput,
             sortField: roleFilterObject.value.sortField,

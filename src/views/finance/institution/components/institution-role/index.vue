@@ -7,7 +7,6 @@
             <role-form></role-form>
         </div>
     </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -20,6 +19,7 @@ import { mode } from './institution-role';
 .pane-container {
     width: 100%;
     height: 100%;
+    padding: 24px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;

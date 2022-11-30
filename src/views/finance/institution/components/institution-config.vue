@@ -5,8 +5,11 @@
         </div>
         <div class="menu-content" v-if="institutionItemData">
             <institution-desc style="margin-bottom: 24px;"></institution-desc>
-            <el-tabs v-model="activeInstitutionName" type="card" @tab-click="handleInstitutionTabClick"
-                     class="list-tab">
+            <el-tabs
+                v-model="activeInstitutionName"
+                type="card"
+                @tab-click="handleInstitutionTabClick"
+                class="list-tab">
                 <el-tab-pane label="机构菜单" name="menuList">
                     <institution-menu></institution-menu>
                 </el-tab-pane>
@@ -19,7 +22,7 @@
             </el-tabs>
         </div>
         <div v-else class="noDataContainer">
-            <el-empty description="暂无数据" />
+            <el-empty description="暂无数据"/>
         </div>
     </div>
     <div class="menu-container" style="overflow-y: auto" v-if="mode === 'form'">

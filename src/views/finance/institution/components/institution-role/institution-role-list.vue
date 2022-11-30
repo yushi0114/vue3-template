@@ -122,12 +122,16 @@ async function handleEditRoleItem(item: RoleListItemType) {
 
 async function handleCurrentChange(item: number) {
     roleFilterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
     await getRolePageList();
+    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     roleFilterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
     await getRolePageList();
+    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewRole() {
@@ -151,11 +155,9 @@ function handleRemoveRoleItem(item: RoleListItemType) {
     )
         .then(async() => {
             await deleteRole(item.id);
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
-            });
+            LoadingService.getInstance().loading();
             await getRolePageList();
+            LoadingService.getInstance().stop();
         })
         .catch(() => {
             ElMessage({

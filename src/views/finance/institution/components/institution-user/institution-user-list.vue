@@ -19,6 +19,7 @@
             <template #icon>
                 <Icon :name="'ep:plus'"></Icon>
             </template>
+            新建
         </el-button>
     </div>
     <el-table :data="listData.list" style="width: 100%"
@@ -116,6 +117,7 @@ async function handleClear() {
 }
 
 async function handleEditItem(item: UserListItemType) {
+    LoadingService.getInstance().loading();
     mode.value = 'form';
     formType.value = 'edit';
     form.value.roleId = item.roleId;
@@ -124,6 +126,7 @@ async function handleEditItem(item: UserListItemType) {
     form.value.status = item.status === 1;
     currentUserId.value = item.id;
     await getRoleListData();
+    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewItem() {
@@ -131,15 +134,23 @@ async function handleCreateNewItem() {
     formType.value = 'create';
     currentUserId.value = '';
     resetUserForm();
+    LoadingService.getInstance().loading();
     await getRoleListData();
+    LoadingService.getInstance().stop();
 }
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
+    await getUserPageList();
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
+    await getUserPageList();
+    LoadingService.getInstance().stop();
 }
 
 function handleRemoveItem(item: UserListItemType) {

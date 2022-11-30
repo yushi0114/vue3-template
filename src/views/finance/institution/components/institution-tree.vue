@@ -32,7 +32,7 @@
                         <div class="popover-list">
                             <el-button
                                 @click="handleOperateTreeItem(data, 'create')"
-                                text
+                                link
                                 class="custom-btn"
                                 size="small">
                                 <template #icon>
@@ -42,7 +42,7 @@
                             </el-button>
                             <el-button
                                 @click="handleOperateTreeItem(data, 'edit')"
-                                text
+                                link
                                 size="small"
                                 class="custom-btn">
                                 <template #icon>
@@ -52,7 +52,7 @@
                             </el-button>
                             <el-button
                                 @click="handleOperateTreeItem(data, 'remove')"
-                                text
+                                link
                                 class="custom-btn"
                                 size="small">
                                 <template #icon>
@@ -78,6 +78,7 @@
 import { ref } from 'vue';
 import Icon from '@/components/Icon.vue';
 import {
+    activeInstitutionName,
     getInstitutionDic,
     getInstitutionItem,
     getInstitutionTree,
@@ -99,7 +100,6 @@ import { getUserPageList } from '@/views/finance/institution/components/institut
 import { LoadingService } from '@/views/system/loading-service';
 import InstitutionRemoveDialog from '@/views/finance/institution/components/institution-remove-dialog.vue';
 import type { FinanceInstitutionTreeItemType } from '@/views/finance/type/finance-institution.type';
-
 
 const activeId = ref();
 
@@ -158,6 +158,7 @@ async function handleOperateTreeItem(item: FinanceInstitutionTreeItemType, type:
 
 async function handleNodeClick(data: FinanceInstitutionTreeItemType) {
     setCurrentMenuId(data.id);
+    activeInstitutionName.value = 'menuList';
     LoadingService.getInstance().loading();
     await getInstitutionItem(data.id);
     await getRolePageList();

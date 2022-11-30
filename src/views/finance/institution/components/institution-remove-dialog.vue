@@ -30,7 +30,6 @@ import type { ValidateCallback } from '@/utils';
 import { validateIllegalSymbol } from '@/utils';
 import type { FormInstance } from 'element-plus';
 
-
 const isLoading = ref(false);
 const deleteForm = ref({
     orgName: ''
@@ -74,8 +73,6 @@ async function deleteOrg(formEl: FormInstance | undefined) {
                 });
                 isLoading.value = false;
             }
-        } else {
-            // todo
         }
     });
 }

@@ -50,9 +50,11 @@
 </template>
 
 <script lang="ts" setup>
-import {institutionItemData} from './finance-institution';
-import {ElMessageBox} from 'element-plus';
+import { currentInstitutionId, getInstitutionItem, institutionItemData, refreshSecretKey } from './finance-institution';
+import { ElMessageBox } from 'element-plus';
 import Icon from '@/components/Icon.vue';
+import { LoadingService } from '@/views/system/loading-service';
+
 function copyHandle(params: string) {
     let input = document.createElement('input');
     input.value = params;
@@ -65,6 +67,7 @@ function copyHandle(params: string) {
         type: 'success'
     });
 }
+
 function refreshSecret() {
     ElMessageBox.confirm(
         `确定刷新“${institutionItemData.value?.orgName}”的机构密钥吗？刷新后金融栈应用服务平台将无法登录，请及时通知金融机构新的机构密钥！`,
@@ -75,9 +78,15 @@ function refreshSecret() {
             cancelButtonText: '取消',
             type: 'warning'
         }
-    ).then(() => {
-        // todo
-    }).catch(() => {});
+    ).then(async () => {
+        await refreshSecretKey({
+            id: currentInstitutionId.value
+        });
+        LoadingService.getInstance().loading();
+        await getInstitutionItem(currentInstitutionId.value);
+        LoadingService.getInstance().stop();
+    }).catch(() => {
+    });
 }
 </script>
 

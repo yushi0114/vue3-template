@@ -35,8 +35,16 @@ export async function getFinanceInstitution(params: { id: string }): Promise<Fin
 }
 
 
-export async function getOrgMenuCheckedIds(params: { id: string }): Promise<string[]> {
+export async function getOrgMenuCheckedIdsApi(params: { id: string }): Promise<string[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/menu/check`, {
+        params
+    });
+}
+
+export async function refreshOrgKeyApi(params: { id: string }): Promise<{
+    secretKey: string
+}> {
+    return api.get(`${DMS_DOMAIN}/v1/org/refresh/key`, {
         params
     });
 }

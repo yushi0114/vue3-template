@@ -13,6 +13,7 @@ import {
     getFinanceInstitutionDicApi,
     getFinanceInstitutionTreeApi,
     getFinanceTypeMenuTreeByIdApi,
+    refreshOrgKeyApi,
     updateOrgApi
 } from '@/api/finance/finance-institution';
 import { ElMessage } from 'element-plus';
@@ -169,7 +170,10 @@ export async function getInstitutionItem(id: string): Promise<void> {
         getFinanceInstitution({
             id
         }).then(data => {
-            institutionItemData.value = data[0];
+            institutionItemData.value = {
+                ...data[0],
+                menuIdArr: data[0].menuIdArr
+            };
             resolve();
         });
     });
@@ -245,6 +249,21 @@ export async function deleteInstitution(params: {
             ElMessage({
                 type: 'success',
                 message: '机构删除成功！',
+            });
+        }).finally(() => {
+            resolve();
+        });
+    });
+}
+
+export async function refreshSecretKey(params: {
+    id: string
+}): Promise<void> {
+    return new Promise((resolve) => {
+        refreshOrgKeyApi(params).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '机构密钥更新成功！',
             });
         }).finally(() => {
             resolve();

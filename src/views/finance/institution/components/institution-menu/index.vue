@@ -1,34 +1,54 @@
 <template>
-    <el-tree
-        ref="menuTree"
-        :data="typeMenuTree"
-        show-checkbox
-        node-key="id"
-        :default-expand-all="true"
-        :default-checked-keys="institutionItemData.menuIdArr">
-    </el-tree>
-    <div>
-        <el-button>
-            重置
-        </el-button>
-        <el-button type="primary" @click="handleUpdate">
-            确定
-        </el-button>
+    <div class="user-manage-container">
+        <el-tree
+            ref="menuTreeTemplateRef"
+            :data="typeMenuTree"
+            show-checkbox
+            node-key="id"
+            :default-expand-all="true"
+            :default-checked-keys="defaultCheckedKey">
+        </el-tree>
+        <div class="footer">
+            <el-button>
+                重置
+            </el-button>
+            <el-button type="primary" @click="handleUpdate">
+                确定
+            </el-button>
+        </div>
     </div>
+
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { institutionItemData, updateOrg, typeMenuTree, treeToArr } from '../finance-institution';
+import { currentInstitutionId, institutionItemData, treeToArr, typeMenuTree, updateOrg } from '../finance-institution';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 import { LoadingService } from '@/views/system/loading-service';
+import { ref, watchEffect } from 'vue';
+import { getOrgMenuCheckedIdsApi } from '@/api/finance/finance-institution';
+import { ElMessage } from 'element-plus';
 
-const menuTree = ref();
+const menuTreeTemplateRef = ref();
+const defaultCheckedKey = ref<string[]>([]);
+
+watchEffect(() => {
+    if (currentInstitutionId.value) {
+        getOrgMenuCheckedIdsApi({ id: currentInstitutionId.value }).then((data) => {
+            console.log(data);
+            menuTreeTemplateRef.value?.setCheckedKeys([]);
+            defaultCheckedKey.value = data;
+        });
+    }
+});
 
 async function handleUpdate() {
-    let checkedNodeIds = menuTree.value?.getCheckedNodes(false, true)
+    let checkedNodeIds = menuTreeTemplateRef.value?.getCheckedNodes(false, true)
         .map((item: TreeNodeData) => item.id as string);
     if (!checkedNodeIds || !institutionItemData.value) {
+        ElMessage({
+            type: 'error',
+            message: '请至少配置一个菜单'
+        });
         return;
     }
     const newTreeData = treeToArr(typeMenuTree.value);

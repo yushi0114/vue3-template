@@ -125,7 +125,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                     changeOrigin: true,
                 },
                 '/dms-service': {
-                    target: `http://${proxyHost}:10208`,
+                    target: `http://192.168.31.49:10208`,
                     changeOrigin: true,
                 },
                 '/lncredit': {

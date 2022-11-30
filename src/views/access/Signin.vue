@@ -72,3 +72,4 @@ import LoginFooter from './components/footer/index.vue';
     height: 37px;
 }
 </style>
+

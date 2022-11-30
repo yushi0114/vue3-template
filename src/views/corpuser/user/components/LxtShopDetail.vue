@@ -101,6 +101,7 @@ const handleClose = () => {
                     class="searchInput"
                     placeholder="请输入关键字进行查询"
                     v-model.trim="searchInput"
+                    size="large"
                     clearable
                     @clear="searchInfoList(true)"
                     @keyup.enter="searchInfoList(false)"
@@ -194,7 +195,6 @@ const handleClose = () => {
 
         .searchInput {
             width: 350px;
-            height: 40px;
         }
     }
 

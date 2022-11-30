@@ -239,6 +239,7 @@ const cancelHandle = ({ field } : { field: string }) => {
                 <el-form-item label="注册企业" prop="registerEnterprise">
                     <el-input
                         v-model.number="countForm.registerEnterprise"
+                        size="large"
                         placeholder="请输入注册企业数"
                         :disabled="allDisabled.registerEnterpriseDisabled"
                     >
@@ -274,6 +275,7 @@ const cancelHandle = ({ field } : { field: string }) => {
                 <el-form-item label="平台机构数量" prop="registerOrg">
                     <el-input
                         v-model.number="countForm.registerOrg"
+                        size="large"
                         placeholder="请输入平台机构数"
                         :disabled="allDisabled.registerOrgDisabled"
                     >
@@ -309,6 +311,7 @@ const cancelHandle = ({ field } : { field: string }) => {
                 <el-form-item label="金融产品" prop="financialProduct">
                     <el-input
                         v-model.number="countForm.financialProduct"
+                        size="large"
                         placeholder="请输入金融产品数"
                         :disabled="allDisabled.financialProductDisabled"
                     >
@@ -344,6 +347,7 @@ const cancelHandle = ({ field } : { field: string }) => {
                 <el-form-item label="平台发布需求" prop="releaseRequirement">
                     <el-input
                         v-model.number="countForm.releaseRequirement"
+                        size="large"
                         placeholder="请输入金融产品数"
                         :disabled="allDisabled.releaseRequirementDisabled"
                     >
@@ -379,6 +383,7 @@ const cancelHandle = ({ field } : { field: string }) => {
                 <el-form-item label="解决融资" prop="financeResolve">
                     <el-input
                         v-model.number="countForm.financeResolve"
+                        size="large"
                         placeholder="请输入解决融资数"
                         :disabled="allDisabled.financeResolveDisabled"
                     >
@@ -414,6 +419,7 @@ const cancelHandle = ({ field } : { field: string }) => {
                 <el-form-item label="产权交易金额" prop="propertyFinanceResolve">
                     <el-input
                         v-model.number="countForm.propertyFinanceResolve"
+                        size="large"
                         placeholder="请输入产权交易金额"
                         :disabled="allDisabled.propertyFinanceResolveDisabled"
                     >

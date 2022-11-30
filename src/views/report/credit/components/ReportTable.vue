@@ -119,6 +119,7 @@ onUnmounted(() => {
                 class="searchInput"
                 placeholder="请输入关键字进行查询"
                 v-model.trim="searchInput"
+                size="large"
                 clearable
                 @clear="handleSearch(true)"
                 @keyup.enter="handleSearch(false)"
@@ -141,13 +142,14 @@ onUnmounted(() => {
             >
                 <el-table-column fixed prop="corpName" label="企业名称" />
                 <el-table-column prop="corpCode" label="统一社会信用代码" />
-                <el-table-column label="操作">
+                <el-table-column>
+                    <template #header>
+                        <span class="header-options">操作</span>
+                    </template>
                     <template #default="scope">
                         <el-button
-                            type="primary"
-                            size="small"
                             :icon="View"
-                            circle
+                            text
                             @click="handleView(scope.row)"
                         ></el-button>
                     </template>
@@ -168,13 +170,16 @@ onUnmounted(() => {
         margin-bottom: 20px;
         .searchInput {
             width: 350px;
-            height: 40px;
         }
     }
 
     .table-content {
         :deep(.el-table__cell) {
             padding: 12px;
+        }
+
+        .header-options {
+            padding-left: 7px;
         }
 
         :deep(.el-scrollbar__wrap--hidden-default .el-table__empty-block) {

@@ -88,6 +88,7 @@ function clear() {
         <el-form-item label="输入旧密码" prop="oldPassword">
             <el-input
                 v-model="formModel.oldPassword"
+                size="large"
                 autocomplete="new-password"
                 type="password"
                 show-password
@@ -96,6 +97,7 @@ function clear() {
         <el-form-item label="输入新密码" prop="newPassword">
                 <el-input
                 v-model="formModel.newPassword"
+                size="large"
                 autocomplete="new-password"
                 type="password"
                 show-password

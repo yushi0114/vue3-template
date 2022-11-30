@@ -9,7 +9,7 @@ watch(
     () => {
         setTimeout(() => {
             resizeHandler();
-        }, 150);
+        }, 200);
     }
 );
 

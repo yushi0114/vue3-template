@@ -202,20 +202,19 @@ const handleCurrentChange = (val: number) => {
                 <el-table-column prop="createBy" label="创建者" />
                 <el-table-column prop="createTime" label="创建时间" sortable />
                 <el-table-column prop="updateTime" label="更新时间" sortable />
-                <el-table-column label="操作">
+                <el-table-column>
+                    <template #header>
+                        <span class="header-options">操作</span>
+                    </template>
                     <template #default="scope">
                         <el-button
-                            type="primary"
-                            size="small"
                             :icon="EditPen"
-                            circle
+                            text
                             @click="handleEdit(scope.row)"
                         ></el-button>
                         <el-button
-                            type="danger"
-                            size="small"
                             :icon="Delete"
-                            circle
+                            text
                             @click="handleDelete(scope.row)"
                         ></el-button>
                     </template>
@@ -265,6 +264,10 @@ const handleCurrentChange = (val: number) => {
             &:hover {
                 color: #1B5CFF;
             }
+        }
+
+        .header-options {
+            padding-left: 34px;
         }
 
         .table-pagination {

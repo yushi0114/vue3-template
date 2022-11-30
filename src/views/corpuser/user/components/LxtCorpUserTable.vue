@@ -220,7 +220,7 @@ const handleCurrentChange = (val: number) => {
                     <el-button :icon="Search" @click="searchUserList(false)" />
                 </template>
             </el-input>
-            <el-button type="danger" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
+            <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
         </div>
         <div class="content">
             <el-table
@@ -256,15 +256,16 @@ const handleCurrentChange = (val: number) => {
                         ></el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column>
+                    <template #header>
+                        <span class="header-options">操作</span>
+                    </template>
                     <template #default="scope">
-                        <el-tooltip content="删除" placement="top-start">
-                            <el-button
-                                :icon="Delete"
-                                text
-                                @click="handleDelete(scope.row)"
-                            ></el-button>
-                        </el-tooltip>
+                        <el-button
+                            :icon="Delete"
+                            text
+                            @click="handleDelete(scope.row)"
+                        ></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -309,6 +310,10 @@ const handleCurrentChange = (val: number) => {
             &:hover {
                 color: #1B5CFF;
             }
+        }
+
+        .header-options {
+            padding-left: 7px;
         }
 
         .table-pagination {

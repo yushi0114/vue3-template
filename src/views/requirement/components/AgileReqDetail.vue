@@ -4,6 +4,8 @@ import type { RequirementEntity } from '@/types';
 import ReqDetail from './ReqDetail.vue';
 import { useApi } from '@/composables';
 
+const route = useRoute();
+const platform = ref(Number(route.params.type));
 const props = withDefaults(
     defineProps<{
         content?: RequirementEntity | null
@@ -23,7 +25,7 @@ const { request } = useApi(getAgileReq);
 
 function handleOpen() {
     if (!props.content) return;
-    request({ id: props.content.id })
+    request({ id: props.content.id, platform: platform.value })
         .then(res => {
             console.log(res);
             detail.value = res;
@@ -36,6 +38,10 @@ function handleClosed() {
     emits('closed');
 
 }
+
+watch(() => route.params, () => {
+    platform.value = Number(route.params.type);
+});
 
 </script>
 

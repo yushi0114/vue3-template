@@ -26,6 +26,7 @@ const shortName = computed(() => {
   width: 60px;
   height: 60px;
   word-break: break-all;
+  white-space: break-spaces;
   text-align: center;
   letter-spacing: 5px;
   border-radius: 2px;

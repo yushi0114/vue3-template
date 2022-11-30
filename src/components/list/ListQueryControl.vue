@@ -2,7 +2,7 @@
 import ListMenu from './ListMenu.vue';
 // import { useQueryParams } from '@/composables';
 import { UseMouseInElement } from '@vueuse/components';
-import { useTemplateRefsList } from '@vueuse/core';
+import { useTemplateRefsList, useWindowSize } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
@@ -44,6 +44,7 @@ type ModelType = any
 type DropdownLabelMapType = any
 const model = reactive<ModelType>({});
 const dropdownLabelMap = reactive<DropdownLabelMapType>({});
+const { height } = useWindowSize();
 
 watch(() => props.searchConfig, () => {
     if (props.searchConfig) {
@@ -246,6 +247,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                 <el-dropdown
                     :ref="refs.set"
                     trigger="click"
+                    :max-height="height - 300"
                     @command="handleDropdownChange">
                     <UseMouseInElement v-slot="{ isOutside }">
                         <FlexRow class="cursor-pointer">

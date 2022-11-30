@@ -66,6 +66,12 @@ const getActiveOption = computed(() => {
         return model.value?.[field]?.toString().includes(menuItem.value) ? 'primary' : '';
     };
 });
+// 过滤器初始展开值
+const initialActiveNames =
+    Object.entries(model.value)
+        .filter(([key, value]) => value && props.menu?.map((item) => item.field).includes(key))
+        .map(([key]) => key) ?? [];
+const activeNames = ref(initialActiveNames);
 watch(isCtrlKeep, (newValue) => {
     if (!newValue) {
         emits('change');
@@ -88,13 +94,19 @@ watch(isCtrlKeep, (newValue) => {
                     name="fluent-mdl2:info" />
             </el-tooltip>
         </Text>
-        <el-collapse class="flex-1 overflow-y-auto !border-r-none">
+        <el-collapse
+            class="flex-1 overflow-y-auto !border-r-none"
+            v-model="activeNames">
             <el-collapse-item
                 :name="subMenu.field"
                 v-for="subMenu in menu"
                 :key="subMenu.field">
                 <template #title>
-                    <Text>{{ subMenu.label }}</Text>
+                    <Text
+                        color="regular"
+                        size="sm"
+                        >{{ subMenu.label }}</Text
+                    >
                 </template>
                 <el-button
                     class="w-full"
@@ -103,7 +115,11 @@ watch(isCtrlKeep, (newValue) => {
                     text
                     :type="getActiveOption(subMenu.field, menuItem)"
                     @click="handleMenuItemClick(menuItem, subMenu.field)"
-                    >{{ menuItem.name }}
+                    ><Text
+                        :color="getActiveOption(subMenu.field, menuItem) || 'regular'"
+                        size="xs"
+                        >{{ menuItem.name }}</Text
+                    >
                 </el-button>
             </el-collapse-item>
         </el-collapse>
@@ -119,6 +135,9 @@ watch(isCtrlKeep, (newValue) => {
 }
 :deep(.el-button.el-button--primary) {
     @apply !bg-[var(--el-fill-color-light)];
+}
+:deep(.el-collapse) {
+    @apply border-y-none;
 }
 </style>
 

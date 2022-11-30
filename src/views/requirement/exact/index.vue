@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { acceptProgressTypeOptions, PlatformType, switchTypeOptions, taxGradeTypeOptions, steTypeOptions, loanEndTypeOptions, longestOverdueTypeOptions } from '@/enums';
-import { getExactReqs } from '@/api';
+import { getExactReqs, deleteExactReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
 import { ExactReqDetail, ReqList } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel } from '@/composables';
+import { useListControlModel, useApi } from '@/composables';
 
 const route = useRoute();
 const platform = ref(Number(route.params.type));
@@ -16,15 +16,34 @@ const { model: listControlModel, clear: clearModel } = useListControlModel({
 
 
 const count = ref(0);
+const loading = ref(false);
 const list = ref<AgileReqEntity[]>([]);
+const ids = ref<string[]>([]);
 function getList() {
+    loading.value = true;
     getExactReqs(Object.assign({ platform: platform.value }, listControlModel))
         .then(({ pageTotal, data }) => {
             count.value = pageTotal;
             list.value = data;
         })
-        .catch(noop);
+        .catch(noop)
+        .finally(() => {
+            loading.value = false;
+        });
 }
+
+const { request: deleteReps } = useApi((idArr: string) => deleteExactReqs({ platform: platform.value, idArr }), {
+    onSuccess() {
+        ElMessage({
+            type: 'success',
+            message: '操作成功',
+        });
+        getList();
+    },
+    onError(error) {
+        console.log('error: ', error);
+    },
+});
 
 watch(listControlModel, () => {
     nextTick(getList);
@@ -44,6 +63,34 @@ function handleTabChange(plat: PlatformType) {
 function goDetail(req: RequirementEntity) {
     detail.value = req;
 }
+
+const handleSelectionChange = (selection: any) => {
+    ids.value = selection.map((item: any) => item.id);
+};
+
+const handleBatchDelete = async() => {
+    const idArr = ids.value.map(item => `"${item}"`).join(',');
+    try {
+        await ElMessageBox.confirm('确认删除已选中的需求吗？', '删除', {
+            type: 'warning',
+        });
+        deleteReps(idArr);
+    } catch {
+        noop;
+    }
+};
+
+const handleDelete = async(req: RequirementEntity) => {
+    const idArr = `"${req.id}"`;
+    try {
+        await ElMessageBox.confirm('确认删除此需求吗？', '删除', {
+            type: 'warning',
+        });
+        deleteReps(idArr);
+    } catch {
+        noop;
+    }
+};
 
 onMounted(() => {
     getList();
@@ -91,10 +138,11 @@ onMounted(() => {
             }"
         >
             <template v-slot:search-rest>
+                <el-button type="danger" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
                 <el-button type="primary">下载</el-button>
             </template>
             <div class="flex-1 overflow-y-auto">
-            <ReqList :list="list" @item-detail="goDetail" />
+            <ReqList :loading="loading" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
 
             <FlexRow horizontal="end">
                 <el-pagination

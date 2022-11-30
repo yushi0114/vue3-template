@@ -1,9 +1,14 @@
 <script lang="ts" setup>
+import { ReportType, ReportTypeUrlMap } from '@/enums';
 import { getExactReq, getExactReqScore } from '@/api';
 import type { RequirementEntity } from '@/types';
 import ReqDetail from './ReqDetail.vue';
 import { useApi } from '@/composables';
 import { ScoreResult } from '@/components';
+
+const route = useRoute();
+const router = useRouter();
+const platform = ref(Number(route.params.type));
 
 const props = withDefaults(
     defineProps<{
@@ -30,12 +35,13 @@ function handleOpen() {
     getExactReqScore({
         corpCode: props.content.corpCode,
         corpName: props.content.corpName,
+        platform: platform.value
     })
         .then((res: any) => {
             console.log(res);
             score.result = res.result;
         });
-    request({ id: props.content.id })
+    request({ id: props.content.id, platform: platform.value })
         .then(res => {
             detail.value = res;
         });
@@ -48,6 +54,21 @@ function handleClosed() {
 
 }
 
+const handleViewReport = (type: ReportType) => {
+    const routerUrl = router.resolve({
+        path: ReportTypeUrlMap[type],
+        query: {
+            corpCode: props.content?.corpCode,
+            corpName: props.content?.corpName,
+        }
+    });
+    window.open(routerUrl.href, '_blank');
+};
+
+watch(() => route.params, () => {
+    platform.value = Number(route.params.type);
+});
+
 </script>
 
 <template>
@@ -56,8 +77,8 @@ function handleClosed() {
         <ContentBoard label="企业评分信息">
             <template #label-rest>
                 <FlexRow>
-                    <el-button size="small">征信报告</el-button>
-                    <el-button size="small">信用评分详情</el-button>
+                    <el-button size="small" @click="handleViewReport(ReportType.CREDIT)">征信报告</el-button>
+                    <el-button size="small" @click="handleViewReport(ReportType.SCORE)">信用评分详情</el-button>
                 </FlexRow>
             </template>
 

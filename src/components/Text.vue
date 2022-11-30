@@ -184,22 +184,22 @@ const onMouseEnter = () => {
 }
 
 .i-text-color-paragraph {
-    color: var(--el-text-color-primary);
+    color: var(--i-text-color-primary);
 }
 
 .i-text-color-regular {
-    color: var(--el-text-color-regular);
+    color: var(--i-text-color-regular);
 }
 
 .i-text-color-secondary {
-    color: var(--el-text-color-secondary);
+    color: var(--i-text-color-secondary);
 }
 
 .i-text-color-placeholder {
-    color: var(--el-text-color-placeholder);
+    color: var(--i-text-color-placeholder);
 }
 
 .i-text-color-disabled {
-    color: var(--el-text-color-disabled);
+    color: var(--i-text-color-disabled);
 }
 </style>

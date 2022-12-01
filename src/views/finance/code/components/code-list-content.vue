@@ -1,11 +1,13 @@
 <template>
     <div class="search-box">
-        <el-input class="search-input"
-                  placeholder="请输入搜索内容"
-                  clearable
-                  @keyup.enter="handleSearchList"
-                  @clear="handleClear"
-                  v-model="financeCodeFilterObject.searchInput">
+        <el-input
+            class="search-input"
+            size="large"
+            placeholder="请输入关键字进行搜索"
+            clearable
+            @keyup.enter="handleSearchList"
+            @clear="handleClear"
+            v-model="financeCodeFilterObject.searchInput">
             <template #append>
                 <el-button @click="handleSearchList">
                     <template #icon>
@@ -76,8 +78,8 @@ import type { RoleListItemType } from '@/views/system/type/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     codeList,
-    financeCodeFilterObject,
     deleteFinanceCode,
+    financeCodeFilterObject,
     goCreateFormView,
     goEditFormView,
     setFinanceCodeList
@@ -173,7 +175,7 @@ function handleRemoveItem(item: RoleListItemType) {
     padding: 10px 0;
 
     .search-input {
-        max-width: 220px;
+        max-width: 350px;
     }
 }
 

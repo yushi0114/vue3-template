@@ -85,7 +85,7 @@ import {
     form,
     userTableData
 } from '@/views/system/user/components/user-list';
-import type { UserListItemType } from '@/views/system/type/user-list.type';
+import type { UserListItemType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 
 function formatSortType(value: string) {

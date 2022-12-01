@@ -81,7 +81,7 @@ import {
     resetMenuForm,
     setFormType
 } from './menu-list';
-import type { MenuFormType } from '@/views/system/type/menu-list.type';
+import type { MenuFormType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 import type { ValidateCallback } from '@/utils';
 import { validateIllegalSymbol } from '@/utils';

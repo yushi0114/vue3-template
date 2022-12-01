@@ -1,14 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" clearable v-model="menuFilterText">
-                <template #append>
-                    <el-button @click="handleSearchMenuTree">
-                        <template #icon>
-                            <Icon :name="'ep:search'"></Icon>
-                        </template>
-                    </el-button>
-                </template>
+            <el-input placeholder="请输入搜索内容" clearable v-model="filterText">
             </el-input>
             <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建路由">
                 <template #icon>
@@ -17,11 +10,13 @@
             </el-button>
         </div>
         <el-tree
+            ref="treeRef"
             class="left-tree"
             :data="menuTreeData"
             node-key="id"
             default-expand-all
             @node-click="handleNodeClick"
+            :filter-node-method="filterNode"
             :expand-on-click-node="false">
             <template #default="{ node, data }">
                 <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
@@ -73,23 +68,30 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { TreeItemType } from '@/views/system/type/menu-list.type';
+import type { TreeItemType } from '@/types/system-manage';
 import Icon from '@/components/Icon.vue';
-import { formType, getTreeData, menuFilterText, menuTreeData, resetMenuForm } from './menu-list';
+import { formType, getTreeData, menuTreeData, resetMenuForm } from './menu-list';
+import type { ElTree } from 'element-plus';
 
 const emit = defineEmits(['nodeClickHandle', 'operateTreeItem']);
 
 const activeId = ref();
 
+const treeRef = ref<InstanceType<typeof ElTree>>();
+const filterText = ref('');
+
+watch(filterText, (val) => {
+    treeRef.value!.filter(val);
+});
+
+const filterNode = (value: string, data: TreeItemType) => {
+    if (!value) return true;
+    return data.label.includes(value);
+};
+
 function handleAddNewMenu() {
     formType.value = 'create';
     resetMenuForm();
-}
-
-async function handleSearchMenuTree() {
-    await getTreeData({
-        searchText: menuFilterText.value
-    });
 }
 
 function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {

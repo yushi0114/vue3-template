@@ -90,6 +90,15 @@ async function handleOperateTreeItem(params: {
         border-radius: 4px;
         box-sizing: border-box;
         padding: 15px;
+        &::-webkit-scrollbar {
+            width: 0;
+        }
+
+        &:hover {
+            &::-webkit-scrollbar {
+                width: 8px;
+            }
+        }
     }
 
     .menu-content {

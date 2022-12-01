@@ -7,7 +7,6 @@
             <role-form></role-form>
         </div>
     </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -23,11 +22,13 @@ import { mode } from './role-list';
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
+
     .list-content {
         width: 100%;
         height: 100%;
         overflow-y: auto;
     }
+
     .form-content {
         display: flex;
         justify-content: center;

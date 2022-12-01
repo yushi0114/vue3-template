@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import type { MenuFormType, MenuTabType, TreeItemType } from '@/views/system/type/menu-list.type';
+import type { MenuFormType, MenuTabType, TreeItemType } from '@/types/system-manage';
 import { addMenuApi, deleteMenuApi, getMenuDetailByIdApi, getMenuTreeApi, updateMenuApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
 
@@ -17,7 +17,6 @@ export const menuForm = ref<MenuFormType>({
 });
 export const parentId = ref();
 export const currentMenuId = ref();
-export const menuFilterText = ref();
 export const formType = ref<'create' | 'edit' | 'empty'>('edit');
 
 export function setParentId(value?: string) {

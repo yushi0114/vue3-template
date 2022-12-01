@@ -14,7 +14,7 @@ import iconsResolver from 'unplugin-icons/resolver';
 import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-let proxyHost = '10.0.30.5';
+let proxyHost = '192.168.31.49';
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {

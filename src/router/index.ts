@@ -40,7 +40,7 @@ const routes: RouteRecordRaw[] = [
         ],
     },{
         path: SIGNIN_PATH,
-        name: 'signin',
+        name: 'login',
         component: Signin
     },
     {

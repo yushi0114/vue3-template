@@ -9,7 +9,7 @@ import { useListControlModel, useApi } from '@/composables';
 const route = useRoute();
 const platform = ref(Number(route.params.type));
 const { model: listControlModel, clear: clearModel } = useListControlModel({
-    numberFields: ['progress']
+    numberFields: ['progress'],
 });
 const count = ref(0);
 const list = ref<ProductRequirementEntity[]>([]);
@@ -74,7 +74,6 @@ onMounted(() => {
                     field: 'searchInput'
                 }"
                 :filterOptionsConfigs="[
-                    { label: '产品名称', field: 'orgId', options: productOptions },
                     { label: '机构名称', field: 'orgId', options: topOrgOptions },
                     { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
                 ]"

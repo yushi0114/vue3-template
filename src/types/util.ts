@@ -4,10 +4,11 @@ export interface PlainObject<T = any> {
 export interface PlainOption<T = any> {
     name: string;
     value: T;
+    disabled?: boolean;
 }
 
 export interface ListResponse<T = any> {
-    pageTotal: number,
-    total: number,
-    data: T[]
+    pageTotal: number;
+    total: number;
+    data: T[];
 }

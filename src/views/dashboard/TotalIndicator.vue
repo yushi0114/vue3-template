@@ -1,6 +1,18 @@
 <script lang="ts" setup>
 import Charts from './Charts.vue';
 import type { TotalIndicatorEntity } from '@/types/dashboard';
+import { useTheme } from '@/composables';
+
+const { isDark } = useTheme();
+
+watch(
+    isDark,
+    () => {
+        setTimeout(() => {
+            loadOptions();
+        }, 0);
+    }
+);
 
 const props = withDefaults(
     defineProps<{
@@ -30,19 +42,19 @@ watch(
 const textStyle = {
     rich: {
         a: {
-            color: '#5e5e5e',
+            color: '',
             fontFamily: 'sans-regular, "Microsoft YaHei", "黑体", sans-serif',
             fontSize: 14,
             lineHeight: 22
         },
         b: {
-            color: '#1e1e1e',
+            color: '',
             fontSize: 20,
             lineHeight: 28,
             padding: [14, 0, 0, 0]
         },
         c: {
-            color: '#5e5e5e',
+            color: '',
             fontSize: 12,
             lineHeight: 18,
             padding: [18, 0, 0, 0]
@@ -168,19 +180,28 @@ const loadOptions = () => {
     options.value.series[1].data[1].value = props.data.countSimpleReq + props.data.countProductReq;
     options.value.series[2].data[0].value = props.data.countProductReq;
     options.value.series[2].data[1].value = props.data.countSimpleReq + props.data.countExactReq;
+    options.value.title.map(item => {
+        item.textStyle.rich.a.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-secondary');
+        item.textStyle.rich.b.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-primary');
+        item.textStyle.rich.c.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-secondary');
+    });
 };
 </script>
 
 <template>
-    <el-card :body-style="{ display: 'flex', padding: '24px 32px 28px' }" shadow="never">
+    <Board :style="{ 'flex-direction': 'row', padding: '24px 32px 28px' }">
         <div class="count-user">
-            <div class="item-label">企业总人数</div>
-            <div class="item-value">{{ data.countUser }}</div>
+            <div class="item-label">
+                <Text color="regular" size="sm">企业总人数</Text>
+            </div>
+            <div class="item-value">
+                <Text color="paragraph" size="current">{{ data.countUser }}</Text>
+            </div>
         </div>
         <div class="chart-wrapper">
             <Charts :options="options" :height="78" />
         </div>
-    </el-card>
+    </Board>
 </template>
 
 <style lang="scss" scoped>
@@ -191,14 +212,12 @@ const loadOptions = () => {
     border-right: 1px solid #dcdfe6;
 
     .item-label {
-        @include font(14px);
         margin-bottom: 7px;
         color: #5e5e5e;
     }
 
     .item-value {
         line-height: 38px;
-        color: #1e1e1e;
         font-size: 30px;
     }
 }

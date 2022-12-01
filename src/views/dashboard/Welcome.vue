@@ -13,8 +13,8 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    padding: 35px;
-    height: 150px;
+    padding: 31px;
+    height: 142px;
     background: url(@/assets/images/home-banner.png) no-repeat top -44px right -40px, linear-gradient(rgb(58, 149, 255) 0%, rgb(27, 92, 255) 100%);
     background-size: 631px 451px;
     border-radius: 8px;

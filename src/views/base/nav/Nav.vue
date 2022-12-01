@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { useDark } from '@vueuse/core';
+import { useTheme } from '@/composables';
 import { Moon, Sunny } from '@element-plus/icons-vue';
 import NavUserProfile from './NavUserProfile.vue';
 
-
-const isDark = useDark();
+const { isDark } = useTheme();
 </script>
 
 <template>

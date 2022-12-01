@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { Top } from '@element-plus/icons-vue';
 import { getReport } from '@/api/report';
 import { useUserStore } from '@/stores';
 
@@ -215,9 +214,7 @@ const print = () => {
                     <punish :punish="reportList.punish"></punish>
                     <abnormal :abnormal="reportList.abnormal"></abnormal>
 
-                    <el-backtop :bottom="100">
-                        <el-icon><Top /></el-icon>
-                    </el-backtop>
+                    <el-backtop :bottom="100"></el-backtop>
 
                     <img class="report-print" src="@/assets/images/print.png" @click="print()">
                 </div>

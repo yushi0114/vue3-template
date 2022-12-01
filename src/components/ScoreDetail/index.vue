@@ -160,9 +160,7 @@ const print = () => {
                         </div>
                     </div>
 
-                    <el-backtop :bottom="100">
-                        <el-icon><Top /></el-icon>
-                    </el-backtop>
+                    <el-backtop :bottom="100"></el-backtop>
 
                     <img class="score-print" src="@/assets/images/print.png" @click="print()">
                 </div>

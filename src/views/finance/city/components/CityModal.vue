@@ -184,6 +184,7 @@ const cityRules = reactive<FormRules>({
                     <el-input
                         ref="isFocused"
                         v-model.trim="cityForm.name"
+                        size="large"
                         :maxlength="10"
                         show-word-limit
                         placeholder="请输入城市名称"
@@ -193,6 +194,7 @@ const cityRules = reactive<FormRules>({
                 <el-form-item label="行政区划代码" prop="code">
                     <el-input
                         v-model.trim="cityForm.code"
+                        size="large"
                         :minlength="6"
                         :maxlength="6"
                         show-word-limit
@@ -203,6 +205,7 @@ const cityRules = reactive<FormRules>({
                 <el-form-item label="排序" prop="sort">
                     <el-input
                         v-model.trim="cityForm.sort"
+                        size="large"
                         :maxlength="3"
                         show-word-limit
                         placeholder="请输入排序"

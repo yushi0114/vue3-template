@@ -17,27 +17,38 @@
             </el-button>
         </div>
     </div>
-
 </template>
 
 <script lang="ts" setup>
-import { currentInstitutionId, institutionItemData, treeToArr, typeMenuTree, updateOrg } from '../finance-institution';
+import {
+    currentInstitutionId,
+    institutionItemData,
+    typeMenuTree,
+    getOrgMenuCheckedIds,
+    treeToArr,
+    updateOrg, currentCategoryId, setTypeMenuTree
+} from '../finance-institution';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 import { LoadingService } from '@/views/system/loading-service';
 import { ref, watchEffect } from 'vue';
-import { getOrgMenuCheckedIdsApi } from '@/api/finance/finance-institution';
 import { ElMessage } from 'element-plus';
 
 const menuTreeTemplateRef = ref();
 const defaultCheckedKey = ref<string[]>([]);
 
-watchEffect(() => {
+watchEffect(async () => {
     if (currentInstitutionId.value) {
-        getOrgMenuCheckedIdsApi({ id: currentInstitutionId.value }).then((data) => {
-            console.log(data);
+        if (!currentCategoryId.value) {
+            return;
+        }
+        await setTypeMenuTree({
+            id: currentCategoryId.value
+        });
+        const data = await getOrgMenuCheckedIds(currentInstitutionId.value);
+        if (data) {
             menuTreeTemplateRef.value?.setCheckedKeys([]);
             defaultCheckedKey.value = data;
-        });
+        }
     }
 });
 

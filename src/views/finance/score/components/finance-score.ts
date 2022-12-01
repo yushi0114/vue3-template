@@ -1,6 +1,6 @@
 import { ref } from 'vue';
-import type { FinanceScoreListItemType } from '@/views/finance/type/finance-score.type';
-import { getFinanceScoreList } from '@/api/finance/finance-score';
+import type { FinanceScoreListItemType } from '@/types/finance';
+import { getFinanceScoreListApi } from '@/api/finance/finance-score';
 
 
 export const listData = ref<{
@@ -37,7 +37,7 @@ export function resetFilterObject() {
 
 export async function getPageList(): Promise<void> {
     return new Promise((resolve) => {
-        getFinanceScoreList({
+        getFinanceScoreListApi({
             pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
             searchInput: filterObject.value.searchInput,

@@ -1,11 +1,12 @@
-import type { FinanceCategoryListItemType } from '@/views/finance/type/finance-category.type';
 import { ref } from 'vue';
 import type {
+    FinanceCategoryListItemType,
     FinanceInstitutionMenuTreeItemType,
     FinanceInstitutionTreeItemType,
-    FinanceInstitutionType
-} from '@/views/finance/type/finance-institution.type';
-import { getOrgTypeDic } from '@/api/finance/finance-category';
+    FinanceInstitutionType,
+    OrgDetailTabViewType
+} from '@/types/finance';
+import { getOrgTypeDicApi } from '@/api/finance/finance-category';
 import {
     addOrgApi,
     deleteOrgApi,
@@ -13,13 +14,18 @@ import {
     getFinanceInstitutionDicApi,
     getFinanceInstitutionTreeApi,
     getFinanceTypeMenuTreeByIdApi,
+    getOrgMenuCheckedIdsApi,
     refreshOrgKeyApi,
     updateOrgApi
 } from '@/api/finance/finance-institution';
 import { ElMessage } from 'element-plus';
+import { getRolePageList } from '@/views/finance/institution/components/institution-role/institution-role';
+import { getUserPageList } from '@/views/finance/institution/components/institution-user/institution-user';
 
 // 机构分类列表
 export const categoryList = ref<FinanceCategoryListItemType[]>();
+// 当前机构分类id
+export const currentCategoryId = ref<string>();
 // 当前类型下的机构树
 export const institutionTreeData = ref<FinanceInstitutionTreeItemType[]>();
 // 当前被选中的机构信息
@@ -27,11 +33,12 @@ export const institutionItemData = ref<FinanceInstitutionType>();
 // 当前类型下的全量菜单树
 export const typeMenuTree = ref<FinanceInstitutionMenuTreeItemType[]>([]);
 export const mode = ref<'form' | 'board'>('board');
-export const activeInstitutionName = ref<'menuList' | 'roleList' | 'userList'>('menuList');
+export const activeInstitutionName = ref<OrgDetailTabViewType>('menuList');
 export const activeName = ref();
+// 当前被选中的机构id
 export const currentInstitutionId = ref();
 
-export function setCurrentMenuId(value?: string) {
+export function setCurrentInstitutionId(value?: string) {
     currentInstitutionId.value = value;
 }
 
@@ -91,13 +98,141 @@ export const willDeleteOrgIdList = ref<{
     id: string;
     orgLevel: number;
 }[]>();
+// 待删除机构名
 export const willDeleteOrgName = ref<string>();
+// 是否展示删除机构弹窗
 export const isDeleteOrgModelShow = ref();
 
-export function resetDeleteMessage() {
+export function resetDeleteOrgMessage() {
     isDeleteOrgModelShow.value = false;
     willDeleteOrgIdList.value = [];
     willDeleteOrgName.value = '';
+}
+
+export async function goBoardView() {
+    mode.value = 'board';
+    currentInstitutionId.value = undefined;
+    institutionItemData.value = undefined;
+    resetInstitutionForm();
+    await getInstitutionTree(activeName.value);
+    await setTypeMenuTree({
+        id: categoryList.value?.find(item => item.code === activeName.value)?.id!
+    });
+}
+
+export async function goCreateFirstLevelFormView() {
+    willCreateOrEditInstitutionData.value = {
+        level: 1
+    };
+    resetInstitutionForm();
+    await getInstitutionDic();
+    if (!currentCategoryId.value) {
+        return;
+    }
+    await setTypeMenuTree({
+        id: currentCategoryId.value
+    });
+    mode.value = 'form';
+}
+
+export async function goCreateChildLevelFormView(id: string) {
+    resetInstitutionForm();
+    await getInstitutionItem(id);
+    if (!currentCategoryId.value) {
+        return;
+    }
+    await setTypeMenuTree({
+        id: currentCategoryId.value
+    });
+    if (institutionItemData.value) {
+        willCreateOrEditInstitutionData.value = {
+            parentId: id,
+            level: institutionItemData.value?.orgLevel + 1
+        };
+    }
+    await getInstitutionDic();
+    mode.value = 'form';
+}
+
+export async function goEditFormView(id: string) {
+    resetInstitutionForm();
+    await getInstitutionItem(id);
+    if (!currentCategoryId.value) {
+        return;
+    }
+    await setTypeMenuTree({
+        id: currentCategoryId.value
+    });
+    if (institutionItemData.value) {
+        setInstitutionForm(institutionItemData.value);
+        willCreateOrEditInstitutionData.value = {
+            id: institutionItemData.value?.id,
+            level: institutionItemData.value?.orgLevel
+        };
+    }
+    await getInstitutionDic();
+    mode.value = 'form';
+}
+
+export function openRemoveView(item: FinanceInstitutionTreeItemType) {
+    resetDeleteOrgMessage();
+    willDeleteOrgIdList.value = lookForAllId([item], []);
+    isDeleteOrgModelShow.value = true;
+    willDeleteOrgName.value = item.orgName;
+}
+
+export async function selectOrgItem(id: string) {
+    setCurrentInstitutionId(id);
+    activeInstitutionName.value = 'menuList';
+    await getInstitutionItem(id);
+    await getRolePageList(id);
+    await getUserPageList(id);
+}
+
+export async function changeOrgTypeView(currentTab: string) {
+    mode.value = 'board';
+    currentInstitutionId.value = undefined;
+    institutionItemData.value = undefined;
+    activeInstitutionName.value = 'menuList';
+    resetInstitutionForm();
+    await getInstitutionTree(currentTab);
+    if (!categoryList.value?.length) {
+        return;
+    }
+    const currentCategory = categoryList.value.find(item => item.code === currentTab);
+    if (!currentCategory) {
+        return;
+    }
+    currentCategoryId.value = currentCategory.id;
+    await setTypeMenuTree({
+        id: currentCategoryId.value
+    });
+}
+
+export async function initInstitutionPage() {
+    await getCategoryList();
+    if (!categoryList.value) {
+        return;
+    }
+    currentCategoryId.value = categoryList.value[0].id;
+    await setTypeMenuTree({
+        id: currentCategoryId.value
+    });
+    activeName.value = categoryList.value[0].code;
+    await getInstitutionTree();
+}
+
+
+export async function changeOrgDetailTabView(view: OrgDetailTabViewType) {
+    if (view === 'menuList') {
+        console.log('do first');
+    }
+    if (view === 'roleList') {
+        await getRolePageList(currentInstitutionId.value);
+    }
+    if (view === 'userList') {
+        await getUserPageList(currentInstitutionId.value);
+    }
 }
 
 // 树形结构转换为数组
@@ -131,6 +266,16 @@ export function lookForAllId(data: any[], arr: any[]): {
         if (item.children && item.children.length) lookForAllId(item.children, arr);
     }
     return arr;
+}
+
+export async function getOrgMenuCheckedIds(id: string): Promise<string[] | undefined> {
+    return new Promise((resolve) => {
+        getOrgMenuCheckedIdsApi({ id }).then((data) => {
+            resolve(data);
+        }).catch(() => {
+            resolve(undefined);
+        });
+    });
 }
 
 export async function getInstitutionTree(type?: string): Promise<void> {
@@ -181,7 +326,7 @@ export async function getInstitutionItem(id: string): Promise<void> {
 
 export async function getCategoryList(): Promise<void> {
     return new Promise((resolve) => {
-        getOrgTypeDic().then(data => {
+        getOrgTypeDicApi().then(data => {
             categoryList.value = data;
             resolve();
         });
@@ -238,7 +383,7 @@ export async function updateOrg(params: {
     });
 }
 
-export async function deleteInstitution(params: {
+export async function deleteOrg(params: {
     orgIdArr: {
         id: string;
         orgLevel: number;

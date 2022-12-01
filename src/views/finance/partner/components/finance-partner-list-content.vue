@@ -87,7 +87,7 @@ import {
     resetFilterObject,
     resetForm
 } from '@/views/finance/partner/components/finance-partner';
-import type { FinancePartnerListItemType } from '@/views/finance/type/finance-parnter.type';
+import type { FinancePartnerListItemType } from '@/types/finance';
 import { dataURLToFile } from '@/utils';
 
 function formatSortType(value: string) {

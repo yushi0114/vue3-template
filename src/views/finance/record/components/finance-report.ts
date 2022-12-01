@@ -1,6 +1,6 @@
 import { ref } from 'vue';
-import type { FinanceReportListItemType } from '@/views/finance/type/finance-record.type';
-import { getFinanceReportList } from '@/api/finance/finance-report';
+import type { FinanceReportListItemType } from '@/types/finance';
+import { getFinanceReportListApi } from '@/api/finance/finance-report';
 
 
 export const listData = ref<{
@@ -37,7 +37,7 @@ export function resetFilterObject() {
 
 export async function getPageList(): Promise<void> {
     return new Promise((resolve) => {
-        getFinanceReportList({
+        getFinanceReportListApi({
             pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
             searchInput: filterObject.value.searchInput,

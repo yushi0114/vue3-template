@@ -12,7 +12,7 @@
                 <i class="el-icon-key"></i>
                 机构密钥
             </template>
-            <el-button disabled type="text" size="small" class="secret">
+            <el-button link disabled size="small" class="secret">
                 {{ institutionItemData.secretKey }}
             </el-button>
             <el-button
@@ -20,7 +20,7 @@
                 plain
                 size="small"
                 :disabled="institutionItemData.status === 0"
-                @click="copyHandle(institutionItemData.secretKey)">
+                @click="handleCopySecretKey(institutionItemData.secretKey)">
                 <template #icon>
                     <Icon :name="'ep:document-copy'"></Icon>
                 </template>
@@ -31,11 +31,10 @@
                 plain
                 size="small"
                 :disabled="institutionItemData.status === 0"
-                @click="refreshSecret">
+                @click="handleRefreshSecretKey">
                 <template #icon>
                     <Icon :name="'ep:refresh'"></Icon>
                 </template>
-
                 刷新
             </el-button>
         </el-descriptions-item>
@@ -50,12 +49,12 @@
 </template>
 
 <script lang="ts" setup>
-import { currentInstitutionId, getInstitutionItem, institutionItemData, refreshSecretKey } from './finance-institution';
-import { ElMessageBox } from 'element-plus';
+import { currentInstitutionId, institutionItemData, getInstitutionItem, refreshSecretKey } from './finance-institution';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import { LoadingService } from '@/views/system/loading-service';
 
-function copyHandle(params: string) {
+function handleCopySecretKey(params: string) {
     let input = document.createElement('input');
     input.value = params;
     document.body.appendChild(input);
@@ -68,7 +67,7 @@ function copyHandle(params: string) {
     });
 }
 
-function refreshSecret() {
+function handleRefreshSecretKey() {
     ElMessageBox.confirm(
         `确定刷新“${institutionItemData.value?.orgName}”的机构密钥吗？刷新后金融栈应用服务平台将无法登录，请及时通知金融机构新的机构密钥！`,
         '提示',
@@ -79,21 +78,27 @@ function refreshSecret() {
             type: 'warning'
         }
     ).then(async () => {
+        LoadingService.getInstance().loading();
         await refreshSecretKey({
             id: currentInstitutionId.value
         });
-        LoadingService.getInstance().loading();
         await getInstitutionItem(currentInstitutionId.value);
         LoadingService.getInstance().stop();
     }).catch(() => {
+        ElMessage({
+            type: 'info',
+            message: '放弃更新机构密钥！',
+        });
     });
 }
 </script>
 
 <style scoped lang="scss">
-.el-descriptions ::v-deep .el-descriptions-item__label {
-    width: 100px;
-    min-width: 100px;
+.el-descriptions {
+    &::v-deep(.el-descriptions-item__label) {
+        width: 100px;
+        min-width: 100px;
+    }
 }
 
 .secret {

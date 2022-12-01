@@ -75,38 +75,29 @@
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
-    codeForm,
     codeList,
-    currentCodeId,
     financeCodeFilterObject,
-    formType,
-    mode,
-    setCityCodeList,
-    setFinanceCodeList,
-    setOrgTypeCodeList
+    deleteFinanceCode,
+    goCreateFormView,
+    goEditFormView,
+    setFinanceCodeList
 } from './code-list';
 import { LoadingService } from '@/views/system/loading-service';
-import type { FinanceCodeListItemType } from '@/views/finance/type/finance-code.type';
-import { deleteFinanceCodeApi } from '@/api/finance/finance-code';
+import type { FinanceCodeListItemType } from '@/types/finance';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
+async function handleCreateNewItem() {
+    LoadingService.getInstance().loading();
+    await goCreateFormView();
+    LoadingService.getInstance().stop();
+}
+
 async function handleEditItem(item: FinanceCodeListItemType) {
     LoadingService.getInstance().loading();
-    mode.value = 'form';
-    formType.value = 'edit';
-    currentCodeId.value = item.id;
-    await setOrgTypeCodeList();
-    await setCityCodeList();
-    codeForm.value = {
-        cityCode: item.cityCode,
-        orgCode: item.orgCode,
-        orgName: item.orgName,
-        orgTypeCode: item.orgTypeCode,
-        address: item.address
-    };
+    await goEditFormView(item);
     LoadingService.getInstance().stop();
 }
 
@@ -119,7 +110,6 @@ async function handleClear() {
 }
 
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
-    console.log(params);
     LoadingService.getInstance().loading();
     financeCodeFilterObject.currentPage = 1;
     financeCodeFilterObject.currentSize = 10;
@@ -151,13 +141,6 @@ async function handleSizeChange(item: number) {
     LoadingService.getInstance().stop();
 }
 
-async function handleCreateNewItem() {
-    mode.value = 'form';
-    formType.value = 'create';
-    await setOrgTypeCodeList();
-    await setCityCodeList();
-}
-
 function handleRemoveItem(item: RoleListItemType) {
     ElMessageBox.confirm(
         '确定要删除当前机构编码吗？',
@@ -169,14 +152,8 @@ function handleRemoveItem(item: RoleListItemType) {
         }
     )
         .then(async () => {
-            await deleteFinanceCodeApi({
-                id: item.id
-            });
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
-            });
             LoadingService.getInstance().loading();
+            await deleteFinanceCode(item.id);
             await setFinanceCodeList();
             LoadingService.getInstance().stop();
         })

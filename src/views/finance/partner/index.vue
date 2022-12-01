@@ -16,7 +16,7 @@ import { activeName, getPageList, filterObject, mode } from '@/views/finance/par
 import type { TabsPaneContext } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
 import { onMounted } from 'vue';
-import type { FinancePartnerTabType } from '@/views/finance/type/finance-parnter.type';
+import type { FinancePartnerTabType } from '@/types/type/finance-parnter.type';
 import FinancePartnerConfig from './components/finance-partner-config.vue';
 
 async function handleClick(tab: TabsPaneContext) {

@@ -2,7 +2,7 @@ import type {
     AddFinancePartnerType,
     DeleteFinancePartnerType, FinancePartnerListItemType, GetFinancePartnerListType,
     UpdateFinancePartnerType
-} from '@/views/finance/type/finance-parnter.type';
+} from '@/types/finance';
 import { api } from '@/api';
 import { DMS_DOMAIN } from '@/api/const';
 

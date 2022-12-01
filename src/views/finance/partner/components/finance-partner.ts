@@ -7,7 +7,7 @@ import type {
     FinancePartnerFormType,
     FinancePartnerListItemType,
     FinancePartnerTabType
-} from '@/views/finance/type/finance-parnter.type';
+} from '@/types/finance';
 
 
 export const activeName = ref<FinancePartnerTabType>('zjfw');

@@ -85,29 +85,23 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import {
-    activeName,
-    categoryList,
     createOrg,
-    currentInstitutionId,
-    getInstitutionTree,
+    goBoardView,
     institutionForm,
-    institutionItemData,
-    mode,
     orgDic,
-    resetInstitutionForm,
-    setTypeMenuTree,
     treeToArr,
     typeMenuTree,
     updateOrg,
     willCreateOrEditInstitutionData
 } from './finance-institution';
 import type { ValidateCallback } from '@/utils';
+import { validateIllegalSymbol } from '@/utils';
 import type { FormInstance } from 'element-plus';
 import { ElMessage } from 'element-plus';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 import { LoadingService } from '@/views/system/loading-service';
 
-const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
+function sortValidator(rule: any, value: any, callback: ValidateCallback) {
     if (!value) {
         return callback(new Error('排序只能为1-999的整数！'));
     }
@@ -116,7 +110,7 @@ const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
     } else {
         callback();
     }
-};
+}
 const orgUIList = computed(() => orgDic.value.map(item => ({
     ...item,
     value: item.id,
@@ -125,14 +119,22 @@ const orgUIList = computed(() => orgDic.value.map(item => ({
 const institutionFormRef = ref();
 const institutionMenuTree = ref();
 const institutionRules = ref({
-    orgDictionaryId: [{ required: true, trigger: 'change', message: '请选择机构' }],
-    orgCode: [{ required: true, trigger: 'change', message: '请输入机构编码' }],
+    orgDictionaryId: [
+        { required: true, trigger: 'change', message: '请选择机构' },
+        validateIllegalSymbol
+    ],
+    orgCode: [
+        { required: true, trigger: 'change', message: '请输入机构编码' },
+        validateIllegalSymbol
+    ],
     sort: [
         { required: true, trigger: 'change', message: '请输入序号' },
-        { required: true, validator: validateSort, trigger: 'change' }
+        { required: true, validator: sortValidator, trigger: 'change' },
+        validateIllegalSymbol
     ],
     desc: [
-        { min: 0, max: 255, message: '描述长度不能超过255个字符', trigger: 'change' }
+        { min: 0, max: 255, message: '描述长度不能超过255个字符', trigger: 'change' },
+        validateIllegalSymbol
     ]
 });
 
@@ -141,14 +143,13 @@ function getInstitutionCode(value: string) {
 }
 
 function resetInstitutionCode() {
-
+    institutionForm.value.orgCode = '';
 }
 
-function goBack() {
-    mode.value = 'board';
-    currentInstitutionId.value = undefined;
-    institutionItemData.value = undefined;
-    resetInstitutionForm();
+async function goBack() {
+    LoadingService.getInstance().loading();
+    await goBoardView();
+    LoadingService.getInstance().stop();
 }
 
 async function submitForm(formEl: FormInstance | undefined) {
@@ -156,8 +157,6 @@ async function submitForm(formEl: FormInstance | undefined) {
     await formEl.validate(async (valid) => {
         if (valid) {
             await createOrEditInstitution();
-        } else {
-            // todo
         }
     });
 }
@@ -178,6 +177,7 @@ async function createOrEditInstitution() {
         }
         return { ...items, selected };
     });
+    LoadingService.getInstance().loading();
     if (willCreateOrEditInstitutionData.value.id) {
         await updateOrg({
             id: willCreateOrEditInstitutionData.value.id,
@@ -199,13 +199,7 @@ async function createOrEditInstitution() {
             menuArr: newTreeMenu
         });
     }
-    mode.value = 'board';
-    institutionItemData.value = undefined;
-    LoadingService.getInstance().loading();
-    await getInstitutionTree(activeName.value);
-    await setTypeMenuTree({
-        id: categoryList.value?.find(item => item.code === activeName.value)?.id!
-    });
+    await goBoardView();
     LoadingService.getInstance().stop();
 }
 

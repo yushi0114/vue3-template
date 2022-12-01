@@ -1,6 +1,6 @@
 import { ref } from 'vue';
-import { getFinanceOrgUserList } from '@/api/finance/finance-org-user';
-import type { FinanceOrgUserListItemType } from '@/views/finance/type/finance-org-user.type';
+import { getFinanceOrgUserListApi } from '@/api/finance/finance-org-user';
+import type { FinanceOrgUserListItemType } from '@/types/finance';
 
 
 export const listData = ref<{
@@ -37,7 +37,7 @@ export function resetFilterObject() {
 
 export async function getPageList(): Promise<void> {
     return new Promise((resolve) => {
-        getFinanceOrgUserList({
+        getFinanceOrgUserListApi({
             pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
             searchInput: filterObject.value.searchInput,

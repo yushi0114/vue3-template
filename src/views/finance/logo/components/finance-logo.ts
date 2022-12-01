@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { getFinanceLogoList } from '@/api/finance/finance-logo';
-import type { FinanceLogoListItemType } from '@/views/finance/type/finance-logo.type';
+import type { FinanceLogoListItemType } from '@/types/finance';
 
 
 export const listData = ref<{

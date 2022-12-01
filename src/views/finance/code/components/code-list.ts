@@ -1,8 +1,13 @@
 import { reactive, ref } from 'vue';
-import { addFinanceCodeApi, getFinanceCodeListApi, updateFinanceCodeApi } from '@/api/finance/finance-code';
-import type { FinanceCodeFormType, FinanceCodeListItemType } from '@/views/finance/type/finance-code.type';
-import { getAllCityList } from '@/api/finance/finance-city';
-import { getOrgTypeDic } from '@/api/finance/finance-category';
+import {
+    addFinanceCodeApi,
+    deleteFinanceCodeApi,
+    getFinanceCodeListApi,
+    updateFinanceCodeApi
+} from '@/api/finance/finance-code';
+import type { FinanceCodeFormType, FinanceCodeListItemType } from '@/types/finance';
+import { getAllCityListApi } from '@/api/finance/finance-city';
+import { getOrgTypeDicApi } from '@/api/finance/finance-category';
 import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
 
@@ -11,8 +16,11 @@ export const cityCodeList = ref();
 export const orgTypeCodeList = ref();
 export const currentCodeId = ref<string>();
 export const codeForm = ref<FinanceCodeFormType>({
-    address: '', cityCode: '', orgCode: '', orgName: '', orgTypeCode: ''
-
+    address: '',
+    cityCode: '',
+    orgCode: '',
+    orgName: '',
+    orgTypeCode: ''
 });
 export const formType = ref<'create' | 'edit'>('edit');
 
@@ -48,9 +56,31 @@ export async function handleGoBack() {
 }
 
 
+export async function goCreateFormView() {
+    mode.value = 'form';
+    formType.value = 'create';
+    await setOrgTypeCodeList();
+    await setCityCodeList();
+}
+
+export async function goEditFormView(item: FinanceCodeListItemType) {
+    mode.value = 'form';
+    formType.value = 'edit';
+    currentCodeId.value = item.id;
+    await setOrgTypeCodeList();
+    await setCityCodeList();
+    codeForm.value = {
+        cityCode: item.cityCode,
+        orgCode: item.orgCode,
+        orgName: item.orgName,
+        orgTypeCode: item.orgTypeCode,
+        address: item.address
+    };
+}
+
 export async function setCityCodeList(): Promise<void> {
     return new Promise((resolve) => {
-        getAllCityList().then(data => {
+        getAllCityListApi().then(data => {
             cityCodeList.value = data.data.map(item => ({
                 ...item,
                 label: item.name,
@@ -65,7 +95,7 @@ export async function setCityCodeList(): Promise<void> {
 
 export async function setOrgTypeCodeList(): Promise<void> {
     return new Promise((resolve) => {
-        getOrgTypeDic().then(data => {
+        getOrgTypeDicApi().then(data => {
             orgTypeCodeList.value = data.map(item => ({
                 ...item,
                 label: item.name,
@@ -105,6 +135,22 @@ export async function updateFinanceCode(): Promise<void> {
             ElMessage({
                 type: 'success',
                 message: '更新成功',
+            });
+        }).finally(() => {
+            resolve();
+        });
+    });
+}
+
+
+export async function deleteFinanceCode(id: string): Promise<void> {
+    return new Promise((resolve) => {
+        deleteFinanceCodeApi({
+            id
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
             });
         }).finally(() => {
             resolve();

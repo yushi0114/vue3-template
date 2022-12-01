@@ -24,10 +24,14 @@
     </div>
     <el-table :data="listData.list" style="width: 100%"
               @sort-change="handleSortChange"
-              :default-sort="{ prop: 'updateTime', order: 'descending' }">
-        <el-table-column prop="name" label="姓名" width="180"/>
-        <el-table-column prop="account" label="手机号" width="180"/>
-        <el-table-column prop="roleName" label="角色" width="180"></el-table-column>
+              :default-sort="{ prop: 'updateTime', order: 'descending' }"
+              :header-cell-style="{
+                    color: '#595959',
+                    'background-color': '#f3f4f8'
+                }">
+        <el-table-column prop="name" label="姓名"/>
+        <el-table-column prop="account" label="手机号"/>
+        <el-table-column prop="roleName" label="角色"></el-table-column>
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
         <el-table-column prop="createBy" label="创建人"/>
@@ -36,8 +40,7 @@
                 <el-button
                     type="primary"
                     size="small"
-                    @click.prevent="handleEditItem(scope.row)"
-                >
+                    @click.prevent="handleEditItem(scope.row)">
                     <template #icon>
                         <Icon :name="'ep:edit'"></Icon>
                     </template>
@@ -45,9 +48,7 @@
                 <el-button
                     type="danger"
                     size="small"
-                    @click.prevent="handleRemoveItem(scope.row
-            )"
-                >
+                    @click.prevent="handleRemoveItem(scope.row)">
                     <template #icon>
                         <Icon :name="'ep:delete'"></Icon>
                     </template>
@@ -85,6 +86,7 @@ import {
 } from './institution-user';
 import type { UserListItemType } from '@/views/system/type/user-list.type';
 import { LoadingService } from '@/views/system/loading-service';
+import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -97,7 +99,7 @@ async function handleSortChange(params: { prop: 'update_time' | 'create_time', o
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = params.prop;
     filterObject.value.sortType = formatSortType(params.order);
-    await getUserPageList();
+    await getUserPageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
 
@@ -105,14 +107,14 @@ async function handleSearchList() {
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
-    await getUserPageList();
+    await getUserPageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
 
 async function handleClear() {
     LoadingService.getInstance().loading();
     resetFilterObject();
-    await getUserPageList();
+    await getUserPageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
 
@@ -142,14 +144,14 @@ async function handleCreateNewItem() {
 async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
     LoadingService.getInstance().loading();
-    await getUserPageList();
+    await getUserPageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
     LoadingService.getInstance().loading();
-    await getUserPageList();
+    await getUserPageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
 
@@ -168,7 +170,7 @@ function handleRemoveItem(item: UserListItemType) {
                 account: item.account,
                 id: item.id
             });
-            await getUserPageList();
+            await getUserPageList(currentInstitutionId.value);
         })
         .catch(() => {
             ElMessage({

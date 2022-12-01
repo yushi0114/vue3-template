@@ -39,8 +39,8 @@ import type { FormInstance, FormRules } from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import { addUser, form, formType, handleGoBack, roleUIList, updateUser } from './institution-user';
 import { LoadingService } from '@/views/system/loading-service';
-import { isPhoneNumber, validateIllegalSymbol } from '@/utils';
 import type { ValidateCallback } from '@/utils';
+import { isPhoneNumber, validateIllegalSymbol } from '@/utils';
 
 const validatePhoneId = (rule: any, value: any, callback: ValidateCallback) => {
     if (!isPhoneNumber(value)) {
@@ -63,7 +63,8 @@ const rules = reactive<FormRules>({
         validateIllegalSymbol
     ],
     roleId: [
-        {required: true, trigger: 'change', message: '角色不能为空'}
+        { required: true, trigger: 'change', message: '角色不能为空' },
+        validateIllegalSymbol
     ]
 });
 

@@ -74,10 +74,10 @@ export async function handleGoBack() {
     mode.value = 'list';
     currentUserId.value = undefined;
     resetUserForm();
-    await getUserPageList();
+    await getUserPageList(currentInstitutionId.value);
 }
 
-export async function getUserPageList(): Promise<void> {
+export async function getUserPageList(orgId: string): Promise<void> {
     return new Promise((resolve) => {
         getFinanceOrgUserRoleList({
             pageIndex: filterObject.value.currentPage,
@@ -85,8 +85,7 @@ export async function getUserPageList(): Promise<void> {
             searchInput: filterObject.value.searchInput,
             sortField: filterObject.value.sortField,
             sortType: filterObject.value.sortType,
-            menuName: '',
-            orgId: currentInstitutionId.value,
+            orgId,
         }).then(data => {
             listData.value.list = data.data;
             listData.value.total = data.pageTotal;

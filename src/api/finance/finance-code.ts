@@ -1,11 +1,14 @@
-import {api} from '@/api';
-import {DMS_DOMAIN} from '@/api/const';
+import { api } from '@/api';
+import { DMS_DOMAIN } from '@/api/const';
 import type {
-    AddFinanceCodeType, DeleteFinanceCodeType,
-    ExportFinanceCodeType, FinanceCodeListItemType,
+    AddFinanceCodeType,
+    DeleteFinanceCodeType,
+    ExportFinanceCodeType,
+    FinanceCodeListItemType,
     GetFinanceCodeListType,
-    ImportFinanceCodeType, UpdateFinanceCodeType
-} from '@/views/finance/type/finance-code.type';
+    ImportFinanceCodeType,
+    UpdateFinanceCodeType
+} from '@/types/finance';
 
 
 export function addFinanceCodeApi(params: AddFinanceCodeType) {
@@ -27,12 +30,12 @@ export function getFinanceCodeListApi(params: GetFinanceCodeListType): Promise<{
     return api.post(`${DMS_DOMAIN}/v1/org/dic/list`, params);
 }
 
-export function exportFinanceCodeList(params: ExportFinanceCodeType) {
+export function exportFinanceCodeListApi(params: ExportFinanceCodeType) {
     return api.post(`${DMS_DOMAIN}/v1/export/org/dic`, {
         params
     });
 }
 
-export function importFinanceCodeList(params: ImportFinanceCodeType) {
+export function importFinanceCodeListApi(params: ImportFinanceCodeType) {
     return api.post(`${DMS_DOMAIN}/v1/import/org/dic`, params);
 }

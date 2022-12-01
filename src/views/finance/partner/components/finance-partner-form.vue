@@ -1,7 +1,13 @@
 <template>
     <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
         <el-form-item label="合作伙伴名称" required prop="name">
-            <el-input v-model="form.name" placeholder="请输入合作伙伴名称" :disabled="formType === 'edit'"/>
+            <el-input
+                v-model="form.name"
+                placeholder="请输入合作伙伴名称"
+                :disabled="formType === 'edit'"
+                :maxlength="255"
+                show-word-limit
+            />
         </el-form-item>
         <el-form-item label="合作伙伴LOGO" required prop="imgUrl">
             <el-upload
@@ -43,7 +49,7 @@ import {
     handleGoBack,
     update
 } from '@/views/finance/partner/components/finance-partner';
-import { blobToDataURL } from '@/utils';
+import { blobToDataURL, validateIllegalSymbol } from '@/utils';
 
 
 const dialogImageUrl = ref();
@@ -92,6 +98,7 @@ const rules = reactive<FormRules>({
     name: [
         { required: true, message: '合作伙伴名称不能为空', trigger: 'blur' },
         { max: 255, message: '合作伙伴名称不能超过255个字符', trigger: 'blur' },
+        validateIllegalSymbol
     ],
     imgUrl: [
         { required: true, message: '合作伙伴LOGO不能为空', trigger: 'change' }

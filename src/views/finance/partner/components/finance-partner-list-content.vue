@@ -2,7 +2,8 @@
     <div class="search-box">
         <el-input
             class="search-input"
-            placeholder="请输入搜索内容"
+            size="large"
+            placeholder="请输入合作伙伴名称进行查询"
             @clear="handleClear"
             clearable
             @keyup.enter="handleSearchList"
@@ -30,8 +31,8 @@
                     color: '#595959',
                     'background-color': '#f3f4f8'
                 }">
-        <el-table-column prop="name" label="伙伴名称"/>
-        <el-table-column prop="imgUrl" label="图片">
+        <el-table-column prop="name" label="合作伙伴"/>
+        <el-table-column prop="imgUrl" label="LOGO">
             <template #default="scope">
                 <el-image style="height: 40px;" :src="scope.row.imgUrl"></el-image>
             </template>
@@ -185,12 +186,7 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
                 tab: activeName.value
             });
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 </script>
@@ -202,7 +198,7 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
     padding: 10px 0;
 
     .search-input {
-        max-width: 220px;
+        width: 350px;
     }
 }
 

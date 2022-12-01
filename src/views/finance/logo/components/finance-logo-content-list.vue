@@ -2,7 +2,8 @@
     <div class="search-box">
         <el-input
             class="search-input"
-            placeholder="请输入搜索内容"
+            size="large"
+            placeholder="请输入机构名称进行查询"
             @clear="handleClear"
             clearable
             @keyup.enter="handleSearchList"
@@ -36,7 +37,7 @@
                 <el-tag type="success">银行</el-tag>
             </template>
         </el-table-column>
-        <el-table-column label="logo">
+        <el-table-column label="LOGO">
             <template #default="scope">
                 <el-image :src="scope.row.logoContent" style="height: 40px"></el-image>
             </template>
@@ -137,7 +138,7 @@ function handleRemoveItem(params: {
     sort: number;
 }) {
     ElMessageBox.confirm(
-        '确定要删除当前logo吗？',
+        `确定删除“${params.orgName}”的机构LOGO吗？`,
         '警告',
         {
             confirmButtonText: '确认',
@@ -210,7 +211,7 @@ async function handleSizeChange(item: number) {
     padding: 10px 0;
 
     .search-input {
-        max-width: 220px;
+        width: 350px;
     }
 }
 

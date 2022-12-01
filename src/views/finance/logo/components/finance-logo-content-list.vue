@@ -9,19 +9,10 @@
             @keyup.enter="handleSearchList"
             v-model="filterObject.searchInput">
             <template #append>
-                <el-button @click="handleSearchList">
-                    <template #icon>
-                        <Icon :name="'ep:search'"></Icon>
-                    </template>
-                </el-button>
+                <el-button :icon="Search" @click="handleSearchList" />
             </template>
         </el-input>
-        <el-button @click="showDialog" type="primary">
-            <template #icon>
-                <Icon :name="'ep:plus'"></Icon>
-            </template>
-            新建
-        </el-button>
+        <el-button type="primary" :icon="Plus" @click="showDialog">新建</el-button>
     </div>
     <el-table
         :data="listData.list" style="width: 100%"
@@ -47,21 +38,8 @@
                 <span class="header-options">操作</span>
             </template>
             <template #default="scope">
-                <el-button
-                    text
-                    @click.prevent="handleEditItem(scope.row)"
-                >
-                    <template #icon>
-                        <Icon :name="'ep:edit'"></Icon>
-                    </template>
-                </el-button>
-                <el-button
-                    text
-                    @click.prevent="handleRemoveItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:delete'"></Icon>
-                    </template>
-                </el-button>
+                <el-button text :icon="EditPen" @click.prevent="handleEditItem(scope.row)" />
+                <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
             </template>
         </el-table-column>
     </el-table>
@@ -85,8 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import Icon from '@/components/Icon.vue';
+import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
 import { LoadingService } from '@/views/system/loading-service';
 import { filterObject, getPageList, listData, resetFilterObject } from './finance-logo';
 import LogoFormModal from '@/views/finance/logo/components/logo-form-modal.vue';

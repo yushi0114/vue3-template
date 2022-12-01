@@ -26,7 +26,6 @@ import {
     resetMenuForm, setFormType, getTreeData, activeName
 } from './menu-list';
 import { LoadingService } from '@/views/system/loading-service';
-import { MenuTabType } from '@/views/system/type/menu-list.type';
 
 async function handleOperateTreeItem(params: {
     id: string,

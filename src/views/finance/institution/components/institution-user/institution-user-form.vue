@@ -37,27 +37,40 @@
 import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import Icon from '@/components/Icon.vue';
-import {
-    addUser,
-    formType,
-    handleGoBack,
-    roleUIList,
-    updateUser,
-    form
-} from './institution-user';
+import { addUser, form, formType, handleGoBack, roleUIList, updateUser } from './institution-user';
 import { LoadingService } from '@/views/system/loading-service';
+import type { ValidateCallback } from '@/utils';
+import { isPhoneNumber, validateIllegalSymbol } from '@/utils';
+
+const validatePhoneId = (rule: any, value: any, callback: ValidateCallback) => {
+    if (!isPhoneNumber(value)) {
+        callback(new Error('请输入正确的手机号码！'));
+    } else {
+        callback();
+    }
+};
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
-    name: [
-        { required: true, message: '请输入用户姓名', trigger: 'blur' },
-        { min: 3, max: 255, message: '用户姓名不能超过255个字符', trigger: 'blur' },
+    account: [
+        { required: true, message: '手机号码不能为空！', trigger: ['blur', 'change'] },
+        { required: true, validator: validatePhoneId, trigger: ['blur', 'change'] },
+        validateIllegalSymbol
     ],
+    name: [
+        { required: true, message: '姓名不能为空！', trigger: ['blur', 'change'] },
+        { min: 0, max: 50, message: '姓名长度不能超过50个字符', trigger: ['blur', 'change'] },
+        validateIllegalSymbol
+    ],
+    roleId: [
+        { required: true, trigger: 'change', message: '角色不能为空' },
+        validateIllegalSymbol
+    ]
 });
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async(valid, fields) => {
+    await formElement.validate(async (valid, fields) => {
         if (valid) {
             LoadingService.getInstance().loading();
             if (formType.value === 'create') {

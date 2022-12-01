@@ -28,3 +28,6 @@ export type FinanceInstitutionType = {
     status: number;
     menuIdArr: string[]
 }
+
+
+export type OrgDetailTabViewType = 'menuList' | 'roleList' | 'userList';

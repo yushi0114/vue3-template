@@ -122,8 +122,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             }
             LoadingService.getInstance().stop();
             await handleGoBack();
-        } else {
-            // todo
         }
     });
 };

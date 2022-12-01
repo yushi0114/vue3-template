@@ -24,9 +24,9 @@
                     color: '#595959',
                     'background-color': '#f3f4f8'
                 }">
-        <el-table-column prop="orgName" label="所属机构" />
-        <el-table-column prop="account" label="手机号码" />
-        <el-table-column prop="name" label="姓名" />
+        <el-table-column prop="orgName" label="所属机构" width="260"/>
+        <el-table-column prop="account" label="手机号码"/>
+        <el-table-column prop="name" label="姓名"/>
         <el-table-column prop="status" label="状态">
 
         </el-table-column>
@@ -49,23 +49,17 @@
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
 import { LoadingService } from '@/views/system/loading-service';
-import {
-    filterObject,
-    getPageList,
-    listData,
-    resetFilterObject
-} from './finance-org-user';
+import { filterObject, getPageList, listData, resetFilterObject } from './finance-org-user';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
-async function handleSortChange(params: { prop: 'update_time' | 'create_ime', order: string }) {
-    console.log(params);
+async function handleSortChange(params: { prop: 'create_ime', order: string }) {
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
-    filterObject.value.sortField = params.prop;
+    filterObject.value.sortField = 'create_time';
     filterObject.value.sortType = formatSortType(params.order);
     await getPageList();
     LoadingService.getInstance().stop();
@@ -87,12 +81,18 @@ async function handleClear() {
 }
 
 
-function handleCurrentChange(item: number) {
+async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
+    LoadingService.getInstance().loading();
+    await getPageList();
+    LoadingService.getInstance().stop();
 }
 
-function handleSizeChange(item: number) {
+async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
+    LoadingService.getInstance().loading();
+    await getPageList();
+    LoadingService.getInstance().stop();
 }
 
 </script>

@@ -73,7 +73,7 @@
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
 import {
     activeName,

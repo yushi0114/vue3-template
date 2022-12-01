@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :model-value="dialogVisible"
-        title="Tips"
+        :title="type === 'create' ? '新建机构LOGO' : '编辑机构LOGO'"
         width="30%"
         :close-on-click-modal="false"
         :modal-append-to-body="true"
@@ -10,7 +10,7 @@
         @close="handleClose">
         <el-form :model="formData" label-width="120px" :rules="rules" ref="ruleFormRef">
             <el-form-item label="机构名称" prop="orgId">
-                <el-select v-model="formData.orgId" placeholder="请选择">
+                <el-select v-model="formData.orgId" placeholder="请选择" :disabled="type === 'edit'">
                     <el-option
                         v-for="(item, index) in firstLevelOrgList"
                         :key="index"
@@ -51,9 +51,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineEmits, defineProps, reactive, ref } from 'vue';
-import type { FormInstance, FormRules, UploadFile, UploadRequestOptions, UploadUserFile } from 'element-plus';
-import { ElMessage } from 'element-plus';
+import { type FormInstance, type FormRules, type UploadFile, type UploadRequestOptions, type UploadUserFile, ElMessage } from 'element-plus';
 import { addLogoApi, getFirstLevelOrgAll, updateLogoApi } from '@/api/finance/finance-logo';
 import { blobToDataURL, dataURLToFile } from '@/utils';
 
@@ -74,6 +72,9 @@ const props = defineProps({
             orgLogoId: string;
             sort: number;
         }>
+    },
+    type: {
+        type: String as PropType<'create' | 'edit'>
     }
 });
 
@@ -154,9 +155,7 @@ async function addLogo(params: {
     orgName: string;
 }): Promise<void> {
     return new Promise((resolve) => {
-        addLogoApi(params).then(data => {
-            firstLevelOrgList.value = data;
-        }).finally(() => {
+        addLogoApi(params).finally(() => {
             resolve();
         });
     });
@@ -169,9 +168,7 @@ async function updateLogo(params: {
     orgName: string;
 }): Promise<void> {
     return new Promise((resolve) => {
-        updateLogoApi(params).then(data => {
-            firstLevelOrgList.value = data;
-        }).finally(() => {
+        updateLogoApi(params).finally(() => {
             resolve();
         });
     });
@@ -179,7 +176,7 @@ async function updateLogo(params: {
 
 async function handleUploadToServer(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async (valid) => {
+    await formElement.validate(async(valid) => {
         if (valid) {
             isLoading.value = true;
             if (props.currentLogo) {
@@ -203,7 +200,7 @@ async function handleUploadToServer(formElement: FormInstance | undefined) {
 }
 
 
-onMounted(async () => {
+onMounted(async() => {
     await setOrgList();
     if (props.currentLogo) {
         fileList.value = [{

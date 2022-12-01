@@ -31,16 +31,23 @@
                     'background-color': '#f3f4f8'
                 }">
         <el-table-column prop="orgName" label="所属机构"/>
-        <el-table-column label="logo">
-            <template #default="scope">
-                <el-image :src="scope.row.logoContent" style="width: 40px; height: 40px"></el-image>
+        <el-table-column label="分类">
+            <template #default>
+                <el-tag type="success">银行</el-tag>
             </template>
         </el-table-column>
-        <el-table-column label="操作" width="180">
+        <el-table-column label="logo">
+            <template #default="scope">
+                <el-image :src="scope.row.logoContent" style="height: 40px"></el-image>
+            </template>
+        </el-table-column>
+        <el-table-column>
+            <template #header>
+                <span class="header-options">操作</span>
+            </template>
             <template #default="scope">
                 <el-button
-                    type="primary"
-                    size="small"
+                    text
                     @click.prevent="handleEditItem(scope.row)"
                 >
                     <template #icon>
@@ -48,8 +55,7 @@
                     </template>
                 </el-button>
                 <el-button
-                    type="danger"
-                    size="small"
+                    text
                     @click.prevent="handleRemoveItem(scope.row)">
                     <template #icon>
                         <Icon :name="'ep:delete'"></Icon>
@@ -72,7 +78,9 @@
         v-if="isDialogShow"
         :dialog-visible="isDialogShow"
         :currentLogo="currentLogo"
-        @close="handleDialogClose"></logo-form-modal>
+        :type="dialogType"
+        @close="handleDialogClose"
+    ></logo-form-modal>
 </template>
 
 <script lang="ts" setup>
@@ -85,6 +93,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { deleteLogoApi } from '@/api/finance/finance-logo';
 
 const isDialogShow = ref<boolean>(false);
+const dialogType = ref<'create' | 'edit'>('create');
 const currentLogo = ref<{
     logoContent: string;
     orgId: string;
@@ -98,7 +107,9 @@ function formatSortType(value: string) {
 }
 
 function showDialog() {
+    dialogType.value = 'create';
     isDialogShow.value = true;
+    currentLogo.value = undefined;
 }
 
 async function handleDialogClose() {
@@ -113,6 +124,7 @@ function handleEditItem(params: {
     orgLogoId: string;
     sort: number;
 }) {
+    dialogType.value = 'edit';
     isDialogShow.value = true;
     currentLogo.value = params;
 }
@@ -133,7 +145,7 @@ function handleRemoveItem(params: {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteLogoApi({
                 id: params.orgLogoId,
                 orgId: params.orgId
@@ -146,12 +158,7 @@ function handleRemoveItem(params: {
             await getPageList();
             LoadingService.getInstance().stop();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 async function handleSortChange(params: { prop: 'create_time', order: string }) {
@@ -211,5 +218,23 @@ async function handleSizeChange(item: number) {
     display: flex;
     justify-content: right;
     padding-top: 10px;
+}
+
+.header-options {
+    padding-left: 8px;
+}
+
+.el-table {
+    :deep(.el-button) {
+        padding: 8px;
+    }
+
+    :deep(.el-icon) {
+        font-size: 16px;
+    }
+
+    :deep(.el-button + .el-button) {
+        margin-left: 0;
+    }
 }
 </style>

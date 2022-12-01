@@ -24,6 +24,7 @@ export type UpdateFinancePartnerType = {
     id: string,
     name: string,
     imgUrl: string,
+    status: number,
     menuName: string
 }
 

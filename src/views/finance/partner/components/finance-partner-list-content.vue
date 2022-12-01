@@ -2,25 +2,17 @@
     <div class="search-box">
         <el-input
             class="search-input"
-            placeholder="请输入搜索内容"
+            size="large"
+            placeholder="请输入合作伙伴名称进行查询"
             @clear="handleClear"
             clearable
             @keyup.enter="handleSearchList"
             v-model="filterObject.searchInput">
             <template #append>
-                <el-button @click="handleSearchList">
-                    <template #icon>
-                        <Icon :name="'ep:search'"></Icon>
-                    </template>
-                </el-button>
+                <el-button :icon="Search" @click="handleSearchList" />
             </template>
         </el-input>
-        <el-button type="primary" @click="handleCreateNewItem">
-            <template #icon>
-                <Icon :name="'ep:plus'"></Icon>
-            </template>
-            新建
-        </el-button>
+        <el-button type="primary" :icon="Plus" @click="handleCreateNewItem">新建</el-button>
     </div>
     <el-table
         :data="listData.list" style="width: 100%"
@@ -30,30 +22,19 @@
                     color: '#595959',
                     'background-color': '#f3f4f8'
                 }">
-        <el-table-column prop="name" label="伙伴名称" width="180"/>
-        <el-table-column prop="imgUrl" label="图片">
+        <el-table-column prop="name" label="合作伙伴"/>
+        <el-table-column prop="imgUrl" label="LOGO">
             <template #default="scope">
                 <el-image style="height: 40px;" :src="scope.row.imgUrl"></el-image>
             </template>
         </el-table-column>
-        <el-table-column label="操作" width="180">
+        <el-table-column>
+            <template #header>
+                <span class="header-options">操作</span>
+            </template>
             <template #default="scope">
-                <el-button
-                    type="primary"
-                    size="small"
-                    @click.prevent="handleEditItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:edit'"></Icon>
-                    </template>
-                </el-button>
-                <el-button
-                    type="danger"
-                    size="small"
-                    @click.prevent="handleRemoveItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:delete'"></Icon>
-                    </template>
-                </el-button>
+                <el-button text :icon="EditPen"  @click.prevent="handleEditItem(scope.row)" />
+                <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
             </template>
         </el-table-column>
     </el-table>
@@ -70,8 +51,8 @@
 </template>
 
 <script lang="ts" setup>
-import Icon from '@/components/Icon.vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
+import { ElMessageBox } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
 import {
     activeName,
@@ -128,6 +109,7 @@ async function handleClear() {
 
 function handleEditItem(item: FinancePartnerListItemType) {
     mode.value = 'form';
+    formType.value = 'edit';
     form.value.name = item.name;
     form.value.imgUrl = item.imgUrl;
     fileList.value = [
@@ -167,7 +149,7 @@ async function handleSizeChange(item: number) {
 
 function handleRemoveItem(item: FinancePartnerListItemType) {
     ElMessageBox.confirm(
-        '确定要删除当前用户吗？',
+        `确定删除“${item.name}”的合作伙伴吗？`,
         '警告',
         {
             confirmButtonText: '确认',
@@ -175,7 +157,7 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await remove({
                 id: item.id
             });
@@ -183,12 +165,7 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
                 tab: activeName.value
             });
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 </script>
@@ -200,7 +177,7 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
     padding: 10px 0;
 
     .search-input {
-        max-width: 220px;
+        width: 350px;
     }
 }
 
@@ -208,5 +185,9 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
     display: flex;
     justify-content: right;
     padding-top: 10px;
+}
+
+.header-options {
+    padding-left: 15px;
 }
 </style>

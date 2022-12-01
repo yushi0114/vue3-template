@@ -181,9 +181,9 @@ const loadOptions = () => {
     options.value.series[2].data[0].value = props.data.countProductReq;
     options.value.series[2].data[1].value = props.data.countSimpleReq + props.data.countExactReq;
     options.value.title.map(item => {
-        item.textStyle.rich.a.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-secondary');
-        item.textStyle.rich.b.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-primary');
-        item.textStyle.rich.c.color = getComputedStyle(document.documentElement).getPropertyValue('--el-text-color-secondary');
+        item.textStyle.rich.a.color = getComputedStyle(document.documentElement).getPropertyValue('--i-text-color-secondary');
+        item.textStyle.rich.b.color = getComputedStyle(document.documentElement).getPropertyValue('--i-text-color-primary');
+        item.textStyle.rich.c.color = getComputedStyle(document.documentElement).getPropertyValue('--i-text-color-secondary');
     });
 };
 </script>

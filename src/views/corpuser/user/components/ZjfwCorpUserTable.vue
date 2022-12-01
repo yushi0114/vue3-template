@@ -32,21 +32,9 @@ onMounted(() => {
     getCorpUserList();
 });
 
-const searchUserList = (isClear: boolean) => {
-    if (isClear) {
-        page.currentPage = 1;
-        getCorpUserList();
-    } else {
-        if (searchInput.value.length >= 2) {
-            page.currentPage = 1;
-            getCorpUserList();
-        } else {
-            ElMessage({
-                type: 'error',
-                message: '输入内容不能少于2个字符',
-            });
-        }
-    }
+const searchUserList = () => {
+    page.currentPage = 1;
+    getCorpUserList();
 };
 
 // 获取列表
@@ -213,11 +201,11 @@ const handleCurrentChange = (val: number) => {
                 v-model.trim="searchInput"
                 size="large"
                 clearable
-                @clear="searchUserList(true)"
-                @keyup.enter="searchUserList(false)"
+                @clear="searchUserList"
+                @keyup.enter="searchUserList"
             >
                 <template #append>
-                    <el-button :icon="Search" @click="searchUserList(false)" />
+                    <el-button :icon="Search" @click="searchUserList" />
                 </template>
             </el-input>
             <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>

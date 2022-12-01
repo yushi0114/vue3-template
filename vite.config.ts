@@ -85,12 +85,12 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                     if (/src\/main.ts$/.test(id)) {
                         if (mode === 'development') {
                             return {
-                                code: `${code};import 'element-plus/dist/index.css';`,
+                                code: `import 'element-plus/dist/index.css';${code};`,
                                 map: null,
                             };
                         } else {
                             return {
-                                code: `${code};import 'element-plus/theme-chalk/el-message-box.css';import 'element-plus/theme-chalk/el-message.css';`,
+                                code: `import 'element-plus/theme-chalk/el-message-box.css';import 'element-plus/theme-chalk/el-message.css';${code};`,
                                 map: null,
                             };
                         }

@@ -84,7 +84,7 @@ import {
     setFinanceCategoryList
 } from './category-list';
 import { LoadingService } from '@/views/system/loading-service';
-import type { FinanceCategoryListItemType } from '@/types/type/finance-category.type';
+import type { FinanceCategoryListItemType } from '@/types/finance';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';

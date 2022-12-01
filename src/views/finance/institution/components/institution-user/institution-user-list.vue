@@ -93,7 +93,6 @@ function formatSortType(value: string) {
 }
 
 async function handleSortChange(params: { prop: 'update_time' | 'create_time', order: string }) {
-    console.log(params);
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;

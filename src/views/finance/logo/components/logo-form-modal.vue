@@ -31,9 +31,9 @@
                     list-type="picture">
                     <el-button type="primary">点击上传</el-button>
                     <template #tip>
-                        <div class="el-upload__tip">
+                        <span class="el-upload__tip" style="margin-left: 16px">
                             只能上传jpg/jpeg/png文件，且不超过2MB
-                        </div>
+                        </span>
                     </template>
                 </el-upload>
             </el-form-item>

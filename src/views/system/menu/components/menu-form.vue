@@ -71,15 +71,12 @@ import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import Icon from '@/components/Icon.vue';
 import {
-    activeName,
     createMenu,
     currentMenuId,
     editMenu,
     formType,
-    getTreeData,
+    goTreeView,
     menuForm,
-    resetMenuForm,
-    setFormType
 } from './menu-list';
 import type { MenuFormType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
@@ -144,8 +141,6 @@ async function submitForm(formElement: FormInstance | undefined) {
                 form: menuForm.value,
                 type: formType.value
             });
-        } else {
-            console.log('error submit!', fields);
         }
     });
 }
@@ -158,21 +153,17 @@ async function handleSaveForm(params: {
     LoadingService.getInstance().loading();
     if (params.type === 'create') {
         await createMenu(params.form);
-        setFormType('edit');
-        await getTreeData({ tab: activeName.value });
     }
     if (params.type === 'edit' && params.id) {
         await editMenu(params.id, params.form);
-        await getTreeData({ tab: activeName.value });
     }
+    await goTreeView();
     LoadingService.getInstance().stop();
 }
 
 async function goBack() {
     LoadingService.getInstance().loading();
-    resetMenuForm();
-    await getTreeData({ tab: activeName.value });
-    formType.value = 'edit';
+    await goTreeView();
     LoadingService.getInstance().stop();
 }
 

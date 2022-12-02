@@ -44,6 +44,27 @@ export function resetMenuForm() {
     };
 }
 
+export async function goTreeView() {
+    resetMenuForm();
+    await getTreeData({ tab: activeName.value });
+    currentMenuId.value = undefined;
+    formType.value = 'empty';
+}
+
+export function goCreateFormView(parentId?: string) {
+    formType.value = 'create';
+    resetMenuForm();
+    if (parentId) {
+        setParentId(parentId);
+    }
+}
+
+export async function goEditFormView(id: string) {
+    setFormType('edit');
+    setCurrentMenuId(id);
+    await getMenuData(id);
+}
+
 export async function getTreeData(params?: {
     tab?: MenuTabType,
     searchText?: string

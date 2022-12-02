@@ -19,11 +19,16 @@
             :filter-node-method="filterNode"
             :expand-on-click-node="false">
             <template #default="{ node, data }">
-                <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
+                <div class="tree-wrap"
+                     @mouseenter="handleMouseEnter(node.id)"
+                     @mouseleave="handleMouseLeave(node.id)">
                     <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ node.label }} </span>
-                    <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start"
-                                trigger="hover"
-                                :width="100">
+                    <el-popover
+                        v-if="node.id === activeId"
+                        class="custom-popover"
+                        placement="right-start"
+                        trigger="hover"
+                        :width="100">
                         <div class="popover-list">
                             <el-button
                                 @click="handleOperateTreeItem(data, 'create')"
@@ -70,7 +75,7 @@
 import { ref } from 'vue';
 import type { TreeItemType } from '@/types/system-manage';
 import Icon from '@/components/Icon.vue';
-import { formType, getTreeData, menuTreeData, resetMenuForm } from './menu-list';
+import { goCreateFormView, menuTreeData } from './menu-list';
 import type { ElTree } from 'element-plus';
 
 const emit = defineEmits(['nodeClickHandle', 'operateTreeItem']);
@@ -79,7 +84,6 @@ const activeId = ref();
 
 const treeRef = ref<InstanceType<typeof ElTree>>();
 const filterText = ref('');
-
 watch(filterText, (val) => {
     treeRef.value!.filter(val);
 });
@@ -90,8 +94,7 @@ const filterNode = (value: string, data: TreeItemType) => {
 };
 
 function handleAddNewMenu() {
-    formType.value = 'create';
-    resetMenuForm();
+    goCreateFormView();
 }
 
 function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {

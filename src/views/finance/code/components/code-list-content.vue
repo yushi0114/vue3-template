@@ -16,12 +16,61 @@
                 </el-button>
             </template>
         </el-input>
-        <el-button type="primary" @click="handleCreateNewItem">
-            <template #icon>
-                <Icon :name="'ep:plus'"></Icon>
-            </template>
-            新建
-        </el-button>
+        <div class="right-control">
+            <el-button @click="handleDownloadExcelTemplate">
+                <template #icon>
+                    <Icon :name="'ep:download'"></Icon>
+                </template>
+                下载Excel模板
+            </el-button>
+            <el-button type="primary" @click="handleCreateNewItem">
+                <template #icon>
+                    <Icon :name="'ep:plus'"></Icon>
+                </template>
+                新建
+            </el-button>
+            <el-dropdown placement="bottom-end">
+                <div class="dropdown-icon">
+                    <Icon style="transform: rotate(90deg)" :name="'ep:more'"></Icon>
+                </div>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item>
+                            <el-upload
+                                action=""
+                                :show-file-list="false"
+                                :http-request="handleUpload"
+                                :before-upload="beforeUpload">
+                                <template #trigger>
+                                    <el-button
+                                        link
+                                        class="custom-btn"
+                                        size="small">
+                                        <template #icon>
+                                            <Icon :name="'ep:upload'"></Icon>
+                                        </template>
+                                        上传
+                                    </el-button>
+                                </template>
+                            </el-upload>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <el-button
+                                @click="handleDownloadList"
+                                link
+                                class="custom-btn"
+                                size="small">
+                                <template #icon>
+                                    <Icon :name="'ep:download'"></Icon>
+                                </template>
+                                下载
+                            </el-button>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
+        </div>
+
     </div>
     <el-table
         :data="codeList.list"
@@ -43,8 +92,7 @@
                 <el-button
                     type="primary"
                     size="small"
-                    @click.prevent="handleEditItem(scope.row)"
-                >
+                    @click.prevent="handleEditItem(scope.row)">
                     <template #icon>
                         <Icon :name="'ep:edit'"></Icon>
                     </template>
@@ -52,8 +100,7 @@
                 <el-button
                     type="danger"
                     size="small"
-                    @click.prevent="handleRemoveItem(scope.row)"
-                >
+                    @click.prevent="handleRemoveItem(scope.row)">
                     <template #icon>
                         <Icon :name="'ep:delete'"></Icon>
                     </template>
@@ -74,14 +121,17 @@
 </template>
 
 <script lang="ts" setup>
-import type { RoleListItemType } from '@/views/system/type/role-list.type';
+import type { UploadRequestOptions } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     codeList,
     deleteFinanceCode,
+    downloadExcelTemplate,
+    exportFinanceCodeList,
     financeCodeFilterObject,
     goCreateFormView,
     goEditFormView,
+    importFinanceCodeList,
     setFinanceCodeList
 } from './code-list';
 import { LoadingService } from '@/views/system/loading-service';
@@ -89,6 +139,31 @@ import type { FinanceCodeListItemType } from '@/types/finance';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
+}
+
+function beforeUpload(file: File) {
+    if (!/\.(xlsx|xls)$/.test(file.name)) {
+        ElMessage({
+            type: 'error',
+            message: '只支持xls或xlsx格式的文件',
+        });
+        return false;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+        ElMessage({
+            type: 'error',
+            message: '文件大小不能超过2MB',
+        });
+        return false;
+    }
+    return true;
+}
+
+async function handleUpload(param: UploadRequestOptions) {
+    LoadingService.getInstance().loading();
+    await importFinanceCodeList(param.file);
+    await setFinanceCodeList();
+    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewItem() {
@@ -101,6 +176,14 @@ async function handleEditItem(item: FinanceCodeListItemType) {
     LoadingService.getInstance().loading();
     await goEditFormView(item);
     LoadingService.getInstance().stop();
+}
+
+async function handleDownloadList() {
+    await exportFinanceCodeList();
+}
+
+async function handleDownloadExcelTemplate() {
+    await downloadExcelTemplate();
 }
 
 async function handleClear() {
@@ -143,7 +226,7 @@ async function handleSizeChange(item: number) {
     LoadingService.getInstance().stop();
 }
 
-function handleRemoveItem(item: RoleListItemType) {
+function handleRemoveItem(item: FinanceCodeListItemType) {
     ElMessageBox.confirm(
         '确定要删除当前机构编码吗？',
         '警告',
@@ -183,5 +266,16 @@ function handleRemoveItem(item: RoleListItemType) {
     display: flex;
     justify-content: right;
     padding-top: 10px;
+}
+
+.right-control {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-icon {
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 4px;
 }
 </style>

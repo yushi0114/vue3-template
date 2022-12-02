@@ -91,7 +91,7 @@ onMounted(() => {
             >
                 <template v-slot:search-rest>
                     <RouterLink :to="`${route.path}/new/1`">
-                        <el-button type="primary"><i-ep-plus />新建</el-button>
+                        <el-button type="primary"><i-ep-download />下载</el-button>
                     </RouterLink>
                 </template>
             </ListQueryControl>

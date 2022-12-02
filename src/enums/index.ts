@@ -6,7 +6,7 @@ export * from './utils';
  * @FilePath: \dms-web\src\enums\index.ts
  * @Author: zys
  * @Date: 2022-11-04 15:03:26
- * @LastEditTime: 2022-12-01 14:47:17
+ * @LastEditTime: 2022-12-02 15:06:18
  * @LastEditors: zys
  * @Reference:
  */
@@ -70,4 +70,11 @@ export enum ELEMENT_TAG_TYPE {
     WARNING = 'warning',
     DANGER = 'danger',
     INFO = 'info',
+}
+
+export enum OPERATE_TYPE {
+    ADD = 'add',
+    EDIT = 'edit',
+    DELETE = 'delete',
+    READ = 'read',
 }

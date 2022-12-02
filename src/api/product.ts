@@ -229,3 +229,113 @@ export function deleteProduct(payload: DeleteProductPayload): Promise<DeleteProd
 }
 
 // #endregion
+
+// #region 判断产品是否在使用
+export type UsingProductPayload = Pick<ProductEntity, 'id'> & {
+    platform?: PlatformType;
+};
+
+export type UsingProductResponse = {};
+
+export function isUsingProduct(payload: UsingProductPayload): Promise<UsingProductResponse> {
+    const url =
+        payload.platform === PlatformType.LiaoXinTong ? '/v1/is/product/using' : '/v1/zjfw/is/product/using';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+
+// #endregion
+
+// #region 新增产品筛选项类别
+export type AddProductFilterPayload = Pick<ProductFilterEntity, 'isFilterShow' | 'typeValue'> & {
+    platform?: PlatformType;
+};
+
+export type AddProductFilterResponse = {};
+
+export function addProductFilter(payload: AddProductFilterPayload): Promise<AddProductFilterResponse> {
+    const url =
+        payload.platform === PlatformType.LiaoXinTong ? '/v1/add/product/type' : '/v1/zjfw/add/product/type';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+
+// #endregion
+
+// #region 新增产品筛选项
+export type AddProductFilterOptionsPayload = Pick<ProductFilterEntity, 'isFilterShow' | 'typeCode' | 'filterValue' | 'typeValue'> & {
+    platform?: PlatformType;
+};
+
+export type AddProductFilterOptionsResponse = {};
+
+export function addProductFilterOptions(payload: AddProductFilterPayload): Promise<AddProductFilterResponse> {
+    const url =
+        payload.platform === PlatformType.LiaoXinTong ? '/v1/add/product/filter' : '/v1/zjfw/add/product/filter';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+
+// #endregion
+
+// #region 修改产品筛选项
+export type UpdateProductFilterPayload = Pick<ProductFilterEntity, 'id' | 'isFilterShow'> & {
+    platform?: PlatformType;
+    typeValue?: ProductFilterEntity['typeValue'];
+    filterValue?: ProductFilterEntity['filterValue'];
+};
+
+export type UpdateProductFilterResponse = {};
+
+export function updateProductFilter(payload: UpdateProductFilterPayload): Promise<UpdateProductFilterResponse> {
+    const url =
+        payload.platform === PlatformType.LiaoXinTong ? '/v1/update/product/filter' : '/v1/zjfw/update/product/filter';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+
+// #endregion
+
+// #region 删除筛选项信息
+export type DeleteProductFilterPayload = Pick<ProductFilterEntity, 'id'> & {
+    platform?: PlatformType;
+};
+
+export type DeleteProductFilterResponse = {};
+
+export function deleteProductFilter(payload: DeleteProductFilterPayload): Promise<DeleteProductFilterResponse> {
+    const url =
+        payload.platform === PlatformType.LiaoXinTong ? '/v1/del/product/filter' : '/v1/zjfw/del/product/filter';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+
+// #endregion
+
+// #region 修改筛选项排序
+export type UpdateProductFilterSortPayload = { data: ProductFilterEntity[] } & {
+    platform?: PlatformType;
+};
+
+export type UpdateProductFilterSortResponse = {};
+
+export function updateProductFilterSort(payload: UpdateProductFilterPayload): Promise<UpdateProductFilterResponse> {
+    const url =
+        payload.platform === PlatformType.LiaoXinTong ? '/v1/update/product/filter/sort' : '/v1/zjfw/update/product/filter/sort';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+
+// #endregion

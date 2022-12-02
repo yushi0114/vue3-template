@@ -322,3 +322,26 @@ export const loanTermTypeMap: Record<LoanTermType, string> = Object.freeze({
     [LoanTermType.over24]: '24个月以上',
 });
 // #endregion
+
+// #region 报告类型（征信报告，信用评分）
+export enum ReportType {
+    CREDIT = '1',
+    SCORE = '2'
+}
+
+
+export const ReportTypeMap: Record<ReportType, string> = {
+    [ReportType.CREDIT]: '征信报告',
+    [ReportType.SCORE]: '信用评分',
+};
+
+export const ReportTypeOptions: PlainOption<ReportType>[] = [
+    { name: ReportTypeMap[ReportType.CREDIT], value: ReportType.CREDIT },
+    { name: ReportTypeMap[ReportType.SCORE], value: ReportType.SCORE },
+];
+
+export const ReportTypeUrlMap: Record<ReportType, string> = {
+    [ReportType.CREDIT]: '/report/detail',
+    [ReportType.SCORE]: '/score/detail',
+};
+// #endregion

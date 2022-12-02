@@ -1,3 +1,12 @@
+/*
+ * @Description:
+ * @FilePath: \dms-web\src\stores\user.ts
+ * @Author: zys
+ * @Date: 2022-11-22 10:47:59
+ * @LastEditTime: 2022-11-30 16:56:36
+ * @LastEditors: zys
+ * @Reference:
+ */
 import { computed, reactive } from 'vue';
 import { defineStore } from 'pinia';
 import {
@@ -69,15 +78,17 @@ export const useUserStore = defineStore('user', () => {
 
         return getUserInfoApi(queryParams)
             .then((user) => {
+                console.log('user: ', user);
                 state.user = user;
                 return dynamicNavs(user.roleId);
             })
             .then((navs) => {
+                console.log('navs: ', navs);
                 const validNavs = navs.filter((nav) => isFunction(genDynamicComponent(nav.component!)));
                 state.navs = validNavs;
                 return addDynamicRoutes(router, validNavs).then(() => {
-
                     state.navTree = toTree({}, validNavs);
+                    console.log('state.navTree: ', state.navTree);
                     return state.user as UserEntity;
                 });
             })

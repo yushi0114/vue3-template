@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores';
 import { noop } from '@/utils';
-import { Key, SwitchButton, User, UserFilled } from '@element-plus/icons-vue';
+import { Key, SwitchButton, User, UserFilled, Setting } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
 import NavUserUpdatePwdDialog from './NavUserUpdatePwdDialog.vue';
 import NavUserUpdateNameDialog from './NavUserUpdateNameDialog.vue';
+import NavUserSettingThemeDialog from './NavUserSettingThemeDialog.vue';
 
 enum UserDropdownCommand {
+    settingTheme,
     changePassword,
     changeUsername,
     Signout,
@@ -16,6 +18,7 @@ const { state, signout } = useUserStore();
 const router = useRouter();
 const updatingPwdVisible = ref(false);
 const updatingNameVisible = ref(false);
+const settingThemeVisible = ref(false);
 
 function handleCommand(cmd: UserDropdownCommand) {
     switch (cmd) {
@@ -28,6 +31,9 @@ function handleCommand(cmd: UserDropdownCommand) {
         case UserDropdownCommand.changeUsername:
             displayChangeUserName();
             break;
+        case UserDropdownCommand.settingTheme:
+            displaySettingTheme();
+            break;
         default:
     }
 }
@@ -38,6 +44,10 @@ function displayChangePassword() {
 
 function displayChangeUserName() {
     updatingNameVisible.value = true;
+}
+
+function displaySettingTheme() {
+    settingThemeVisible.value = true;
 }
 
 function handleSignout() {
@@ -57,13 +67,18 @@ function handleSignout() {
 </script>
 
 <template>
-    <el-dropdown class="nav-user-profile" trigger="click" @command="handleCommand">
+    <el-dropdown class="nav-user-profile" trigger="hover" @command="handleCommand">
         <el-space size="small">
             <el-avatar shape="square" size="small" :icon="UserFilled" />
             {{ state.user?.name }}
         </el-space>
         <template v-slot:dropdown>
             <el-dropdown-menu>
+                <el-dropdown-item
+                    :command="UserDropdownCommand.settingTheme"
+                    :icon="Setting">
+                    主题设置
+                </el-dropdown-item>
                 <el-dropdown-item
                     :command="UserDropdownCommand.changePassword"
                     :icon="Key">修改密码
@@ -81,13 +96,14 @@ function handleSignout() {
     </el-dropdown>
     <NavUserUpdatePwdDialog v-model="updatingPwdVisible" />
     <NavUserUpdateNameDialog v-model="updatingNameVisible" />
+    <NavUserSettingThemeDialog v-model="settingThemeVisible" />
 </template>
 
 <style lang="scss">
 .nav-user-profile {
     padding: $gap-xs;
     margin-right: -$gap-xs;
-    cursor: default;
+    cursor: pointer;
     border-radius: 4px;
     transition: .2s ease-in-out all;
 

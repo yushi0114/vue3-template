@@ -17,7 +17,7 @@ const emits = defineEmits<{
     (e: ItemOperate.delete, detail: ProductEntity): void;
     (e: ItemOperate.edit, detail: ProductEntity): void;
     (e: ItemOperate.online, detail: ProductEntity): void;
-    (e: ItemOperate.online, detail: ProductEntity): void;
+    (e: ItemOperate.offline, detail: ProductEntity): void;
 }>();
 
 function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity) {
@@ -69,7 +69,7 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
                 :max-out-count="1"
                 @operate="(opt: ListOperatorOption<ItemOperate>) => handleOperate(opt, item)"
                 :operators="[
-                    { name: '查看申请企业', value: ItemOperate.detail },
+                    { name: '查看申请企业', value: ItemOperate.reqDetail },
                     { name: isOnline ? '下架' : '上架', value: isOnline ? ItemOperate.offline : ItemOperate.online },
                     { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit', disabled: isOnline },
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', disabled: isOnline },

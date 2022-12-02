@@ -1,21 +1,24 @@
 <script lang="ts" setup>
 import { AcceptProgressType, expectTimeTypeMap, requirmentProgressTypeMap } from '@/enums';
 import type { RequirementEntity } from '@/types';
-import { ItemOperate, List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
-
+import { ItemOperate, ListField, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
+import { TABLE_CONFIG, TABLE_COLUMNS} from '../constants';
 
 withDefaults(
     defineProps<{
         list?: RequirementEntity[],
+        loading?: boolean;
     }>(),
     {
-        list: () => []
+        list: () => [],
+        loading: false
     }
 );
 
 const emits = defineEmits<{
     (e: ItemOperate.detail, detail: RequirementEntity): void;
     (e: ItemOperate.delete, detail: RequirementEntity): void;
+    (e: 'multi-selection', selection: string[]): void;
 }>();
 
 const colorStatusMap: Record<AcceptProgressType, string> = {
@@ -31,10 +34,64 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, item: RequirementEn
     if (opt.disabled) return;
     emits(ItemOperate.delete as any, item);
 }
+
+const handleSelectionChange = (selection: any) => {
+    emits('multi-selection', selection);
+};
+
 </script>
 
 <template>
-  <List class="req-list">
+    <sjc-table
+        class="req-list"
+        ref="sjcTableRef"
+        :table-data="list"
+        :loading="loading"
+        :columns="TABLE_COLUMNS"
+        :show-header="true"
+        row-class-name="tr-item"
+        :table-config="TABLE_CONFIG"
+        :showPagination="false"
+        @multi-selection="handleSelectionChange">
+        <template #reqLogo="{ scope }">
+            <RectLogo :name="scope.row.corpName" />
+        </template>
+        <template #append="{ props }">
+            <div class="req-list-content">
+                <div class="req-list-info">
+                    <div class="req-list-item">
+                        <ListField label="企业名称" hoverable @click="emits(ItemOperate.detail, props.row)">{{ props.row.corpName }}</ListField>
+                        <ListField label="联系人" type="desc">{{ props.row.contactPerson }}</ListField>
+                    </div>
+                    <div class="req-list-item">
+                        <ListField label="期望融资金额">{{ props.row.expectFinancing }}万元</ListField>
+                        <ListField label="联系电话" type="desc">{{ props.row.contactMobile }}</ListField>
+                    </div>
+                    <div class="req-list-item">
+                        <ListField label="期望放款时间">{{ expectTimeTypeMap[(props.row as RequirementEntity).expectTime] }}</ListField>
+                        <ListField label="发布时间" type="desc">{{ props.row.createTime }}</ListField>
+                    </div>
+                </div>
+                <ListProgress
+                    label="需求进度"
+                    :progress="props.row.barCode * 100"
+                    :status="colorStatusMap[(props.row as RequirementEntity).progress]"
+                >
+                    {{ requirmentProgressTypeMap[(props.row as RequirementEntity).progress] }}
+                </ListProgress>
+            </div>
+        </template>
+        <template #handler="{ scope }">
+            <ListOperator
+                :max-out-count="1"
+                @operate="(opt: ListOperatorOption<ItemOperate>) => handleOperate(opt, scope.row)"
+                :operators="[
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]"
+            />
+        </template>
+    </sjc-table>
+  <!-- <List class="req-list">
         <ListItem v-for="(item, i) in list" :key="i" class="req-list-item">
             <RectLogo :name="item.corpName" />
             <div class="req-list-content">
@@ -68,7 +125,7 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, item: RequirementEn
                 ]"
             />
         </ListItem>
-    </List>
+    </List> -->
 </template>
 
 <style lang="scss">

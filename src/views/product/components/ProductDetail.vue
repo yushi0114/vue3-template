@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import { getProduct } from '@/api';
+import type { PlatformType } from '@/enums';
 import type { ProductEntity, ProductFilterEntity } from '@/types';
 import { useApi } from '@/composables';
 
 const fixFilterTexts = ['贷款额度', '贷款期限', '担保方式'];
 const props = withDefaults(
     defineProps<{
-        content?: ProductEntity | null
+        content?: ProductEntity | null;
+        platform: PlatformType;
     }>(),
     {
         content: null
@@ -27,7 +29,7 @@ const { request } = useApi(getProduct);
 function handleOpen() {
     if (!props.content) return;
 
-    request({ id: props.content.id })
+    request({ id: props.content.id, platform: props.platform })
         .then(res => {
             detail.value = res;
             fixFilters.value = [];

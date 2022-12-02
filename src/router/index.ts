@@ -10,7 +10,7 @@ import RiskTip from '@/components/RiskTip/index.vue';
 import ScoreDetail from '@/components/ScoreDetail/index.vue';
 
 // @/store/user signin()
-export const SIGNIN_PATH = '/signin';
+export const SIGNIN_PATH = '/login';
 export const ROOT_PATH = '/';
 export const ERROR_404_PATH = '/error-404';
 export const ROOT_NAME = 'base';
@@ -40,7 +40,7 @@ const routes: RouteRecordRaw[] = [
         ],
     },{
         path: SIGNIN_PATH,
-        name: 'signin',
+        name: 'login',
         component: Signin
     },
     {

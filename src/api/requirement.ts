@@ -36,12 +36,18 @@ export function getAligeReqs(payload: GetAgileReqsPayload)
 // #region 获取敏捷需求详情
 export type GetAgileReqPayload = {
     id: AgileReqEntity['id'],
+    platform?: PlatformType,
 }
 
 export type GetAgileReqResponse = AgileReqEntity
 
 export function getAgileReq(payload: GetAgileReqPayload): Promise<GetAgileReqResponse> {
-    return api.get(`${DMS_DOMAIN}/v1/simple/req`, { params: payload });
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/simple/req'
+        : '/v1/zjfw/simple/req';
+
+    delete payload.platform;
+    return api.get(`${DMS_DOMAIN}${url}`, { params: payload });
 }
 // #endregion
 
@@ -77,12 +83,18 @@ export function getExactReqs(payload: GetExactReqsPayload)
 // #region 获取精准需求详情
 export type GetExactReqPayload = {
     id: ExactReqEntity['id'],
+    platform?: PlatformType,
 }
 
 export type GetExactReqResponse = ExactReqEntity
 
 export function getExactReq(payload: GetExactReqPayload): Promise<GetExactReqResponse> {
-    return api.get(`${DMS_DOMAIN}/v1/exact/req`, { params: payload })
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/exact/req'
+        : '/v1/zjfw/exact/req';
+
+    delete payload.platform;
+    return api.get(`${DMS_DOMAIN}${url}`, { params: payload })
         .then((res: any) => {
             const entity = res[0];
             entity.dataFirst = (entity.reqProgress[0].typeOne || []).map((p: any) => {
@@ -110,7 +122,8 @@ export function getExactReq(payload: GetExactReqPayload): Promise<GetExactReqRes
 
 export type GetExactReqScorePayload = {
     corpName: string,
-    corpCode: string
+    corpCode: string;
+    platform?: PlatformType,
 }
 
 export type GetExactReqScoreResponse = {
@@ -118,7 +131,54 @@ export type GetExactReqScoreResponse = {
 }
 
 export function getExactReqScore(payload: GetExactReqScorePayload) : Promise<GetExactReqScoreResponse> {
-    return api.post(`${DMS_DOMAIN}/v1/exact/req/score`, payload);
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/exact/req/score'
+        : '/v1/zjfw/exact/req/score';
+
+    delete payload.platform;
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
 }
 
+// #endregion
+
+// #region 删除精准需求（批量，单个）
+export type DeleteExactReqsPayload = {
+    idArr: string;
+    platform?: PlatformType,
+}
+
+export type DeleteExactReqsponse = ListResponse<ExactReqEntity>
+
+export function deleteExactReqs(payload: DeleteExactReqsPayload)
+    : Promise<GetExactReqsResponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/del/exact/req'
+        : '/v1/zjfw/del/exact/req';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+// #endregion
+
+// #region 删除敏捷需求（批量，单个）
+export type DeleteAgileReqsPayload = {
+    idArr: string;
+    platform?: PlatformType,
+}
+
+export type DeleteAgileReqsponse = ListResponse<ExactReqEntity>
+
+export function deleteAgileReqs(payload: DeleteExactReqsPayload)
+    : Promise<GetExactReqsResponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/del/simple/req'
+        : '/v1/zjfw/del/simple/req';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
 // #endregion

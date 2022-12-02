@@ -1,8 +1,12 @@
 <script lang="ts" setup>
+import ListMenu from './ListMenu.vue';
 // import { useQueryParams } from '@/composables';
+import { UseMouseInElement } from '@vueuse/components';
+import { useTemplateRefsList, useWindowSize } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
+import type { ElDropdown } from 'element-plus';
 import { getNextMonth } from '@/utils';
 // TODO
 export type ControlConfig = {
@@ -37,7 +41,10 @@ const emits = defineEmits<{
 }>();
 
 type ModelType = any
+type DropdownLabelMapType = any
 const model = reactive<ModelType>({});
+const dropdownLabelMap = reactive<DropdownLabelMapType>({});
+const { height } = useWindowSize();
 
 watch(() => props.searchConfig, () => {
     if (props.searchConfig) {
@@ -169,40 +176,34 @@ function disableDate(d: Date) {
     return d >= getNextMonth();
 }
 
-function handleRadioClick(tField: string, tValue: any) {
-    model[tField] = model[tField] === tValue ? '' : tValue;
+const refs = useTemplateRefsList<typeof ElDropdown>();
+const handleDropdownChange = ({ option, fConf }: { option: PlainOption<any>;fConf: ControlOptionConfig<any> }) => {
+    model[fConf.field] = option.value;
+    dropdownLabelMap[fConf.field] = option.name;
     wrapGo();
-}
+};
+
+const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => {
+    if (refs.value[index]) {
+        nextTick(() => {
+            refs.value[index].handleClose();
+        });
+    }
+    model[fConf.field] = undefined;
+    dropdownLabelMap[fConf.field] = undefined;
+    wrapGo();
+};
+
 </script>
 
 <template>
   <div class="list-query-control">
-    <!-- -->
-    <FlexRow horizontal="between" class="lqc-search-row">
-        <div v-if="searchConfig">
-            <el-input
-                v-model="model[searchConfig.field]"
-                size="large"
-                :placeholder="searchConfig.label"
-                class="input-with-select"
-                >
-                <template #append>
-                    <el-button
-                        :icon="Search"
-                        @click="wrapGo"
-                    />
-                </template>
-            </el-input>
-        </div>
-
-        <FlexRow horizontal="end" class="lqc-search-rest">
-            <slot name="search-rest" />
-        </FlexRow>
-    </FlexRow>
     <FlexRow
         class="lqc-type-row"
+        vertical="start"
         v-if="typeOptionsConfigs">
-        <div class="lqc-type-item" v-for="tConf in typeOptionsConfigs" :key="tConf.field">
+        <ListMenu :menu="typeOptionsConfigs" multiple :multiple-fields="['taxGradeArr', 'steTypeArr', 'loanEndArr', 'longestOverdueArr']" v-model="model" @change="wrapGo"></ListMenu>
+        <!-- <div class="lqc-type-item" v-for="tConf in typeOptionsConfigs" :key="tConf.field">
             <Text size="sm" color="regular">{{ tConf.label }}:</Text>
             <el-button-group size="small" >
                 <el-button
@@ -215,59 +216,111 @@ function handleRadioClick(tField: string, tValue: any) {
                     {{ opt.name }}
                 </el-button>
             </el-button-group>
-        </div>
+        </div> -->
     </FlexRow>
-    <FlexRow
-        class="lqc-filter-row">
-        <div class="lqc-filter-item" v-for="fConf in filterOptionsConfigs" :key="fConf.field">
-            <el-select
-                clearable
-                :placeholder="fConf.label"
-                v-model="model[fConf.field]"
-                @change="wrapGo"
-                >
-                <el-option
-                    v-for="opt in fConf.options"
-                    :key="opt.value"
-                    :label="opt.name"
-                    :value="opt.value"
+    <!-- -->
+    <div class="flex-1 flex flex-col">
+        <FlexRow horizontal="between" class="lqc-search-row">
+            <div v-if="searchConfig">
+                <el-input
+                    v-model="model[searchConfig.field]"
+                    size="large"
+                    :placeholder="searchConfig.label"
+                    class="input-with-select"
+                    >
+                    <template #append>
+                        <el-button
+                            :icon="Search"
+                            @click="wrapGo"
+                        />
+                    </template>
+                </el-input>
+            </div>
+
+            <FlexRow horizontal="end" class="lqc-search-rest">
+                <slot name="search-rest" />
+            </FlexRow>
+        </FlexRow>
+        <FlexRow
+            class="lqc-filter-row">
+            <div class="lqc-filter-item" v-for="(fConf, index) in filterOptionsConfigs" :key="fConf.field">
+                <el-dropdown
+                    :ref="refs.set"
+                    trigger="click"
+                    :max-height="height - 300"
+                    @command="handleDropdownChange">
+                    <UseMouseInElement v-slot="{ isOutside }">
+                        <FlexRow class="cursor-pointer">
+                            {{ dropdownLabelMap[fConf.field] || fConf.label }}
+                            <i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/>
+                            <i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/>
+                        </FlexRow>
+                    </UseMouseInElement>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item
+                                v-for="option in fConf.options"
+                                :key="option.name"
+                                :command="{option, fConf}">
+                                {{ option.name }}
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+                <!-- <el-select
+                    clearable
+                    :placeholder="fConf.label"
+                    v-model="model[fConf.field]"
+                    @change="wrapGo"
+                    >
+                    <el-option
+                        v-for="opt in fConf.options"
+                        :key="opt.value"
+                        :label="opt.name"
+                        :value="opt.value"
+                    />
+                </el-select> -->
+            </div>
+            <div class="lqc-date-item" v-if="dateRangeConfig">
+                <el-date-picker
+                    type="monthrange"
+                    unlink-panels
+                    v-model="model.DATE"
+                    range-separator="~"
+                    value-format="YYYYMM"
+                    @change="wrapGo"
+                    :disabled-date="disableDate"
+                    :start-placeholder="dateRangeConfig.options[0].name"
+                    :end-placeholder="dateRangeConfig.options[1].name"
                 />
-            </el-select>
-        </div>
-        <div class="lqc-date-item" v-if="dateRangeConfig">
-            <el-date-picker
-                type="monthrange"
-                unlink-panels
-                v-model="model.DATE"
-                range-separator="~"
-                value-format="YYYYMM"
-                @change="wrapGo"
-                :disabled-date="disableDate"
-                :start-placeholder="dateRangeConfig.options[0].name"
-                :end-placeholder="dateRangeConfig.options[1].name"
-            />
-        </div>
-        <div class="lqc-filter-rest">
-            <slot name="filter-rest" />
-        </div>
-        <div
-            class="lqc-sort-item"
-            @click="handleSort(sOpt.field, loopSort(model[sOpt.field]))"
-            v-for="sOpt in sortConfigs" :key="sOpt.field">
-            <Text
-                size="sm"
-                :color="model[sOpt.field] === SortType.none ? 'regular' : 'primary'">
-                {{ sOpt.label }}
-                <i-ep-sort-up v-if="model[sOpt.field] === SortType.asc" />
-                <i-ep-sort-down v-else />
-            </Text>
-        </div>
-    </FlexRow>
+            </div>
+            <div class="lqc-filter-rest">
+                <slot name="filter-rest" />
+            </div>
+            <div
+                class="lqc-sort-item"
+                @click="handleSort(sOpt.field, loopSort(model[sOpt.field]))"
+                v-for="sOpt in sortConfigs" :key="sOpt.field">
+                <Text
+                    size="sm"
+                    :color="model[sOpt.field] === SortType.none ? 'regular' : 'primary'">
+                    {{ sOpt.label }}
+                    <i-ep-sort-up v-if="model[sOpt.field] === SortType.asc" />
+                    <i-ep-sort-down v-else />
+                </Text>
+            </div>
+        </FlexRow>
+        <slot></slot>
+    </div>
   </div>
 </template>
 <style lang="postcss">
-.lqc-type-row {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+.list-query-control .lqc-type-row {
+    @apply w-250px overflow-y-auto bg-$el-bg-color;
+    /* @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4; */
+}
+.list-query-control {
+    @apply flex space-x-2;
 }
 </style>
 <style lang="scss">

@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import { useTheme } from '@/composables';
-import { Moon, Sunny } from '@element-plus/icons-vue';
 import NavUserProfile from './NavUserProfile.vue';
-
-const { isDark } = useTheme();
 </script>
 
 <template>
@@ -14,13 +10,6 @@ const { isDark } = useTheme();
             <slot></slot>
         </div>
         <el-space size="small">
-            <el-switch
-                v-model="isDark"
-                :active-icon="Moon"
-                :inactive-icon="Sunny"
-                inline-prompt
-                style="--el-switch-on-color: var(--el-fill-color-dark); --el-switch-off-color: var(--el-color-info-light-3)"
-            />
             <NavUserProfile />
         </el-space>
     </FlexRow>

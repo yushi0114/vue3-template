@@ -3,11 +3,12 @@
  * @FilePath: \dms-web\src\components\SjcForm\types.ts
  * @Author: zys
  * @Date: 2022-10-28 10:51:15
- * @LastEditTime: 2022-11-18 11:33:38
+ * @LastEditTime: 2022-12-01 17:06:23
  * @LastEditors: zys
  * @Reference:
  */
 import type { CSSProperties } from 'vue';
+import type { PlainOption } from '@/types';
 import type { FILE_TYPE, FormType, FILE_SERVER } from '@/enums';
 import type { FormItemRule } from 'element-plus';
 
@@ -32,14 +33,15 @@ type InputNumberForm = {
 };
 
 type TextareaForm = {
-    autosize?: boolean | { minRows: number; maxRows: number };
+    autosize?: boolean | { minRows?: number; maxRows?: number };
 };
 type TreeForm = {
     treeData?: Tree[];
     fieldNames?: { label: string; value: string; children: string };
 };
 type SelectForm = {
-    selectOptions?: { title: string; value: string | number }[];
+    multiple?: boolean;
+    selectOptions?: PlainOption[];
 };
 type DatePicker = {
     datePickerType?:
@@ -99,13 +101,15 @@ export type DefItem = InputForm &
         label?: string;
         type: DefItemType;
         keyName: string;
+        isIgnoreKey?: boolean;
         placeholder?: string;
         disabled?: boolean;
         borderless?: boolean;
         span?: number;
         defaultValue?: DefItemValue;
         value?: DefItemValue;
-        rules?: FormItemRule[];
+        rules?: FormItemRule[] | ((...args: any) => FormItemRule[]);
+        formatter?: <T = any, K = DefItem>(data: T, formItem: K) => any;
         fileServer?: FILE_SERVER;
     };
 

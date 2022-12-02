@@ -1,6 +1,5 @@
 import { reactive, ref } from 'vue';
-import type { RoleListItemType } from '@/views/system/type/role-list.type';
-import type { UserFormType, UserListItemType, UserTabType } from '@/views/system/type/user-list.type';
+import type { RoleListItemType, UserFormType, UserListItemType, UserTabType } from '@/types/system-manage';
 import { addUserApi, deleteUserApi, getTotalRoleListApi, getUserListApi, updateUserApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
 
@@ -46,6 +45,7 @@ export function resetUserForm() {
         status: false
     };
 }
+
 export const roleUIList = computed(() => totalRoleList.value?.map(item => ({
     ...item,
     label: item.name,
@@ -148,8 +148,8 @@ export async function updateUser(): Promise<void> {
 
 export async function deleteUser(params: {
     account: string;
-    id:string;
-}): Promise<void>{
+    id: string;
+}): Promise<void> {
     return new Promise((resolve) => {
         deleteUserApi({
             menuName: '',

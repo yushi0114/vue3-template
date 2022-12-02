@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
-import type { RoleListItemType } from '@/views/system/type/role-list.type';
+import type { RoleListItemType } from '@/types/system-manage';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     activeName,

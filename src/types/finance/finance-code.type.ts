@@ -35,12 +35,12 @@ export type ImportFinanceCodeType = {
 
 export type ExportFinanceCodeType = {
     searchInput?: string;
-    sortField: 'create_time';
-    sortType: 'desc';
-    pageIndex: number;
-    pageSize: number;
-    orgTypeCodeArr: number[],
-    cityCodeArr: string[]
+    sortField: 'create_time' | 'update_time';
+    sortType: 'desc'| 'asc';
+    // pageIndex: number;
+    // pageSize: number;
+    // orgTypeCodeArr: number[],
+    // cityCodeArr: string[]
 };
 
 

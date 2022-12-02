@@ -30,12 +30,22 @@ export function getFinanceCodeListApi(params: GetFinanceCodeListType): Promise<{
     return api.post(`${DMS_DOMAIN}/v1/org/dic/list`, params);
 }
 
-export function exportFinanceCodeListApi(params: ExportFinanceCodeType) {
-    return api.post(`${DMS_DOMAIN}/v1/export/org/dic`, {
+
+export function downloadFinanceCodeListTemplateApi(): Promise<any> {
+    return api.get(`${DMS_DOMAIN}/v1/download/org/dic/template`);
+}
+
+
+export function exportFinanceCodeListApi(params: ExportFinanceCodeType): Promise<any> {
+    return api.get(`${DMS_DOMAIN}/v1/export/org/dic`, {
         params
     });
 }
 
 export function importFinanceCodeListApi(params: ImportFinanceCodeType) {
-    return api.post(`${DMS_DOMAIN}/v1/import/org/dic`, params);
+    return api.post(`${DMS_DOMAIN}/v1/import/org/dic`, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }

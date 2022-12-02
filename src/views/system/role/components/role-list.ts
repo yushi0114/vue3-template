@@ -1,7 +1,6 @@
 import { ref } from 'vue';
-import type { RoleFormType, RoleListItemType, RoleTabType } from '@/views/system/type/role-list.type';
 import { addRoleApi, getMenuTreeApi, getRoleListApi, updateRoleApi } from '@/api/system-manage';
-import type { TreeItemType } from '@/views/system/type/menu-list.type';
+import type { RoleFormType, RoleListItemType, RoleTabType, TreeItemType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
 

@@ -15,7 +15,7 @@
 import { onMounted } from 'vue';
 import RoleConfig from '@/views/system/role/components/role-config.vue';
 import type { TabsPaneContext } from 'element-plus';
-import type { RoleTabType } from '@/views/system/type/role-list.type';
+import type { RoleTabType } from '@/types/system-manage';
 import {
     activeName,
     getRolePageList,

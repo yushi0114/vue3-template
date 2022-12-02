@@ -1,8 +1,19 @@
 import { DMS_DOMAIN } from './const';
 import { api } from './http';
-import type { DeleteMenuType, MenuRouteType, MenuTabType, UpdateMenuType } from '@/views/system/type/menu-list.type';
-import type { AddRoleType, DeleteRoleType, RoleTabType, UpdateRoleType } from '@/views/system/type/role-list.type';
-import type { AddUserType, DeleteUserType, UpdateUserType, UserListItemType } from '@/views/system/type/user-list.type';
+import type {
+    AddRoleType,
+    AddUserType,
+    DeleteMenuType,
+    DeleteRoleType,
+    DeleteUserType,
+    MenuRouteType,
+    MenuTabType,
+    RoleTabType,
+    UpdateMenuType,
+    UpdateRoleType,
+    UpdateUserType,
+    UserListItemType
+} from '@/types/system-manage';
 
 
 export function addMenuApi(params: MenuRouteType) {

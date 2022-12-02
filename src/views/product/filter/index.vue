@@ -1,59 +1,140 @@
 <script lang="ts" setup>
-// import { PlatformType } from '@/enums';
-import { getProductFilters } from '@/api';
-import { useApi, useQueryParams } from '@/composables';
-import type { ProductFilterEntity } from '@/types';
+import { PlatformType, OPERATE_TYPE } from '@/enums';
 import Draggable from 'vuedraggable';
+import { useFilter } from '../hooks/useFilter';
+import FilterModal from './components/FilterModal.vue';
+import FilterOptionsModal from './components/FilterOptionsModal.vue';
+import type { ProductFilterEntity } from '@/types';
+import { noop } from '@/utils';
+import { CANT_CHANGE_FILTER_MAP } from '../constants';
 
 const dragging = ref(false);
-const { request } = useApi(getProductFilters);
-const { queryParams, goQuery } = useQueryParams({
-    searchInput: ''
-});
 
-const filters = ref<ProductFilterEntity[]>([]);
-const list  =ref([
-    { name: "John", id: 0 },
-    { name: "Joao", id: 1 },
-    { name: "Jean", id: 2 }
-    ])
-function getList() {
-    request({})
-        .then((res) => {
-            console.log(res);
-            filters.value = res.data;
-        });
+const route = useRoute();
+const platform = ref<PlatformType>(Number(route.params.type));
+const filterModalRef = ref<InstanceType<typeof FilterModal> | null>(null);
+const filterOptionsModalRef = ref<InstanceType<typeof FilterOptionsModal> | null>(null);
+const {
+    loading,
+    filters,
+    FILTERS_FORM,
+    requestUpdateProductFilter,
+    requestAddProductFilter,
+    requestDeleteProductFilter,
+    requestAddProductFilterOptions,
+    requestUpdateProductFilterSort,
+    FILTERS_OPTIONS_FORM,
+} = useFilter(platform);
+
+function handleTabChange(plat: PlatformType) {
+    platform.value = plat;
 }
 
-watch(queryParams, () => {
-    getList();
-}, { immediate: true });
+const canFilterChange = computed(() => {
+    return (typeValue: string) => {
+        return !CANT_CHANGE_FILTER_MAP[platform.value].includes(typeValue);
+    };
+});
+const handleOpenFilterModal = (data?: ProductFilterEntity) => {
+    filterModalRef.value?.open(data ?? null);
+};
 
+const handleOpenFilterOptionsModal = (type: OPERATE_TYPE, data?: ProductFilterEntity) => {
+    filterOptionsModalRef.value?.open({ type, data });
+};
 
+const handleFilterModalSubmit = (type: OPERATE_TYPE, values: any) => {
+    type === OPERATE_TYPE.ADD &&
+        requestAddProductFilter(values).then(() => {
+            filterModalRef.value?.handleCancel();
+        });
 
+    type === OPERATE_TYPE.EDIT &&
+        requestUpdateProductFilter(values).then(() => {
+            filterModalRef.value?.handleCancel();
+        });
+};
+
+const handleFilterOptionsModalSubmit = (type: OPERATE_TYPE, values: any) => {
+    type === OPERATE_TYPE.ADD &&
+        requestAddProductFilterOptions(values).then(() => {
+            filterOptionsModalRef.value?.handleCancel();
+        });
+
+    type === OPERATE_TYPE.EDIT &&
+        requestUpdateProductFilter(values).then(() => {
+            filterOptionsModalRef.value?.handleCancel();
+        });
+};
+
+const handleDeleteFilter = async(filter: ProductFilterEntity) => {
+    console.log('filter: ', filter);
+    try {
+        await ElMessageBox.confirm(
+            `确认删除“${filter.typeValue}${filter.filterValue ? '/' + filter.filterValue : ''}”的筛选项吗？`,
+            '删除',
+            {
+                type: 'warning',
+            }
+        );
+        requestDeleteProductFilter({ id: filter.id ?? filter.filterId });
+    } catch {
+        noop;
+    }
+};
+
+const handleDragListChange = () => {
+    requestUpdateProductFilterSort({ data: filters.value});
+    console.log('list: ', filters.value);
+};
 </script>
 
 <template>
     <PagePanel>
-        <Board class="product-filter" full>
-            <PlatformTab />
+        <Board
+            class="product-filter"
+            v-loading="loading"
+            full>
+            <PlatformTab @tab-change="handleTabChange" />
+            <FlexRow horizontal="end">
+                <el-button
+                    type="primary"
+                    @click="handleOpenFilterModal(undefined)"
+                    ><i-ep-plus />新建类别</el-button
+                >
+            </FlexRow>
             <draggable
-                :list="filters"
+                v-model="filters"
                 item-key="id"
+                filter=".disable-drag"
                 @start="dragging = true"
                 @end="dragging = false"
-            >
+                @sort="handleDragListChange"
+                >
                 <template #item="{ element: parent }">
-                    <ContentBoard :label="parent.typeValue">
+                    <ContentBoard
+                        class="product-filter-item"
+                        hoverable
+                        :disabled="!parent.isFilterShow"
+                        :label="parent.typeValue">
                         <template #label-rest>
-                            <FlexRow gap="xs">
-                                <TextHoverable color="regular">
+                            <FlexRow gap="xs" class="disable-drag">
+                                <TextHoverable
+                                    v-if="parent.isFilterShow"
+                                    color="regular"
+                                    @click="handleOpenFilterOptionsModal(OPERATE_TYPE.ADD, parent)">
                                     <i-ep-plus />
                                 </TextHoverable>
-                                <TextHoverable color="regular">
+                                <TextHoverable
+                                    v-if="canFilterChange(parent.typeValue)"
+                                    color="regular"
+                                    @click="handleOpenFilterModal(parent)">
                                     <i-ep-edit />
                                 </TextHoverable>
-                                <TextHoverable color="regular">
+                                <TextHoverable
+                                    v-if="canFilterChange(parent.typeValue)"
+                                    color="regular"
+                                    @click="handleDeleteFilter(parent)">
                                     <i-ep-close />
                                 </TextHoverable>
                             </FlexRow>
@@ -63,18 +144,32 @@ watch(queryParams, () => {
                             :list="parent.filter"
                             item-key="id"
                             class="product-filter-group"
+                            filter=".disable-drag"
                             @start="dragging = true"
                             @end="dragging = false"
-                        >
+                            @sort="handleDragListChange"
+                            >
                             <template #item="{ element: child }">
-                                <ElTag>
-                                    <FlexRow horizontal="between" gap="md" >
+                                <ElTag :type="child.isFilterShow ? '' : 'info'">
+                                    <FlexRow
+                                        horizontal="between"
+                                        gap="md">
                                         <div>{{ child.filterValue }}</div>
-                                        <FlexRow gap="line" class="product-filter-tag-operator">
-                                            <TextHoverable color="regular" size="xs">
+                                        <FlexRow
+                                            v-if="child.filterValue !== '不限'"
+                                            gap="line"
+                                            class="product-filter-tag-operator disable-drag">
+                                            <TextHoverable
+                                                v-if="parent.isFilterShow"
+                                                color="regular"
+                                                size="xs"
+                                                @click="handleOpenFilterOptionsModal(OPERATE_TYPE.EDIT, child)">
                                                 <i-ep-edit />
                                             </TextHoverable>
-                                            <TextHoverable color="regular"  size="xs">
+                                            <TextHoverable
+                                                color="regular"
+                                                size="xs"
+                                                @click="handleDeleteFilter(child)">
                                                 <i-ep-close />
                                             </TextHoverable>
                                         </FlexRow>
@@ -85,6 +180,14 @@ watch(queryParams, () => {
                     </ContentBoard>
                 </template>
             </draggable>
+            <FilterModal
+                ref="filterModalRef"
+                :form="FILTERS_FORM"
+                @submit="handleFilterModalSubmit"></FilterModal>
+            <FilterOptionsModal
+                ref="filterOptionsModalRef"
+                :form="FILTERS_OPTIONS_FORM"
+                @submit="handleFilterOptionsModalSubmit" />
         </Board>
     </PagePanel>
 </template>
@@ -92,6 +195,11 @@ watch(queryParams, () => {
 <style lang="scss">
 .product-filter {
     user-select: none;
+    &-item {
+        &:hover {
+            cursor: move;
+        }
+    }
 }
 
 .product-filter-tag-operator {

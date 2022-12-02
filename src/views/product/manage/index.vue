@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onlineTypeOptions, PlatformType, SwitchType, onlineTypeMap } from '@/enums';
-import { getProducts, getTopOrgs, updateProductStatus, deleteProduct } from '@/api';
+import { getProducts, getTopOrgs, updateProductStatus, deleteProduct, isUsingProduct } from '@/api';
 import type { PlainOption, ProductEntity } from '@/types';
 import { ProductDetail, ProductList, ProductEdit } from '../components';
 import { noop } from '@/utils';
@@ -38,6 +38,8 @@ const { request: requestDeleteProduct } = useApi(deleteProduct, {
     },
 });
 
+const { request: requestIsUsingProduct } = useApi((params) => isUsingProduct({platform: platform.value, ...params}));
+
 const count = ref(0);
 const list = ref<ProductEntity[]>([]);
 const productEditModal = ref<InstanceType<typeof ProductEdit> | null>(null);
@@ -71,12 +73,14 @@ function goReqDetail(req: ProductEntity) {
         path: `${route.path}/req/${platform.value}`,
         query: {
             productId: req.id,
-        }
+        },
     });
 }
 
 const handleEdit = (req: ProductEntity) => {
-    productEditModal.value?.open({ id: req.id });
+    requestIsUsingProduct({id: req.id}).then(() => {
+        productEditModal.value?.open({ id: req.id });
+    }).catch(noop);
 };
 
 const handleUpdateStatus = async (req: ProductEntity) => {
@@ -97,6 +101,7 @@ const handleUpdateStatus = async (req: ProductEntity) => {
 
 const handleDelete = async (req: ProductEntity) => {
     try {
+        await requestIsUsingProduct({ id: req.id });
         await ElMessageBox.confirm(`确认删除“${req.name}”的产品吗？`, '删除', {
             type: 'warning',
         });

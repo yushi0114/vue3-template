@@ -76,19 +76,15 @@
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
-    categoryForm,
     categoryList,
-    currentCategoryId,
     financeFilterObject,
-    formType,
-    mode,
-    setAllSystemMenuTree,
-    setFinanceCategoryList,
-    setOrgTypeModuleList
+    deleteFinanceCategory,
+    goCreateFormView,
+    goEditFormView,
+    setFinanceCategoryList
 } from './category-list';
 import { LoadingService } from '@/views/system/loading-service';
-import type { FinanceCategoryListItemType } from '@/views/finance/type/finance-category.type';
-import { deleteFinanceCategory, getOrgTypeById } from '@/api/finance/finance-category';
+import type { FinanceCategoryListItemType } from '@/types/finance';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -96,21 +92,8 @@ function formatSortType(value: string) {
 
 async function handleEditRoleItem(item: FinanceCategoryListItemType) {
     LoadingService.getInstance().loading();
-    mode.value = 'form';
-    formType.value = 'edit';
-    currentCategoryId.value = item.id;
-    await setOrgTypeModuleList();
-    await setAllSystemMenuTree();
-    const result = await getOrgTypeById({ id: item.id });
-    categoryForm.value = {
-        typeModuleId: item.typeModuleId,
-        name: item.name,
-        sort: item.sort,
-        desc: item.desc ?? '',
-        menuIdArr: result[0].menuIdArr
-    };
+    await goEditFormView(item);
     LoadingService.getInstance().stop();
-
 }
 
 
@@ -155,11 +138,8 @@ async function handleSizeChange(item: number) {
 }
 
 async function handleCreateNewRole() {
-    mode.value = 'form';
-    formType.value = 'create';
     LoadingService.getInstance().loading();
-    await setOrgTypeModuleList();
-    await setAllSystemMenuTree();
+    await goCreateFormView();
     LoadingService.getInstance().stop();
 }
 
@@ -174,14 +154,8 @@ function handleRemoveRoleItem(item: RoleListItemType) {
         }
     )
         .then(async () => {
-            await deleteFinanceCategory({
-                id: item.id
-            });
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
-            });
             LoadingService.getInstance().loading();
+            await deleteFinanceCategory(item.id);
             await setFinanceCategoryList();
             LoadingService.getInstance().stop();
         })

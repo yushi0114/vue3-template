@@ -4,7 +4,7 @@ import type {
     FinanceInstitutionMenuTreeItemType,
     FinanceInstitutionTreeItemType,
     FinanceInstitutionType
-} from '@/views/finance/type/finance-institution.type';
+} from '@/types/finance';
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
 
 
@@ -13,7 +13,6 @@ export async function getFinanceInstitutionTreeApi(params: { typeCode: string })
         params
     });
 }
-
 
 export async function getFinanceInstitutionDicApi(params: {
     orgTypeCode: string
@@ -35,8 +34,16 @@ export async function getFinanceInstitution(params: { id: string }): Promise<Fin
 }
 
 
-export async function getOrgMenuCheckedIds(params: { id: string }): Promise<string[]> {
+export async function getOrgMenuCheckedIdsApi(params: { id: string }): Promise<string[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/menu/check`, {
+        params
+    });
+}
+
+export async function refreshOrgKeyApi(params: { id: string }): Promise<{
+    secretKey: string
+}> {
+    return api.get(`${DMS_DOMAIN}/v1/org/refresh/key`, {
         params
     });
 }
@@ -83,7 +90,7 @@ export async function deleteOrgApi(params: {
 }
 
 
-export async function getFinanceInstitutionMenuTree(params: { id: string }): Promise<FinanceInstitutionMenuTreeItemType[]> {
+export async function getFinanceInstitutionMenuTreeApi(params: { id: string }): Promise<FinanceInstitutionMenuTreeItemType[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/menu/check/tree`, {
         params
     });
@@ -95,7 +102,6 @@ export async function getFinanceOrgUserRoleList(params: {
     sortType: 'desc' | 'asc';
     pageIndex: number;
     pageSize: number;
-    menuName: string;
     orgId: string;
     name?: string;
 }): Promise<{
@@ -148,13 +154,12 @@ export async function getFinanceTypeMenuTreeByIdApi(params: { id: string }): Pro
     });
 }
 
-export async function getFinanceOrgRoleList(params: {
+export async function getFinanceOrgRoleListApi(params: {
     searchInput?: string;
     sortField: 'create_time' | 'update_time';
     sortType: 'desc' | 'asc';
     pageIndex: number;
     pageSize: number;
-    menuName: string;
     orgId: string;
 }): Promise<{
     pageTotal: number;

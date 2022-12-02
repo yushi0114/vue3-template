@@ -20,8 +20,12 @@
     <el-table
         :data="roleList.list" style="width: 100%"
         @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }">
-        <el-table-column prop="name" label="名称" width="180"/>
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        :header-cell-style="{
+            color: '#595959',
+            'background-color': '#f3f4f8'
+        }">
+        <el-table-column prop="name" label="名称"/>
         <el-table-column prop="desc" label="描述" width="180"/>
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
@@ -64,29 +68,27 @@ import Icon from '@/components/Icon.vue';
 import type { RoleListItemType } from '@/views/system/type/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
-    currentRoleId,
-    formType,
+    deleteRole,
     getRolePageList,
-    getTreeData,
-    mode, resetRoleFilterObject, resetRoleForm,
+    goCreateFormView, goEditFormView,
+    resetRoleFilterObject,
     roleFilterObject,
-    roleForm,
-    roleList, deleteRole, getOrgRoleMenuIds
+    roleList
 } from './institution-role';
 import { LoadingService } from '@/views/system/loading-service';
+import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
 async function handleSortChange(params: { prop: 'update_time' | 'create_time', order: string }) {
-    console.log(params);
     LoadingService.getInstance().loading();
     roleFilterObject.value.currentPage = 0;
     roleFilterObject.value.currentSize = 10;
     roleFilterObject.value.sortField = params.prop;
     roleFilterObject.value.sortType = formatSortType(params.order);
-    await getRolePageList();
+    await getRolePageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
 
@@ -94,50 +96,43 @@ async function handleSearchRoleList() {
     LoadingService.getInstance().loading();
     roleFilterObject.value.currentPage = 0;
     roleFilterObject.value.currentSize = 10;
-    await getRolePageList();
+    await getRolePageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
 
 async function handleClear() {
     LoadingService.getInstance().loading();
     resetRoleFilterObject();
-    await getRolePageList();
+    await getRolePageList(currentInstitutionId.value);
+    LoadingService.getInstance().stop();
+}
+
+async function handleCreateNewRole() {
+    LoadingService.getInstance().loading();
+    await goCreateFormView();
     LoadingService.getInstance().stop();
 }
 
 async function handleEditRoleItem(item: RoleListItemType) {
     LoadingService.getInstance().loading();
-    mode.value = 'form';
-    formType.value = 'edit';
-    currentRoleId.value = item.id;
-    await getTreeData();
-    const menuList = await getOrgRoleMenuIds(currentRoleId.value);
-    roleForm.value = {
-        name: item.name,
-        desc: item.desc ?? '',
-        menuIdArr: menuList as unknown as string[]
-    };
+    await goEditFormView(item);
     LoadingService.getInstance().stop();
 }
 
 async function handleCurrentChange(item: number) {
     roleFilterObject.value.currentPage = item;
-    await getRolePageList();
+    LoadingService.getInstance().loading();
+    await getRolePageList(currentInstitutionId.value);
+    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     roleFilterObject.value.currentSize = item;
-    await getRolePageList();
-}
-
-async function handleCreateNewRole() {
-    mode.value = 'form';
-    formType.value = 'create';
-    resetRoleForm();
     LoadingService.getInstance().loading();
-    await getTreeData();
+    await getRolePageList(currentInstitutionId.value);
     LoadingService.getInstance().stop();
 }
+
 
 function handleRemoveRoleItem(item: RoleListItemType) {
     ElMessageBox.confirm(
@@ -149,13 +144,11 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
+        .then(async () => {
             await deleteRole(item.id);
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
-            });
-            await getRolePageList();
+            LoadingService.getInstance().loading();
+            await getRolePageList(currentInstitutionId.value);
+            LoadingService.getInstance().stop();
         })
         .catch(() => {
             ElMessage({

@@ -1,9 +1,9 @@
 import { api } from '@/api';
 import { DMS_DOMAIN } from '@/api/const';
-import type { FinanceScoreListItemType, GetFinanceScoreListType } from '@/views/finance/type/finance-score.type';
+import type { FinanceScoreListItemType, GetFinanceScoreListType } from '@/types/finance';
 
 
-export function getFinanceScoreList(params: GetFinanceScoreListType): Promise<{
+export function getFinanceScoreListApi(params: GetFinanceScoreListType): Promise<{
     data: FinanceScoreListItemType[],
     total: number
 }> {

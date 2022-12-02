@@ -9,21 +9,21 @@ import type {
     GetFinanceCategoryListType,
     OrgTypeMenuItem,
     UpdateFinanceCategoryType
-} from '@/views/finance/type/finance-category.type';
+} from '@/types/finance';
 
-export function addFinanceCategory(params: AddFinanceCategoryType) {
+export function addFinanceCategoryApi(params: AddFinanceCategoryType) {
     return api.post(`${DMS_DOMAIN}/v1/add/org/type`, params);
 }
 
-export function updateFinanceCategory(params: UpdateFinanceCategoryType) {
+export function updateFinanceCategoryApi(params: UpdateFinanceCategoryType) {
     return api.post(`${DMS_DOMAIN}/v1/update/org/type`, params);
 }
 
-export function deleteFinanceCategory(params: DeleteFinanceCategoryType) {
+export function deleteFinanceCategoryApi(params: DeleteFinanceCategoryType) {
     return api.post(`${DMS_DOMAIN}/v1/del/org/type`, params);
 }
 
-export function getFinanceCategoryList(params: GetFinanceCategoryListType) {
+export function getFinanceCategoryListApi(params: GetFinanceCategoryListType) {
     return api.get(`${DMS_DOMAIN}/v1/org/type/list`, {
         params
     });
@@ -33,7 +33,7 @@ export function getOrgTypeModuleList(): Promise<OrgTypeMenuItem[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/type/module`);
 }
 
-export function getOrgTypeDic(): Promise<FinanceCategoryListItemType[]> {
+export function getOrgTypeDicApi(): Promise<FinanceCategoryListItemType[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/type/dic`);
 }
 

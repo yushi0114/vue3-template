@@ -18,18 +18,17 @@
         </el-form>
         <div class="user-footer">
             <el-button size="small" @click="cancel">取 消</el-button>
-            <el-button type="primary" size="small" :loading="isLoading" @click="deleteOrg(deleteFormRef)">确 定</el-button>
+            <el-button type="primary" size="small" :loading="isLoading" @click="handleDeleteOrg(deleteFormRef)">确 定</el-button>
         </div>
     </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { deleteInstitution, isDeleteOrgModelShow, willDeleteOrgIdList } from './finance-institution';
+import { deleteOrg, isDeleteOrgModelShow, willDeleteOrgIdList } from './finance-institution';
 import type { ValidateCallback } from '@/utils';
 import { validateIllegalSymbol } from '@/utils';
 import type { FormInstance } from 'element-plus';
-
 
 const isLoading = ref(false);
 const deleteForm = ref({
@@ -63,19 +62,17 @@ function cancel() {
     isDeleteOrgModelShow.value = false;
 }
 
-async function deleteOrg(formEl: FormInstance | undefined) {
+async function handleDeleteOrg(formEl: FormInstance | undefined) {
     if (!formEl) return;
     await formEl.validate(async (valid) => {
         if (valid) {
             if (willDeleteOrgIdList.value?.length) {
                 isLoading.value = true;
-                await deleteInstitution({
+                await deleteOrg({
                     orgIdArr: willDeleteOrgIdList.value
                 });
                 isLoading.value = false;
             }
-        } else {
-            // todo
         }
     });
 }

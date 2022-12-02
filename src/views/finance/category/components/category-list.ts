@@ -1,12 +1,20 @@
 import { reactive, ref } from 'vue';
-import { getAllSystemMenuTree, getFinanceCategoryList, getOrgTypeModuleList } from '@/api/finance/finance-category';
+import {
+    addFinanceCategoryApi,
+    deleteFinanceCategoryApi,
+    getAllSystemMenuTree,
+    getFinanceCategoryListApi,
+    getOrgTypeById,
+    getOrgTypeModuleList, updateFinanceCategoryApi
+} from '@/api/finance/finance-category';
 import type {
+    AddFinanceCategoryType,
     AllSystemMenuTreeItem,
     FinanceCategoryFormType,
     FinanceCategoryListItemType,
-    OrgTypeMenuItem
-} from '@/views/finance/type/finance-category.type';
-import { LoadingService } from '@/views/system/loading-service';
+    OrgTypeMenuItem, UpdateFinanceCategoryType
+} from '@/types/finance';
+import { ElMessage } from 'element-plus';
 
 export const allSystemMenuTree = ref<AllSystemMenuTreeItem[]>();
 export const orgTypeModuleList = ref<(OrgTypeMenuItem & { label: string; value: string })[]>();
@@ -44,12 +52,33 @@ export const financeFilterObject = reactive<{
 });
 
 
-export async function handleGoBack() {
+export async function goListView() {
     mode.value = 'list';
     currentCategoryId.value = undefined;
-    LoadingService.getInstance().loading();
     await setFinanceCategoryList();
-    LoadingService.getInstance().stop();
+}
+
+export async function goCreateFormView() {
+    mode.value = 'form';
+    formType.value = 'create';
+    await setOrgTypeModuleList();
+    await setAllSystemMenuTree();
+}
+
+export async function goEditFormView(item: FinanceCategoryListItemType) {
+    mode.value = 'form';
+    formType.value = 'edit';
+    currentCategoryId.value = item.id;
+    await setOrgTypeModuleList();
+    await setAllSystemMenuTree();
+    const result = await getOrgTypeById({ id: item.id });
+    categoryForm.value = {
+        typeModuleId: item.typeModuleId,
+        name: item.name,
+        sort: item.sort,
+        desc: item.desc ?? '',
+        menuIdArr: result[0].menuIdArr
+    };
 }
 
 export async function setAllSystemMenuTree(): Promise<void> {
@@ -79,7 +108,7 @@ export async function setOrgTypeModuleList(): Promise<void> {
 
 export async function setFinanceCategoryList(): Promise<void> {
     return new Promise((resolve) => {
-        getFinanceCategoryList({
+        getFinanceCategoryListApi({
             pageIndex: financeFilterObject.currentPage,
             pageSize: financeFilterObject.currentSize,
             searchInput: financeFilterObject.searchInput,
@@ -92,5 +121,44 @@ export async function setFinanceCategoryList(): Promise<void> {
             resolve();
         });
     });
+}
 
+
+export async function addFinanceCategory(params: AddFinanceCategoryType): Promise<void> {
+    return new Promise((resolve) => {
+        addFinanceCategoryApi(params).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '创建成功',
+            });
+        }).finally(() => {
+            resolve();
+        });
+    });
+}
+
+export async function updateFinanceCategory(params: UpdateFinanceCategoryType): Promise<void> {
+    return new Promise((resolve) => {
+        updateFinanceCategoryApi(params).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '创建成功',
+            });
+        }).finally(() => {
+            resolve();
+        });
+    });
+}
+
+export async function deleteFinanceCategory(id: string): Promise<void> {
+    return new Promise((resolve) => {
+        deleteFinanceCategoryApi({ id }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+        }).finally(() => {
+            resolve();
+        });
+    });
 }

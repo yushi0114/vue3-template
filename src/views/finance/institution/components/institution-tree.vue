@@ -1,14 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" clearable>
-                <template #append>
-                    <el-button @click="handleSearchMenuTree">
-                        <template #icon>
-                            <Icon :name="'ep:search'"></Icon>
-                        </template>
-                    </el-button>
-                </template>
+            <el-input placeholder="请输入搜索内容" v-model="filterText" clearable>
             </el-input>
             <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
                 <template #icon>
@@ -17,11 +10,13 @@
             </el-button>
         </div>
         <el-tree
+            ref="treeRef"
             class="left-tree"
             :data="institutionTreeData"
             node-key="id"
             default-expand-all
             @node-click="handleNodeClick"
+            :filter-node-method="filterNode"
             :expand-on-click-node="false">
             <template #default="{ node, data }">
                 <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
@@ -32,7 +27,7 @@
                         <div class="popover-list">
                             <el-button
                                 @click="handleOperateTreeItem(data, 'create')"
-                                text
+                                link
                                 class="custom-btn"
                                 size="small">
                                 <template #icon>
@@ -42,7 +37,7 @@
                             </el-button>
                             <el-button
                                 @click="handleOperateTreeItem(data, 'edit')"
-                                text
+                                link
                                 size="small"
                                 class="custom-btn">
                                 <template #icon>
@@ -52,7 +47,7 @@
                             </el-button>
                             <el-button
                                 @click="handleOperateTreeItem(data, 'remove')"
-                                text
+                                link
                                 class="custom-btn"
                                 size="small">
                                 <template #icon>
@@ -78,90 +73,58 @@
 import { ref } from 'vue';
 import Icon from '@/components/Icon.vue';
 import {
-    getInstitutionDic,
-    getInstitutionItem,
-    getInstitutionTree,
-    institutionItemData,
+    selectOrgItem,
+    goCreateChildLevelFormView,
+    goCreateFirstLevelFormView,
+    goEditFormView,
+    openRemoveView,
     institutionTreeData,
     isDeleteOrgModelShow,
-    lookForAllId,
-    mode,
-    resetDeleteMessage,
-    resetInstitutionForm,
-    setCurrentMenuId,
-    setInstitutionForm,
-    willCreateOrEditInstitutionData,
-    willDeleteOrgIdList,
     willDeleteOrgName
 } from './finance-institution';
-import { getRolePageList } from '@/views/finance/institution/components/institution-role/institution-role';
-import { getUserPageList } from '@/views/finance/institution/components/institution-user/institution-user';
 import { LoadingService } from '@/views/system/loading-service';
 import InstitutionRemoveDialog from '@/views/finance/institution/components/institution-remove-dialog.vue';
-import type { FinanceInstitutionTreeItemType } from '@/views/finance/type/finance-institution.type';
-
+import type { FinanceInstitutionTreeItemType } from '@/types/finance';
+import type { ElTree } from 'element-plus';
 
 const activeId = ref();
+const treeRef = ref<InstanceType<typeof ElTree>>();
+const filterText = ref('');
+
+watch(filterText, (val) => {
+    treeRef.value!.filter(val);
+});
+
+const filterNode = (value: string, data: FinanceInstitutionTreeItemType) => {
+    if (!value) return true;
+    return data.orgName.includes(value);
+};
 
 async function handleAddNewMenu() {
-    mode.value = 'form';
     LoadingService.getInstance().loading();
-    willCreateOrEditInstitutionData.value = {
-        level: 1
-    };
-    resetInstitutionForm();
-    await getInstitutionDic();
+    await goCreateFirstLevelFormView();
     LoadingService.getInstance().stop();
-}
-
-async function handleSearchMenuTree() {
-    await getInstitutionTree();
 }
 
 async function handleOperateTreeItem(item: FinanceInstitutionTreeItemType, type: 'edit' | 'remove' | 'create') {
     if (type === 'remove') {
-        resetDeleteMessage();
-        willDeleteOrgIdList.value = lookForAllId([item], []);
-        isDeleteOrgModelShow.value = true;
-        willDeleteOrgName.value = item.orgName;
+        openRemoveView(item);
     }
     if (type === 'edit') {
-        resetInstitutionForm();
         LoadingService.getInstance().loading();
-        await getInstitutionItem(item.id);
-        if (institutionItemData.value) {
-            setInstitutionForm(institutionItemData.value);
-            willCreateOrEditInstitutionData.value = {
-                id: institutionItemData.value?.id,
-                level: institutionItemData.value?.orgLevel
-            };
-        }
-        await getInstitutionDic();
-        mode.value = 'form';
+        await goEditFormView(item.id);
         LoadingService.getInstance().stop();
     }
     if (type === 'create') {
-        resetInstitutionForm();
         LoadingService.getInstance().loading();
-        await getInstitutionItem(item.id);
-        if (institutionItemData.value) {
-            willCreateOrEditInstitutionData.value = {
-                parentId: item.id,
-                level: institutionItemData.value?.orgLevel + 1
-            };
-        }
-        mode.value = 'form';
-        await getInstitutionDic();
+        await goCreateChildLevelFormView(item.id);
         LoadingService.getInstance().stop();
     }
 }
 
 async function handleNodeClick(data: FinanceInstitutionTreeItemType) {
-    setCurrentMenuId(data.id);
     LoadingService.getInstance().loading();
-    await getInstitutionItem(data.id);
-    await getRolePageList();
-    await getUserPageList();
+    await selectOrgItem(data.id);
     LoadingService.getInstance().stop();
 }
 

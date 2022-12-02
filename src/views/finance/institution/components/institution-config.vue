@@ -5,10 +5,13 @@
         </div>
         <div class="menu-content" v-if="institutionItemData">
             <institution-desc style="margin-bottom: 24px;"></institution-desc>
-            <el-tabs v-model="activeInstitutionName" type="card" @tab-click="handleInstitutionTabClick"
-                     class="list-tab">
+            <el-tabs
+                v-model="activeInstitutionName"
+                type="card"
+                @tab-click="handleInstitutionTabClick"
+                class="list-tab">
                 <el-tab-pane label="机构菜单" name="menuList">
-                    <institution-menu></institution-menu>
+                    <institution-menu v-if="activeInstitutionName === 'menuList'"></institution-menu>
                 </el-tab-pane>
                 <el-tab-pane label="角色列表" name="roleList">
                     <institution-role></institution-role>
@@ -19,7 +22,7 @@
             </el-tabs>
         </div>
         <div v-else class="noDataContainer">
-            <el-empty description="暂无数据" />
+            <el-empty description="暂无数据"/>
         </div>
     </div>
     <div class="menu-container" style="overflow-y: auto" v-if="mode === 'form'">
@@ -33,11 +36,16 @@ import InstitutionTree from '@/views/finance/institution/components/institution-
 import InstitutionDesc from '@/views/finance/institution/components/institution-desc.vue';
 import InstitutionRole from '@/views/finance/institution/components/institution-role/index.vue';
 import InstitutionUser from '@/views/finance/institution/components/institution-user/index.vue';
-import { activeInstitutionName, institutionItemData, mode } from './finance-institution';
+import { activeInstitutionName, changeOrgDetailTabView, institutionItemData, mode } from './finance-institution';
 import InstitutionForm from '@/views/finance/institution/components/institution-form.vue';
+import type { TabsPaneContext } from 'element-plus';
+import type { OrgDetailTabViewType } from '@/types/finance';
+import { LoadingService } from '@/views/system/loading-service';
 
-function handleInstitutionTabClick() {
-
+async function handleInstitutionTabClick(tab: TabsPaneContext) {
+    LoadingService.getInstance().loading();
+    await changeOrgDetailTabView(tab.paneName as OrgDetailTabViewType);
+    LoadingService.getInstance().stop();
 }
 </script>
 

@@ -1,6 +1,6 @@
 import { api } from '@/api';
 import { DMS_DOMAIN } from '@/api/const';
-import type { FinanceLogoListItemType, GetFinanceLogoListType } from '@/views/finance/type/finance-logo.type';
+import type { FinanceLogoListItemType, GetFinanceLogoListType } from '@/types/finance';
 
 
 export function getFinanceLogoList(params: GetFinanceLogoListType): Promise<{

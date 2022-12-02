@@ -2,7 +2,7 @@
   <PageContent :title="'合作伙伴'">
       <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="市综服" name="zjfw">
-              <finance-partner-config v-if="activeName === 'zjfw'"> </finance-partner-config>
+              <finance-partner-config v-if="activeName === 'zjfw'"></finance-partner-config>
           </el-tab-pane>
           <el-tab-pane label="辽信通" name="sjzx">
               <finance-partner-config v-if="activeName === 'sjzx'"></finance-partner-config>
@@ -16,7 +16,7 @@ import { activeName, getPageList, filterObject, mode } from '@/views/finance/par
 import type { TabsPaneContext } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
 import { onMounted } from 'vue';
-import type { FinancePartnerTabType } from '@/views/finance/type/finance-parnter.type';
+import type { FinancePartnerTabType } from '@/types/type/finance-parnter.type';
 import FinancePartnerConfig from './components/finance-partner-config.vue';
 
 async function handleClick(tab: TabsPaneContext) {

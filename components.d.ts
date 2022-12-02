@@ -77,6 +77,8 @@ declare module '@vue/runtime-core' {
     Identity: typeof import('./src/components/ReportDetail/components/basic/identity/index.vue')['default']
     IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
     IEpBack: typeof import('~icons/ep/back')['default']
+    IEpCheck: typeof import('~icons/ep/check')['default']
+    IEpClose: typeof import('~icons/ep/close')['default']
     IEpDelete: typeof import('~icons/ep/delete')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
     IEpEdit: typeof import('~icons/ep/edit')['default']

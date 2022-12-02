@@ -17,6 +17,7 @@ import { mode } from './institution-user';
 
 <style scoped lang="scss">
 .pane-container {
+    padding: 24px;
     width: 100%;
     height: 100%;
     box-sizing: border-box;

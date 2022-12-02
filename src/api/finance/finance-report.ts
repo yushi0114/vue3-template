@@ -1,9 +1,9 @@
 import { api } from '@/api';
 import { DMS_DOMAIN } from '@/api/const';
-import type { FinanceReportListItemType, GetFinanceReportListType } from '@/views/finance/type/finance-record.type';
+import type { FinanceReportListItemType, GetFinanceReportListType } from '@/types/finance';
 
 
-export function getFinanceReportList(params: GetFinanceReportListType): Promise<{
+export function getFinanceReportListApi(params: GetFinanceReportListType): Promise<{
     data: FinanceReportListItemType[],
     total: number
 }> {

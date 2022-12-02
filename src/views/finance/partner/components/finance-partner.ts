@@ -1,13 +1,12 @@
 import { ref } from 'vue';
 import { LoadingService } from '@/views/system/loading-service';
-import { ElMessage } from 'element-plus';
-import type { UploadUserFile } from 'element-plus';
+import { type UploadUserFile, ElMessage } from 'element-plus';
 import { FinancePartnerService } from '@/api/finance/finance-partner';
 import type {
     FinancePartnerFormType,
     FinancePartnerListItemType,
     FinancePartnerTabType
-} from '@/views/finance/type/finance-parnter.type';
+} from '@/types/finance';
 
 
 export const activeName = ref<FinancePartnerTabType>('zjfw');
@@ -16,7 +15,7 @@ export const currentId = ref();
 export const form = ref<FinancePartnerFormType>({
     name: '',
     imgUrl: '',
-    status: false
+    status: true
 });
 export const formType = ref<'create' | 'edit'>('edit');
 export const fileList = ref<UploadUserFile[]>([]);
@@ -33,7 +32,7 @@ export function resetForm() {
     form.value = {
         name: '',
         imgUrl: '',
-        status: false
+        status: true
     };
 }
 
@@ -117,6 +116,7 @@ export async function update(): Promise<void> {
         new FinancePartnerService(activeName.value).getInstance().update({
             id: currentId.value,
             ...form.value,
+            status: form.value.status ? 1 : 0,
             menuName: ''
         }).then(() => {
             ElMessage({
@@ -139,7 +139,7 @@ export async function remove(params: { id: string }): Promise<void> {
         }).then(() => {
             ElMessage({
                 type: 'success',
-                message: '更新成功',
+                message: '删除成功',
             });
             resolve();
         }).catch(() => {

@@ -72,14 +72,11 @@ function clear() {
     <!-- -->
     <el-form
         ref="formRef"
+        size="large"
         :rules="rules"
-        :model="formModel"
-        label-position="top">
+        :model="formModel">
         <el-form-item label="请输入新的用户名" prop="username">
-            <el-input
-                v-model="formModel.username"
-                size="large"
-                />
+            <el-input v-model="formModel.username" />
         </el-form-item>
     </el-form>
 </MessageDialog>

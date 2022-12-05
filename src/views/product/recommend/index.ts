@@ -1,8 +1,8 @@
-import RecommandCreate from './RecommandCreate.vue';
+import RecommandEdit from './RecommandEdit.vue';
 
 export const routes = [
     {
-        path: '/create/:kind',
-        component: RecommandCreate
+        path: '/edit/:kind',
+        component: RecommandEdit
     }
 ];

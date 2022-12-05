@@ -3,10 +3,10 @@ import { OPERATE_TYPE } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
 import SjcForm from '@/components/SjcForm/index.vue';
 import { useModal } from '@/composables';
-import { toRefs } from '@vueuse/core';
 import type { ProductFilterEntity } from '@/types';
 import { isDefind } from '@/utils';
-import { pick } from 'lodash';
+import { pick, cloneDeep } from 'lodash';
+import { FILTER_UNIT_MAP } from '../../constants';
 
 const effectFields = ['typeCode', 'typeValue'];
 const props = withDefaults(
@@ -23,29 +23,33 @@ const emits = defineEmits<{
     (e: 'submit', type: OPERATE_TYPE, v: Recordable): void;
 }>();
 
-const propsRefs = toRefs(props);
+const form = ref(cloneDeep(props.form));
 const title = ref('');
 const modalType = ref<OPERATE_TYPE>(OPERATE_TYPE.ADD);
 const initialData = ref<ProductFilterEntity | null>(null);
 const publicFormRef = ref<InstanceType<typeof SjcForm> | null>(null);
-const openCallback = (data?: { type: OPERATE_TYPE; data?: any,}) => {
-    console.log('data: ', data);
+const openCallback = (data?: { type: OPERATE_TYPE; data?: any }) => {
+    form.value = cloneDeep(props.form);
     if (data?.type === OPERATE_TYPE.ADD) {
         title.value = '新建过滤项';
         modalType.value = OPERATE_TYPE.ADD;
         initialData.value = data?.data ?? null;
-        propsRefs.form.value.forEach((formItem) => {
-            formItem.defaultValue = undefined;
-        });
+        filterForm();
         return;
     }
     title.value = '编辑过滤项';
     modalType.value = OPERATE_TYPE.EDIT;
     initialData.value = data?.data;
-    propsRefs.form.value.forEach((formItem) => {
+    filterForm();
+    form.value.forEach((formItem) => {
         if (isDefind(data?.data[formItem.keyName])) {
-            console.log('data[formItem.keyName]：', data?.data[formItem.keyName]);
             formItem.defaultValue = data?.data[formItem.keyName];
+        }
+
+        if (data?.data.filterValue) {
+            const [start, end] = (data?.data.filterValue ?? '').split('-');
+            formItem.keyName === 'filterValueStart' && (formItem.defaultValue = start);
+            formItem.keyName === 'filterValueEnd' && (formItem.defaultValue = end);
         }
     });
 };
@@ -62,11 +66,30 @@ const handleCancel = () => {
 
 // eslint-disable-next-line no-undef
 const handleSubmit = (values: Recordable) => {
-    const a = pick(initialData.value, effectFields);
-    console.log('a: ', a);
-    const params = { ...pick(initialData.value, effectFields),...values };
+    if (!values.filterValue && values.filterValueStart && values.filterValueEnd) {
+        values.filterValue = values.filterValueStart + '-' + values.filterValueEnd;
+        Reflect.deleteProperty(values, 'filterValueStart');
+        Reflect.deleteProperty(values, 'filterValueEnd');
+    }
+    const params = { ...pick(initialData.value, effectFields), ...values };
     initialData.value?.id && (params.id = initialData.value.id);
     emits('submit', modalType.value, params);
+};
+
+const filterForm = () => {
+    const rangeInputFields = ['贷款额度', '贷款期限', '融资额度', '融资期限'];
+    if (rangeInputFields.includes(initialData.value?.typeValue ?? '')) {
+        form.value = form.value.filter((item) => item.keyName !== 'filterValue').map((item) => {
+            if (item.keyName === 'unit') {
+                item.defaultValue = FILTER_UNIT_MAP[initialData.value?.typeValue as keyof typeof FILTER_UNIT_MAP];
+            }
+            return item;
+        });
+    } else {
+        form.value = form.value.filter((item) =>
+            ['filterValue', 'isFilterShow'].includes(item.keyName)
+        );
+    }
 };
 
 defineExpose({
@@ -85,7 +108,7 @@ defineExpose({
         @close="handleCancel">
         <sjc-form
             ref="publicFormRef"
-            :def="propsRefs.form.value"
+            :def="form"
             @search="handleSubmit"></sjc-form>
         <FlexRow horizontal="center">
             <el-button @click="handleCancel">取 消</el-button>

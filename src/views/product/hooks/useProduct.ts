@@ -29,7 +29,6 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
     const { request: requestProduct } = useApi(() => getProduct({ id: id?.value ?? '', platform: platform.value }), {
         ready: productFilters,
         onSuccess(data) {
-            console.log('data: ', data);
             const ignoreList = ['贷款额度', '贷款期限', '担保方式'];
             const filterList = resolveArrayByKey(data.filterList, 'typeValue', ignoreList);
             filterList.forEach((item: any) => {
@@ -165,7 +164,6 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
     };
 
     watch(platform, () => {
-        console.log('platform: ', platform);
         resetForm();
         requestProductFilters();
     });
@@ -174,7 +172,6 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
         () => id?.value,
         () => {
             id?.value && requestProduct();
-            console.log('id?.value: ', id?.value);
         }
     );
 

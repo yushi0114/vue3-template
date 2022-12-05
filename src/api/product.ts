@@ -329,7 +329,7 @@ export type UpdateProductFilterSortPayload = { data: ProductFilterEntity[] } & {
 
 export type UpdateProductFilterSortResponse = {};
 
-export function updateProductFilterSort(payload: UpdateProductFilterPayload): Promise<UpdateProductFilterResponse> {
+export function updateProductFilterSort(payload: UpdateProductFilterSortPayload): Promise<UpdateProductFilterResponse> {
     const url =
         payload.platform === PlatformType.LiaoXinTong ? '/v1/update/product/filter/sort' : '/v1/zjfw/update/product/filter/sort';
 

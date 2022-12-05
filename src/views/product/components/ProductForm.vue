@@ -16,7 +16,6 @@ const emits = defineEmits<{
 }>();
 
 const propsRefs = toRefs(props);
-console.log('propsRefs: ', propsRefs);
 
 const { formValueChange, PRODUCT_FORM, dynamicForm } = useProductForm(propsRefs.platform, propsRefs.id);
 
@@ -31,7 +30,6 @@ const handleCancel = () => {
 };
 
 const handleSubmit = async(values: any) => {
-    console.log('values: ', values);
     const params = values;
     if (Number(params.referenceRateStart) === Number(params.referenceRateEnd)) {
         params.referenceRate = toFixed(params.referenceRateEnd) + '%';

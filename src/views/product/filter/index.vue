@@ -6,7 +6,7 @@ import FilterModal from './components/FilterModal.vue';
 import FilterOptionsModal from './components/FilterOptionsModal.vue';
 import type { ProductFilterEntity } from '@/types';
 import { noop } from '@/utils';
-import { CANT_CHANGE_FILTER_MAP } from '../constants';
+import { CANT_CHANGE_FILTER_MAP, FILTER_UNIT_MAP } from '../constants';
 
 const dragging = ref(false);
 
@@ -29,6 +29,12 @@ const {
 function handleTabChange(plat: PlatformType) {
     platform.value = plat;
 }
+
+const formatterFilterUnit = computed(() => {
+    return (typeValue: keyof typeof FILTER_UNIT_MAP, filterValue: string) => {
+        return FILTER_UNIT_MAP[typeValue] && filterValue !== '不限' ? filterValue + FILTER_UNIT_MAP[typeValue] : filterValue;
+    };
+});
 
 const canFilterChange = computed(() => {
     return (typeValue: string) => {
@@ -68,7 +74,6 @@ const handleFilterOptionsModalSubmit = (type: OPERATE_TYPE, values: any) => {
 };
 
 const handleDeleteFilter = async(filter: ProductFilterEntity) => {
-    console.log('filter: ', filter);
     try {
         await ElMessageBox.confirm(
             `确认删除“${filter.typeValue}${filter.filterValue ? '/' + filter.filterValue : ''}”的筛选项吗？`,
@@ -84,8 +89,7 @@ const handleDeleteFilter = async(filter: ProductFilterEntity) => {
 };
 
 const handleDragListChange = () => {
-    requestUpdateProductFilterSort({ data: filters.value});
-    console.log('list: ', filters.value);
+    requestUpdateProductFilterSort({ data: filters.value });
 };
 </script>
 
@@ -109,8 +113,7 @@ const handleDragListChange = () => {
                 filter=".disable-drag"
                 @start="dragging = true"
                 @end="dragging = false"
-                @sort="handleDragListChange"
-                >
+                @sort="handleDragListChange">
                 <template #item="{ element: parent }">
                     <ContentBoard
                         class="product-filter-item"
@@ -118,7 +121,9 @@ const handleDragListChange = () => {
                         :disabled="!parent.isFilterShow"
                         :label="parent.typeValue">
                         <template #label-rest>
-                            <FlexRow gap="xs" class="disable-drag">
+                            <FlexRow
+                                gap="xs"
+                                class="disable-drag">
                                 <TextHoverable
                                     v-if="parent.isFilterShow"
                                     color="regular"
@@ -147,14 +152,13 @@ const handleDragListChange = () => {
                             filter=".disable-drag"
                             @start="dragging = true"
                             @end="dragging = false"
-                            @sort="handleDragListChange"
-                            >
+                            @sort="handleDragListChange">
                             <template #item="{ element: child }">
-                                <ElTag :type="child.isFilterShow ? '' : 'info'">
+                                <ElTag :class="[child.filterValue === '不限' && 'disable-drag']" :type="child.isFilterShow ? '' : 'info'">
                                     <FlexRow
                                         horizontal="between"
                                         gap="md">
-                                        <div>{{ child.filterValue }}</div>
+                                        <div>{{ formatterFilterUnit(parent.typeValue, child.filterValue) }}</div>
                                         <FlexRow
                                             v-if="child.filterValue !== '不限'"
                                             gap="line"

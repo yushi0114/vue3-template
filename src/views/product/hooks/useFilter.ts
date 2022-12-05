@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\product\hooks\useFilter.ts
  * @Author: zys
  * @Date: 2022-12-02 11:22:14
- * @LastEditTime: 2022-12-02 17:32:49
+ * @LastEditTime: 2022-12-05 10:35:33
  * @LastEditors: zys
  * @Reference:
  */
@@ -98,7 +98,6 @@ export const useFilter = (platform: Ref<PlatformType>) => {
     );
 
     const { request: requestUpdateProductFilterSort } = useApi(
-        // eslint-disable-next-line no-undef
         (params: UpdateProductFilterSortPayload) => updateProductFilterSort({ platform: platform.value, ...params }),
         {
             onSuccess() {
@@ -128,7 +127,6 @@ export const useFilter = (platform: Ref<PlatformType>) => {
     watch(
         platform,
         () => {
-            console.log('1212：', 1212);
             requestProductFilters();
             resetForm();
         },

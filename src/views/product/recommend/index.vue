@@ -11,6 +11,7 @@ const { queryParams, goQuery } = useQueryParams({
     kind: ProductRecommandType.primary
 });
 const route = useRoute();
+const router = useRouter();
 const kind = ref(queryParams.value.kind);
 const kindName = computed<string>(() => {
     return productRecommandTypeMap[queryParams.value.kind];
@@ -37,19 +38,18 @@ function handleDelete(rd: ProductRecommandEntity) {
         .then(() => deleteProductRecommends({ id: rd.id }))
         .then(() => {
             ElMessage({ message: '删除成功', type: 'success' });
+            getList();
         })
         .catch(noop);
 }
 
 function handleEdit(rd: ProductRecommandEntity) {
     console.log(rd);
+    router.push(`${route.path}/edit/${kind.value}?id=${rd.id}`);
 }
 
 watch(kind, () => {
     getList();
-    nextTick(() => {
-        console.log(kindName.value);
-    });
 }, { immediate: true });
 
 
@@ -61,7 +61,7 @@ watch(kind, () => {
             <PlatformTab :filter-types="[PlatformType.LiaoXinTong]"/>
 
             <FlexRow horizontal="between">
-                <el-select v-model="kind" @change="(type: ProductRecommandType) => goQuery({ kind })">
+                <el-select v-model="kind" @change="goQuery({ kind })">
                     <el-option
                         v-for="opt in productRecommandTypeOptions"
                         :key="opt.value"
@@ -69,11 +69,10 @@ watch(kind, () => {
                         :label="opt.name"/>
                 </el-select>
 
-                <RouterLink :to="`${route.path}/create/${kind}`">
+                <RouterLink :to="`${route.path}/edit/${kind}?id=0`">
                     <el-button :icon="Plus" type="primary">新建{{ kindName }}</el-button>
                 </RouterLink>
             </FlexRow>
-            {{ loading }}
             <FlexRow class="product-recommand-row">
                 <ContentBoard
                     hoverable

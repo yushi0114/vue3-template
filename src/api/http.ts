@@ -61,6 +61,11 @@ service.interceptors.response.use(res => {
     const token = useToken();
     // 未设置状态码则默认成功状态
     const code = res.data.code || HttpStatus.ok;
+
+    // 文件下载状态码置为200
+    if (res.headers['content-type'] === 'application/octet-stream') {
+        return res.data;
+    }
     // 获取错误信息
     const msg = res.data.msg;
     if (code === 10010) {

@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\validate.ts
  * @Author: zys
  * @Date: 2022-11-07 17:08:03
- * @LastEditTime: 2022-11-18 17:21:59
+ * @LastEditTime: 2022-11-30 17:29:41
  * @LastEditors: zys
  * @Reference:
  */
@@ -60,7 +60,6 @@ export function genCheckEmpty(msg: string = '不能为空') {
     };
 }
 
-
 export const validatorIllegalSymbolFunction = (rule: any, value: string, callback: ValidateCallback) => {
     if (illegalSymbolRegExp.test(value)) {
         callback(new Error('输入内容不支持SQL和JS代码类型'));
@@ -71,5 +70,14 @@ export const validatorIllegalSymbolFunction = (rule: any, value: string, callbac
 
 export const validateIllegalSymbol = {
     validator: validatorIllegalSymbolFunction,
-    trigger: ['blur', 'change']
+    trigger: ['blur', 'change'],
+};
+
+export const NOT_LOGO_TIPS = '已选的银行未上传LOGO，请前往机构管理/机构LOGO管理页面上传';
+export const validatorLogo = (rule: any, value: string, callback: ValidateCallback) => {
+    if (value === NOT_LOGO_TIPS) {
+        callback(new Error('请先上传已选机构的LOGO'));
+    } else {
+        callback();
+    }
 };

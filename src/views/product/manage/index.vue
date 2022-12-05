@@ -1,26 +1,48 @@
 <script lang="ts" setup>
-import { onlineTypeOptions, PlatformType } from '@/enums';
-import { getProducts, getTopOrgs } from '@/api';
+import { onlineTypeOptions, PlatformType, SwitchType, onlineTypeMap } from '@/enums';
+import { getProducts, getTopOrgs, updateProductStatus, deleteProduct, isUsingProduct } from '@/api';
 import type { PlainOption, ProductEntity } from '@/types';
-import { ProductDetail, ProductList } from '../components';
+import { ProductDetail, ProductList, ProductEdit } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel, useApi } from '@/composables';
 
+const { push } = useRouter();
 const route = useRoute();
 const platform = ref(Number(route.params.type));
 const topOrgOptions = ref<PlainOption[]>([]);
 const detail = ref<ProductEntity | null>(null);
 
 const { model: listControlModel, clear: clearModel } = useListControlModel({
-    numberFields: ['status']
+    numberFields: ['status'],
 });
-
 
 const { request: requestOrgOptions } = useApi(getTopOrgs, { cache: true });
 
+const { request: requestProductStatus } = useApi(updateProductStatus, {
+    onSuccess() {
+        ElMessage({
+            type: 'success',
+            message: '操作成功',
+        });
+        getList();
+    },
+});
+
+const { request: requestDeleteProduct } = useApi(deleteProduct, {
+    onSuccess() {
+        ElMessage({
+            type: 'success',
+            message: '操作成功',
+        });
+        getList();
+    },
+});
+
+const { request: requestIsUsingProduct } = useApi((params) => isUsingProduct({platform: platform.value, ...params}));
 
 const count = ref(0);
 const list = ref<ProductEntity[]>([]);
+const productEditModal = ref<InstanceType<typeof ProductEdit> | null>(null);
 function getList() {
     getProducts(Object.assign({ platform: platform.value }, listControlModel))
         .then(({ total, data }) => {
@@ -42,68 +64,124 @@ function handleTabChange(plat: PlatformType) {
 }
 
 function goDetail(req: ProductEntity) {
-    console.log(req);
     detail.value = req;
 }
 
-watch(listControlModel, () => {
-    nextTick(getList);
-}, { immediate: true });
+function goReqDetail(req: ProductEntity) {
+    push({
+        path: `${route.path}/req/${platform.value}`,
+        query: {
+            productId: req.id,
+            productName: req.name
+        },
+    });
+}
+
+const handleEdit = (req: ProductEntity) => {
+    requestIsUsingProduct({id: req.id}).then(() => {
+        productEditModal.value?.open({ id: req.id });
+    }).catch(noop);
+};
+
+const handleUpdateStatus = async(req: ProductEntity) => {
+    const params = {
+        platform: platform.value,
+        id: req.id,
+        status: req.status === SwitchType.off ? SwitchType.on : SwitchType.off,
+    };
+    try {
+        await ElMessageBox.confirm(`确定${onlineTypeMap[params.status]}标题为“${req.name}”的产品吗？`, {
+            type: 'warning',
+        });
+        requestProductStatus(params);
+    } catch {
+        return;
+    }
+};
+
+const handleDelete = async(req: ProductEntity) => {
+    try {
+        await requestIsUsingProduct({ id: req.id });
+        await ElMessageBox.confirm(`确认删除“${req.name}”的产品吗？`, '删除', {
+            type: 'warning',
+        });
+        requestDeleteProduct({ id: req.id, platform: platform.value });
+    } catch {
+        noop;
+    }
+};
+
+watch(
+    listControlModel,
+    () => {
+        nextTick(getList);
+    },
+    { immediate: true }
+);
 
 onBeforeMount(() => {
-    requestOrgOptions()
-        .then(res => topOrgOptions.value = res.map(({ id, orgName }) => ({ name: orgName, value: id })));
+    requestOrgOptions().then(
+        (res) => (topOrgOptions.value = res.data.map(({ orgId, orgName }) => ({ name: orgName, value: orgId })))
+    );
 });
 </script>
 
 <template>
-  <PagePanel>
-    <Board class="product-manage">
-        <PlatformTab @tab-change="handleTabChange" />
-        <ListQueryControl
-            v-model="listControlModel"
-            :searchConfig="{
-                label: '请输入产品名称',
-                field: 'searchInput'
-            }"
-            :filterOptionsConfigs="[
-                { label: '机构名称', field: 'orgId', options: topOrgOptions },
-                { label: '产品状态', field: 'status', options: onlineTypeOptions },
-            ]"
-            :sortConfigs="[
-                { label: '申请时间', field: 'createTime', },
-            ]"
-        >
-            <template v-slot:search-rest>
-                <RouterLink :to="`${route.path}/new/1`">
-                    <el-button type="primary">新建</el-button>
-                </RouterLink>
-            </template>
-        </ListQueryControl>
-        <Text>
-        </Text>
+    <PagePanel>
+        <Board class="product-manage">
+            <PlatformTab @tab-change="handleTabChange" />
+            <ListQueryControl
+                v-model="listControlModel"
+                :searchConfig="{
+                    label: '请输入产品名称',
+                    field: 'searchInput',
+                }"
+                :filterOptionsConfigs="[
+                    { label: '机构名称', field: 'orgId', options: topOrgOptions },
+                    { label: '产品状态', field: 'status', options: onlineTypeOptions },
+                ]"
+                :sortConfigs="[{ label: '申请时间', field: 'createTime' }]">
+                <template v-slot:search-rest>
+                    <RouterLink :to="`${route.path}/new/1`">
+                        <el-button type="primary"><i-ep-plus />新建</el-button>
+                    </RouterLink>
+                </template>
+            </ListQueryControl>
+            <Text> </Text>
 
-        <ProductList :list="list" @item-detail="goDetail" />
+            <ProductList
+                :list="list"
+                @item-detail="goDetail"
+                @item-req-detail="goReqDetail"
+                @item-edit="handleEdit"
+                @item-online="handleUpdateStatus"
+                @item-offline="handleUpdateStatus"
+                @item-delete="handleDelete" />
 
-        <FlexRow horizontal="end">
-            <el-pagination
-                v-model:current-page="listControlModel.pageIndex"
-                v-model:page-size="listControlModel.pageSize"
-                :page-sizes="[10, 20, 50]"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="count"
-            />
-        </FlexRow>
-    </Board>
+            <FlexRow horizontal="end">
+                <el-pagination
+                    v-model:current-page="listControlModel.pageIndex"
+                    v-model:page-size="listControlModel.pageSize"
+                    :page-sizes="[10, 20, 50]"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="count" />
+            </FlexRow>
+        </Board>
 
-    <ProductDetail
-        :modelValue="!!detail"
-        @closed="detail = null"
-        :content="detail" />
-  </PagePanel>
+        <ProductEdit
+            ref="productEditModal"
+            :platform="platform"
+            @success="getList" />
+
+        <ProductDetail
+            :platform="platform"
+            :modelValue="!!detail"
+            @closed="detail = null"
+            :content="detail" />
+    </PagePanel>
 </template>
 <style lang="postcss">
 .product-manage {
-  @apply;
+    @apply;
 }
 </style>

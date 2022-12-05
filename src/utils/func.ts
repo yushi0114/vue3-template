@@ -212,3 +212,45 @@ export function openWindow(
 
     window.open(url, target, feature.join(','));
 }
+
+export function toFixed(num: number, fractionDigits: number = 0): string {
+    return (Math.round(num * 100) / 100).toFixed(fractionDigits);
+}
+
+/**
+ * @desc 根据名字将数组对象中名字相同的项组成一个相同的数组
+ * @param {[]object} beforeData
+ * @param {string} key
+ * @return {[]{orgin:[], [key]: any}}
+ */
+export const resolveArrayByKey = (beforeData: any[], key: string, ignoreList:string[] = [], holdKeyList = []) => {
+    const tempArr = [];
+    const afterData = [];
+    for (let i = 0; i < beforeData.length; i++) {
+        if (ignoreList.includes(beforeData[i][key])) {
+            afterData.push(beforeData[i]);
+            continue;
+        }
+        if (tempArr.indexOf(beforeData[i][key]) === -1) {
+            // eslint-disable-next-line no-undef
+            const holdKeyMap: Recordable = {};
+            holdKeyList.forEach((key) => {
+                holdKeyMap[key] = beforeData[i][key];
+            });
+            afterData.push({
+                [key]: beforeData[i][key],
+                ...holdKeyMap,
+                origin: [beforeData[i]],
+            });
+            tempArr.push(beforeData[i][key]);
+        } else {
+            for (let j = 0; j < afterData.length; j++) {
+                if (afterData[j][key] == beforeData[i][key]) {
+                    afterData[j].origin.push(beforeData[i]);
+                    break;
+                }
+            }
+        }
+    }
+    return afterData;
+};

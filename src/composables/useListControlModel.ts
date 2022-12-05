@@ -1,14 +1,12 @@
 import { useUrlSearchParams } from '@vueuse/core';
 
-export function useListControlModel(opt?: {
-    initialModel?: any,
-    numberFields?: string[],
-}) {
-
-    const listControlModel = reactive<any>(opt?.initialModel || {
-        pageIndex: 1,
-        pageSize: 20,
-    });
+export function useListControlModel(opt?: { initialModel?: any; numberFields?: string[] }) {
+    const listControlModel = reactive<any>(
+        opt?.initialModel || {
+            pageIndex: 1,
+            pageSize: 10,
+        }
+    );
 
     const params = useUrlSearchParams('history', {
         initialValue: listControlModel,
@@ -26,7 +24,7 @@ export function useListControlModel(opt?: {
     });
 
     function clear() {
-        Object.keys(listControlModel).forEach(key => listControlModel[key] = undefined);
+        Object.keys(listControlModel).forEach((key) => (listControlModel[key] = undefined));
         listControlModel.pageIndex = 1;
         listControlModel.pageSize = 20;
     }
@@ -40,6 +38,8 @@ export function useListControlModel(opt?: {
     });
 
     return {
-        model: listControlModel, params, clear,
+        model: listControlModel,
+        params,
+        clear,
     };
 }

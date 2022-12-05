@@ -6,7 +6,7 @@
                 @operateTreeItem="handleOperateTreeItem($event)"></MenuTree>
         </div>
         <div class="menu-content">
-            <el-empty v-if="formType === 'empty'" description="暂无数据" />
+            <el-empty v-if="formType === 'empty'" description="暂无数据"/>
             <MenuForm v-else></MenuForm>
         </div>
     </div>
@@ -16,15 +16,7 @@
 import MenuTree from './menu-tree.vue';
 import MenuForm from './menu-form.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import {
-    menuTreeData,
-    formType,
-    getMenuData,
-    removeMenus,
-    setCurrentMenuId,
-    setParentId,
-    resetMenuForm, setFormType, getTreeData, activeName
-} from './menu-list';
+import { formType, goCreateFormView, goEditFormView, goTreeView, menuTreeData, removeMenus } from './menu-list';
 import { LoadingService } from '@/views/system/loading-service';
 
 async function handleOperateTreeItem(params: {
@@ -33,10 +25,8 @@ async function handleOperateTreeItem(params: {
     willDeleteList?: { id: string }[]
 }) {
     if (params.type === 'edit') {
-        setFormType('edit');
-        setCurrentMenuId(params.id);
         LoadingService.getInstance().loading();
-        await getMenuData(params.id);
+        await goEditFormView(params.id);
         LoadingService.getInstance().stop();
     } else if (params.type === 'remove') {
         ElMessageBox.confirm(
@@ -48,14 +38,13 @@ async function handleOperateTreeItem(params: {
                 type: 'warning',
             }
         )
-            .then(async() => {
+            .then(async () => {
                 if (!params?.willDeleteList || !params.willDeleteList.length) {
                     return;
                 }
-                await removeMenus(params.willDeleteList.map(item => item.id));
                 LoadingService.getInstance().loading();
-                setFormType('empty');
-                await getTreeData({ tab: activeName.value });
+                await removeMenus(params.willDeleteList.map(item => item.id));
+                await goTreeView();
                 LoadingService.getInstance().stop();
             })
             .catch(() => {
@@ -65,9 +54,7 @@ async function handleOperateTreeItem(params: {
                 });
             });
     } else if (params.type === 'create') {
-        formType.value = 'create';
-        setParentId(params.id);
-        resetMenuForm();
+        goCreateFormView(params.id);
     }
 }
 
@@ -90,6 +77,16 @@ async function handleOperateTreeItem(params: {
         border-radius: 4px;
         box-sizing: border-box;
         padding: 15px;
+
+        &::-webkit-scrollbar {
+            width: 0;
+        }
+
+        &:hover {
+            &::-webkit-scrollbar {
+                width: 8px;
+            }
+        }
     }
 
     .menu-content {

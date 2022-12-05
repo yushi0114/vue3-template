@@ -4,11 +4,11 @@
         class="common-table">
         <!--批量操作栏，勾选行时显示-->
         <el-row
-            v-if="$tableConfig.showSelection && state.selection.length"
+            v-if="$tableConfig.showSelection && $tableConfig.showSelectionOpt && state.selection.length"
             justify="space-between"
             align="middle">
             <div class="multi-menu">
-                <span style="font-size: 12px">已选中{{ state.selection.length }}项</span>
+                <Text size="sm">已选中{{ state.selection.length }}项</Text>
                 <el-divider direction="vertical" />
                 <slot
                     name="multiSelectMenu"

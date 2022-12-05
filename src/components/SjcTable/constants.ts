@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\SjcTable\constants.ts
  * @Author: zys
  * @Date: 2022-11-04 09:12:54
- * @LastEditTime: 2022-11-17 09:19:11
+ * @LastEditTime: 2022-11-30 10:09:07
  * @LastEditors: zys
  * @Reference:
  */
@@ -20,6 +20,7 @@ export const INIT_PAGINATION_CONFIG: Partial<IPaginationConfig> = {
 export const INIT_TABLE_CONFIG = {
     rowKey: 'id', //   行数据的 Key，用来优化 Table 的渲染
     showSelection: false, // 是否多选
+    showSelectionOpt: false, // 多选操作栏是否显示
     showIndexColumn: false, // 是否显示自定义索引
     indexLabel: '序号', // 自定义索引名
     isCheckMemory: false, // 是否需要跨页勾选

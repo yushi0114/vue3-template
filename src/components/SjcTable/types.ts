@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\SjcTable\types.ts
  * @Author: zys
  * @Date: 2022-11-03 14:59:33
- * @LastEditTime: 2022-11-25 14:16:56
+ * @LastEditTime: 2022-11-30 10:08:45
  * @LastEditors: zys
  * @Reference:
  */
@@ -13,9 +13,10 @@ import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-
 // eslint-disable-next-line no-undef
 export type ITableData<T = Recordable> = T[];
 // eslint-disable-next-line no-undef
-export interface ITableConfig<DataType = Recordable> extends TableProps<DataType> {
-    rowKey: string | ((row: DataType) => string);
+export interface ITableConfig<DataType = Recordable> extends Partial<TableProps<DataType>> {
+    rowKey?: string | ((row: DataType) => string);
     showSelection?: boolean;
+    showSelectionOpt?: boolean;
     showIndexColumn?: boolean;
     indexLabel?: string;
     isCheckMemory?: boolean;

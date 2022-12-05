@@ -16,7 +16,7 @@
                             <el-form-item
                                 :label="item.label"
                                 :prop="`form[${index}].value`"
-                                :rules="item.rules || []"
+                                :rules="getFormRules(item.rules, formData.form)"
                                 :label-width="item.labelWidth">
                                 <el-input
                                     v-if="item.type === FormType.INPUT"
@@ -55,14 +55,17 @@
                                     :style="item.style || { width: '100%' }"
                                     :disabled="item.disabled"
                                     filterable
+                                    :multiple="item.multiple"
                                     :borderless="item.borderless || false"
-                                    :placeholder="item.placeholder || '请选择'">
+                                    :placeholder="item.placeholder || '请选择'"
+                                    @change="() => handleChange(item, formData.form)">
                                     <el-option
                                         v-for="(option, optionIndex) in item.selectOptions"
-                                        :key="optionIndex"
-                                        :label="option.title"
-                                        :value="option.value">
-                                        {{ option.title }}
+                                        :key="optionIndex + item.keyName"
+                                        :label="option.name"
+                                        :value="option.value"
+                                        :disabled="option.disabled">
+                                        {{ option.name }}
                                     </el-option>
                                 </el-select>
                                 <el-tree
@@ -142,7 +145,8 @@
                                 <!-- text展示 -->
                                 <span
                                     v-if="item.type === FormType.TEXT"
-                                    v-text="item.value"></span>
+                                    v-text="item.value"
+                                    ></span>
                                 <!-- 计量单位 -->
                                 <span
                                     class="ml-2"
@@ -204,6 +208,17 @@
                                         :src="dialogImageUrl"
                                         alt="" />
                                 </el-dialog>
+                                <el-image
+                                    v-if="item.type === FormType.IMAGE"
+                                    :src="item.value"
+                                    @error="error"
+                                    class="form-image">
+                                    <template #error>
+                                        <div :class="['image-slot', item.value && 'image-slot--error']">
+                                            {{ item.value || item.placeholder || '加载失败' }}
+                                        </div>
+                                    </template>
+                                </el-image>
                                 <sjc-editor
                                     v-if="item.type === FormType.EDITOR"
                                     :file-server="item.fileServer"
@@ -247,6 +262,7 @@ import type { FormInstance, ElTree, UploadRawFile, UploadFiles } from 'element-p
 import type { DefItem, IFormValues, UploadObj } from './types';
 import { useTree, useUpload } from './hooks';
 import { FormType } from '@/enums';
+import { isFunction, cloneDeep } from 'lodash';
 
 const form = ref<FormInstance>();
 const formWrapperRef = ref<HTMLDivElement>();
@@ -275,14 +291,16 @@ const props = withDefaults(
     { def: () => [], loading: false, showBtn: false, updateSubmit: 0, updateReset: 0, autoFocus: true }
 );
 
-const emit = defineEmits<{
+const emits = defineEmits<{
     (e: 'search', values: IFormValues): void;
+    (e: 'change', formItem: DefItem, form?: DefItem[]): void;
 }>();
 
 const formData = reactive<{ form: DefItem[] }>({ form: [] });
 const initForm = () => {
     formData.form.length = 0;
-    props.def.forEach((item) => {
+    const formObj = cloneDeep(props.def);
+    formObj.forEach((item) => {
         const tmpItem = reactive<DefItem>({
             ...item,
             value: undefined,
@@ -292,7 +310,7 @@ const initForm = () => {
         //     tmpItem.value = null;
         // }
 
-        if (item.type === FormType.UPLOAD) {
+        if ([FormType.UPLOAD].includes(item.type) || (item.type === FormType.SELECT && item.multiple)) {
             tmpItem.value = [];
         }
 
@@ -302,27 +320,39 @@ const initForm = () => {
 
         formData.form.push(tmpItem);
     });
-    if (formWrapperRef.value && props.autoFocus) {
-        nextTick(() => {
-            const firstInputDom = formWrapperRef.value?.querySelector('input');
-            if (firstInputDom) {
-                firstInputDom.focus();
-            }
-        });
-    }
 };
 
+const getFormRules = computed(() => {
+    return (rules: any, form: DefItem[]) => {
+        if (isFunction(rules)) {
+            const values: IFormValues = {};
+            formData.form.forEach((formItem) => {
+                if (formItem.keyName && !formItem.isIgnoreKey) {
+                    values[formItem.keyName] = formItem.value;
+                }
+            });
+            return rules(values) ?? [];
+        }
+        return rules ?? [];
+    };
+});
+
+const handleChange = (item: DefItem, form?: DefItem[]) => {
+    emits('change', item, form);
+};
+const error = () => {
+};
 const handleSearch = async() => {
     if (!form) return;
     await form.value?.validate((valid, fields) => {
         if (valid) {
             const values: IFormValues = {};
             formData.form.forEach((formItem) => {
-                if (formItem.keyName) {
+                if (formItem.keyName && !formItem.isIgnoreKey) {
                     values[formItem.keyName] = formItem.value;
                 }
             });
-            emit('search', values);
+            emits('search', values);
         } else {
             const [[{ message }]] = Object.values(fields ?? {});
             ElMessage({
@@ -338,6 +368,17 @@ const onReset = () => {
     if (!form) return;
     form.value?.resetFields();
     initForm();
+};
+
+const getFocus = (isAuto = true) => {
+    if (formWrapperRef.value && isAuto) {
+        nextTick(() => {
+            const firstInputDom = formWrapperRef.value?.querySelector('input');
+            if (firstInputDom) {
+                firstInputDom.focus();
+            }
+        });
+    }
 };
 
 watch(
@@ -364,11 +405,13 @@ watch(
 
 onMounted(() => {
     initForm();
+    getFocus(props.autoFocus);
 });
 
 defineExpose({
     handleSearch,
     onReset,
+    getFocus
 });
 </script>
 
@@ -412,6 +455,22 @@ defineExpose({
 
         .el-upload__tip {
             display: none;
+        }
+    }
+
+    .form-image {
+        height: 32px;
+        max-width: 100%;
+        box-sizing: border-box;
+        :deep(.el-image__wrapper) {
+            position: relative;
+        }
+        .image-slot {
+            color: $text-color-placeholder;
+            font: var(--el-font-size-base);
+            &--error {
+                color: $color-danger;
+            }
         }
     }
 }

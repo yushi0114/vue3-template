@@ -1,13 +1,14 @@
 import { isFunction } from './../utils/func';
 import { isNumber } from '@/utils';
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import type { HttpError } from '@/api/types';
 
 export type UseApiOption<K, P = any[]> = {
     cache?: boolean | number;
     onSuccess?: (data: K, params: P) => void;
     onError?: (error: HttpError) => void;
-    formatter?: <U = K>(response: K) => U
+    formatter?: <U = K>(response: K) => U;
+    ready?: Ref<any | undefined>;
 };
 export function useApi<T extends (...args: any[]) => Promise<any>>(
     apiFunc: T,
@@ -16,8 +17,10 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
     const opt: UseApiOption<Awaited<ReturnType<T>>, any[]> = Object.assign({ cache: false }, option);
 
     const loading = ref(false);
+    const data = ref<Awaited<ReturnType<T>> | undefined>(undefined);
     const cache = ref<Awaited<ReturnType<T>>>();
     let timer: ReturnType<typeof setTimeout>;
+    // const waitFn = ref<any[]>([]);
 
     function clear() {
         cache.value = undefined;
@@ -30,6 +33,7 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
             ? Promise.resolve(cache.value)
             : apiFunc(...args).then((res: Awaited<ReturnType<T>>) => {
                 const response = isFunction(opt.formatter) ? opt.formatter!(res) : res;
+                data.value = response;
                 if (opt.cache) {
                     cache.value = response;
                     if (isNumber(opt.cache)) {
@@ -39,23 +43,25 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
                 return response;
             });
         if (cache.value) {
-            return Promise.resolve(cache.value);
+            if (isFunction(opt.onSuccess)) {
+                opt.onSuccess!(cache.value, [...args]);
+            } else {
+                return Promise.resolve(cache.value);
+            }
         }
 
         return requestResponse
             .then((res: Awaited<ReturnType<T>>) => {
                 if (isFunction(opt.onSuccess)) {
                     opt.onSuccess!(res, [...args]);
-                }
-                else {
+                } else {
                     return Promise.resolve(res);
                 }
             })
             .catch((error: HttpError) => {
                 if (isFunction(opt.onError)) {
                     opt.onError!(error);
-                }
-                else {
+                } else {
                     return Promise.reject(error);
                 }
             })
@@ -64,6 +70,25 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
             });
     }) as T;
 
+    // const request: T = (...args) => {
+    //     if (option?.ready && !option?.ready?.value) {
+    //         waitFn.value.push(() => run(...args));
+    //         return noop;
+    //     }
+    //     return run(...args);
+    // };
+
+    // watch(
+    //     () => option?.ready,
+    //     () => {
+    //         if (option?.ready?.value) {
+    //             waitFn.value.forEach((fn) => {
+    //                 fn();
+    //             });
+    //         }
+    //     }
+    // );
+
     onBeforeUnmount(clear);
-    return { loading, request, clear };
+    return { loading, request, clear, data };
 }

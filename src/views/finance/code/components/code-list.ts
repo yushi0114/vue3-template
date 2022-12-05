@@ -2,7 +2,10 @@ import { reactive, ref } from 'vue';
 import {
     addFinanceCodeApi,
     deleteFinanceCodeApi,
+    downloadFinanceCodeListTemplateApi,
+    exportFinanceCodeListApi,
     getFinanceCodeListApi,
+    importFinanceCodeListApi,
     updateFinanceCodeApi
 } from '@/api/finance/finance-code';
 import type { FinanceCodeFormType, FinanceCodeListItemType } from '@/types/finance';
@@ -10,6 +13,7 @@ import { getAllCityListApi } from '@/api/finance/finance-city';
 import { getOrgTypeDicApi } from '@/api/finance/finance-category';
 import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
+import { downloadByBase64, downloadByData } from '@/utils';
 
 export const mode = ref<'form' | 'list'>('list');
 export const cityCodeList = ref();
@@ -175,5 +179,50 @@ export async function setFinanceCodeList(): Promise<void> {
             resolve();
         });
     });
+}
 
+
+export async function exportFinanceCodeList(): Promise<void> {
+    return new Promise((resolve) => {
+        exportFinanceCodeListApi({
+            searchInput: financeCodeFilterObject.searchInput,
+            sortField: financeCodeFilterObject.sortField,
+            sortType: financeCodeFilterObject.sortType,
+        }).then(data => {
+            console.log(data);
+            downloadByData(data, '机构编码字典.xlsx');
+            resolve();
+        });
+    });
+}
+
+export async function importFinanceCodeList(params: File): Promise<void> {
+    return new Promise((resolve) => {
+        importFinanceCodeListApi({
+            file: params
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '上传成功',
+            });
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '上传失败',
+            });
+        }).finally(() => {
+            resolve();
+        });
+    });
+}
+
+export async function downloadExcelTemplate(): Promise<void> {
+    return new Promise((resolve) => {
+        downloadFinanceCodeListTemplateApi()
+            .then((res) => {
+                downloadByBase64(res, '机构编码字典模板.xlsx');
+            }).finally(() => {
+                resolve();
+            });
+    });
 }

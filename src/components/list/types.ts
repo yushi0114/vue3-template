@@ -1,10 +1,9 @@
 import type { PlainOption } from '@/types';
 
 export type ListOperatorOption<T = any> = PlainOption<T> & {
-    icon?: string,
-    disabled?: boolean
-}
-
+    icon?: string;
+    disabled?: boolean;
+};
 
 export enum ItemOperate {
     detail = 'item-detail',
@@ -12,4 +11,5 @@ export enum ItemOperate {
     online = 'item-online',
     edit = 'item-edit',
     delete = 'item-delete',
+    reqDetail = 'item-req-detail',
 }

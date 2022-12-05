@@ -5,12 +5,14 @@ withDefaults(
         cols?: number,
         background?: boolean,
         hoverable?: boolean,
+        disabled?: boolean,
     }>(),
     {
         label: '',
         cols: 1,
         background: false,
         hoverable: false,
+        disabled: false
     }
 );
 </script>
@@ -18,8 +20,8 @@ withDefaults(
 <template>
     <div class="i-content-board" :class="{ background, hoverable }">
         <!-- -->
-        <div class="icb-label">
-            <Text color="paragraph" bold>{{ label }}</Text>
+        <div class="icb-label" :class="{ disabled }">
+            <Text :color="disabled ? 'placeholder' : 'paragraph'" bold>{{ label }}</Text>
             <slot name="label-rest"></slot>
         </div>
         <div class="icb-content">
@@ -37,6 +39,10 @@ withDefaults(
         background-color: var(--light-bg-color);
     }
 
+    &.disabled {
+        background-color: $disabled-bg-color;
+    }
+
     &.hoverable:hover {
         background-color: var(--light-bg-color);
     }
@@ -49,6 +55,9 @@ withDefaults(
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &.disabled {
+        border-left: 4px solid $disabled-border-color;
+    }
 
 }
 

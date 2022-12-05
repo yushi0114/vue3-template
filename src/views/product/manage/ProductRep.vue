@@ -1,23 +1,22 @@
 <script lang="ts" setup>
-import { acceptProgressTypeOptions, PlatformType } from '@/enums';
-import { getProductOptions, getProductReqs, getTopOrgs } from '@/api';
+import { acceptProgressTypeOptions } from '@/enums';
+import { getProductReqs, getTopOrgs } from '@/api';
 import type { PlainOption, ProductRequirementEntity } from '@/types';
 import { ProductReqList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel, useApi } from '@/composables';
 
+const { back } = useRouter();
 const route = useRoute();
-const platform = ref(Number(route.params.type));
-const { model: listControlModel, clear: clearModel } = useListControlModel({
-    numberFields: ['progress']
+const platform = ref(Number(route.params.p));
+const { model: listControlModel } = useListControlModel({
+    numberFields: ['progress'],
 });
 const count = ref(0);
 const list = ref<ProductRequirementEntity[]>([]);
 const topOrgOptions = ref<PlainOption[]>([]);
-const productOptions = ref<PlainOption[]>([]);
 const detail = ref<ProductRequirementEntity | null>(null);
 const { request: requestOrgOptions } = useApi(getTopOrgs, { cache: true });
-const { request: requestPdtOptions } = useApi(getProductOptions, { cache: true });
 
 function getList() {
     getProductReqs(Object.assign({ platform: platform.value }, listControlModel))
@@ -31,17 +30,6 @@ function getList() {
 watch(listControlModel, () => {
     nextTick(getList);
 });
-
-function clear() {
-    count.value = 0;
-    list.value = [];
-    clearModel();
-}
-
-function handleTabChange(plat: PlatformType) {
-    clear();
-    platform.value = plat;
-}
 
 function goDetail(req: ProductRequirementEntity) {
     detail.value = req;
@@ -65,8 +53,18 @@ onMounted(() => {
 
 <template>
     <PagePanel>
-        <Board class="product-apply">
-            <PlatformTab @tab-change="handleTabChange" />
+        <Board class="product-apply space-y-2">
+            <FlexRow>
+                <el-button
+                    class="mr-2"
+                    @click="back"
+                    ><i-ep-back></i-ep-back>返回</el-button
+                >
+                <div
+                    class="text-$el-text-color-secondary"
+                    >当前产品：{{ listControlModel.productName }}</div
+                >
+            </FlexRow>
             <ListQueryControl
                 v-model="listControlModel"
                 :searchConfig="{
@@ -74,7 +72,6 @@ onMounted(() => {
                     field: 'searchInput'
                 }"
                 :filterOptionsConfigs="[
-                    { label: '产品名称', field: 'orgId', options: productOptions },
                     { label: '机构名称', field: 'orgId', options: topOrgOptions },
                     { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
                 ]"
@@ -91,9 +88,7 @@ onMounted(() => {
                 }"
             >
                 <template v-slot:search-rest>
-                    <RouterLink :to="`${route.path}/new/1`">
-                        <el-button type="primary"><i-ep-plus />新建</el-button>
-                    </RouterLink>
+                    <el-button type="primary"><i-ep-download />下载</el-button>
                 </template>
             </ListQueryControl>
             <Text>
@@ -114,8 +109,8 @@ onMounted(() => {
             :content="detail" />
     </PagePanel>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .product-apply {
-    @apply;
+    height: 100%;
 }
 </style>

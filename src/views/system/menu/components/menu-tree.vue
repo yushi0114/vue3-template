@@ -1,14 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" clearable v-model="menuFilterText">
-                <template #append>
-                    <el-button @click="handleSearchMenuTree">
-                        <template #icon>
-                            <Icon :name="'ep:search'"></Icon>
-                        </template>
-                    </el-button>
-                </template>
+            <el-input placeholder="请输入搜索内容" clearable v-model="filterText">
             </el-input>
             <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建路由">
                 <template #icon>
@@ -17,18 +10,25 @@
             </el-button>
         </div>
         <el-tree
+            ref="treeRef"
             class="left-tree"
             :data="menuTreeData"
             node-key="id"
             default-expand-all
             @node-click="handleNodeClick"
+            :filter-node-method="filterNode"
             :expand-on-click-node="false">
             <template #default="{ node, data }">
-                <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
+                <div class="tree-wrap"
+                     @mouseenter="handleMouseEnter(node.id)"
+                     @mouseleave="handleMouseLeave(node.id)">
                     <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ node.label }} </span>
-                    <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start"
-                                trigger="hover"
-                                :width="100">
+                    <el-popover
+                        v-if="node.id === activeId"
+                        class="custom-popover"
+                        placement="right-start"
+                        trigger="hover"
+                        :width="100">
                         <div class="popover-list">
                             <el-button
                                 @click="handleOperateTreeItem(data, 'create')"
@@ -73,23 +73,28 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { TreeItemType } from '@/views/system/type/menu-list.type';
+import type { TreeItemType } from '@/types/system-manage';
 import Icon from '@/components/Icon.vue';
-import { formType, getTreeData, menuFilterText, menuTreeData, resetMenuForm } from './menu-list';
+import { goCreateFormView, menuTreeData } from './menu-list';
+import type { ElTree } from 'element-plus';
 
 const emit = defineEmits(['nodeClickHandle', 'operateTreeItem']);
 
 const activeId = ref();
 
-function handleAddNewMenu() {
-    formType.value = 'create';
-    resetMenuForm();
-}
+const treeRef = ref<InstanceType<typeof ElTree>>();
+const filterText = ref('');
+watch(filterText, (val) => {
+    treeRef.value!.filter(val);
+});
 
-async function handleSearchMenuTree() {
-    await getTreeData({
-        searchText: menuFilterText.value
-    });
+const filterNode = (value: string, data: TreeItemType) => {
+    if (!value) return true;
+    return data.label.includes(value);
+};
+
+function handleAddNewMenu() {
+    goCreateFormView();
 }
 
 function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {

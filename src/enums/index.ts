@@ -6,7 +6,7 @@ export * from './utils';
  * @FilePath: \dms-web\src\enums\index.ts
  * @Author: zys
  * @Date: 2022-11-04 15:03:26
- * @LastEditTime: 2022-11-18 16:31:54
+ * @LastEditTime: 2022-12-02 15:06:18
  * @LastEditors: zys
  * @Reference:
  */
@@ -57,6 +57,7 @@ export enum FormType {
     UPLOAD = 'upload',
     INPUT_NUMBER = 'input-number',
     EDITOR = 'editor',
+    IMAGE = 'image',
 }
 
 export enum FILE_SERVER {
@@ -71,3 +72,9 @@ export enum ELEMENT_TAG_TYPE {
     INFO = 'info',
 }
 
+export enum OPERATE_TYPE {
+    ADD = 'add',
+    EDIT = 'edit',
+    DELETE = 'delete',
+    READ = 'read',
+}

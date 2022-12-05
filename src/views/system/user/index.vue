@@ -1,29 +1,29 @@
 <template>
-  <PageContent :title="'用户管理'">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="DMS" name="dms">
-          <user-config v-if="activeName === 'dms'"> </user-config>
-      </el-tab-pane>
-      <el-tab-pane label="征信端" name="cre">
-        <user-config v-if="activeName === 'cre'"></user-config>
-      </el-tab-pane>
-    </el-tabs>
-  </PageContent>
+    <PageContent :title="'用户管理'">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="DMS" name="dms">
+                <user-config v-if="activeName === 'dms'"></user-config>
+            </el-tab-pane>
+            <el-tab-pane label="征信端" name="cre">
+                <user-config v-if="activeName === 'cre'"></user-config>
+            </el-tab-pane>
+        </el-tabs>
+    </PageContent>
 </template>
 
 <script lang="ts" setup>
-import {onMounted} from 'vue';
+import { onMounted } from 'vue';
 import UserConfig from '@/views/system/user/components/user-config.vue';
-import type {TabsPaneContext} from 'element-plus';
+import type { TabsPaneContext } from 'element-plus';
 import {
-    getUserListData,
     activeName,
     getRoleListData,
+    getUserListData,
     mode,
     userFilterObject
 } from '@/views/system/user/components/user-list';
-import type {UserTabType} from '@/views/system/type/user-list.type';
-import {LoadingService} from '@/views/system/loading-service';
+import type { UserTabType } from '@/types/system-manage';
+import { LoadingService } from '@/views/system/loading-service';
 
 
 async function handleClick(tab: TabsPaneContext) {
@@ -36,7 +36,7 @@ async function handleClick(tab: TabsPaneContext) {
     LoadingService.getInstance().stop();
 }
 
-onMounted(async() => {
+onMounted(async () => {
     LoadingService.getInstance().loading();
     await getUserListData({
         tab: activeName.value

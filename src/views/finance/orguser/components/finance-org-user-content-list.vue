@@ -2,7 +2,8 @@
     <div class="search-box">
         <el-input
             class="search-input"
-            placeholder="请输入搜索内容"
+            size="large"
+            placeholder="请输入关键字进行搜索"
             @clear="handleClear"
             clearable
             @keyup.enter="handleSearchList"
@@ -21,14 +22,21 @@
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }"
         :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }">
+            color: '#595959',
+            'background-color': '#f3f4f8'
+        }">
         <el-table-column prop="orgName" label="所属机构" width="260"/>
         <el-table-column prop="account" label="手机号码"/>
         <el-table-column prop="name" label="姓名"/>
-        <el-table-column prop="status" label="状态">
-
+        <el-table-column label="状态" align="center">
+            <template #default="scope">
+                <el-switch
+                    v-model="scope.row.status"
+                    :active-value="1"
+                    :inactive-value="0"
+                    disabled
+                ></el-switch>
+            </template>
         </el-table-column>
         <el-table-column prop="createBy" label="创建人"/>
         <el-table-column prop="createTime" sortable label="创建时间"/>
@@ -104,7 +112,7 @@ async function handleSizeChange(item: number) {
     padding: 10px 0;
 
     .search-input {
-        max-width: 220px;
+        max-width: 350px;
     }
 }
 

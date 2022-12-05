@@ -79,12 +79,12 @@ export function fileToURL(file: Blob) {
 /**
  * file转base64
  */
-export const blobToDataURL = (blob: Blob, cb: Function) => {
+export const blobToDataURL = (blob: Blob, cb?: Function) => {
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = function(evt) {
             const base64 = evt.target?.result;
-            cb(base64);
+            cb?.(base64);
             resolve(base64);
         };
         reader.readAsDataURL(blob);

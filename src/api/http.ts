@@ -24,7 +24,7 @@ service.interceptors.request.use(config => {
         const uuid = genUUID();
         config.headers['uuid'] = uuid;
 
-        const menuName = router.currentRoute.value.meta.menu;
+        const menuName = config.params?.menuName || router.currentRoute.value.meta.menu;
 
         if (config.method === 'get') {
             config.params = { ...config.params, menuName };

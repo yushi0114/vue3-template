@@ -24,6 +24,7 @@ const formRef = ref<FormInstance>();
 const formModel = reactive({
     oldPassword: '',
     newPassword: '',
+    confirmPassword: ''
 });
 
 function checkNewPassword(rule: any, value: string, callback: ValidateCallback) {
@@ -33,9 +34,17 @@ function checkNewPassword(rule: any, value: string, callback: ValidateCallback) 
     return checkPassword(rule, value, callback);
 }
 
+function checkConfirmPassword(rule: any, value: string, callback: ValidateCallback) {
+    if (value !== formModel.newPassword) {
+        return callback(new Error('两次输入的密码不相同'));
+    }
+    return checkPassword(rule, value, callback);
+}
+
 const rules: any = reactive({
     oldPassword: [{ validator: checkPassword, trigger: 'change' }],
     newPassword: [{ validator: checkNewPassword, trigger: 'change' }],
+    confirmPassword: [{ validator: checkConfirmPassword, trigger: 'change' }]
 });
 
 async function submit() {
@@ -82,23 +91,26 @@ function clear() {
     <!-- -->
     <el-form
         ref="formRef"
+        size="large"
         :rules="rules"
-        :model="formModel"
-        label-position="top">
+        :model="formModel">
         <el-form-item label="输入旧密码" prop="oldPassword">
             <el-input
                 v-model="formModel.oldPassword"
-                size="large"
-                autocomplete="new-password"
                 type="password"
                 show-password
                 />
         </el-form-item>
         <el-form-item label="输入新密码" prop="newPassword">
-                <el-input
+            <el-input
                 v-model="formModel.newPassword"
-                size="large"
-                autocomplete="new-password"
+                type="password"
+                show-password
+            />
+        </el-form-item>
+        <el-form-item label="确认新密码" prop="confirmPassword">
+            <el-input
+                v-model="formModel.confirmPassword"
                 type="password"
                 show-password
             />

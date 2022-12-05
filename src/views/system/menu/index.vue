@@ -19,7 +19,7 @@ import { onMounted } from 'vue';
 import type { TabsPaneContext } from 'element-plus';
 import MenuConfig from '@/views/system/menu/components/menu-config.vue';
 import { activeName, getTreeData, setFormType } from './components/menu-list';
-import type { MenuTabType } from '@/views/system/type/menu-list.type';
+import type { MenuTabType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 
 

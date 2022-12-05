@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import type { MenuFormType, MenuTabType, TreeItemType } from '@/views/system/type/menu-list.type';
+import type { MenuFormType, MenuTabType, TreeItemType } from '@/types/system-manage';
 import { addMenuApi, deleteMenuApi, getMenuDetailByIdApi, getMenuTreeApi, updateMenuApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
 
@@ -17,7 +17,6 @@ export const menuForm = ref<MenuFormType>({
 });
 export const parentId = ref();
 export const currentMenuId = ref();
-export const menuFilterText = ref();
 export const formType = ref<'create' | 'edit' | 'empty'>('edit');
 
 export function setParentId(value?: string) {
@@ -43,6 +42,27 @@ export function resetMenuForm() {
         component: '',
         status: false
     };
+}
+
+export async function goTreeView() {
+    resetMenuForm();
+    await getTreeData({ tab: activeName.value });
+    currentMenuId.value = undefined;
+    formType.value = 'empty';
+}
+
+export function goCreateFormView(parentId?: string) {
+    formType.value = 'create';
+    resetMenuForm();
+    if (parentId) {
+        setParentId(parentId);
+    }
+}
+
+export async function goEditFormView(id: string) {
+    setFormType('edit');
+    setCurrentMenuId(id);
+    await getMenuData(id);
 }
 
 export async function getTreeData(params?: {

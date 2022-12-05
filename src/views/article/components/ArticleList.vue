@@ -193,7 +193,7 @@ watch(listControlModel, () => {
                 </el-row>
             </template>
             <template #handler="{ scope }">
-                <div class="flex-center items-end gap-2">
+                <div class="flex-center items-end">
                     <div
                         :class="['flex-center', scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
                         <!-- <TextHoverable
@@ -204,7 +204,7 @@ watch(listControlModel, () => {
                         </TextHoverable> -->
                         <el-button
                             type="primary"
-                            circle
+                            text
                             :disabled="scope.row.status === ARTICLE_STATUS.PUBLISHED"
                             @click="handleToEdit(scope)">
                             <el-tooltip
@@ -220,7 +220,7 @@ watch(listControlModel, () => {
                             color="regular">
                             更多
                         </TextHoverable> -->
-                        <el-button circle>
+                        <el-button text>
                             <el-tooltip
                                 placement="top"
                                 content="更多">
@@ -254,13 +254,23 @@ watch(listControlModel, () => {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+:deep(.el-table__row) {
+    .el-button {
+        padding: 8px;
+    }
+
+    .el-button + .el-button {
+        margin-left: 0;
+    }
+}
 .tr-item {
     .thumbnail {
         transition: all 0.5s ease-in-out;
     }
 }
 .tr-item:hover {
+    /* background-color: var(--el-fill-color-light); */
     .thumbnail {
         transform: scale(1.1);
     }

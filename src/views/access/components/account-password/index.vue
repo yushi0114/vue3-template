@@ -100,6 +100,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus';
+import { onKeyStroke } from '@vueuse/core';
 import { useApi } from '@/composables';
 import { useUserStore } from '@/stores';
 import { getCaptcha } from '@/api/access';

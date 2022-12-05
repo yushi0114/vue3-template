@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { Search, View } from '@element-plus/icons-vue';
+import { Search, View, CircleCloseFilled } from '@element-plus/icons-vue';
 import { getAllCorpList } from '@/api/report';
 import type { IReportTable } from '@/types/report';
 
 const dataSource = ref<IReportTable[]>([]);
 
 const searchInput = ref('');
+
+const showError = ref(false);
 
 const allToogle = reactive({
     loading: false,
@@ -36,6 +38,10 @@ const getCorpList = () => {
         });
 };
 
+const handleInput = () => {
+    showError.value = searchInput.value.length < 2;
+};
+
 // 搜索企业
 const handleSearch = (isClear: boolean) => {
     if (isClear) {
@@ -47,10 +53,7 @@ const handleSearch = (isClear: boolean) => {
             dataSource.value = [];
             getCorpList();
         } else {
-            ElMessage({
-                type: 'error',
-                message: '输入内容不能少于2个字符',
-            });
+            showError.value = true;
         }
     }
 };
@@ -121,6 +124,7 @@ onUnmounted(() => {
                 v-model.trim="searchInput"
                 size="large"
                 clearable
+                @input="handleInput"
                 @clear="handleSearch(true)"
                 @keyup.enter="handleSearch(false)"
             >
@@ -128,6 +132,12 @@ onUnmounted(() => {
                     <el-button :icon="Search" @click="handleSearch(false)" />
                 </template>
             </el-input>
+            <span class="search-tip" v-if="showError">
+                <el-icon :size="16" style="margin-right: 8px">
+                    <CircleCloseFilled />
+                </el-icon>
+                输入内容不能少于2个字符
+            </span>
         </div>
         <div class="table-content">
             <el-table
@@ -165,11 +175,18 @@ onUnmounted(() => {
     .table-header {
         min-height: 40px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
         .searchInput {
             width: 350px;
+        }
+
+        .search-tip {
+            display: flex;
+            align-items: center;
+            margin-left: 16px;
+            color: #f56c6c;
+            font-size: 14px;
         }
     }
 

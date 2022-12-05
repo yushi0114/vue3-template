@@ -155,7 +155,7 @@ export function getProductRecommend(payload: GetProductRecommendPayload): Promis
     return api.get(`${DMS_DOMAIN}/v1/product/recommend/byid`, {
         params: payload,
     })
-        .then(res => res.data[0]);
+        .then((res: any) => res[0]);
 }
 
 // #endregion
@@ -165,7 +165,7 @@ export type GetProductRecommendsPayload = {
     productType: ProductRecommandType;
 };
 
-export type GetProductRecommendsResponse = ListResponse<ProductRecommandEntity>;
+export type GetProductRecommendsResponse = ProductRecommandEntity[];
 
 export function getProductRecommends(payload: GetProductRecommendsPayload): Promise<GetProductRecommendsResponse> {
     return api.get(`${DMS_DOMAIN}/v1/product/recommend`, {

@@ -16,14 +16,13 @@ const kind = ref(queryParams.value.kind);
 const kindName = computed<string>(() => {
     return productRecommandTypeMap[queryParams.value.kind];
 });
-const { request, loading } = useApi(getProductRecommends);
+const { request } = useApi(getProductRecommends);
 const recommands = ref<ProductRecommandEntity[]>([]);
 
 function getList() {
     request({ productType: kind.value })
         .then(res => {
-            console.log(res.data);
-            recommands.value = res.data;
+            recommands.value = res;
         });
 }
 

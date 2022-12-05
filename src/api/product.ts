@@ -67,16 +67,16 @@ export type GetProductOptionsPayload = {
     menuName?: string;
 };
 
-export type GetProductOptionsResponse = ProductEntity[];
+export type GetProductOptionsResponse = { data: ProductEntity[] };
 
 export function getProductOptions(payload: GetProductOptionsPayload): Promise<GetProductOptionsResponse> {
-    const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/dic' : '/v1/zjfw/product/all';
+    const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/all' : '/v1/zjfw/product/all';
 
     payload.menuName = payload.platform === PlatformType.LiaoXinTong ? 'requirement' : 'zjfwapply';
 
     delete payload.platform;
 
-    return api.post(`${DMS_DOMAIN}${url}`, payload);
+    return api.get(`${DMS_DOMAIN}${url}`, { params: payload });
 }
 // #endregion
 
@@ -338,4 +338,43 @@ export function updateProductFilterSort(payload: UpdateProductFilterSortPayload)
     return api.post(`${DMS_DOMAIN}${url}`, payload);
 }
 
+// #endregion
+
+// #region 删除精准需求（批量，单个）
+export type DeleteProductReqsPayload = {
+    idArr: string;
+    platform?: PlatformType,
+}
+
+export type DeleteExactResponse = {};
+
+export function deleteProductReqs(payload: DeleteProductReqsPayload)
+    : Promise<DeleteExactResponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/del/corp'
+        : '/v1/zjfw/del/corp';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+// #endregion
+
+// #region 下载企业需求列表
+export type DownloadProductReqsPayload = GetProductReqsPayload;
+
+export type DownloadExactResponse = {};
+
+export function downloadProductReqs(payload: DeleteProductReqsPayload)
+    : Promise<DeleteExactResponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/export/corp'
+        : '/v1/zjfw/export/corp';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
 // #endregion

@@ -1,6 +1,7 @@
 import { validatorLogo } from '@/utils';
 import { PlatformType, FormType } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
+import type { ITableConfig } from '@/components/SjcTable/types';
 
 // 产品表单
 export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
@@ -960,4 +961,33 @@ export const FILTER_UNIT_MAP = Object.freeze({
     '融资额度': '万元',
     '贷款期限': '个月',
     '融资期限': '个月',
+});
+
+// 表格列配置
+export const REQ_TABLE_COLUMNS = [
+    // 自定义索引
+    {
+        label: '',
+        keyName: 'reqLogo',
+        slotName: 'reqLogo',
+        width: 90,
+    },
+];
+
+// 表格配置项
+export const REQ_TABLE_CONFIG: ITableConfig = reactive({
+    showHandler: true,
+    showAppend: true,
+    showSelection: true,
+    appendLabel: '',
+    handlerConfig: {
+        width: 120,
+        label: ''
+    },
+});
+
+export const PAGE_CONFIG = reactive({
+    pageIndex: 1,
+    pageSize: 10,
+    total: 0,
 });

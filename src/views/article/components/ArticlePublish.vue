@@ -169,13 +169,13 @@ onMounted(() => {
 
             <div>
                 <el-button
-                    v-loading="loadingCreate || loadingUpdate"
+                    :loading="loadingCreate || loadingUpdate"
                     :icon="Collection"
                     @click="publish(ARTICLE_STATUS.DRAFT)">
                     保存</el-button
                 >
                 <el-button
-                    v-loading="loadingCreate || loadingUpdate"
+                    :loading="loadingCreate || loadingUpdate"
                     type="primary"
                     :icon="Sell"
                     @click="publish(ARTICLE_STATUS.PUBLISHED)">

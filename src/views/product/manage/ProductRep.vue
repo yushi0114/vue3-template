@@ -7,7 +7,7 @@ import { ProductReqList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel, useApi } from '@/composables';
 
-const { request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
+const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
     onSuccess() {
         ElMessage({
             type: 'success',
@@ -141,7 +141,7 @@ onMounted(() => {
                 }"
             >
                 <template v-slot:search-rest>
-                    <el-button type="danger" :icon="Delete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
+                    <el-button type="danger" :icon="Delete" :loading="loadingBatchDelete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
                     <DownloadButton type="primary" :api="downloadProductReqs" :download-options="downloadOptions"></DownloadButton>
                 </template>
             </ListQueryControl>

@@ -17,6 +17,8 @@ const filterModalRef = ref<InstanceType<typeof FilterModal> | null>(null);
 const filterOptionsModalRef = ref<InstanceType<typeof FilterOptionsModal> | null>(null);
 const {
     loading,
+    loadingFilter,
+    loadingFilterOptions,
     filters,
     FILTERS_FORM,
     requestUpdateProductFilter,
@@ -188,10 +190,12 @@ const handleDragListChange = () => {
             </draggable>
             <FilterModal
                 ref="filterModalRef"
+                :loading="loadingFilter"
                 :form="FILTERS_FORM"
                 @submit="handleFilterModalSubmit"></FilterModal>
             <FilterOptionsModal
                 ref="filterOptionsModalRef"
+                :loading="loadingFilterOptions"
                 :form="FILTERS_OPTIONS_FORM"
                 @submit="handleFilterOptionsModalSubmit" />
         </Board>

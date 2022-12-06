@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Edit, SoldOut, Sell, Sort, Delete, MoreFilled } from '@element-plus/icons-vue';
+import { Edit, SoldOut, Sell, Sort, Delete } from '@element-plus/icons-vue';
 import emptyImg from '@/assets/images/no-data.png';
 import {
     NEWS_TYPE,

@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\product\hooks\useFilter.ts
  * @Author: zys
  * @Date: 2022-12-02 11:22:14
- * @LastEditTime: 2022-12-05 10:35:33
+ * @LastEditTime: 2022-12-06 15:17:52
  * @LastEditors: zys
  * @Reference:
  */
@@ -39,7 +39,7 @@ export const useFilter = (platform: Ref<PlatformType>) => {
         }
     );
 
-    const { request: requestAddProductFilter } = useApi(
+    const { request: requestAddProductFilter, loading: loadingAddFilter } = useApi(
         // eslint-disable-next-line no-undef
         (params: AddProductFilterPayload) => addProductFilter({ platform: platform.value, ...params }),
         {
@@ -54,7 +54,7 @@ export const useFilter = (platform: Ref<PlatformType>) => {
         }
     );
 
-    const { request: requestAddProductFilterOptions } = useApi(
+    const { request: requestAddProductFilterOptions, loading: loadingAddFilterOpt } = useApi(
         // eslint-disable-next-line no-undef
         (params: AddProductFilterOptionsPayload) => addProductFilterOptions({ platform: platform.value, ...params }),
         {
@@ -69,7 +69,7 @@ export const useFilter = (platform: Ref<PlatformType>) => {
         }
     );
 
-    const { request: requestUpdateProductFilter } = useApi(
+    const { request: requestUpdateProductFilter, loading: loadingEditFilter } = useApi(
         // eslint-disable-next-line no-undef
         (params: UpdateProductFilterPayload) => updateProductFilter({ platform: platform.value, ...params }),
         {
@@ -120,6 +120,12 @@ export const useFilter = (platform: Ref<PlatformType>) => {
     );
     const filters = ref<ProductFilterEntity[]>([]);
 
+    const loadingFilter = computed(() => {
+        return loadingAddFilter.value || loadingEditFilter.value;
+    });
+    const loadingFilterOptions = computed(() => {
+        return loadingAddFilterOpt.value || loadingEditFilter.value;
+    });
     const resetForm = () => {
         FILTERS_FORM.value = cloneDeep(FILTERS_FORM_MAP[platform.value]);
     };
@@ -134,6 +140,8 @@ export const useFilter = (platform: Ref<PlatformType>) => {
     );
     return {
         loading,
+        loadingFilter,
+        loadingFilterOptions,
         requestProductFilters,
         requestAddProductFilter,
         requestUpdateProductFilter,

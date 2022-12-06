@@ -17,7 +17,7 @@ import {
     type SigninPayload,
     type GetUserInfoPayload,
 } from '@/api';
-import { NavStatusType, type DynamicNavEntity, type UserEntity } from '@/types';
+import type { DynamicNavEntity, UserEntity } from '@/types';
 import { toTree } from '@/utils/tree';
 import { addDynamicRoutes } from '@/router';
 import { useRouter } from 'vue-router';
@@ -36,16 +36,8 @@ export const useUserStore = defineStore('user', () => {
         user: null,
         navs: [],
         navTree: [],
+        // 插入动态导航之前
         prevNavTree: [
-            {
-                id: '',
-                name: '',
-                path: '/home',
-                title: 'Homepage',
-                status: NavStatusType.default,
-                parentId: '',
-                sort: 0,
-            },
         ],
     });
 

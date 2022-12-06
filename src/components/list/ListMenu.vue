@@ -66,6 +66,13 @@ const getActiveOption = computed(() => {
         return model.value?.[field]?.toString().includes(menuItem.value) ? 'primary' : '';
     };
 });
+
+const clearFilterOptions = () => {
+    props.menu?.forEach((item) => {
+        model.value[item.field] = '';
+    });
+    emits('change');
+};
 // 过滤器初始展开值
 const initialActiveNames =
     Object.entries(model.value)
@@ -81,19 +88,27 @@ watch(isCtrlKeep, (newValue) => {
 
 <template>
     <div class="list-menu">
-        <Text
-            size="lg"
-            color="paragraph"
-            class="flex items-center space-x-2"
-            ><span>过滤器</span>
-            <el-tooltip
-                content="按住Ctrl+Click可多选"
-                placement="top">
-                <Icon
-                    class="cursor-pointer w-4 text-[var(--el-text-color-regular)]"
-                    name="fluent-mdl2:info" />
-            </el-tooltip>
-        </Text>
+        <FlexRow horizontal="between">
+            <FlexRow class="list-menu-title">
+                <Text
+                    size="md"
+                    color="paragraph"
+                    >
+                    过滤器
+                </Text>
+                <el-tooltip
+                    content="按住Ctrl+Click可多选"
+                    placement="top">
+                    <Icon
+                        class="cursor-pointer"
+                        style="width: 0.875rem"
+                        name="ep-warning" />
+                </el-tooltip>
+            </FlexRow>
+            <FlexRow class="cursor-pointer mr-4" @click.stop="clearFilterOptions">
+                <TextHoverable color="regular" size="sm"><FlexRow class="gap-1"><i-ep-brush class="w-3"/>清空过滤项</FlexRow></TextHoverable>
+            </FlexRow>
+        </FlexRow>
         <el-collapse
             class="flex-1 overflow-y-auto !border-r-none"
             v-model="activeNames">
@@ -126,19 +141,26 @@ watch(isCtrlKeep, (newValue) => {
     </div>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 .list-menu {
-    @apply w-full h-full flex flex-col space-y-2 border-r-1 border-r-$el-menu-border-color;
-}
-:deep(.el-button + .el-button) {
-    @apply ml-0;
-}
-:deep(.el-button.el-button--primary) {
-    @apply !bg-[var(--el-fill-color-light)];
-}
-:deep(.el-collapse) {
-    @apply border-y-none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-right: $border;
+    &-title {
+        gap: $gap-line;
+    }
+
+    :deep(.el-button + .el-button) {
+        margin-left: 0;
+    }
+    :deep(.el-button.el-button--primary) {
+        background-color: $fill-color-light;
+    }
+    :deep(.el-collapse) {
+        border-top: none;
+        border-bottom: none;
+    }
 }
 </style>
-
-<style lang="scss" scoped></style>

@@ -219,7 +219,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
         </div> -->
     </FlexRow>
     <!-- -->
-    <div class="flex-1 flex flex-col">
+    <div class="lqc-filter-wrapper">
         <FlexRow horizontal="between" class="lqc-search-row">
             <div v-if="searchConfig">
                 <el-input
@@ -314,21 +314,22 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     </div>
   </div>
 </template>
-<style lang="postcss">
-.list-query-control .lqc-type-row {
-    @apply w-250px overflow-y-auto bg-$el-bg-color;
-    /* @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4; */
-}
-.list-query-control {
-    @apply flex space-x-2;
-}
-</style>
+
 <style lang="scss">
 .list-query-control {
+    display: flex;
+    gap: $gap-xs;
+    .lqc-type-row {
+        width: 250px;
+        overflow-y: auto;
+        background-color: $bg-color;
+    }
 }
 
-.lqc-search-row {
-
+.lqc-filter-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .lqc-search-row {
@@ -339,7 +340,6 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 .lqc-filter-row {
     border-radius: 4px;
     padding: $gap-xs $gap-md;
-    margin-bottom: $gap-xs;
     background-color: var(--el-color-info-light-9);
     gap: $gap-xs;
 }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ExactReqEntity } from '@/types';
-import { AcceptProgressType, loanEndTypeMap, loanTermTypeMap, longestOverdueTypeMap, steTypeMap, switchTypeMap, taxGradeTypeMap } from '@/enums';
+import { AcceptProgressType, loanEndTypeMap, loanTermTypeMap, longestOverdueTypeMap, steTypeMap, switchTypeMap, taxGradeTypeMap, expectTimeTypeMap } from '@/enums';
 
 withDefaults(
     defineProps<{
@@ -27,7 +27,7 @@ withDefaults(
             <ContentBoardField label="联系电话">{{ content?.contactMobile }}</ContentBoardField>
         </ContentBoard>
 
-        <ContentBoard label="详细信息" :cols="3" v-if="content">
+        <ContentBoard label="详细信息" :cols="3" v-if="exact && content">
             <ContentBoardField label="是否为小微企业">{{ switchTypeMap[content.mseType] }}</ContentBoardField>
             <ContentBoardField label="是否有抵押物">{{ switchTypeMap[content.pawnType] }}</ContentBoardField>
             <ContentBoardField label="是否可提供担保">{{ switchTypeMap[content.guaranteeType] }}</ContentBoardField>
@@ -42,8 +42,8 @@ withDefaults(
         </ContentBoard>
 
         <ContentBoard label="贷款需求" :cols="2">
-            <ContentBoardField label="期望融资金额">{{ content?.corpName }}</ContentBoardField>
-            <ContentBoardField label="期望放款时间">{{ content?.corpCode }}</ContentBoardField>
+            <ContentBoardField label="期望融资金额">{{ content?.expectFinancing }}万元</ContentBoardField>
+            <ContentBoardField label="期望放款时间">{{ expectTimeTypeMap[content?.expectTime!] }}</ContentBoardField>
         </ContentBoard>
 
         <ContentBoard label="放款信息" :cols="4" v-if="content?.progress === AcceptProgressType.done">

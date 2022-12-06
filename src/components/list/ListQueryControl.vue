@@ -2,7 +2,7 @@
 import ListMenu from './ListMenu.vue';
 // import { useQueryParams } from '@/composables';
 import { UseMouseInElement } from '@vueuse/components';
-import { useTemplateRefsList, useWindowSize } from '@vueuse/core';
+import { useTemplateRefsList, useWindowSize, useVModel } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
@@ -25,6 +25,9 @@ export type ControlOptionConfig<T = any> = ControlConfig & {
 const props = withDefaults(
     defineProps<{
         modelValue?: any,
+        checkAll?: boolean,
+        isIndeterminate?: boolean,
+        showSelection?: boolean,
         searchConfig?: ControlConfig,
         typeOptionsConfigs?: ControlOptionConfig[]
         filterOptionsConfigs?: ControlOptionConfig[]
@@ -38,12 +41,15 @@ const props = withDefaults(
 const emits = defineEmits<{
     (e: 'update', model: any): void;
     (e: 'update:modelValue', modelValue: any): void
+    (e: 'update:checkAll', checkAll: boolean): void
+    (e: 'change-check-all'): void
 }>();
 
 type ModelType = any
 type DropdownLabelMapType = any
 const model = reactive<ModelType>({});
 const dropdownLabelMap = reactive<DropdownLabelMapType>({});
+const modelCheckAll = useVModel(props, 'checkAll', emits);
 const { height } = useWindowSize();
 
 watch(() => props.searchConfig, () => {
@@ -243,6 +249,13 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
         </FlexRow>
         <FlexRow
             class="lqc-filter-row">
+            <el-checkbox
+                v-if="showSelection"
+                v-model="modelCheckAll"
+                :indeterminate="isIndeterminate"
+                @change="emits('change-check-all')"
+                ></el-checkbox
+            >
             <div class="lqc-filter-item" v-for="(fConf, index) in filterOptionsConfigs" :key="fConf.field">
                 <el-dropdown
                     :ref="refs.set"

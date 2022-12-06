@@ -5,14 +5,18 @@ import { AcceptProgressType, expectTimeTypeMap, requirmentProgressTypeMap } from
 import { REQ_TABLE_COLUMNS, REQ_TABLE_CONFIG} from '../constants';
 import { isEmptyPlainObject } from '@/utils';
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         list?: ProductRequirementEntity[],
         loading?: boolean,
+        isSelectAll?: boolean;
+        isIndeterminate?: boolean;
     }>(),
     {
         list: () => [],
         loading: false,
+        isSelectAll: false,
+        isIndeterminate: false
     }
 );
 
@@ -21,6 +25,8 @@ const emits = defineEmits<{
     (e: ItemOperate.detail, detail: ProductRequirementEntity): void;
     (e: 'multi-selection', selection: string[]): void;
 }>();
+
+const sjcTableRef = ref();
 const colorStatusMap: Record<AcceptProgressType, string> = {
     [AcceptProgressType.all]: 'warning',
     [AcceptProgressType.undo]: 'warning',
@@ -38,6 +44,11 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, item: ProductRequir
 const handleSelectionChange = (selection: any) => {
     emits('multi-selection', selection);
 };
+
+watch(() => props.isSelectAll, () => {
+    sjcTableRef.value?.toggleAllSelection();
+});
+
 </script>
 
 <template>
@@ -47,7 +58,7 @@ const handleSelectionChange = (selection: any) => {
         :table-data="list"
         :loading="loading"
         :columns="REQ_TABLE_COLUMNS"
-        :show-header="true"
+        :show-header="false"
         :table-config="REQ_TABLE_CONFIG"
         :showPagination="false"
         @multi-selection="handleSelectionChange">

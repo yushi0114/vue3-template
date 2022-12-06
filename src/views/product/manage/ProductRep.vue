@@ -5,7 +5,7 @@ import { getProductReqs, getTopOrgs, deleteProductReqs, downloadProductReqs } fr
 import type { PlainOption, ProductRequirementEntity } from '@/types';
 import { ProductReqList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel, useApi } from '@/composables';
+import { useListControlModel, useApi, useTableCheckbox } from '@/composables';
 
 const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
     onSuccess() {
@@ -29,7 +29,9 @@ const { model: listControlModel } = useListControlModel({
 const count = ref(0);
 const loading = ref(false);
 const list = ref<ProductRequirementEntity[]>([]);
-const ids = ref<string[]>([]);
+
+const { isSelectAll, tableSelectAll, isIndeterminate, ids, handleSelectionChange, handleChangeCheckAll } = useTableCheckbox(list);
+
 const topOrgOptions = ref<PlainOption[]>([]);
 const detail = ref<ProductRequirementEntity | null>(null);
 const downloadOptions = reactive({
@@ -59,10 +61,6 @@ watch(listControlModel, () => {
 function goDetail(req: ProductRequirementEntity) {
     detail.value = req;
 }
-
-const handleSelectionChange = (selection: any) => {
-    ids.value = selection.map((item: any) => item.id);
-};
 
 const handleBatchDelete = async() => {
     const idArr = ids.value.map(item => `"${item}"`).join(',');
@@ -120,6 +118,9 @@ onMounted(() => {
             </FlexRow>
             <ListQueryControl
                 v-model="listControlModel"
+                v-model:check-all="isSelectAll"
+                :is-indeterminate="isIndeterminate"
+                show-selection
                 :searchConfig="{
                     label: '请输入产品名称',
                     field: 'searchInput'
@@ -139,6 +140,7 @@ onMounted(() => {
                         { name: '结束月份', value: 'endTime', },
                     ]
                 }"
+                @change-check-all="handleChangeCheckAll"
             >
                 <template v-slot:search-rest>
                     <el-button type="danger" :icon="Delete" :loading="loadingBatchDelete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
@@ -148,7 +150,7 @@ onMounted(() => {
             <Text>
             </Text>
 
-            <ProductReqList :list="list" :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            <ProductReqList :list="list" :is-select-all="tableSelectAll"  :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
 
             <FlexRow horizontal="end">
                 <el-pagination v-model:current-page="listControlModel.pageIndex"

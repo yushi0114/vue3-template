@@ -5,7 +5,7 @@ import { getExactReqs, deleteExactReqs, downloadExactReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
 import { ExactReqDetail, ReqList } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel, useApi } from '@/composables';
+import { useListControlModel, useApi, useTableCheckbox } from '@/composables';
 
 const route = useRoute();
 const platform = ref<PlatformType>(Number(route.params.type));
@@ -15,11 +15,12 @@ const { model: listControlModel, clear: clearModel } = useListControlModel({
     numberFields: ['progress']
 });
 
-
 const count = ref(0);
 const loading = ref(false);
 const list = ref<AgileReqEntity[]>([]);
-const ids = ref<string[]>([]);
+
+const { isSelectAll, tableSelectAll, isIndeterminate, ids, handleSelectionChange, handleChangeCheckAll } = useTableCheckbox(list);
+
 const downloadOptions = reactive({
     fileName: `精准需求列表（${platformTypeMap[platform.value]}）.xlsx`,
     params: Object.assign({ platform: platform.value }, listControlModel)
@@ -71,10 +72,6 @@ function goDetail(req: RequirementEntity) {
     detail.value = req;
 }
 
-const handleSelectionChange = (selection: any) => {
-    ids.value = selection.map((item: any) => item.id);
-};
-
 const handleBatchDelete = async() => {
     const idArr = ids.value.map(item => `"${item}"`).join(',');
     try {
@@ -112,6 +109,9 @@ onMounted(() => {
         <ListQueryControl
             class="flex-1 overflow-hidden"
             v-model="listControlModel"
+            v-model:check-all="isSelectAll"
+            :is-indeterminate="isIndeterminate"
+            showSelection
             :searchConfig="{
                 label: '请输入企业名称',
                 field: 'searchInput'
@@ -143,13 +143,14 @@ onMounted(() => {
                     {  name: '结束月份', value: 'endTime', },
                 ]
             }"
+            @change-check-all="handleChangeCheckAll"
         >
             <template v-slot:search-rest>
                 <el-button type="danger" :icon="Delete" :loading="loadingBatchDelete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
                 <DownloadButton type="primary" :api="downloadExactReqs" :download-options="downloadOptions"></DownloadButton>
             </template>
             <div class="flex-1 overflow-y-auto">
-            <ReqList :loading="loading" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            <ReqList :loading="loading" :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange"/>
 
             <FlexRow horizontal="end">
                 <el-pagination

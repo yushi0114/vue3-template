@@ -5,7 +5,7 @@ import { getAligeReqs, deleteAgileReqs, downloadAgileReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
 import { AgileReqDetail, ReqList } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel, useApi } from '@/composables';
+import { useListControlModel, useApi, useTableCheckbox } from '@/composables';
 
 const route = useRoute();
 const platform = ref<PlatformType>(Number(route.params.type));
@@ -18,7 +18,9 @@ const { model: listControlModel, clear: clearModel } = useListControlModel({
 const count = ref(0);
 const loading = ref(false);
 const list = ref<AgileReqEntity[]>([]);
-const ids = ref<string[]>([]);
+
+const { isSelectAll, tableSelectAll, isIndeterminate, ids, handleSelectionChange, handleChangeCheckAll } = useTableCheckbox(list);
+
 const downloadOptions = reactive({
     fileName: `精准需求列表（${platformTypeMap[platform.value]}）.xlsx`,
     params: Object.assign({ platform: platform.value }, listControlModel)
@@ -70,10 +72,6 @@ function goDetail(req: RequirementEntity) {
     detailContent.value = req;
 }
 
-const handleSelectionChange = (selection: any) => {
-    ids.value = selection.map((item: any) => item.id);
-};
-
 const handleBatchDelete = async() => {
     const idArr = ids.value.map(item => `"${item}"`).join(',');
     try {
@@ -111,6 +109,9 @@ onMounted(() => {
             <PlatformTab @tab-change="handleTabChange" :filter-types="[PlatformType.LiaoXinTong]"/>
             <ListQueryControl
                 v-model="listControlModel"
+                v-model:check-all="isSelectAll"
+                :is-indeterminate="isIndeterminate"
+                show-selection
                 :searchConfig="{
                     label: '请输入企业名称',
                     field: 'searchInput'
@@ -131,6 +132,7 @@ onMounted(() => {
                         {  name: '结束月份', value: 'endTime', },
                     ]
                 }"
+                @change-check-all="handleChangeCheckAll"
             >
                 <template v-slot:search-rest>
                     <el-button type="danger" :loading="loadingBatchDelete" :icon="Delete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
@@ -138,7 +140,7 @@ onMounted(() => {
                 </template>
             </ListQueryControl>
 
-            <ReqList :loading="loading" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            <ReqList :loading="loading" :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
 
             <FlexRow horizontal="end">
                 <el-pagination

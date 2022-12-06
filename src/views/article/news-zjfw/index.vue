@@ -5,14 +5,12 @@ import { ARTICLE_MODULE } from '../../../enums';
 
 <template>
     <PagePanel>
-        <Board class="publish">
+        <Board full>
             <article-wrapper :module="ARTICLE_MODULE.NEWS_ZJFW"></article-wrapper>
         </Board>
     </PagePanel>
 </template>
 
-<style lang="postcss">
-.publish {
-    @apply  h-full;
-}
+<style lang="scss">
+
 </style>

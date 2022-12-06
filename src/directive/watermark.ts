@@ -18,7 +18,6 @@ export default {
             parentNode.appendChild(can);
             can.width = width;
             can.height = height;
-            can.style.display = 'none';
             const cans = can.getContext('2d');
             cans.rotate((textRotate * Math.PI) / 180);
             cans.font = font;

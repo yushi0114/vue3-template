@@ -1,11 +1,13 @@
 <template>
-    <PageContent :title="'机构管理'">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane v-for="item in categoryList" :key="item.id" :label="item.name" :name="item.code">
-                <institution-config v-if="activeName === item.code"></institution-config>
-            </el-tab-pane>
-        </el-tabs>
-    </PageContent>
+    <PagePanel>
+        <Board full>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane v-for="item in categoryList" :key="item.id" :label="item.name" :name="item.code">
+                    <institution-config v-if="activeName === item.code"></institution-config>
+                </el-tab-pane>
+            </el-tabs>
+        </Board>
+    </PagePanel>
 </template>
 
 <script lang="ts" setup>
@@ -21,7 +23,7 @@ async function handleClick(tab: TabsPaneContext) {
     LoadingService.getInstance().stop();
 }
 
-onMounted(async () => {
+onMounted(async() => {
     LoadingService.getInstance().loading();
     await initInstitutionPage();
     LoadingService.getInstance().stop();

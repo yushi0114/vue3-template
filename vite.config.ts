@@ -32,14 +32,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                 presets: [
                     presetUno(),
                     presetAttributify(),
-                    presetIcons({
-                        cdn: 'https://esm.sh/',
-                    }),
                 ],
-                shortcuts: {
-                    'flex-center': 'flex items-center justify-center',
-                    'flex-between': 'flex items-center justify-between',
-                },
                 transformers: [transformerDirectives()],
             }),
             autoImport({
@@ -53,9 +46,6 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                     'vue-router',
                     'pinia',
                     {
-                        '@vueuse/core': ['onKeyStroke', 'useFocus'],
-                        '/src/utils/func.ts': ['omit', 'cloneDeep'],
-                        '/src/composables/index.ts': ['useApi'],
                         'element-plus': ['ElMessage'],
                     },
                 ],

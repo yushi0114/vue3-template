@@ -1,7 +1,9 @@
 <template>
-  <PageContent :title="'信用评分查询记录'">
-        <finance-score-content-list></finance-score-content-list>
-  </PageContent>
+    <PagePanel>
+        <Board full>
+            <finance-score-content-list></finance-score-content-list>
+        </Board>
+    </PagePanel>
 </template>
 
 <script lang="ts" setup>
@@ -11,7 +13,7 @@ import { onMounted } from 'vue';
 import { LoadingService } from '@/views/system/loading-service';
 import { getPageList } from './components/finance-score';
 
-onMounted(async() => {
+onMounted(async () => {
     LoadingService.getInstance().loading();
     await getPageList();
     LoadingService.getInstance().stop();

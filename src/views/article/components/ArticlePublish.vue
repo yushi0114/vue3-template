@@ -153,7 +153,7 @@ onMounted(() => {
         class="article-publish"
         v-loading="loadingDetail">
         <div class="flex justify-between">
-            <div class="flex-center">
+            <FlexRow horizontal="center">
                 <el-button
                     class="mr-2"
                     :icon="Back"
@@ -165,7 +165,7 @@ onMounted(() => {
                     v-if="state.laseUpdateTime"
                     >最近一次编辑时间：{{ state.laseUpdateTime }}</div
                 >
-            </div>
+            </FlexRow>
 
             <div>
                 <el-button

@@ -39,7 +39,7 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
                 align="center">
                 {{ data.subTitle }}
             </Text>
-            <div class="flex-between px-20">
+            <FlexRow horizontal="between" class="px-20">
                 <ListField
                     class="flex-1 min-w-0"
                     label="信息来源"
@@ -47,7 +47,7 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
                     >{{ data.origin }}</ListField
                 >
                 <ListField label="发布日期">{{ data.publishDate }}</ListField>
-            </div>
+            </FlexRow>
             <el-divider class="!border-t-$el-color-error"></el-divider>
             <sjc-editor
                 v-model:model-value="data.content"

@@ -1,7 +1,9 @@
 <template>
-    <PageContent :title="'机构LOGO管理'">
-        <finance-report-content-list></finance-report-content-list>
-    </PageContent>
+    <PagePanel>
+        <Board full>
+            <finance-report-content-list></finance-report-content-list>
+        </Board>
+    </PagePanel>
 </template>
 
 <script lang="ts" setup>

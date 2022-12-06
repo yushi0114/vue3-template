@@ -17,7 +17,7 @@ watch(route, (val) => {
 
 <template>
     <PagePanel>
-        <Board class="statistics">
+        <Board full>
             <PlatformTab />
             <template v-if="isLxtstatistics">
                 <statistics-table></statistics-table>
@@ -29,8 +29,6 @@ watch(route, (val) => {
     </PagePanel>
 </template>
 
-<style lang="postcss" scoped>
-.statistics {
-    @apply  h-full;
-}
+<style lang="scss" scoped>
+
 </style>

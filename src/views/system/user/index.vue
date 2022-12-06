@@ -1,14 +1,16 @@
 <template>
-    <PageContent :title="'用户管理'">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="DMS" name="dms">
-                <user-config v-if="activeName === 'dms'"></user-config>
-            </el-tab-pane>
-            <el-tab-pane label="征信端" name="cre">
-                <user-config v-if="activeName === 'cre'"></user-config>
-            </el-tab-pane>
-        </el-tabs>
-    </PageContent>
+    <PagePanel>
+        <Board full>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="DMS" name="dms">
+                    <user-config v-if="activeName === 'dms'"></user-config>
+                </el-tab-pane>
+                <el-tab-pane label="征信端" name="cre">
+                    <user-config v-if="activeName === 'cre'"></user-config>
+                </el-tab-pane>
+            </el-tabs>
+        </Board>
+    </PagePanel>
 </template>
 
 <script lang="ts" setup>

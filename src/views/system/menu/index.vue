@@ -1,17 +1,19 @@
 <template>
-    <PageContent :title="'菜单管理'">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="DMS" name="dms">
-                <menu-config v-if="activeName === 'dms'"></menu-config>
-            </el-tab-pane>
-            <el-tab-pane label="征信端" name="cre">
-                <menu-config v-if="activeName === 'cre'"></menu-config>
-            </el-tab-pane>
-            <el-tab-pane label="金融端" name="fin">
-                <menu-config v-if="activeName === 'fin'"></menu-config>
-            </el-tab-pane>
-        </el-tabs>
-    </PageContent>
+    <PagePanel>
+        <Board full>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="DMS" name="dms">
+                    <menu-config v-if="activeName === 'dms'"></menu-config>
+                </el-tab-pane>
+                <el-tab-pane label="征信端" name="cre">
+                    <menu-config v-if="activeName === 'cre'"></menu-config>
+                </el-tab-pane>
+                <el-tab-pane label="金融端" name="fin">
+                    <menu-config v-if="activeName === 'fin'"></menu-config>
+                </el-tab-pane>
+            </el-tabs>
+        </Board>
+    </PagePanel>
 </template>
 
 <script setup lang="ts">
@@ -30,7 +32,7 @@ async function handleClick(tab: TabsPaneContext) {
     LoadingService.getInstance().stop();
 }
 
-onMounted(async () => {
+onMounted(async() => {
     LoadingService.getInstance().loading();
     await getTreeData();
     setFormType('empty');

@@ -107,13 +107,14 @@ import { getCaptcha } from '@/api/access';
 import { encrypt } from '@/utils/crypto';
 import { COUNT_PASSWORD_FORM_RULES } from '../../constants';
 import { MENU_TAB } from '@/enums';
-const { push } = useRouter();
+import { ROOT_PATH } from '@/router';
+const { replace } = useRouter();
 const { signin } = useUserStore();
 
 const { loading, request: login } = useApi(signin, {
     onSuccess() {
         // 路由跳转
-        push('/home');
+        replace(ROOT_PATH);
     },
     onError() {
         getVerifyCode();

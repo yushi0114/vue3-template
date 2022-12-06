@@ -4,10 +4,11 @@ import Nav from './nav/Nav.vue';
 import { Layout } from '@/components';
 import { useUserStore } from '@/stores';
 import { computed, onBeforeMount } from 'vue';
+import { ROOT_PATH } from '@/router';
 
 const { state, getUserInfo } = useUserStore();
 
-const sidebarOptions = computed(() => [...state.prevNavTree, ...state.navTree]);
+const sidebarOptions = computed(() => [...state.navTree]);
 onBeforeMount(() => {
     getUserInfo();
 });
@@ -21,7 +22,7 @@ onBeforeMount(() => {
 <template>
     <Layout class="app-container">
         <Nav>
-            <RouterLink to="/home">
+            <RouterLink :to="ROOT_PATH">
                 <Logo class="app-logo" />
             </RouterLink>
         </Nav>

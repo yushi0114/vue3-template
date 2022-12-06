@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from 'vue-router';
-import Home from '@/views/home/Home.vue';
 import { Signin } from '@/views/access';
 import type { DynamicNavEntity } from '@/types';
 import { genDynamicComponent, genDynamicViewConfig } from '@/views';
@@ -14,13 +13,6 @@ export const SIGNIN_PATH = '/login';
 export const ROOT_PATH = '/';
 export const ERROR_404_PATH = '/error-404';
 export const ROOT_NAME = 'base';
-export enum RoutePermission {
-    read = 1,
-    exec = 2,
-    update = 4,
-    add = 8,
-    delete = 16,
-}
 
 const routes: RouteRecordRaw[] = [
     {
@@ -29,15 +21,8 @@ const routes: RouteRecordRaw[] = [
         // redirect: ROOT_PATH,
         component: Base,
         children: [
-            {
-                path: '/home',
-                name: 'homepage',
-                component: Home,
-                meta: {
-                    title: 'Home'
-                }
-            }
         ],
+        redirect: '/dashboard'
     },{
         path: SIGNIN_PATH,
         name: 'login',
@@ -87,7 +72,6 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
             meta: {
                 title: nav.title,
                 menu: nav.name,
-                permission: RoutePermission.read
             }
         });
 
@@ -121,7 +105,6 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
                 component: Error404,
                 meta: {
                     title: 'Not Found',
-                    permission: RoutePermission.read
                 }
             });
         });

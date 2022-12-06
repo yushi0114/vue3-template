@@ -92,7 +92,7 @@ watch(isCtrlKeep, (newValue) => {
             <FlexRow class="list-menu-title">
                 <Text
                     size="md"
-                    color="paragraph"
+                    color="regular"
                     >
                     过滤器
                 </Text>
@@ -110,7 +110,7 @@ watch(isCtrlKeep, (newValue) => {
             </FlexRow>
         </FlexRow>
         <el-collapse
-            class="flex-1 overflow-y-auto !border-r-none"
+            class="flex-1 pl-2 overflow-y-auto !border-r-none"
             v-model="activeNames">
             <el-collapse-item
                 :name="subMenu.field"
@@ -118,20 +118,20 @@ watch(isCtrlKeep, (newValue) => {
                 :key="subMenu.field">
                 <template #title>
                     <Text
-                        color="regular"
+                        color="paragraph"
                         size="sm"
                         >{{ subMenu.label }}</Text
                     >
                 </template>
                 <el-button
-                    class="w-full"
+                    class="w-full justify-start"
                     v-for="menuItem in subMenu.options"
                     :key="menuItem.value"
                     text
                     :type="getActiveOption(subMenu.field, menuItem)"
                     @click="handleMenuItemClick(menuItem, subMenu.field)"
                     ><Text
-                        :color="getActiveOption(subMenu.field, menuItem) || 'regular'"
+                        color="current"
                         size="xs"
                         >{{ menuItem.name }}</Text
                     >
@@ -156,11 +156,22 @@ watch(isCtrlKeep, (newValue) => {
         margin-left: 0;
     }
     :deep(.el-button.el-button--primary) {
-        background-color: $fill-color-light;
+        background-color: $color-primary;
+        color: $bg-color;
     }
     :deep(.el-collapse) {
         border-top: none;
         border-bottom: none;
+        .el-collapse-item__header {
+            border-bottom: none;
+        }
+        .el-collapse-item__wrap {
+            border-bottom: none;
+        }
+
+        .el-collapse-item__content {
+            padding-bottom: 0;
+        }
     }
 }
 </style>

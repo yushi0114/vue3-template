@@ -57,7 +57,7 @@ function handleSignout() {
 </script>
 
 <template>
-    <el-dropdown class="nav-user-profile" trigger="click" @command="handleCommand">
+    <el-dropdown class="nav-user-profile" @command="handleCommand">
         <el-space size="small">
             <el-avatar shape="square" size="small" :icon="UserFilled" />
             {{ state.user?.name }}
@@ -70,7 +70,7 @@ function handleSignout() {
                 </el-dropdown-item>
                 <el-dropdown-item
                     :command="UserDropdownCommand.changeUsername"
-                    :icon="User">修改用户名
+                    :icon="User">修改姓名
                 </el-dropdown-item>
                 <el-dropdown-item
                     :command="UserDropdownCommand.Signout"

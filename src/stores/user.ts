@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\stores\user.ts
  * @Author: zys
  * @Date: 2022-11-22 10:47:59
- * @LastEditTime: 2022-11-30 16:56:36
+ * @LastEditTime: 2022-12-06 09:33:23
  * @LastEditors: zys
  * @Reference:
  */
@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', () => {
         return signinApi(user).then((res) => {
             token.set(res.token);
             localStorage.setItem('dms', res.id);
-            return getUserInfo({ tab: user.tab });
+            return Promise.resolve(res);
         });
     }
 

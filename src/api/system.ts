@@ -9,7 +9,7 @@ export type DynamicNavsResponse = DynamicNavEntity[];
 export function dynamicNavs(roleId: DynamicNavsPayload): Promise<DynamicNavsResponse> {
     return api.get(`${DMS_DOMAIN}/v1/role/menu/list`, {
         params: { roleId, tab: MENU_TAB.MENU_TAB_DMS },
-    }).then(res => res.data);
+    });
 }
 
 export function allNavs(): Promise<NavEntity[]> {

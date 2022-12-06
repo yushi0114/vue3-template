@@ -53,7 +53,7 @@ async function submit() {
             await signout();
         }
         finally {
-            router.replace('/signin');
+            router.replace('/login');
         }
     }
     catch {

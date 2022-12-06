@@ -74,11 +74,11 @@ service.interceptors.response.use(res => {
             type: 'error'
         });
         token.remove();
-        router.replace('/signin');
+        router.replace('/login');
         return Promise.reject('error');
     } else if (code === HttpStatus.unauthorized) {
         token.remove();
-        router.replace('/signin');
+        router.replace('/login');
     } else if (code === HttpStatus.internalServerError) {
         console.error(msg);
         return Promise.reject(new Error(msg));

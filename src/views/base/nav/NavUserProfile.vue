@@ -50,7 +50,7 @@ function handleSignout() {
     )
         .then(signout)
         .then(() => {
-            router.replace('/signin');
+            router.replace('/login');
         })
         .catch(noop);
 }

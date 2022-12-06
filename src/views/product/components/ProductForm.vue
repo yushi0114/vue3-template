@@ -64,14 +64,14 @@ const handleSubmit = async(values: any) => {
             @change="formValueChange"
             @search="handleSubmit"></sjc-form>
         <slot name="footer">
-            <div class="flex-center">
+            <FlexRow horizontal="center">
                 <el-button @click="handleCancel">取消</el-button>
                 <el-button
                     type="primary"
                     @click="handleOk"
                     >确定</el-button
                 >
-            </div>
+            </FlexRow>
         </slot>
     </div>
 </template>

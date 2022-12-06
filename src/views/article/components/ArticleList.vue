@@ -103,14 +103,14 @@ watch(listControlModel, () => {
                         v-real-img="{ img: scope.row.thumbnail, errImg }"
                         alt="" />
                 </div>
-                <div
+                <FlexColumn vertical="center"
                     v-else
-                    class="w-67px h-67px flex-center flex-col border border-$el-fill-color">
+                    class="w-67px h-67px border border-$el-fill-color">
                     <div class="w-full h-60% bg-$el-fill-color text-2xl text-center">
                         {{ getDate(scope.row.publishDate).day }}
                     </div>
                     <div class="flex-1">{{ getDate(scope.row.publishDate).yearAndMonth }}</div>
-                </div>
+                </FlexColumn>
             </template>
             <template #append="{ props }">
                 <el-row>
@@ -194,9 +194,9 @@ watch(listControlModel, () => {
                 </el-row>
             </template>
             <template #handler="{ scope }">
-                <div class="flex-center items-end">
-                    <div
-                        :class="['flex-center', scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
+                <FlexRow vertical="end" horizontal="center">
+                    <FlexRow horizontal="center"
+                        :class="[scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
                         <!-- <TextHoverable
                             size="sm"
                             :color="scope.row.status === ARTICLE_STATUS.PUBLISHED ? 'disabled' : 'regular'"
@@ -214,7 +214,7 @@ watch(listControlModel, () => {
                                 <Icon name="ep-edit" />
                             </el-tooltip>
                         </el-button>
-                    </div>
+                    </FlexRow>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, scope.row)">
                         <!-- <TextHoverable
                             size="sm"
@@ -252,7 +252,7 @@ watch(listControlModel, () => {
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                </div>
+                </FlexRow>
             </template>
         </sjc-table>
     </div>

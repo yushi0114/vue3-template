@@ -11,12 +11,11 @@ const { queryParams, goQuery } = useQueryParams({
     kind: ProductRecommandType.primary
 });
 const route = useRoute();
-const router = useRouter();
 const kind = ref(queryParams.value.kind);
 const kindName = computed<string>(() => {
     return productRecommandTypeMap[queryParams.value.kind];
 });
-const { request } = useApi(getProductRecommends);
+const { request, loading } = useApi(getProductRecommends);
 const recommands = ref<ProductRecommandEntity[]>([]);
 
 function getList() {

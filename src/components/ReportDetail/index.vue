@@ -214,7 +214,7 @@ const print = () => {
                     <punish :punish="reportList.punish"></punish>
                     <abnormal :abnormal="reportList.abnormal"></abnormal>
 
-                    <el-backtop :bottom="100"></el-backtop>
+                    <el-backtop :bottom="120"></el-backtop>
 
                     <img class="report-print" src="@/assets/images/print.png" @click="print()">
                 </div>

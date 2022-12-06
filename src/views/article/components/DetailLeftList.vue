@@ -49,7 +49,7 @@ defineExpose({
     <div
         class="article-list-wrapper"
         v-loading="state.loading && !state.loadingMore">
-        <div class="flex-between space-x-2">
+        <FlexRow horizontal="between" class="space-x-2">
             <div class="flex flex-1 space-x-2">
                 <el-input
                     placeholder="请输入关键字进行查询"
@@ -79,7 +79,7 @@ defineExpose({
                     class="cursor-pointer"
                     @click="handleToCreate"></i-ep-plus>
             </el-tooltip>
-        </div>
+        </FlexRow>
         <template v-if="state.data.length > 0">
             <ul
                 class="article-list"
@@ -181,7 +181,7 @@ defineExpose({
     }
 }
 .article-list-item {
-    @apply h-30px leading-30px text-sm flex-between flex-nowrap;
+    @apply h-30px leading-30px text-sm flex items-center justify-between flex-nowrap;
     &:hover {
         @apply cursor-pointer text-$el-primary-color bg-$el-fill-color;
     }

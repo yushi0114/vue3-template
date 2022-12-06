@@ -189,7 +189,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 .sidebar-root-label {
     @apply
         flex-1
-        text-sm font-medium ml-3
+        text-sm font-medium ml-2
         truncate
         lg:sidebar-expanded:opacity-100
         2xl:opacity-100 duration-200
@@ -210,7 +210,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 
 .sidebar-sub-block {
-    @apply h-8 text-sm pl-12;
+    @apply h-8 text-sm pl-10;
 }
 
 .sidebar-sub-link {

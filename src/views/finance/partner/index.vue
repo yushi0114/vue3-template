@@ -1,14 +1,16 @@
 <template>
-  <PageContent :title="'合作伙伴'">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="市综服" name="zjfw">
-              <finance-partner-config v-if="activeName === 'zjfw'"></finance-partner-config>
-          </el-tab-pane>
-          <el-tab-pane label="辽信通" name="sjzx">
-              <finance-partner-config v-if="activeName === 'sjzx'"></finance-partner-config>
-          </el-tab-pane>
-      </el-tabs>
-  </PageContent>
+    <PagePanel>
+        <Board full>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="辽信通" name="sjzx">
+                    <finance-partner-config v-if="activeName === 'sjzx'"></finance-partner-config>
+                </el-tab-pane>
+                <el-tab-pane label="市综服" name="zjfw">
+                    <finance-partner-config v-if="activeName === 'zjfw'"></finance-partner-config>
+                </el-tab-pane>
+            </el-tabs>
+        </Board>
+    </PagePanel>
 </template>
 
 <script lang="ts" setup>

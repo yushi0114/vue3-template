@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useVModel } from '@vueuse/core';
+import { useVModel, onKeyStroke } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import type { ControlOptionConfig } from './ListQueryControl.vue';
 

@@ -1,14 +1,16 @@
 <template>
-    <PageContent :title="'角色管理'">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="DMS" name="dms">
-                <role-config v-if="activeName === 'dms'"></role-config>
-            </el-tab-pane>
-            <el-tab-pane label="征信端" name="cre">
-                <role-config v-if="activeName === 'cre'"></role-config>
-            </el-tab-pane>
-        </el-tabs>
-    </PageContent>
+    <PagePanel>
+        <Board full>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="DMS" name="dms">
+                    <role-config v-if="activeName === 'dms'"></role-config>
+                </el-tab-pane>
+                <el-tab-pane label="征信端" name="cre">
+                    <role-config v-if="activeName === 'cre'"></role-config>
+                </el-tab-pane>
+            </el-tabs>
+        </Board>
+    </PagePanel>
 </template>
 
 <script lang="ts" setup>
@@ -25,7 +27,7 @@ import {
 } from '@/views/system/role/components/role-list';
 import { LoadingService } from '@/views/system/loading-service';
 
-const handleClick = async (tab: TabsPaneContext) => {
+const handleClick = async(tab: TabsPaneContext) => {
     LoadingService.getInstance().loading();
     mode.value = 'list';
     resetRoleFilterObject();
@@ -35,7 +37,7 @@ const handleClick = async (tab: TabsPaneContext) => {
     LoadingService.getInstance().stop();
 };
 
-onMounted(async () => {
+onMounted(async() => {
     LoadingService.getInstance().loading();
     roleFilterObject.value.currentSize = 10;
     roleFilterObject.value.currentPage = 0;

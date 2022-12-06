@@ -7,8 +7,8 @@ import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
 import type { ElDropdown } from 'element-plus';
-import { getNextMonth } from '@/utils';
-// TODO
+import { getNextMonth, isString } from '@/utils';
+
 export type ControlConfig = {
     label: string,
     field: string,
@@ -33,8 +33,10 @@ const props = withDefaults(
         filterOptionsConfigs?: ControlOptionConfig[]
         sortConfigs?: ControlConfig[],
         dateRangeConfig?: ControlOptionConfig,
+        filterRowVisible?: boolean
     }>(),
     {
+        filterRowVisible: true,
     }
 );
 
@@ -51,6 +53,7 @@ const model = reactive<ModelType>({});
 const dropdownLabelMap = reactive<DropdownLabelMapType>({});
 const modelCheckAll = useVModel(props, 'checkAll', emits);
 const { height } = useWindowSize();
+const searchTipVisible = ref(false);
 
 watch(() => props.searchConfig, () => {
     if (props.searchConfig) {
@@ -174,6 +177,18 @@ function handleSort(sField: string, sValue: SortType) {
     wrapGo();
 }
 
+function checkSearchInput(val: any) {
+    const vaild = isString(val) && (val.length >= 2 || val.length === 0);
+    searchTipVisible.value = !vaild;
+    return vaild;
+}
+
+function handleSearch(val: any) {
+    const valid = checkSearchInput(val);
+    if (!valid) return;
+    wrapGo();
+}
+
 // onMounted(() => {
 //     wrapGo();
 // });
@@ -229,26 +244,29 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
         <FlexRow horizontal="between" class="lqc-search-row">
             <div v-if="searchConfig">
                 <el-input
-                    v-model="model[searchConfig.field]"
+                    v-model.trim="model[searchConfig.field]"
                     size="large"
+                    clearable
                     :placeholder="searchConfig.label"
-                    class="input-with-select"
+                    class="lqc-search-input"
+                    @input="checkSearchInput(model[searchConfig!.field])"
+                    @keyup.enter="handleSearch(model[searchConfig!.field])"
                     >
                     <template #append>
                         <el-button
                             :icon="Search"
-                            @click="wrapGo"
+                            @click="handleSearch(model[searchConfig!.field])"
                         />
                     </template>
                 </el-input>
             </div>
-
+            <el-alert v-if="searchTipVisible" class="lqc-search-tip" :closable="false" show-icon title="输入内容不能少于2个字符" type="error" />
             <FlexRow horizontal="end" class="lqc-search-rest">
                 <slot name="search-rest" />
             </FlexRow>
         </FlexRow>
         <FlexRow
-            class="lqc-filter-row">
+            class="lqc-filter-row" v-if="filterRowVisible">
             <el-checkbox
                 v-if="showSelection"
                 v-model="modelCheckAll"
@@ -263,10 +281,10 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                     :max-height="height - 300"
                     @command="handleDropdownChange">
                     <UseMouseInElement v-slot="{ isOutside }">
-                        <FlexRow class="cursor-pointer">
-                            {{ dropdownLabelMap[fConf.field] || fConf.label }}
-                            <i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/>
-                            <i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/>
+                        <FlexRow class="lqc-filter-dropname">
+                            <Text color="regular" size="sm" bold>{{ dropdownLabelMap[fConf.field] || fConf.label }}</Text>
+                            <Text color="regular" size="sm"><i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/></Text>
+                            <Text color="regular" size="sm"><i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/></Text>
                         </FlexRow>
                     </UseMouseInElement>
                     <template #dropdown>
@@ -314,13 +332,10 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                 class="lqc-sort-item"
                 @click="handleSort(sOpt.field, loopSort(model[sOpt.field]))"
                 v-for="sOpt in sortConfigs" :key="sOpt.field">
-                <Text
-                    size="sm"
-                    :color="model[sOpt.field] === SortType.none ? 'regular' : 'primary'">
+                <Text size="sm" color="regular" bold>
                     {{ sOpt.label }}
-                    <i-ep-sort-up v-if="model[sOpt.field] === SortType.asc" />
-                    <i-ep-sort-down v-else />
                 </Text>
+                <SortArrow :sort="model[sOpt.field]" />
             </div>
         </FlexRow>
         <slot></slot>
@@ -349,6 +364,15 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     margin-bottom: $gap-md;
 }
 
+.lqc-search-input {
+    width: 350px;
+}
+
+.lqc-search-tip {
+    margin: 0 $gap-xs;
+    width: 240px;
+}
+
 .lqc-type-row,
 .lqc-filter-row {
     border-radius: 4px;
@@ -360,6 +384,18 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 
 .lqc-filter-item {
     margin-right: $gap-xs;
+}
+
+.lqc-filter-dropname {
+    cursor: pointer;
+
+    & svg {
+        display: block;
+        width: 1em;
+        height: 1em;
+        margin-top: $gap-line;
+        margin-left: calc($gap-xs / 2);
+    }
 }
 
 .lqc-search-rest {

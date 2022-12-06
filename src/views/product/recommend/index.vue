@@ -1,29 +1,42 @@
 <script lang="ts" setup>
 import { getProductRecommends, deleteProductRecommends } from '@/api';
 import { useQueryParams, useApi } from '@/composables';
-import { PlatformType, ProductRecommandType, productRecommandTypeOptions, productRecommandTypeMap } from '@/enums';
+import { ProductRecommandType, productRecommandTypeOptions, productRecommandTypeMap } from '@/enums';
 import type { ProductRecommandEntity } from '@/types';
 import { noop } from '@/utils';
 import { Plus } from '@element-plus/icons-vue';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, type TabsPaneContext } from 'element-plus';
 
 const { queryParams, goQuery } = useQueryParams({
     kind: ProductRecommandType.primary
 });
-const route = useRoute();
 const kind = ref(queryParams.value.kind);
 const kindName = computed<string>(() => {
     return productRecommandTypeMap[queryParams.value.kind];
 });
+
+const route = useRoute();
+
 const { request, loading } = useApi(getProductRecommends);
 const recommands = ref<ProductRecommandEntity[]>([]);
 
 function getList() {
     request({ productType: kind.value })
         .then(res => {
-            console.log(res.data);
             recommands.value = res.data;
         });
+}
+
+watch(kind, () => {
+    getList();
+}, { immediate: true });
+
+function handleRecommendTabClick(tab: TabsPaneContext) {
+    goQuery({ kind: tab.paneName as ProductRecommandType });
+}
+
+function handleEdit(rd: ProductRecommandEntity) {
+    console.log(rd);
 }
 
 function handleDelete(rd: ProductRecommandEntity) {
@@ -40,40 +53,25 @@ function handleDelete(rd: ProductRecommandEntity) {
         })
         .catch(noop);
 }
-
-function handleEdit(rd: ProductRecommandEntity) {
-    console.log(rd);
-}
-
-watch(kind, () => {
-    getList();
-    nextTick(() => {
-        console.log(kindName.value);
-    });
-}, { immediate: true });
-
-
 </script>
 
 <template>
     <PagePanel>
-        <Board class="product-recommend" full>
-            <PlatformTab :filter-types="[PlatformType.LiaoXinTong]"/>
-
-            <FlexRow horizontal="between">
-                <el-select v-model="kind" @change="(type: ProductRecommandType) => goQuery({ kind })">
-                    <el-option
-                        v-for="opt in productRecommandTypeOptions"
-                        :key="opt.value"
-                        :value="opt.value"
-                        :label="opt.name"/>
-                </el-select>
-
+        <Board class="product-recommend" full v-loading="loading">
+            <el-tabs 
+                v-model="kind"
+                @tab-click="handleRecommendTabClick">
+                <el-tab-pane
+                    v-for="opt in productRecommandTypeOptions"
+                    :key="opt.value"
+                    :label="opt.name"
+                    :name="opt.value"></el-tab-pane>
+            </el-tabs>
+            <FlexRow horizontal="end">
                 <RouterLink :to="`${route.path}/create/${kind}`">
                     <el-button :icon="Plus" type="primary">新建{{ kindName }}</el-button>
                 </RouterLink>
             </FlexRow>
-            {{ loading }}
             <FlexRow class="product-recommand-row">
                 <ContentBoard
                     hoverable
@@ -86,7 +84,7 @@ watch(kind, () => {
                                 <i-ep-edit />
                             </TextHoverable>
                             <TextHoverable color="regular" @click="handleDelete(recommand)">
-                                <i-ep-close />
+                                <i-ep-delete />
                             </TextHoverable>
                         </FlexRow>
                     </template>
@@ -98,14 +96,6 @@ watch(kind, () => {
 </template>
 
 <style lang="scss">
-.product-recommend {
-}
-
-.pdt-rmd-tab {
-    flex: 1;
-    height: 100%;
-}
-
 .product-recommand-row {
     gap: $gap-xs;
     padding-top: $gap-sm;
@@ -113,9 +103,5 @@ watch(kind, () => {
 
 .product-recommand-poster {
     width: 230px;
-}
-
-.product-recommand-icon {
-    cursor: pointer;
 }
 </style>

@@ -1,6 +1,7 @@
 import { validatorLogo } from '@/utils';
 import { PlatformType, FormType } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
+import type { ITableConfig } from '@/components/SjcTable/types';
 
 // 产品表单
 export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
@@ -723,6 +724,91 @@ export const FILTERS_OPTIONS_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
             ], // 验证
         },
         {
+            type: FormType.INPUT,
+            label: '筛选项名称', // 字段
+            keyName: 'filterValueStart', // 字段名
+            placeholder: '请填写筛选项开始值', // 提示内容
+            span: 12,
+            maxlength: 6,
+            disabled: false, // 是否禁用
+            rules: (formValues: any) => [
+                {
+                    required: true,
+                    message: '筛选项开始值不能为空',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    max: 6,
+                    message: '筛选项开始值不能超过6个字符',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    validator: (rule, value, callback) => {
+                        if (!/^\d{1,6}$/.test(value)) {
+                            callback(new Error('请输入1-6位数字'));
+                        } else if (formValues.filterValueEnd && Number(formValues.filterValueEnd) <= Number(value)) {
+                            callback(new Error('筛选项结束值必须大于开始值'));
+                        } else {
+                            callback();
+                        }
+                    },
+                    trigger: ['blur', 'change'],
+                },
+            ], // 验证
+        },
+        {
+            type: FormType.TEXT,
+            keyName: 'constText',
+            label: '', // 字段
+            span: 1,
+            labelWidth: '15px',
+            isIgnoreKey: true,
+            defaultValue: '-',
+        },
+        {
+            type: FormType.INPUT,
+            label: '', // 字段
+            keyName: 'filterValueEnd', // 字段名
+            placeholder: '请填写筛选项结束值', // 提示内容
+            span: 8,
+            maxlength: 6,
+            disabled: false, // 是否禁用
+            labelWidth: '10px',
+            rules: (formValues: any) => [
+                {
+                    required: true,
+                    message: '筛选项结束值不能为空',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    max: 6,
+                    message: '筛选项结束值不能超过6个字符',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    validator: (rule, value, callback) => {
+                        if (!/^\d{1,6}$/.test(value)) {
+                            callback(new Error('请输入1-6位数字'));
+                        } else if (Number(formValues.filterValueStart) >= Number(value)) {
+                            callback(new Error('筛选项结束值必须大于开始值'));
+                        } else {
+                            callback();
+                        }
+                    },
+                    trigger: ['blur', 'change'],
+                },
+            ], // 验证
+        },
+        {
+            type: FormType.UNIT,
+            keyName: 'unit',
+            label: '', // 字段
+            span: 2,
+            labelWidth: '5px',
+            isIgnoreKey: true,
+            defaultValue: '个月',
+        },
+        {
             type: FormType.SWITCH,
             label: '状态', // 字段
             keyName: 'isFilterShow', // 字段名
@@ -760,6 +846,91 @@ export const FILTERS_OPTIONS_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
             ], // 验证
         },
         {
+            type: FormType.INPUT,
+            label: '筛选项名称', // 字段
+            keyName: 'filterValueStart', // 字段名
+            placeholder: '请填写筛选项开始值', // 提示内容
+            span: 12,
+            maxlength: 6,
+            disabled: false, // 是否禁用
+            rules: (formValues: any) => [
+                {
+                    required: true,
+                    message: '筛选项开始值不能为空',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    max: 6,
+                    message: '筛选项开始值不能超过6个字符',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    validator: (rule, value, callback) => {
+                        if (!/^\d{1,6}$/.test(value)) {
+                            callback(new Error('请输入1-6位数字'));
+                        } else if (formValues.filterValueEnd && Number(formValues.filterValueEnd) <= Number(value)) {
+                            callback(new Error('筛选项结束值必须大于开始值'));
+                        } else {
+                            callback();
+                        }
+                    },
+                    trigger: ['blur', 'change'],
+                },
+            ], // 验证
+        },
+        {
+            type: FormType.TEXT,
+            keyName: 'constText',
+            label: '', // 字段
+            span: 1,
+            labelWidth: '20px',
+            isIgnoreKey: true,
+            defaultValue: '-',
+        },
+        {
+            type: FormType.INPUT,
+            label: '', // 字段
+            keyName: 'filterValueEnd', // 字段名
+            placeholder: '请填写筛选项结束值', // 提示内容
+            span: 8,
+            maxlength: 6,
+            disabled: false, // 是否禁用
+            labelWidth: '10px',
+            rules: (formValues: any) => [
+                {
+                    required: true,
+                    message: '筛选项结束值不能为空',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    max: 6,
+                    message: '筛选项结束值不能超过6个字符',
+                    trigger: ['blur', 'change'],
+                },
+                {
+                    validator: (rule, value, callback) => {
+                        if (!/^\d{1,6}$/.test(value)) {
+                            callback(new Error('请输入1-6位数字'));
+                        } else if (Number(formValues.filterValueStart) >= Number(value)) {
+                            callback(new Error('筛选项结束值必须大于开始值'));
+                        } else {
+                            callback();
+                        }
+                    },
+                    trigger: ['blur', 'change'],
+                },
+            ], // 验证
+        },
+        {
+            type: FormType.UNIT,
+            keyName: 'unit',
+            label: '', // 字段
+            span: 2,
+            labelWidth: '5px',
+            isIgnoreKey: true,
+            defaultValue: '个月',
+        },
+        {
             type: FormType.SWITCH,
             label: '状态', // 字段
             keyName: 'isFilterShow', // 字段名
@@ -783,3 +954,40 @@ export const CANT_CHANGE_FILTER_MAP: { [key in PlatformType]: string[] } = {
     [PlatformType.LiaoXinTong]: ['贷款额度', '贷款期限', '融资额度', '融资期限', '担保方式', '企业分类', '企业资产'],
     [PlatformType.ShiZongFu]: ['融资额度', '融资期限', '担保方式', '企业分类', '企业资产'],
 };
+
+// 筛选项单位
+export const FILTER_UNIT_MAP = Object.freeze({
+    '贷款额度': '万元',
+    '融资额度': '万元',
+    '贷款期限': '个月',
+    '融资期限': '个月',
+});
+
+// 表格列配置
+export const REQ_TABLE_COLUMNS = [
+    // 自定义索引
+    {
+        label: '',
+        keyName: 'reqLogo',
+        slotName: 'reqLogo',
+        width: 90,
+    },
+];
+
+// 表格配置项
+export const REQ_TABLE_CONFIG: ITableConfig = reactive({
+    showHandler: true,
+    showAppend: true,
+    showSelection: true,
+    appendLabel: '',
+    handlerConfig: {
+        width: 120,
+        label: ''
+    },
+});
+
+export const PAGE_CONFIG = reactive({
+    pageIndex: 1,
+    pageSize: 10,
+    total: 0,
+});

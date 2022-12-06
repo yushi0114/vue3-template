@@ -26,7 +26,6 @@ const handleClose = () => {
 };
 
 const handleSubmit = (params: any) => {
-    console.log('params: ', params);
     request(params);
 };
 </script>

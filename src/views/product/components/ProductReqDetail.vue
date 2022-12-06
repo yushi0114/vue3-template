@@ -3,8 +3,9 @@ import { getProductReq, getProductReqScore } from '@/api';
 import type { RequirementEntity } from '@/types';
 import { useApi } from '@/composables';
 import { ScoreResult } from '@/components';
-import { AcceptProgressType, expectRateTypeMap, expectTimeTypeMap, loanTermTypeMap } from '@/enums';
+import { AcceptProgressType, expectRateTypeMap, expectTimeTypeMap, loanTermTypeMap, ReportType, ReportTypeUrlMap } from '@/enums';
 
+const router = useRouter();
 const props = withDefaults(
     defineProps<{
         content?: RequirementEntity | null
@@ -47,6 +48,17 @@ function handleClosed() {
 
 }
 
+const handleViewReport = (type: ReportType) => {
+    const routerUrl = router.resolve({
+        path: ReportTypeUrlMap[type],
+        query: {
+            corpCode: props.content?.corpCode,
+            corpName: props.content?.corpName,
+        }
+    });
+    window.open(routerUrl.href, '_blank');
+};
+
 </script>
 
 <template>
@@ -78,8 +90,8 @@ function handleClosed() {
         <ContentBoard label="企业评分信息">
             <template #label-rest>
                 <FlexRow>
-                    <el-button size="small">征信报告</el-button>
-                    <el-button size="small">信用评分详情</el-button>
+                    <el-button size="small" @click="handleViewReport(ReportType.CREDIT)">征信报告</el-button>
+                    <el-button size="small" @click="handleViewReport(ReportType.CREDIT)">信用评分详情</el-button>
                 </FlexRow>
             </template>
             <ScoreResult :score-result="score.result" />

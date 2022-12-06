@@ -67,16 +67,18 @@ export type GetProductOptionsPayload = {
     menuName?: string;
 };
 
-export type GetProductOptionsResponse = ProductEntity[];
+export type GetProductOptionsResponse = { data: ProductEntity[] };
 
 export function getProductOptions(payload: GetProductOptionsPayload): Promise<GetProductOptionsResponse> {
-    const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/dic' : '/v1/zjfw/product/all';
+    const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/all' : '/v1/zjfw/product/all';
 
-    payload.menuName = payload.platform === PlatformType.LiaoXinTong ? 'requirement' : 'zjfwapply';
+    payload.menuName = payload.menuName || (payload.platform === PlatformType.LiaoXinTong ? 'requirement' : 'zjfwapply');
 
     delete payload.platform;
 
-    return api.post(`${DMS_DOMAIN}${url}`, payload);
+    return api.get(`${DMS_DOMAIN}${url}`, {
+        params: payload
+    });
 }
 // #endregion
 
@@ -118,12 +120,52 @@ export function getProductReq(payload: GetProductReqPayload): Promise<GetProduct
 }
 // #endregion
 
-// #region 统计推荐产品
+
+// #region 创建推荐产品
+export type CreateProductRecommendPayload = Pick<ProductRecommandEntity, 'orgProductId' | 'productPoster' | 'productType' | 'status'>;
+
+export type CreateProductRecommendResponse = void;
+
+export function createProductRecommend(payload: CreateProductRecommendPayload): Promise<CreateProductRecommendResponse> {
+    return api.post(`${DMS_DOMAIN}/v1/add/product/recommend`, payload);
+}
+
+// #endregion
+
+// #region 编辑推荐产品
+export type UpdateProductRecommendPayload = Pick<ProductRecommandEntity, 'id' | 'orgProductId' | 'productPoster' | 'productType' | 'status'>;
+
+export type UpdateProductRecommendResponse = void;
+
+export function updateProductRecommend(payload: UpdateProductRecommendPayload): Promise<UpdateProductRecommendResponse> {
+    return api.post(`${DMS_DOMAIN}/v1/update/product/recommend`, payload);
+}
+
+// #endregion
+
+
+// #region 推荐产品详情
+export type GetProductRecommendPayload = {
+    id: ProductRequirementEntity['id'];
+};
+
+export type GetProductRecommendResponse = ProductRecommandEntity;
+
+export function getProductRecommend(payload: GetProductRecommendPayload): Promise<GetProductRecommendResponse> {
+    return api.get(`${DMS_DOMAIN}/v1/product/recommend/byid`, {
+        params: payload,
+    })
+        .then((res: any) => res[0]);
+}
+
+// #endregion
+
+// #region 推荐产品列表
 export type GetProductRecommendsPayload = {
     productType: ProductRecommandType;
 };
 
-export type GetProductRecommendsResponse = ListResponse<ProductRecommandEntity>;
+export type GetProductRecommendsResponse = ProductRecommandEntity[];
 
 export function getProductRecommends(payload: GetProductRecommendsPayload): Promise<GetProductRecommendsResponse> {
     return api.get(`${DMS_DOMAIN}/v1/product/recommend`, {
@@ -329,7 +371,7 @@ export type UpdateProductFilterSortPayload = { data: ProductFilterEntity[] } & {
 
 export type UpdateProductFilterSortResponse = {};
 
-export function updateProductFilterSort(payload: UpdateProductFilterPayload): Promise<UpdateProductFilterResponse> {
+export function updateProductFilterSort(payload: UpdateProductFilterSortPayload): Promise<UpdateProductFilterResponse> {
     const url =
         payload.platform === PlatformType.LiaoXinTong ? '/v1/update/product/filter/sort' : '/v1/zjfw/update/product/filter/sort';
 
@@ -338,4 +380,43 @@ export function updateProductFilterSort(payload: UpdateProductFilterPayload): Pr
     return api.post(`${DMS_DOMAIN}${url}`, payload);
 }
 
+// #endregion
+
+// #region 删除精准需求（批量，单个）
+export type DeleteProductReqsPayload = {
+    idArr: string;
+    platform?: PlatformType,
+}
+
+export type DeleteExactResponse = {};
+
+export function deleteProductReqs(payload: DeleteProductReqsPayload)
+    : Promise<DeleteExactResponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/del/corp'
+        : '/v1/zjfw/del/corp';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+// #endregion
+
+// #region 下载企业需求列表
+export type DownloadProductReqsPayload = GetProductReqsPayload;
+
+export type DownloadExactResponse = {};
+
+export function downloadProductReqs(payload: DeleteProductReqsPayload)
+    : Promise<DeleteExactResponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/export/corp'
+        : '/v1/zjfw/export/corp';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
 // #endregion

@@ -145,7 +145,8 @@
                                 <!-- text展示 -->
                                 <span
                                     v-if="item.type === FormType.TEXT"
-                                    v-text="item.value"></span>
+                                    v-text="item.value"
+                                    ></span>
                                 <!-- 计量单位 -->
                                 <span
                                     class="ml-2"
@@ -340,7 +341,6 @@ const handleChange = (item: DefItem, form?: DefItem[]) => {
     emits('change', item, form);
 };
 const error = () => {
-    console.log('1212：', 1212);
 };
 const handleSearch = async() => {
     if (!form) return;
@@ -370,10 +370,20 @@ const onReset = () => {
     initForm();
 };
 
+const getFocus = (isAuto = true) => {
+    if (formWrapperRef.value && isAuto) {
+        setTimeout(() => {
+            const firstInputDom = formWrapperRef.value?.querySelector('input');
+            if (firstInputDom) {
+                firstInputDom.focus();
+            }
+        }, 30);
+    }
+};
+
 watch(
     () => props.def,
     () => {
-        console.log('props.def：', props.def);
         initForm();
     },
     { deep: true }
@@ -395,19 +405,13 @@ watch(
 
 onMounted(() => {
     initForm();
-    if (formWrapperRef.value && props.autoFocus) {
-        nextTick(() => {
-            const firstInputDom = formWrapperRef.value?.querySelector('input');
-            if (firstInputDom) {
-                firstInputDom.focus();
-            }
-        });
-    }
+    getFocus(props.autoFocus);
 });
 
 defineExpose({
     handleSearch,
     onReset,
+    getFocus
 });
 </script>
 

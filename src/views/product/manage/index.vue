@@ -64,7 +64,6 @@ function handleTabChange(plat: PlatformType) {
 }
 
 function goDetail(req: ProductEntity) {
-    console.log(req);
     detail.value = req;
 }
 
@@ -73,6 +72,7 @@ function goReqDetail(req: ProductEntity) {
         path: `${route.path}/req/${platform.value}`,
         query: {
             productId: req.id,
+            productName: req.name
         },
     });
 }
@@ -83,7 +83,7 @@ const handleEdit = (req: ProductEntity) => {
     }).catch(noop);
 };
 
-const handleUpdateStatus = async (req: ProductEntity) => {
+const handleUpdateStatus = async(req: ProductEntity) => {
     const params = {
         platform: platform.value,
         id: req.id,
@@ -99,7 +99,7 @@ const handleUpdateStatus = async (req: ProductEntity) => {
     }
 };
 
-const handleDelete = async (req: ProductEntity) => {
+const handleDelete = async(req: ProductEntity) => {
     try {
         await requestIsUsingProduct({ id: req.id });
         await ElMessageBox.confirm(`确认删除“${req.name}”的产品吗？`, '删除', {

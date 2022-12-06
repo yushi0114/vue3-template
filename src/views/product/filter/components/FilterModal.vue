@@ -27,7 +27,6 @@ const type = ref<OPERATE_TYPE>(OPERATE_TYPE.ADD);
 const initialData = ref<ProductFilterEntity | null>(null);
 const publicFormRef = ref<InstanceType<typeof SjcForm> | null>(null);
 const openCallback = (data?: any) => {
-    console.log('data: ', data);
     if (!data) {
         title.value = '新建筛选类别';
         type.value = OPERATE_TYPE.ADD;
@@ -42,7 +41,6 @@ const openCallback = (data?: any) => {
     initialData.value = data;
     propsRefs.form.value.forEach((formItem) => {
         if (isDefind(data[formItem.keyName])) {
-            console.log('data[formItem.keyName]：', data[formItem.keyName]);
             formItem.defaultValue = data[formItem.keyName];
         }
     });
@@ -61,7 +59,6 @@ const handleCancel = () => {
 // eslint-disable-next-line no-undef
 const handleSubmit = (values: Recordable) => {
     const params = { ...values };
-    console.log('initialData：', initialData);
     initialData.value?.id && (params.id = initialData.value.id);
     emits('submit', type.value, params);
 };

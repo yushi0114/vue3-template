@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\validate.ts
  * @Author: zys
  * @Date: 2022-11-07 17:08:03
- * @LastEditTime: 2022-11-30 17:29:41
+ * @LastEditTime: 2022-12-05 17:08:57
  * @LastEditors: zys
  * @Reference:
  */
@@ -19,9 +19,9 @@ export function isPhoneNumber(val: string): boolean {
 
 export const checkPhoneId: RuleItem['validator'] = (rule, value, callback) => {
     if (!value) {
-        callback(new Error('手机号不能为空！'));
+        callback(new Error('手机号不能为空'));
     } else if (!isPhoneNumber(value)) {
-        callback(new Error('请输入正确的手机号码！'));
+        callback(new Error('请输入正确的手机号码'));
     } else {
         callback();
     }
@@ -29,7 +29,7 @@ export const checkPhoneId: RuleItem['validator'] = (rule, value, callback) => {
 
 export const checkVerifyCode: RuleItem['validator'] = (rule, value, callback) => {
     if (!value) {
-        callback(new Error('图形验证码不能为空！'));
+        callback(new Error('图形验证码不能为空'));
     } else if (!/^\d{1,2}$/.test(value)) {
         callback(new Error('图形验证码答案为1~2位数字'));
     } else {

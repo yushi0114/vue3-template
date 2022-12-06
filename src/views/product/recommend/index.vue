@@ -11,6 +11,7 @@ const { queryParams, goQuery } = useQueryParams({
     kind: ProductRecommandType.primary
 });
 const route = useRoute();
+const router = useRouter();
 const kind = ref(queryParams.value.kind);
 const kindName = computed<string>(() => {
     return productRecommandTypeMap[queryParams.value.kind];
@@ -34,9 +35,8 @@ function handleRecommendTabClick(tab: TabsPaneContext) {
 }
 
 function handleEdit(rd: ProductRecommandEntity) {
-    console.log(rd);
+    router.push(`${route.path}/edit/${kind.value}?id=${rd.id}`);
 }
-
 function handleDelete(rd: ProductRecommandEntity) {
     ElMessageBox.confirm(
         `您确定删除名为“${rd.name}”的${kindName.value}吗?`,
@@ -57,7 +57,7 @@ function handleDelete(rd: ProductRecommandEntity) {
 <template>
     <PagePanel>
         <Board class="product-recommend" full v-loading="loading">
-            <el-tabs 
+            <el-tabs
                 v-model="kind"
                 @tab-click="handleRecommendTabClick">
                 <el-tab-pane
@@ -67,7 +67,7 @@ function handleDelete(rd: ProductRecommandEntity) {
                     :name="opt.value"></el-tab-pane>
             </el-tabs>
             <FlexRow horizontal="end">
-                <RouterLink :to="`${route.path}/create/${kind}`">
+                <RouterLink :to="`${route.path}/edit/${kind}?id=0`">
                     <el-button :icon="Plus" type="primary">新建{{ kindName }}</el-button>
                 </RouterLink>
             </FlexRow>

@@ -268,10 +268,10 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                     :max-height="height - 300"
                     @command="handleDropdownChange">
                     <UseMouseInElement v-slot="{ isOutside }">
-                        <FlexRow class="cursor-pointer">
-                            {{ dropdownLabelMap[fConf.field] || fConf.label }}
-                            <i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/>
-                            <i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/>
+                        <FlexRow class="lqc-filter-dropname">
+                            <Text color="regular" size="sm" bold>{{ dropdownLabelMap[fConf.field] || fConf.label }}</Text>
+                            <Text color="regular" size="sm"><i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/></Text>
+                            <Text color="regular" size="sm"><i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/></Text>
                         </FlexRow>
                     </UseMouseInElement>
                     <template #dropdown>
@@ -319,13 +319,10 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                 class="lqc-sort-item"
                 @click="handleSort(sOpt.field, loopSort(model[sOpt.field]))"
                 v-for="sOpt in sortConfigs" :key="sOpt.field">
-                <Text
-                    size="sm"
-                    :color="model[sOpt.field] === SortType.none ? 'regular' : 'primary'">
+                <Text size="sm" color="regular" bold>
                     {{ sOpt.label }}
-                    <i-ep-sort-up v-if="model[sOpt.field] === SortType.asc" />
-                    <i-ep-sort-down v-else />
                 </Text>
+                <SortArrow :sort="model[sOpt.field]" />
             </div>
         </FlexRow>
         <slot></slot>
@@ -374,6 +371,18 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 
 .lqc-filter-item {
     margin-right: $gap-xs;
+}
+
+.lqc-filter-dropname {
+    cursor: pointer;
+
+    & svg {
+        display: block;
+        width: 1em;
+        height: 1em;
+        margin-top: $gap-line;
+        margin-left: calc($gap-xs / 2);
+    }
 }
 
 .lqc-search-rest {

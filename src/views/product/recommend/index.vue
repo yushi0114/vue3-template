@@ -98,6 +98,8 @@ function handleDelete(rd: ProductRecommandEntity) {
 .product-recommand-row {
     gap: $gap-xs;
     padding-top: $gap-sm;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .product-recommand-poster {

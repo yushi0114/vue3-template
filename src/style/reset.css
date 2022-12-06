@@ -10,9 +10,8 @@ a, a:visited, a:active, a:hover {
 
 :root {
     --scrollbar-width: 8px;
-    --c-divider-light: rgba(60, 60, 67, .32);
-    --c-divider-dark: rgba(84, 84, 88, .48);
-    --c-bg: #bbb;
+    --c-divider-light: var(--el-color-info-light-7);
+    --c-divider-dark: var(--el-color-info-light-5);
 }
   
 body {
@@ -46,7 +45,7 @@ h1,h2,h3,h4,h5,h6 {
   
   
 ::-webkit-scrollbar-track{
-    background: var(--c-bg);
+    background: transparent;
 }
   
 ::-webkit-scrollbar-thumb{

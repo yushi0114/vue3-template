@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Delete } from '@element-plus/icons-vue';
 import { acceptProgressTypeOptions, PlatformType, platformTypeMap } from '@/enums';
 import { getAligeReqs, deleteAgileReqs, downloadAgileReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
@@ -132,7 +133,7 @@ onMounted(() => {
                 }"
             >
                 <template v-slot:search-rest>
-                    <el-button type="danger" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
+                    <el-button type="danger" :icon="Delete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
                     <DownloadButton type="primary" :api="downloadAgileReqs" :download-options="downloadOptions"></DownloadButton>
                 </template>
             </ListQueryControl>

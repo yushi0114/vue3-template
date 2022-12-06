@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Edit, SoldOut, Sell, Sort, Delete, MoreFilled } from '@element-plus/icons-vue';
 import emptyImg from '@/assets/images/no-data.png';
 import {
     NEWS_TYPE,
@@ -91,7 +92,8 @@ defineExpose({
                     :class="{ active: activeId === item.id }"
                     @click="handleActiveIdChange(item.id)">
                     <div class="article-title-wrap">
-                        <i-ep-document></i-ep-document>
+                        <Icon name="ep-document">
+                        </Icon>
                         <list-field
                             class="flex-1"
                             :class="{ 'text-$el-color-primary': activeId === item.id }"
@@ -110,29 +112,34 @@ defineExpose({
                         </el-tag>
                     </div>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
-                        <i-ep-more-filled class="icon-more"></i-ep-more-filled>
+                        <Icon class="icon-more" name="ep-more-filled">
+                        </Icon>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item
                                     :disabled="item.status === ARTICLE_STATUS.PUBLISHED"
                                     :command="ARTICLE_OPERATE_MODE.EDIT"
-                                    ><i-ep-edit />{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
+                                    :icon="Edit"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-if="item.status === ARTICLE_STATUS.PUBLISHED"
                                     :command="ARTICLE_OPERATE_MODE.OFFLINE"
-                                    ><i-ep-sold-out />{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
+                                    :icon="SoldOut"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-else
-                                    :command="ARTICLE_OPERATE_MODE.PUBLISH">
-                                    <i-ep-sell />{{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
+                                    :command="ARTICLE_OPERATE_MODE.PUBLISH" :icon="Sell">
+                                    {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
                                 </el-dropdown-item>
                                 <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"
-                                    ><i-ep-sort />{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
+                                    :icon="Sort"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
                                 </el-dropdown-item>
                                 <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE"
-                                    ><i-ep-delete />{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
+                                :icon="Delete"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>

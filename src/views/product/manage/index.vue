@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Plus } from '@element-plus/icons-vue';
 import { onlineTypeOptions, PlatformType, SwitchType, onlineTypeMap } from '@/enums';
 import { getProducts, getTopOrgs, updateProductStatus, deleteProduct, isUsingProduct } from '@/api';
 import type { PlainOption, ProductEntity } from '@/types';
@@ -143,7 +144,7 @@ onBeforeMount(() => {
                 :sortConfigs="[{ label: '申请时间', field: 'createTime' }]">
                 <template v-slot:search-rest>
                     <RouterLink :to="`${route.path}/new/1`">
-                        <el-button type="primary"><i-ep-plus />新建</el-button>
+                        <el-button type="primary" :icon="Plus">新建</el-button>
                     </RouterLink>
                 </template>
             </ListQueryControl>

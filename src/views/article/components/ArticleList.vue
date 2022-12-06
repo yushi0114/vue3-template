@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-// import { Search } from '@element-plus/icons-vue';
+import { Plus, MoreFilled, SoldOut, Sell, Sort, Delete } from '@element-plus/icons-vue';
 import { ListField } from '@/components';
 import { NEWS_TYPE, ARTICLE_STATUS, ARTICLE_OPERATE_MODE_LABEL, ARTICLE_OPERATE_MODE, ARTICLE_MODULE } from '@/enums';
 // import ArticleFilter from './ArticleFilter.vue';
@@ -78,8 +78,9 @@ watch(listControlModel, () => {
             <template v-slot:search-rest>
                 <el-button
                     type="primary"
+                    :icon="Plus"
                     @click="handleToCreate"
-                    ><i-ep-plus />新建</el-button
+                    >新建</el-button
                 >
             </template>
         </ListQueryControl>
@@ -220,30 +221,33 @@ watch(listControlModel, () => {
                             color="regular">
                             更多
                         </TextHoverable> -->
-                        <el-button text>
+                        <Text>
                             <el-tooltip
                                 placement="top"
                                 content="更多">
-                                <Icon name="ep-more-filled" />
+                                <el-button text :icon="MoreFilled"></el-button>
                             </el-tooltip>
-                        </el-button>
+                        </Text>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item
                                     v-if="scope.row.status === ARTICLE_STATUS.PUBLISHED"
                                     :command="ARTICLE_OPERATE_MODE.OFFLINE"
-                                    ><i-ep-sold-out />{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
+                                    :icon="SoldOut"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-else
-                                    :command="ARTICLE_OPERATE_MODE.PUBLISH">
-                                    <i-ep-sell />{{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
+                                    :command="ARTICLE_OPERATE_MODE.PUBLISH"
+                                    :icon="Sell"
+                                    >
+                                    {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"
-                                    ><i-ep-sort />{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
+                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT" :icon="Sort"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE"
-                                    ><i-ep-delete />{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
+                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE" :icon="Delete"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>

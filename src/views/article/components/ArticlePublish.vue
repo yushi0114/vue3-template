@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Back, Sell, Collection } from '@element-plus/icons-vue';
 import { ARTICLE_MODULE, ARTICLE_TYPE_LABEL, ARTICLE_STATUS, ARTICLE_API, UPLOAD_FILE_TYPE } from '@/enums';
 import { ARTICLE_FORM_MAP } from '../constants';
 import { useApi } from '@/composables';
@@ -155,8 +156,9 @@ onMounted(() => {
             <div class="flex-center">
                 <el-button
                     class="mr-2"
+                    :icon="Back"
                     @click="back"
-                    ><i-ep-back></i-ep-back>返回</el-button
+                    >返回</el-button
                 >
                 <div
                     class="text-$el-text-color-secondary"
@@ -168,15 +170,15 @@ onMounted(() => {
             <div>
                 <el-button
                     v-loading="loadingCreate || loadingUpdate"
+                    :icon="Collection"
                     @click="publish(ARTICLE_STATUS.DRAFT)">
-                    <div class="i-ic-round-save"></div>
                     保存</el-button
                 >
                 <el-button
                     v-loading="loadingCreate || loadingUpdate"
                     type="primary"
+                    :icon="Sell"
                     @click="publish(ARTICLE_STATUS.PUBLISHED)">
-                    <span class="i-ic-sharp-publish"></span>
                     发布</el-button
                 >
             </div>

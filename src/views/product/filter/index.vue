@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Plus } from '@element-plus/icons-vue';
 import { PlatformType, OPERATE_TYPE } from '@/enums';
 import Draggable from 'vuedraggable';
 import { useFilter } from '../hooks/useFilter';
@@ -103,8 +104,9 @@ const handleDragListChange = () => {
             <FlexRow horizontal="end">
                 <el-button
                     type="primary"
+                    :icon="Plus"
                     @click="handleOpenFilterModal(undefined)"
-                    ><i-ep-plus />新建类别</el-button
+                    >新建类别</el-button
                 >
             </FlexRow>
             <draggable

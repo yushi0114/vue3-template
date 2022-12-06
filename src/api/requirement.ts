@@ -182,3 +182,39 @@ export function deleteAgileReqs(payload: DeleteExactReqsPayload)
     return api.post(`${DMS_DOMAIN}${url}`, payload);
 }
 // #endregion
+
+// #region 下载敏捷需求
+export type DownloadAgileReqsPayload = Partial<GetAgileReqsPayload>;
+
+export type DownloadAgileReqsponse = {};
+
+export function downloadAgileReqs(payload: DownloadAgileReqsPayload)
+    : Promise<DownloadAgileReqsponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/export/simple/req'
+        : '/v1/zjfw/export/simple/req';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+// #endregion
+
+// #region 下载精准需求
+export type DownloadExactReqsPayload = Partial<GetExactReqsPayload>;
+
+export type DownloadExactReqsponse = {};
+
+export function downloadExactReqs(payload: DownloadExactReqsPayload)
+    : Promise<DownloadExactReqsponse>
+{
+    const url = payload.platform === PlatformType.LiaoXinTong
+        ? '/v1/export/exact/req'
+        : '/v1/zjfw/export/exact/req';
+
+    delete payload.platform;
+
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
+}
+// #endregion

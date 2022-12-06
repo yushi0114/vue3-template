@@ -6,7 +6,7 @@ import LoginFooter from './components/footer/index.vue';
 <template>
     <div class="login">
         <div class="form">
-            <div class="form-title"> <Logo class="app-logo" /></div>
+            <div class="form-title"> <Logo class="app-logo login-logo" /></div>
             <div class="form-title-line"></div>
             <account-password-login></account-password-login>
         </div>
@@ -30,6 +30,10 @@ import LoginFooter from './components/footer/index.vue';
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
+}
+
+.login .login-logo {
+    height: 55px;
 }
 
 .form-title {

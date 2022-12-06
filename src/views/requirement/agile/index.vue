@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { acceptProgressTypeOptions, PlatformType } from '@/enums';
-import { getAligeReqs, deleteAgileReqs } from '@/api';
+import { acceptProgressTypeOptions, PlatformType, platformTypeMap } from '@/enums';
+import { getAligeReqs, deleteAgileReqs, downloadAgileReqs } from '@/api';
 import type { AgileReqEntity, RequirementEntity } from '@/types';
 import { AgileReqDetail, ReqList } from '../components';
 import { noop } from '@/utils';
 import { useListControlModel, useApi } from '@/composables';
 
 const route = useRoute();
-const platform = ref(Number(route.params.type));
+const platform = ref<PlatformType>(Number(route.params.type));
 const detailContent = ref<RequirementEntity | null>(null);
 
 const { model: listControlModel, clear: clearModel } = useListControlModel({
@@ -18,6 +18,10 @@ const count = ref(0);
 const loading = ref(false);
 const list = ref<AgileReqEntity[]>([]);
 const ids = ref<string[]>([]);
+const downloadOptions = reactive({
+    fileName: `精准需求列表（${platformTypeMap[platform.value]}）.xlsx`,
+    params: Object.assign({ platform: platform.value }, listControlModel)
+});
 function getList() {
     loading.value = true;
     getAligeReqs(Object.assign({ platform: platform.value }, listControlModel))
@@ -45,6 +49,7 @@ const { request: deleteReps } = useApi((idArr: string) => deleteAgileReqs({ plat
 });
 
 watch(listControlModel, () => {
+    downloadOptions.params = Object.assign({ platform: platform.value }, listControlModel);
     nextTick(getList);
 });
 
@@ -57,6 +62,7 @@ function clear() {
 function handleTabChange(plat: PlatformType) {
     clear();
     platform.value = plat;
+    downloadOptions.params = Object.assign({ platform: platform.value }, listControlModel);
 }
 
 function goDetail(req: RequirementEntity) {
@@ -127,7 +133,7 @@ onMounted(() => {
             >
                 <template v-slot:search-rest>
                     <el-button type="danger" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
-                    <el-button type="primary">下载</el-button>
+                    <DownloadButton type="primary" :api="downloadAgileReqs" :download-options="downloadOptions"></DownloadButton>
                 </template>
             </ListQueryControl>
 

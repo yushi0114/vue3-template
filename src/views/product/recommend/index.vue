@@ -10,20 +10,19 @@ import { ElMessageBox, type TabsPaneContext } from 'element-plus';
 const { queryParams, goQuery } = useQueryParams({
     kind: ProductRecommandType.primary
 });
+const route = useRoute();
+const router = useRouter();
 const kind = ref(queryParams.value.kind);
 const kindName = computed<string>(() => {
     return productRecommandTypeMap[queryParams.value.kind];
 });
-
-const route = useRoute();
-
-const { request, loading } = useApi(getProductRecommends);
+const { request } = useApi(getProductRecommends);
 const recommands = ref<ProductRecommandEntity[]>([]);
 
 function getList() {
     request({ productType: kind.value })
         .then(res => {
-            recommands.value = res.data;
+            recommands.value = res;
         });
 }
 
@@ -50,6 +49,7 @@ function handleDelete(rd: ProductRecommandEntity) {
         .then(() => deleteProductRecommends({ id: rd.id }))
         .then(() => {
             ElMessage({ message: '删除成功', type: 'success' });
+            getList();
         })
         .catch(noop);
 }

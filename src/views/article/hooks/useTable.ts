@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-11-24 11:34:17
+ * @LastEditTime: 2022-12-05 17:09:35
  * @LastEditors: zys
  * @Reference:
  */
@@ -276,7 +276,7 @@ export const useTable = (
         }
     };
 
-    const updateArticleStatus = async({ row, status, operateLabel }: any) => {
+    const updateArticleStatus = async ({ row, status, operateLabel }: any) => {
         try {
             await ElMessageBox.confirm(`确定${operateLabel}标题为“${row.title}”的${ARTICLE_TYPE_LABEL}吗？`, {
                 type: 'warning',
@@ -287,16 +287,16 @@ export const useTable = (
         }
     };
 
-    const updateArticleSort = async({ row }: any) => {
+    const updateArticleSort = async ({ row }: any) => {
         try {
             const { value } = await ElMessageBox.prompt('请输入新的序号', '修改排序', {
                 showInput: true,
                 inputValue: row.sort || '',
                 inputValidator: (val) => {
                     if (val.length === 0) {
-                        return '序号不能为空！';
+                        return '序号不能为空';
                     } else if (!/^[1-9]\d*$/.test(val)) {
-                        return '序号只能为1-999的整数！';
+                        return '序号只能为1-999的整数';
                     } else {
                         return true;
                     }

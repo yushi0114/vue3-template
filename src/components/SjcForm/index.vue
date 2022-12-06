@@ -372,12 +372,12 @@ const onReset = () => {
 
 const getFocus = (isAuto = true) => {
     if (formWrapperRef.value && isAuto) {
-        nextTick(() => {
+        setTimeout(() => {
             const firstInputDom = formWrapperRef.value?.querySelector('input');
             if (firstInputDom) {
                 firstInputDom.focus();
             }
-        });
+        }, 30);
     }
 };
 

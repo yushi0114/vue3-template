@@ -101,12 +101,11 @@ watch(isCtrlKeep, (newValue) => {
                     placement="top">
                     <Icon
                         class="cursor-pointer"
-                        style="width: 0.875rem"
                         name="ep-warning" />
                 </el-tooltip>
             </FlexRow>
             <FlexRow class="cursor-pointer mr-4" @click.stop="clearFilterOptions">
-                <TextHoverable color="regular" size="sm"><FlexRow class="gap-1"><i-ep-brush class="w-3"/>清空过滤项</FlexRow></TextHoverable>
+                <TextHoverable color="regular" size="sm"><FlexRow class="gap-1"><i-ep-brush/>清空过滤项</FlexRow></TextHoverable>
             </FlexRow>
         </FlexRow>
         <el-collapse

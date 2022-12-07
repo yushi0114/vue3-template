@@ -75,7 +75,7 @@ function goDetail(req: RequirementEntity) {
 const handleBatchDelete = async() => {
     const idArr = ids.value.map(item => `"${item}"`).join(',');
     try {
-        await ElMessageBox.confirm('确认删除已选中的需求吗？', '删除', {
+        await ElMessageBox.confirm(`确认删除已选中的${ids.value.length}条需求吗？`, '删除', {
             type: 'warning',
         });
         deleteReps(idArr);
@@ -111,7 +111,7 @@ onMounted(() => {
                 v-model="listControlModel"
                 v-model:check-all="isSelectAll"
                 :is-indeterminate="isIndeterminate"
-                show-selection
+                :showSelection="!!list.length"
                 :searchConfig="{
                     label: '请输入企业名称',
                     field: 'searchInput'

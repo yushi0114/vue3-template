@@ -4,7 +4,7 @@ import type { ConfigEnv, UserConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import unocss from 'unocss/vite';
-import { presetUno, presetAttributify, presetIcons } from 'unocss';
+import { presetUno, presetAttributify } from 'unocss';
 import transformerDirectives from '@unocss/transformer-directives';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
@@ -46,7 +46,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                     'vue-router',
                     'pinia',
                     {
-                        'element-plus': ['ElMessage'],
+                        'element-plus': ['ElMessage', 'ElMessageBox'],
                     },
                 ],
                 dirs: ['./composables', './components', './types', './utils', './stores'],

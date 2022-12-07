@@ -40,12 +40,16 @@
     </el-table>
     <div class="page-content">
         <el-pagination
+            v-if="listData.total"
             class="margin-20-20"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="filterObject.currentPage"
+            v-model:current-page="filterObject.currentPage"
+            v-model:page-size="filterObject.currentSize"
+            :page-sizes="[10, 20, 50]"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="listData.total">
+            :total="listData.total"
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange">
         </el-pagination>
     </div>
 </template>
@@ -90,8 +94,7 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
 
 async function handleSearchList() {
     LoadingService.getInstance().loading();
-    filterObject.value.currentPage = 0;
-    filterObject.value.currentSize = 10;
+    filterObject.value.currentPage = 1;
     await getPageList({
         tab: activeName.value
     });
@@ -139,6 +142,7 @@ async function handleCurrentChange(item: number) {
 }
 
 async function handleSizeChange(item: number) {
+    filterObject.value.currentPage = 1;
     filterObject.value.currentSize = item;
     LoadingService.getInstance().loading();
     await getPageList({

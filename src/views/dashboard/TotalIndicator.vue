@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Warning } from '@element-plus/icons-vue';
 import Charts from './Charts.vue';
 import type { TotalIndicatorEntity } from '@/types/dashboard';
 import { useTheme } from '@/composables';
@@ -193,6 +194,11 @@ const loadOptions = () => {
         <div class="count-user">
             <div class="item-label">
                 <Text color="regular" size="sm">企业总人数</Text>
+                <el-tooltip content="辽信通、市综服全部用户人数" placement="right">
+                    <el-icon class="item-label-tip">
+                        <Warning />
+                    </el-icon>
+                </el-tooltip>
             </div>
             <div class="item-value">
                 <Text color="paragraph" size="current">{{ data.countUser }}</Text>
@@ -212,8 +218,14 @@ const loadOptions = () => {
     border-right: 1px solid #dcdfe6;
 
     .item-label {
+        display: flex;
+        align-items: center;
         margin-bottom: 7px;
-        color: #5e5e5e;
+        color: var(--i-text-color-regular);
+    }
+
+    .item-label-tip {
+        margin-left: 4px;
     }
 
     .item-value {

@@ -17,7 +17,7 @@ const emits = defineEmits<{
 
 const propsRefs = toRefs(props);
 
-const { formValueChange, PRODUCT_FORM, dynamicForm } = useProductForm(propsRefs.platform, propsRefs.id);
+const { formValueChange, PRODUCT_FORM_ALL, dynamicForm } = useProductForm(propsRefs.platform, propsRefs.id);
 
 const updateSubmit = ref(new Date().getTime());
 
@@ -59,7 +59,7 @@ const handleSubmit = async(values: any) => {
 <template>
     <div>
         <sjc-form
-            :def="PRODUCT_FORM"
+            :def="PRODUCT_FORM_ALL"
             :update-submit="updateSubmit"
             @change="formValueChange"
             @search="handleSubmit"></sjc-form>

@@ -3,4 +3,5 @@ export { default as ProductReqList } from './ProductReqList.vue';
 export { default as ProductReqDetail } from './ProductReqDetail.vue';
 export { default as ProductDetail } from './ProductDetail.vue';
 export { default as ProductForm } from './ProductForm.vue';
+export { default as ProductStepsForm } from './ProductStepsForm.vue';
 export { default as ProductEdit } from './ProductEdit.vue';

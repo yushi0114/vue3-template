@@ -129,7 +129,7 @@ onBeforeMount(() => {
 
 <template>
     <PagePanel>
-        <Board class="product-manage">
+        <Board class="product-manage" full>
             <PlatformTab @tab-change="handleTabChange" />
             <ListQueryControl
                 v-model="listControlModel"
@@ -177,8 +177,7 @@ onBeforeMount(() => {
             :content="detail" />
     </PagePanel>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .product-manage {
-    @apply;
 }
 </style>

@@ -163,16 +163,12 @@ const handleClose = () => {
                     </el-table-column>
                 </el-table>
 
-                <el-pagination
+                <CommonPagination
                     v-model:current-page="page.currentPage"
                     v-model:page-size="page.pageSize"
-                    :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper"
                     :total="page.total"
-                    background
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    class="table-pagination"
                 />
             </div>
         </el-drawer>
@@ -206,11 +202,6 @@ const handleClose = () => {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }
-
-        .table-pagination {
-            margin-top: 20px;
-            justify-content: flex-end;
         }
     }
 }

@@ -38,16 +38,11 @@
             </template>
         </el-table-column>
     </el-table>
-    <div class="page-content">
-        <el-pagination
-            class="margin-20-20"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="filterObject.currentPage"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="listData.total">
-        </el-pagination>
-    </div>
+    <CommonPagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="filterObject.currentPage"
+        :total="listData.total" />
 </template>
 
 <script lang="ts" setup>
@@ -179,12 +174,6 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
     .search-input {
         width: 350px;
     }
-}
-
-.page-content {
-    display: flex;
-    justify-content: right;
-    padding-top: 10px;
 }
 
 .header-options {

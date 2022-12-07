@@ -108,16 +108,11 @@
             </template>
         </el-table-column>
     </el-table>
-    <div class="page-content">
-        <el-pagination
-            class="margin-20-20"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="financeCodeFilterObject.currentPage"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="codeList.total">
-        </el-pagination>
-    </div>
+    <CommonPagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="financeCodeFilterObject.currentPage"
+        :total="codeList.total" />
 </template>
 
 <script lang="ts" setup>
@@ -260,12 +255,6 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
     .search-input {
         max-width: 350px;
     }
-}
-
-.page-content {
-    display: flex;
-    justify-content: right;
-    padding-top: 10px;
 }
 
 .right-control {

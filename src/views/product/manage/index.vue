@@ -159,14 +159,10 @@ onBeforeMount(() => {
                 @item-offline="handleUpdateStatus"
                 @item-delete="handleDelete" />
 
-            <FlexRow horizontal="end">
-                <el-pagination
-                    v-model:current-page="listControlModel.pageIndex"
-                    v-model:page-size="listControlModel.pageSize"
-                    :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="count" />
-            </FlexRow>
+            <CommonPagination
+                v-model:current-page="listControlModel.pageIndex"
+                v-model:page-size="listControlModel.pageSize"
+                :total="count" />
         </Board>
 
         <ProductEdit

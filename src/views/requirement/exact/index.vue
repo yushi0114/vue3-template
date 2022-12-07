@@ -104,7 +104,7 @@ onMounted(() => {
 
 <template>
   <PagePanel full>
-    <Board class="req-agile">
+    <Board class="req-exact" focus-full>
         <PlatformTab @tab-change="handleTabChange" />
         <ListQueryControl
             class="flex-1 overflow-hidden"
@@ -150,21 +150,15 @@ onMounted(() => {
                 <DownloadButton type="primary" :api="downloadExactReqs" :download-options="downloadOptions"></DownloadButton>
             </template>
             <div class="flex-1 overflow-y-auto">
-            <ReqList :loading="loading" :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange"/>
+                <ReqList :loading="loading" :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange"/>
 
-            <FlexRow horizontal="end">
-                <el-pagination
+                <CommonPagination
                     v-model:current-page="listControlModel.pageIndex"
                     v-model:page-size="listControlModel.pageSize"
-                    :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper"
                     :total="count"
                 />
-            </FlexRow>
             </div>
         </ListQueryControl>
-        <Text>
-        </Text>
 
         <ExactReqDetail
             :modelValue="!!detail"
@@ -174,7 +168,6 @@ onMounted(() => {
   </PagePanel>
 </template>
 <style lang="postcss">
-.req-agile {
-  @apply h-full flex;
+.req-exact {
 }
 </style>

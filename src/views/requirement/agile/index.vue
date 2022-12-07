@@ -22,7 +22,7 @@ const list = ref<AgileReqEntity[]>([]);
 const { isSelectAll, tableSelectAll, isIndeterminate, ids, handleSelectionChange, handleChangeCheckAll } = useTableCheckbox(list);
 
 const downloadOptions = reactive({
-    fileName: `精准需求列表（${platformTypeMap[platform.value]}）.xlsx`,
+    fileName: `敏捷需求列表（${platformTypeMap[platform.value]}）.xlsx`,
     params: Object.assign({ platform: platform.value }, listControlModel)
 });
 function getList() {
@@ -105,7 +105,7 @@ onMounted(() => {
 
 <template>
     <PagePanel>
-        <Board class="req-agile">
+        <Board class="req-agile" focus-full>
             <PlatformTab @tab-change="handleTabChange" :filter-types="[PlatformType.LiaoXinTong]"/>
             <ListQueryControl
                 v-model="listControlModel"
@@ -142,21 +142,16 @@ onMounted(() => {
 
             <ReqList :loading="loading" :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
 
-            <FlexRow horizontal="end">
-                <el-pagination
-                    v-model:current-page="listControlModel.pageIndex"
-                    v-model:page-size="listControlModel.pageSize"
-                    :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="count"
-                />
-            </FlexRow>
+            <CommonPagination
+                v-model:current-page="listControlModel.pageIndex"
+                v-model:page-size="listControlModel.pageSize"
+                :total="count"
+            />
         </Board>
         <AgileReqDetail :modelValue="!!detailContent" @closed="detailContent = null" :content="detailContent" />
     </PagePanel>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .req-agile {
-  @apply;
 }
 </style>

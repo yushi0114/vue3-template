@@ -458,8 +458,6 @@ const cancelHandle = ({ field } : { field: string }) => {
 
 <style lang="scss" scoped>
 .statistics-container {
-    width: 27%;
-    max-width: 27%;
     margin: 0 auto;
 
     .header {
@@ -481,8 +479,11 @@ const cancelHandle = ({ field } : { field: string }) => {
             margin-bottom: 40px;
 
             .el-form-item {
-                width: 80%;
                 margin-bottom: 0;
+
+                .el-input {
+                    width: 350px;
+                }
 
                 .icon {
                     color: #6f86ed;

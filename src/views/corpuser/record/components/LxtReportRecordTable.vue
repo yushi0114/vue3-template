@@ -167,8 +167,8 @@ const handleCurrentChange = (val: number) => {
             <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
         </div>
         <div class="content">
+            <LoadingBoard :loading="allToogle.loading" :empty="!reportRecordList.length">
             <el-table
-                v-loading="allToogle.loading"
                 :data="reportRecordList"
                 :default-sort="{ prop: 'createTime', order: 'descending' }"
                 @sort-change="handleSortChange"
@@ -212,6 +212,7 @@ const handleCurrentChange = (val: number) => {
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
             />
+            </LoadingBoard>
         </div>
     </div>
 </template>

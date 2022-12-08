@@ -211,6 +211,7 @@ const handleCurrentChange = (val: number) => {
             <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
         </div>
         <div class="content">
+            <LoadingBoard :loading="allToogle.loading" :empty="!userList.length">
             <el-table
                 v-loading="allToogle.loading"
                 :data="userList"
@@ -264,6 +265,7 @@ const handleCurrentChange = (val: number) => {
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
             />
+            </LoadingBoard>
 
             <ZjfwShopDetail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></ZjfwShopDetail>
         </div>

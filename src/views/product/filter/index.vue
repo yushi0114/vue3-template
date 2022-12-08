@@ -132,12 +132,12 @@ const handleDragListChange = () => {
                     >
                 </template>
             </ListQueryControl>
+            <LoadingBoard :loading="loading" :empty="!formatFilters.length">
             <draggable
                 class="flex-1"
                 v-model="formatFilters"
                 item-key="id"
                 filter=".disable-drag"
-                v-empty="{ visible: !filters.length }"
                 @start="dragging = true"
                 @end="dragging = false"
                 @sort="handleDragListChange">
@@ -222,6 +222,7 @@ const handleDragListChange = () => {
                     </ContentBoard>
                 </template>
             </draggable>
+        </LoadingBoard>
             <FilterModal
                 ref="filterModalRef"
                 :loading="loadingFilter"

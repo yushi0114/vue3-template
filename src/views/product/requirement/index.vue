@@ -153,14 +153,15 @@ onMounted(() => {
             </ListQueryControl>
             <Text>
             </Text>
-
-            <ProductReqList :list="list" :is-select-all="tableSelectAll" :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            <LoadingBoard :loading="loading" :empty="!list.length">
+            <ProductReqList :list="list" :is-select-all="tableSelectAll" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
 
             <CommonPagination
                 v-model:current-page="listControlModel.pageIndex"
                 v-model:page-size="listControlModel.pageSize"
                 :total="count"
             />
+            </LoadingBoard>
         </Board>
 
         <ProductReqDetail

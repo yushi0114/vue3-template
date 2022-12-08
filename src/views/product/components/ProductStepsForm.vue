@@ -72,7 +72,7 @@ defineExpose({
 </script>
 
 <template>
-    <div>
+    <div class="pdt-steps-form">
         <el-steps
             class="justify-center mb-4"
             align-center
@@ -85,12 +85,15 @@ defineExpose({
                 :title="step.title" />
         </el-steps>
         <sjc-form
+            class="pdt-steps-form-step"
             v-show="index === 0"
+            :auto-focus="false"
             :def="PRODUCT_FORM"
             :update-submit="steps[PRODUCT_STEPS.BASE_INFO].updateSubmit"
             @change="formValueChange"
             @search="handleSubmitBaseInfo"></sjc-form>
         <sjc-form
+            class="pdt-steps-form-step"
             v-show="index === 1"
             :def="dynamicForm"
             :update-submit="steps[PRODUCT_STEPS.FILTERS].updateSubmit"
@@ -128,11 +131,26 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
+.pdt-steps-form {
+    align-self: center;
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    &-step {
+        width: 600px;
+        align-self: center;
+    }
+}
 .product-success-wrapper {
     margin: 3rem 0;
     gap: $gap-md;
 }
 .product-success-image {
     --color: var(--el-color-success-light-3);
+}
+
+:deep(.el-step) {
+    flex-basis: 300px !important;
 }
 </style>

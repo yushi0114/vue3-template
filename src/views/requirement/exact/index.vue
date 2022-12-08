@@ -149,15 +149,17 @@ onMounted(() => {
                 <el-button type="danger" :icon="Delete" :loading="loadingBatchDelete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
                 <DownloadButton type="primary" :api="downloadExactReqs" :download-options="downloadOptions"></DownloadButton>
             </template>
-            <div class="flex-1 overflow-y-auto">
-                <ReqList :loading="loading" :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange"/>
+            <LoadingBoard :loading="loading" :empty="!list.length">
+                <div class="flex-1 overflow-y-auto">
+                    <ReqList :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange"/>
 
-                <CommonPagination
-                    v-model:current-page="listControlModel.pageIndex"
-                    v-model:page-size="listControlModel.pageSize"
-                    :total="count"
-                />
-            </div>
+                    <CommonPagination
+                        v-model:current-page="listControlModel.pageIndex"
+                        v-model:page-size="listControlModel.pageSize"
+                        :total="count"
+                    />
+                </div>
+            </LoadingBoard>
         </ListQueryControl>
 
         <ExactReqDetail

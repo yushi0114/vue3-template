@@ -112,8 +112,8 @@ watch(listControlModel, () => {
             }">
         </ListQueryControl>
         <Layout class="table-content">
+            <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
             <el-table
-                v-loading="allToogle.loading"
                 :data="dataSource"
                 style="width: 100%; height: 770px;"
                 :header-cell-style="{
@@ -137,6 +137,7 @@ watch(listControlModel, () => {
                     </template>
                 </el-table-column>
             </el-table>
+            </LoadingBoard>
         </Layout>
     </Layout>
 

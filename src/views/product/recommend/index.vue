@@ -56,7 +56,7 @@ function handleDelete(rd: ProductRecommandEntity) {
 
 <template>
     <PagePanel>
-        <Board class="product-recommend" full v-loading="loading">
+        <Board class="product-recommend" full>
             <el-tabs
                 v-model="kind"
                 @tab-click="handleRecommendTabClick">
@@ -66,6 +66,7 @@ function handleDelete(rd: ProductRecommandEntity) {
                     :label="opt.name"
                     :name="opt.value"></el-tab-pane>
             </el-tabs>
+            <LoadingBoard :loading="loading" :empty="!recommands.length">
             <FlexRow vertical="start" horizontal="between">
                 <FlexRow class="product-recommand-row">
                     <ContentBoard
@@ -91,7 +92,7 @@ function handleDelete(rd: ProductRecommandEntity) {
                     <el-button :icon="Plus" type="primary">新建{{ kindName }}</el-button>
                 </RouterLink>
             </FlexRow>
-            <FlexRow class="product-recommand-row" vertical="start" v-empty="{ visible: !recommands.length }">
+            <FlexRow class="product-recommand-row" vertical="start">
                 <ContentBoard
                     hoverable
                     :label="recommand.name"
@@ -110,6 +111,7 @@ function handleDelete(rd: ProductRecommandEntity) {
                     <img class="product-recommand-poster" :src="recommand.productPoster" />
                 </ContentBoard>
             </FlexRow>
+            </LoadingBoard>
         </Board>
     </PagePanel>
 </template>

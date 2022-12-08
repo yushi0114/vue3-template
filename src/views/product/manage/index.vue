@@ -43,14 +43,19 @@ const { request: requestIsUsingProduct } = useApi((params) => isUsingProduct({pl
 
 const count = ref(0);
 const list = ref<ProductEntity[]>([]);
+const loading = ref(false);
 const productEditModal = ref<InstanceType<typeof ProductEdit> | null>(null);
 function getList() {
+    loading.value = true;
     getProducts(Object.assign({ platform: platform.value }, listControlModel))
         .then(({ total, data }) => {
             count.value = total;
             list.value = data;
         })
-        .catch(noop);
+        .catch(noop)
+        .finally(() => {
+            loading.value = false;
+        });
 }
 
 function clear() {
@@ -131,38 +136,40 @@ onBeforeMount(() => {
     <PagePanel>
         <Board class="product-manage" full>
             <PlatformTab @tab-change="handleTabChange" />
-            <ListQueryControl
-                v-model="listControlModel"
-                :searchConfig="{
-                    label: '请输入产品名称',
-                    field: 'searchInput',
-                }"
-                :filterOptionsConfigs="[
-                    { label: '机构名称', field: 'orgId', options: topOrgOptions },
-                    { label: '产品状态', field: 'status', options: onlineTypeOptions },
-                ]"
-                :sortConfigs="[{ label: '申请时间', field: 'createTime' }]">
-                <template v-slot:search-rest>
-                    <RouterLink :to="`${route.path}/new/1`">
-                        <el-button type="primary" :icon="Plus">新建</el-button>
-                    </RouterLink>
-                </template>
-            </ListQueryControl>
-            <Text> </Text>
+                <ListQueryControl
+                    v-model="listControlModel"
+                    :searchConfig="{
+                        label: '请输入产品名称',
+                        field: 'searchInput',
+                    }"
+                    :filterOptionsConfigs="[
+                        { label: '机构名称', field: 'orgId', options: topOrgOptions },
+                        { label: '产品状态', field: 'status', options: onlineTypeOptions },
+                    ]"
+                    :sortConfigs="[{ label: '申请时间', field: 'createTime' }]">
+                    <template v-slot:search-rest>
+                        <RouterLink :to="`${route.path}/new/1`">
+                            <el-button type="primary" :icon="Plus">新建</el-button>
+                        </RouterLink>
+                    </template>
+                </ListQueryControl>
+                <Text> </Text>
+                <LoadingBoard :loading="loading" :empty="!list.length">
+                <ProductList
+                    :loading="loading"
+                    :list="list"
+                    @item-detail="goDetail"
+                    @item-req-detail="goReqDetail"
+                    @item-edit="handleEdit"
+                    @item-online="handleUpdateStatus"
+                    @item-offline="handleUpdateStatus"
+                    @item-delete="handleDelete" />
 
-            <ProductList
-                :list="list"
-                @item-detail="goDetail"
-                @item-req-detail="goReqDetail"
-                @item-edit="handleEdit"
-                @item-online="handleUpdateStatus"
-                @item-offline="handleUpdateStatus"
-                @item-delete="handleDelete" />
-
-            <CommonPagination
-                v-model:current-page="listControlModel.pageIndex"
-                v-model:page-size="listControlModel.pageSize"
-                :total="count" />
+                <CommonPagination
+                    v-model:current-page="listControlModel.pageIndex"
+                    v-model:page-size="listControlModel.pageSize"
+                    :total="count" />
+            </LoadingBoard>
         </Board>
 
         <ProductEdit

@@ -1,47 +1,50 @@
 <template>
-    <el-form :model="categoryForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
-        <el-form-item label="机构分类:" required prop="name">
-            <el-input v-model="categoryForm.name" placeholder="请输入分类名称" show-word-limit maxlength="255"/>
-        </el-form-item>
-        <el-form-item label="描述:" prop="desc">
-            <el-input
-                type="textarea"
-                v-model="categoryForm.desc"
-                placeholder="请输入分类描述"
-                show-word-limit
-                maxlength="255"/>
-        </el-form-item>
-        <el-form-item label="分类排序:" required prop="sort">
-            <el-input v-model="categoryForm.sort" placeholder="请输入分类描述" show-word-limit maxlength="3"/>
-        </el-form-item>
-        <el-form-item label="展现形式:" required prop="typeModuleId">
-            <el-select v-model="categoryForm.typeModuleId" placeholder="请选择展现形式">
-                <el-option
-                    v-for="item in orgTypeModuleList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"/>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="配置菜单" required>
-            <div style="margin-top: 10px">
-                <el-tree
-                    ref="menuTree"
-                    :data="allSystemMenuTree"
-                    show-checkbox
-                    node-key="id"
-                    :default-checked-keys="categoryForm.menuIdArr"
-                    :default-expand-all="true">
-                </el-tree>
-            </div>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submitForm(ruleFormRef)">
-                {{ formType === 'edit' ? '编辑' : '创建' }}
-            </el-button>
-            <el-button @click="goBack()">返回</el-button>
-        </el-form-item>
-    </el-form>
+    <div>
+        <div class="form-header">机构编码</div>
+        <el-form :model="categoryForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
+            <el-form-item label="机构分类:" required prop="name">
+                <el-input v-model="categoryForm.name" placeholder="请输入分类名称" show-word-limit maxlength="255"/>
+            </el-form-item>
+            <el-form-item label="描述:" prop="desc">
+                <el-input
+                    type="textarea"
+                    v-model="categoryForm.desc"
+                    placeholder="请输入分类描述"
+                    show-word-limit
+                    maxlength="255"/>
+            </el-form-item>
+            <el-form-item label="分类排序:" required prop="sort">
+                <el-input v-model="categoryForm.sort" placeholder="请输入分类描述" show-word-limit maxlength="3"/>
+            </el-form-item>
+            <el-form-item label="展现形式:" required prop="typeModuleId">
+                <el-select v-model="categoryForm.typeModuleId" placeholder="请选择展现形式">
+                    <el-option
+                        v-for="item in orgTypeModuleList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"/>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="配置菜单" required>
+                <div style="margin-top: 10px">
+                    <el-tree
+                        ref="menuTree"
+                        :data="allSystemMenuTree"
+                        show-checkbox
+                        node-key="id"
+                        :default-checked-keys="categoryForm.menuIdArr"
+                        :default-expand-all="true">
+                    </el-tree>
+                </div>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="goBack()">返回</el-button>
+                <el-button type="primary" @click="submitForm(ruleFormRef)">
+                    {{ formType === 'edit' ? '编辑' : '创建' }}
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -167,6 +170,10 @@ async function goBack() {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.form-header {
+    font-size: 24px;
+    margin: 20px 0 30px;
+}
 
 </style>

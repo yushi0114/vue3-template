@@ -185,12 +185,6 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
     }
 }
 
-.page-content {
-    display: flex;
-    justify-content: right;
-    padding-top: 10px;
-}
-
 .header-options {
     padding-left: 15px;
 }

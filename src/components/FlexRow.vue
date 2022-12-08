@@ -4,86 +4,91 @@ withDefaults(
         vertical?: 'start' | 'center' | 'end' | 'stretch',
         horizontal?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'
         gap?: 'none' | 'line' | 'xs' | 'sm' | 'md' | 'lg'
+        full?: boolean
     }>(),
     {
         horizontal: 'start',
         vertical: 'center',
+        full: false
     }
 );
-
-
 </script>
 <template>
     <div class="i-flex-row" v-bind="$attrs" :class="[
         'i-flex-row-vertical-' + vertical,
         'i-flex-row-horizontal-' + horizontal,
         'i-flex-row-gap-' + gap,
+        full ? 'i-flex-row-full' : '',
     ]">
-        <slot />
+        <slot></slot>
     </div>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .i-flex-row {
-    @apply flex;
+    display: flex;
+}
+
+.i-flex-row-full {
+    flex: 1; width: 100%;
 }
 
 .i-flex-row-vertical-center {
-    @apply items-center;
+    align-items: center;
 }
 
 .i-flex-row-vertical-start {
-    @apply items-start;
+    align-items: flex-start;
 }
 
 .i-flex-row-vertical-end {
-    @apply items-end;
+    align-items: flex-end;
 }
 
 .i-flex-row-vertical-stretch {
-    @apply items-stretch;
+    align-items: stretch;
 }
 
 .i-flex-row-horizontal-start {
-    @apply justify-start;
+    justify-content: flex-start;
 }
 
 .i-flex-row-horizontal-center {
-    @apply justify-center;
+    justify-content: center;
 }
 
 .i-flex-row-horizontal-end {
-    @apply justify-end;
+    justify-content: flex-end;
 }
 
 .i-flex-row-horizontal-between {
-    @apply justify-between;
+    justify-content: space-between;
 }
 
 .i-flex-row-horizontal-around {
-    @apply justify-around;
+    justify-content: space-around;
 }
 
 .i-flex-row-horizontal-evenly {
-    @apply justify-evenly;
+    justify-content: space-evenly;
 }
 
 .i-flex-row-gap-line {
-    gap: 2px;
+    gap: $gap-line;
 }
 .i-flex-row-gap-xs {
-    @apply gap-2;
+    gap: $gap-xs;
 }
 .i-flex-row-gap-sm {
-    @apply gap-3
+    gap: $gap-sm;
 }
 .i-flex-row-gap-md {
-    @apply gap-4
+    gap: $gap-md;
 }
 .i-flex-row-gap-lg {
-    @apply gap-5
+    gap: $gap-lg;
 }
 
 .i-flex-row-gap-xl {
-    @apply gap-6
+    gap: $gap-xl;
 }
 </style>

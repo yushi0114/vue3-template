@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { getProductRecommends, deleteProductRecommends } from '@/api';
 import { useQueryParams, useApi } from '@/composables';
-import { ProductRecommandType, productRecommandTypeOptions, productRecommandTypeMap } from '@/enums';
+import { ProductRecommandType, productRecommandTypeOptions, productRecommandTypeMap, SwitchType } from '@/enums';
 import type { ProductRecommandEntity } from '@/types';
 import { noop } from '@/utils';
 import { Plus } from '@element-plus/icons-vue';
@@ -66,7 +66,27 @@ function handleDelete(rd: ProductRecommandEntity) {
                     :label="opt.name"
                     :name="opt.value"></el-tab-pane>
             </el-tabs>
-            <FlexRow horizontal="end">
+            <FlexRow vertical="start" horizontal="between">
+                <FlexRow class="product-recommand-row">
+                    <ContentBoard
+                        hoverable
+                        :disabled="(recommand.status === SwitchType.off)"
+                        :label="recommand.name"
+                        v-for="(recommand, i) in recommands"
+                        :key="i">
+                        <template #label-rest>
+                            <FlexRow gap="xs">
+                                <CircleOptBtn @click="handleEdit(recommand)" :disabled="(recommand.status === SwitchType.off)">
+                                    <i-ep-edit-pen />
+                                </CircleOptBtn>
+                                <CircleOptBtn @click="handleDelete(recommand)" :disabled="(recommand.status === SwitchType.off)">
+                                    <i-ep-close />
+                                </CircleOptBtn>
+                            </FlexRow>
+                        </template>
+                        <img class="product-recommand-poster" :class="{ disabled: recommand.status === SwitchType.off }" :src="recommand.productPoster" />
+                    </ContentBoard>
+                </FlexRow>
                 <RouterLink :to="`${route.path}/edit/${kind}?id=0`">
                     <el-button :icon="Plus" type="primary">新建{{ kindName }}</el-button>
                 </RouterLink>
@@ -98,12 +118,33 @@ function handleDelete(rd: ProductRecommandEntity) {
 .product-recommand-row {
     flex: 1;
     gap: $gap-xs;
-    padding-top: $gap-sm;
     display: flex;
     flex-wrap: wrap;
+
+    & .opt-btn {
+        width: 1.2rem;
+        height: 1.2rem;
+        font-size: 0.75rem;
+        border-radius: 1rem;
+        color: $text-color-secondary;
+
+        &:hover {
+            background: $color-primary;
+            color: $color-white;
+        }
+    }
+
+    .disabled .opt-btn:hover {
+        background: $color-info-light-3;
+        color: $color-white;
+    }
 }
 
 .product-recommand-poster {
     width: 230px;
+
+    &.disabled {
+        opacity: 0.5;
+    }
 }
 </style>

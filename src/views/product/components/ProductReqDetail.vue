@@ -62,25 +62,25 @@ const handleViewReport = (type: ReportType) => {
 </script>
 
 <template>
-    <el-drawer :size="850"  @open="handleOpen" @closed="handleClosed">
+    <DetailDrawer  @open="handleOpen" @closed="handleClosed">
         <!-- -->
         <template #header>
             <Text>产品申请详情</Text>
         </template>
-        <ContentBoard label="基本信息" :cols="2">
+        <ContentBoard background label="基本信息" :cols="2">
             <ContentBoardField label="企业名称">{{ detail?.corpName }}</ContentBoardField>
             <ContentBoardField label="社会统一信用代码">{{ detail?.corpCode }}</ContentBoardField>
             <ContentBoardField label="联系人">{{ detail?.contactPerson }}</ContentBoardField>
             <ContentBoardField label="联系电话">{{ detail?.contactMobile }}</ContentBoardField>
         </ContentBoard>
 
-        <ContentBoard label="贷款需求" :cols="3" v-if="detail">
+        <ContentBoard background label="贷款需求" :cols="3" v-if="detail">
             <ContentBoardField label="期望融资金额">{{ detail.expectFinancing }}万元</ContentBoardField>
             <ContentBoardField label="期望放款时间">{{ expectTimeTypeMap[detail.expectTime] }}</ContentBoardField>
             <ContentBoardField label="期望贷款利率">{{ expectRateTypeMap[detail.expectRate] }}</ContentBoardField>
         </ContentBoard>
 
-        <ContentBoard label="放款信息" :cols="4" v-if="detail?.progress === AcceptProgressType.done">
+        <ContentBoard background label="放款信息" :cols="4" v-if="detail?.progress === AcceptProgressType.done">
             <ContentBoardField label="产品名称">{{ content?.productName }}</ContentBoardField>
             <ContentBoardField label="实际放款金额">{{ detail?.loanAmount }}万元</ContentBoardField>
             <ContentBoardField label="实际贷款期限">{{ loanTermTypeMap[detail?.loanTerm!] }}</ContentBoardField>
@@ -101,7 +101,7 @@ const handleViewReport = (type: ReportType) => {
             <ContentBoardField label="所申请产品">{{ content?.productName }}</ContentBoardField>
             <ContentAcceptSteps :steps="detail?.dataFirst" />
         </ContentBoard>
-    </el-drawer>
+    </DetailDrawer>
 </template>
 
 <style lang="postcss">

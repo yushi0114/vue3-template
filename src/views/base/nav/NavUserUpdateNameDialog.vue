@@ -27,7 +27,7 @@ const formModel = reactive({
 });
 
 const rules: any = reactive({
-    username: [{ validator: genCheckEmpty('姓名不能为空'), trigger: 'change' }],
+    username: [{ validator: genCheckEmpty('姓名不能为空'), trigger: ['blur', 'change'] }],
 });
 
 async function submit() {
@@ -75,7 +75,7 @@ function clear() {
         size="large"
         :rules="rules"
         :model="formModel">
-        <el-form-item label="请输入新的姓名" prop="username">
+        <el-form-item label="姓名" prop="username" required>
             <el-input v-model="formModel.username" placeholder="请输入姓名" />
         </el-form-item>
     </el-form>

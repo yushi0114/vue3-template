@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from '@vueuse/core';
+// import { useUrlSearchParams } from '@vueuse/core';
 
 export function useListControlModel(opt?: { initialModel?: any; numberFields?: string[] }) {
     const listControlModel = reactive<any>(
@@ -8,18 +8,19 @@ export function useListControlModel(opt?: { initialModel?: any; numberFields?: s
         }
     );
 
-    const params = useUrlSearchParams('history', {
-        initialValue: listControlModel,
-    });
+    // const params = useUrlSearchParams('history', {
+    //     initialValue: listControlModel,
+    // });
 
-    watch(listControlModel, (model) => {
-        const schemaChanged = Object.keys(model).some((k) => {
-            return model[k] !== params[k] && k !== 'pageIndex';
+    watch(listControlModel, (newModel, OldModel) => {
+        const schemaChanged = Object.keys(newModel).some((k) => {
+            return newModel[k] !== OldModel[k] && k !== 'pageIndex';
         });
-        Object.assign(params, model);
+        // Object.assign(params, model);
+        console.log(newModel, schemaChanged);
         if (schemaChanged) {
-            model.pageIndex = 1;
-            params.pageIndex = 1;
+            newModel.pageIndex = 1;
+            // params.pageIndex = 1;
         }
     });
 
@@ -29,17 +30,17 @@ export function useListControlModel(opt?: { initialModel?: any; numberFields?: s
         listControlModel.pageSize = 10;
     }
 
-    onBeforeMount(() => {
-        const numberFields = ['pageIndex', 'pageSize', ...(opt?.numberFields || [])];
-        Object.keys(params).forEach((key) => {
-            if (listControlModel[key] === params[key]) return;
-            listControlModel[key] = numberFields.includes(key) ? Number(params[key]) : params[key];
-        });
-    });
+    // onBeforeMount(() => {
+    //     const numberFields = ['pageIndex', 'pageSize', ...(opt?.numberFields || [])];
+    //     Object.keys(params).forEach((key) => {
+    //         if (listControlModel[key] === params[key]) return;
+    //         listControlModel[key] = numberFields.includes(key) ? Number(params[key]) : params[key];
+    //     });
+    // });
 
     return {
         model: listControlModel,
-        params,
+        // params,
         clear,
     };
 }

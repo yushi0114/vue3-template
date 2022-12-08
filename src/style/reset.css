@@ -22,8 +22,6 @@ body {
 h1,h2,h3,h4,h5,h6 {
     margin: 0;
 }
-  
-
 
   /* Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
@@ -33,6 +31,10 @@ h1,h2,h3,h4,h5,h6 {
 .no-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */
     -moz-scrollbar-width: none;  /* Firefox */
+}
+
+.outline-none {
+    outline: 0;
 }
   
 ::-webkit-scrollbar{

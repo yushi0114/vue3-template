@@ -196,12 +196,6 @@ async function handleSizeChange(item: number) {
     }
 }
 
-.page-content {
-    display: flex;
-    justify-content: right;
-    padding-top: 10px;
-}
-
 .header-options {
     padding-left: 8px;
 }

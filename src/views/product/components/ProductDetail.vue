@@ -54,60 +54,60 @@ function handleClosed() {
 </script>
 
 <template>
-    <el-drawer :size="850"  @open="handleOpen" @closed="handleClosed">
+    <DetailDrawer  @open="handleOpen" @closed="handleClosed">
         <!-- -->
         <template #header>
             <Text>产品详情</Text>
         </template>
         <FlexRow vertical="stretch" class="pdt-detail-row">
-            <ContentBoard label="产品名称">
+            <ContentBoard background label="产品名称">
                 <Text truncate size="lg" bold color="primary">{{ detail?.name }}</Text>
             </ContentBoard>
-            <ContentBoard label="年化利率">
+            <ContentBoard background label="年化利率">
                 <Text truncate size="lg" bold color="primary">{{ detail?.referenceRate }}</Text>
             </ContentBoard>
-            <ContentBoard :label="f.typeValue" v-for="(f, i) in fixFilters" :key="i">
+            <ContentBoard background :label="f.typeValue" v-for="(f, i) in fixFilters" :key="i">
                 <Text truncate size="lg" bold color="primary">{{ f.filterValue }}</Text>
             </ContentBoard>
         </FlexRow>
 
         <FlexRow vertical="stretch" class="pdt-detail-row">
-            <ContentBoard label="机构名称">
+            <ContentBoard background label="机构名称">
                 <div class="pdt-detail-orgname">
                     <Text truncate size="md" color="regular">{{ detail?.orgName }}</Text>
                 </div>
             </ContentBoard>
-            <ContentBoard label="机构Logo">
+            <ContentBoard background label="机构Logo">
                 <img class="pdt-detail-logo" :src="detail?.logoContent!" />
             </ContentBoard>
         </FlexRow>
 
-        <ContentBoard label="产品简介">
+        <ContentBoard background label="产品简介">
             <Text size="sm" color="regular">{{ detail?.description }}</Text>
         </ContentBoard>
-        <ContentBoard label="产品特点">
+        <ContentBoard background label="产品特点">
             <Text size="sm" color="regular">{{ detail?.feature }}</Text>
         </ContentBoard>
-        <ContentBoard label="适用客户">
+        <ContentBoard background label="适用客户">
             <Text size="sm" color="regular">{{ detail?.customer }}</Text>
         </ContentBoard>
-        <ContentBoard label="还款方式">
+        <ContentBoard background label="还款方式">
             <Text size="sm" color="regular">{{ detail?.repayment }}</Text>
         </ContentBoard>
-        <ContentBoard label="申请条件">
+        <ContentBoard background label="申请条件">
             <Text size="sm" color="regular">{{ detail?.applicationConditions }}</Text>
         </ContentBoard>
-        <ContentBoard label="所需资料">
+        <ContentBoard background label="所需资料">
             <Text size="sm" color="regular">{{ detail?.requiredMaterials }}</Text>
         </ContentBoard>
-        <ContentBoard label="咨询电话">
+        <ContentBoard background label="咨询电话">
             <Text size="sm" color="regular">{{ detail?.supportTel }}</Text>
         </ContentBoard>
-        <ContentBoard :label="f.typeValue" v-for="(f, i) in filters" :key="i">
+        <ContentBoard background :label="f.typeValue" v-for="(f, i) in filters" :key="i">
             <Text size="sm" color="regular">{{ f.filterValue }}</Text>
         </ContentBoard>
 
-    </el-drawer>
+    </DetailDrawer>
 </template>
 
 <style lang="scss">

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         label?: string,
         progress?: number,
@@ -15,13 +15,18 @@ withDefaults(
 function format() {
     return '';
 }
+
+const percentage = computed(() => {
+    const p = Number(props.progress);
+    return isNaN(p) ? 0 : p;
+});
 </script>
 <template>
     <div class="list-progress">
         <Text size="xs" color="regular" v-if="label">{{ label }}:</Text>
-        <el-progress class="list-progress-inner" :percentage="progress" :status="status as any" :format="format" />
+        <el-progress class="list-progress-inner" :percentage="percentage" :status="(status as any)" :format="format" />
         <Text size="xs" :color="status as any || 'primary'" class="list-progress-desc">
-            <slot />
+            <slot></slot>
         </Text>
     </div>
 </template>

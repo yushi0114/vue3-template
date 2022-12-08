@@ -57,18 +57,7 @@ function handleOpened() {
 
 <style lang="scss">
 .message-dialog {
-    max-width: 460px;
+    max-width: 480px;
     border-radius: 4px !important;
-
-    & .el-dialog__header {
-        padding: 15px 15px 5px !important;
-    }
-    & .el-dialog__body {
-        padding: 10px 15px 10px !important;
-    }
-
-    & .el-dialog__headerbtn {
-        top: 0;
-    }
 }
 </style>

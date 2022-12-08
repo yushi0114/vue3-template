@@ -61,16 +61,11 @@
             </template>
         </el-table-column>
     </el-table>
-    <div class="page-content">
-        <el-pagination
-            class="margin-20-20"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="financeFilterObject.currentPage"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="categoryList.total">
-        </el-pagination>
-    </div>
+    <CommonPagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="financeFilterObject.currentPage"
+        :total="categoryList.total" />
 </template>
 
 <script lang="ts" setup>
@@ -178,11 +173,5 @@ function handleRemoveRoleItem(item: RoleListItemType) {
     .search-input {
         max-width: 350px;
     }
-}
-
-.page-content {
-    display: flex;
-    justify-content: right;
-    padding-top: 10px;
 }
 </style>

@@ -36,7 +36,7 @@ withDefaults(
     display: flex;
     flex-direction: column;
     &.background {
-        background-color: var(--light-bg-color);
+        background-color: $color-info-light-9;
     }
 
     &.disabled {
@@ -44,12 +44,12 @@ withDefaults(
     }
 
     &.hoverable:hover {
-        background-color: var(--light-bg-color);
+        background-color: $color-info-light-9;
     }
 }
 
 .icb-label {
-    border-left: 4px solid var(--el-color-primary);
+    border-left: 4px solid $color-primary;
     padding: 0 $gap-sm;
     margin-bottom: $gap-xs;
     display: flex;

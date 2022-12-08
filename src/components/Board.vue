@@ -5,14 +5,15 @@ withDefaults(
         title?: string
         bordered?: boolean
         full?: boolean
+        focusFull?: boolean
     }>(),
-    { title: '', bordered: false, full: false }
+    { title: '', bordered: false, full: false, focusFull: false }
 );
 
 
 </script>
 <template>
-    <div class="i-board" :class="{ bordered, full }" v-bind="$attrs">
+    <div class="i-board" :class="{ bordered, full, 'focus-full': focusFull }" v-bind="$attrs">
         <Text class="i-board-title" v-if="title" size="xl" bold>{{ title }}</Text>
         <slot />
     </div>
@@ -34,6 +35,13 @@ withDefaults(
 
     &.full {
         min-height: 100%;
+        flex: 1;
+    }
+
+    &.focus-full {
+        height: 100%;
+        max-height: 100%;
+        overflow-y: auto;
         flex: 1;
     }
 }

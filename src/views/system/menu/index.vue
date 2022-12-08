@@ -1,6 +1,6 @@
 <template>
-    <PagePanel>
-        <Board full>
+    <PagePanel full>
+        <Board focus-full>
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="金融端" name="fin">
                     <menu-config v-if="activeName === 'fin'"></menu-config>

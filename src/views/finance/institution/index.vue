@@ -1,6 +1,6 @@
 <template>
-    <PagePanel>
-        <Board full>
+    <PagePanel full>
+        <Board focus-full>
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane v-for="item in categoryList" :key="item.id" :label="item.name" :name="item.code">
                     <institution-config v-if="activeName === item.code"></institution-config>

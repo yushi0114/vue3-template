@@ -1,62 +1,60 @@
 <template>
-    <el-form
-        class="custom-form"
-        :model="roleForm"
-        :rules="rules"
-        label-width="120px"
-        ref="ruleFormRef">
-        <el-form-item label="角色名称:" required prop="name">
-            <el-input
-                v-model="roleForm.name"
-                placeholder="请输入角色名称"
-                clearable
-                maxlength="100"
-                show-word-limit
-                ref="roleNameRef"
-            />
-        </el-form-item>
-        <el-form-item label="角色描述:" prop="desc">
-            <el-input
-                v-model="roleForm.desc"
-                placeholder="请输入角色描述"
-                type="textarea"
-                maxlength="255"
-                show-word-limit
-                autocomplete="off"/>
-        </el-form-item>
-        <el-form-item label="配置菜单:" required>
-            <div style="margin-top: 10px">
-                <el-tree
-                    v-if="roleMenuTreeData"
-                    ref="menuTree"
-                    :data="roleMenuTreeData"
-                    show-checkbox
-                    node-key="id"
-                    :default-checked-keys="roleForm.menuIdArr"
-                    :default-expand-all="true">
-                </el-tree>
-            </div>
-        </el-form-item>
-        <el-form-item>
-            <el-button @click="goBack()">
-                <template #icon>
-                    <Icon :name="'ep:back'"></Icon>
-                </template>
-            </el-button>
-            <el-button type="primary" @click="submitForm(ruleFormRef)">
-                <template #icon>
-                    <Icon :name="'ep:edit'"></Icon>
-                </template>
-            </el-button>
-        </el-form-item>
-    </el-form>
+    <div>
+        <div class="form-header">角色管理</div>
+        <el-form
+            class="custom-form"
+            :model="roleForm"
+            :rules="rules"
+            label-width="120px"
+            ref="ruleFormRef">
+            <el-form-item label="角色名称:" required prop="name">
+                <el-input
+                    v-model="roleForm.name"
+                    placeholder="请输入角色名称"
+                    clearable
+                    maxlength="100"
+                    show-word-limit
+                    ref="roleNameRef"
+                />
+            </el-form-item>
+            <el-form-item label="角色描述:" prop="desc">
+                <el-input
+                    v-model="roleForm.desc"
+                    placeholder="请输入角色描述"
+                    type="textarea"
+                    maxlength="255"
+                    show-word-limit
+                    autocomplete="off"/>
+            </el-form-item>
+            <el-form-item label="配置菜单:" required>
+                <div style="margin-top: 10px">
+                    <el-tree
+                        v-if="roleMenuTreeData"
+                        ref="menuTree"
+                        :data="roleMenuTreeData"
+                        show-checkbox
+                        node-key="id"
+                        :default-checked-keys="roleForm.menuIdArr"
+                        :default-expand-all="true">
+                    </el-tree>
+                </div>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="goBack()">
+                    返回
+                </el-button>
+                <el-button type="primary" @click="submitForm(ruleFormRef)">
+                    编辑
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { ElTree, FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus';
-import Icon from '@/components/Icon.vue';
 import { addRole, formType, goBackListView, roleForm, roleMenuTreeData, updateRole } from './institution-role';
 import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
@@ -117,6 +115,9 @@ onMounted(() => {
 <style scoped lang="scss">
 .custom-form {
     width: 700px;
-    padding: 40px 0;
+}
+.form-header {
+    font-size: 24px;
+    margin: 20px 0 30px;
 }
 </style>

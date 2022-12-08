@@ -1,42 +1,40 @@
 <template>
-    <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
-        <el-form-item label="姓名:" required prop="name">
-            <el-input v-model="form.name" placeholder="请输入姓名"/>
-        </el-form-item>
-        <el-form-item label="手机号:" required prop="account">
-            <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'"/>
-        </el-form-item>
-        <el-form-item label="角色:" required prop="roleId">
-            <el-select v-model="form.roleId" placeholder="请选择角色">
-                <el-option
-                    v-for="item in roleUIList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"/>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="状态:" required prop="status">
-            <el-switch v-model="form.status"/>
-        </el-form-item>
-        <el-form-item>
-            <el-button @click="goBack()">
-                <template #icon>
-                    <Icon :name="'ep:back'"></Icon>
-                </template>
-            </el-button>
-            <el-button type="primary" @click="submitForm(ruleFormRef)">
-                <template #icon>
-                    <Icon :name="'ep:edit'"></Icon>
-                </template>
-            </el-button>
-        </el-form-item>
-    </el-form>
+    <div>
+        <div class="form-header">用户管理</div>
+        <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
+            <el-form-item label="姓名:" required prop="name">
+                <el-input v-model="form.name" placeholder="请输入姓名"/>
+            </el-form-item>
+            <el-form-item label="手机号:" required prop="account">
+                <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'"/>
+            </el-form-item>
+            <el-form-item label="角色:" required prop="roleId">
+                <el-select v-model="form.roleId" placeholder="请选择角色">
+                    <el-option
+                        v-for="item in roleUIList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"/>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="状态:" required prop="status">
+                <el-switch v-model="form.status"/>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="goBack()">
+                    返回
+                </el-button>
+                <el-button type="primary" @click="submitForm(ruleFormRef)">
+                    编辑
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import Icon from '@/components/Icon.vue';
 import { addUser, form, formType, handleGoBack, roleUIList, updateUser } from './institution-user';
 import { LoadingService } from '@/views/system/loading-service';
 import type { ValidateCallback } from '@/utils';
@@ -97,6 +95,9 @@ async function goBack() {
 <style scoped lang="scss">
 .custom-form {
     width: 700px;
-    padding: 40px 0;
+}
+.form-header {
+    font-size: 24px;
+    margin: 20px 0 30px;
 }
 </style>

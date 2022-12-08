@@ -482,7 +482,7 @@ const cancelHandle = ({ field } : { field: string }) => {
                 margin-bottom: 0;
 
                 .el-input {
-                    width: 350px;
+                    width: 300px;
                 }
 
                 .icon {

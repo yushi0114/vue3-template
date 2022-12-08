@@ -8,10 +8,12 @@ const props = withDefaults(
         offsetHeight: number;
         offsetWidth: number;
         defaultStyle?: string;
+        imageSize?: number;
     }>(),
     {
         defaultStyle: '',
         image: emptyImg,
+        imageSize: 483
     }
 );
 
@@ -24,15 +26,7 @@ const getStyle = computed(() => {
     <div
         class="empty"
         :style="getStyle">
-        <div style="text-align: center">
-            <img
-                :src="image"
-                height="430"
-                width="483" />
-            <div>
-                <Text color="regular">{{ content || '暂无数据' }}</Text>
-            </div>
-        </div>
+        <el-empty v-bind="$attrs" :image="image" :image-size="imageSize" :description="content || '暂无数据'" />
     </div>
 </template>
 
@@ -41,7 +35,6 @@ const getStyle = computed(() => {
     position: absolute;
     top: 0;
     left: 0;
-    background: $bg-color;
     display: flex;
     justify-content: center;
     align-items: center;

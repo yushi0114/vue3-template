@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { Top } from '@element-plus/icons-vue';
 import { getScore } from '@/api/score';
 import { useUserStore } from '@/stores';
 
@@ -160,7 +159,7 @@ const print = () => {
                         </div>
                     </div>
 
-                    <el-backtop :bottom="100"></el-backtop>
+                    <el-backtop :bottom="120"></el-backtop>
 
                     <img class="score-print" src="@/assets/images/print.png" @click="print()">
                 </div>
@@ -305,6 +304,8 @@ const print = () => {
 
     .score-container {
         padding: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 }
 </style>

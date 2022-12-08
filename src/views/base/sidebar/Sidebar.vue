@@ -130,8 +130,10 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
         <FlexRow
             :horizontal="expand ? 'end' : 'center'"
             class="sidebar-footer">
-            <i-ep-fold v-if="expand" @click="toggleExpand(false)" />
-            <i-ep-expand v-else @click="toggleExpand(true)" />
+            <Text color="regular">
+                <i-ep-fold v-if="expand" @click="toggleExpand(false)" />
+                <i-ep-expand v-else @click="toggleExpand(true)" />
+            </Text>
         </FlexRow>
     </div>
 </template>
@@ -142,7 +144,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
     @apply
         flex flex-col shrink-0 border-box select-none
         transform transition-all duration-200 ease-in-out // -translate-x-64 lg: translate-x-0
-        w-20
+        w-18
         overflow-y-hidden
         ;
 
@@ -175,7 +177,8 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 
 .sidebar-root-icon {
-    @apply h-5 w-5 mt-0.5;
+    @apply h-4 w-4 mt-0.5;
+    font-weight: bold;
 }
 
 .sidebar-sub-icon {
@@ -183,13 +186,19 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 }
 
 .sidebar-root-link {
-    @apply flex flex-1 truncate;
+    /* @apply flex flex-1 truncate; */
+    display: flex;
+    flex: 1;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .sidebar-root-label {
     @apply
         flex-1
-        text-sm font-medium ml-3
+        text-sm font-medium ml-2
         truncate
         lg:sidebar-expanded:opacity-100
         2xl:opacity-100 duration-200
@@ -210,7 +219,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 
 .sidebar-sub-block {
-    @apply h-8 text-sm pl-12;
+    @apply h-8 text-sm pl-9;
 }
 
 .sidebar-sub-link {
@@ -234,6 +243,12 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 .sidebar-footer {
     @apply py-2 text-2xl px-4;
     color: var(--el-text-color-secondary);
+
+    & svg {
+        cursor: pointer;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
 }
 
 

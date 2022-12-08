@@ -4,14 +4,16 @@ import type { RequirementEntity } from '@/types';
 import { ItemOperate, ListField, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
 import { TABLE_CONFIG, TABLE_COLUMNS} from '../constants';
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         list?: RequirementEntity[],
         loading?: boolean;
+        isSelectAll?: boolean;
     }>(),
     {
         list: () => [],
-        loading: false
+        loading: false,
+        isSelectAll: false,
     }
 );
 
@@ -21,6 +23,7 @@ const emits = defineEmits<{
     (e: 'multi-selection', selection: string[]): void;
 }>();
 
+const sjcTableRef = ref();
 const colorStatusMap: Record<AcceptProgressType, string> = {
     [AcceptProgressType.all]: 'warning',
     [AcceptProgressType.undo]: 'warning',
@@ -39,6 +42,10 @@ const handleSelectionChange = (selection: any) => {
     emits('multi-selection', selection);
 };
 
+watch(() => props.isSelectAll, () => {
+    sjcTableRef.value?.toggleAllSelection();
+});
+
 </script>
 
 <template>
@@ -48,7 +55,7 @@ const handleSelectionChange = (selection: any) => {
         :table-data="list"
         :loading="loading"
         :columns="TABLE_COLUMNS"
-        :show-header="true"
+        :show-header="false"
         row-class-name="tr-item"
         :table-config="TABLE_CONFIG"
         :showPagination="false"

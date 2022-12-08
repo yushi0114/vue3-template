@@ -1,12 +1,13 @@
 <script lang="ts" setup>
+import { Delete } from '@element-plus/icons-vue';
 import { acceptProgressTypeOptions, platformTypeMap, PlatformType } from '@/enums';
 import { getProductReqs, getTopOrgs, deleteProductReqs, downloadProductReqs } from '@/api';
 import type { PlainOption, ProductRequirementEntity } from '@/types';
 import { ProductReqList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel, useApi } from '@/composables';
+import { useListControlModel, useApi, useTableCheckbox, useQueryParams } from '@/composables';
 
-const { request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
+const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
     onSuccess() {
         ElMessage({
             type: 'success',
@@ -21,6 +22,10 @@ const { request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ pl
 
 const { back } = useRouter();
 const route = useRoute();
+const { queryParams } = useQueryParams({
+    productId: '',
+    productName: '',
+});
 const platform = ref<PlatformType>(Number(route.params.p));
 const { model: listControlModel } = useListControlModel({
     numberFields: ['progress'],
@@ -28,18 +33,20 @@ const { model: listControlModel } = useListControlModel({
 const count = ref(0);
 const loading = ref(false);
 const list = ref<ProductRequirementEntity[]>([]);
-const ids = ref<string[]>([]);
+
+const { isSelectAll, tableSelectAll, isIndeterminate, ids, handleSelectionChange, handleChangeCheckAll } = useTableCheckbox(list);
+
 const topOrgOptions = ref<PlainOption[]>([]);
 const detail = ref<ProductRequirementEntity | null>(null);
 const downloadOptions = reactive({
     fileName: `企业申请列表（${platformTypeMap[platform.value]}）.xlsx`,
-    params: Object.assign({ platform: platform.value }, listControlModel)
+    params: Object.assign({ platform: platform.value, productId: queryParams.value.productId }, listControlModel)
 });
 const { request: requestOrgOptions } = useApi(getTopOrgs, { cache: true });
 
 function getList() {
     loading.value = true;
-    getProductReqs(Object.assign({ platform: platform.value }, listControlModel))
+    getProductReqs(Object.assign({ platform: platform.value, productId: queryParams.value.productId }, listControlModel))
         .then(({ total, data }) => {
             count.value = total;
             list.value = data;
@@ -51,7 +58,7 @@ function getList() {
 }
 
 watch(listControlModel, () => {
-    downloadOptions.params = Object.assign({ platform: platform.value }, listControlModel);
+    downloadOptions.params = Object.assign({ platform: platform.value, productId: queryParams.value.productId }, listControlModel);
     nextTick(getList);
 });
 
@@ -59,14 +66,10 @@ function goDetail(req: ProductRequirementEntity) {
     detail.value = req;
 }
 
-const handleSelectionChange = (selection: any) => {
-    ids.value = selection.map((item: any) => item.id);
-};
-
 const handleBatchDelete = async() => {
     const idArr = ids.value.map(item => `"${item}"`).join(',');
     try {
-        await ElMessageBox.confirm('确认删除已选中的需求吗？', '删除', {
+        await ElMessageBox.confirm(`确认删除已选中的${ids.value.length}条需求吗？`, '删除', {
             type: 'warning',
         });
         deleteReps(idArr);
@@ -114,11 +117,14 @@ onMounted(() => {
                 >
                 <div
                     class="text-$el-text-color-secondary"
-                    >当前产品：{{ listControlModel.productName }}</div
+                    >当前产品：{{ queryParams.productName }}</div
                 >
             </FlexRow>
             <ListQueryControl
                 v-model="listControlModel"
+                v-model:check-all="isSelectAll"
+                :is-indeterminate="isIndeterminate"
+                :showSelection="!!list.length"
                 :searchConfig="{
                     label: '请输入产品名称',
                     field: 'searchInput'
@@ -138,23 +144,23 @@ onMounted(() => {
                         { name: '结束月份', value: 'endTime', },
                     ]
                 }"
+                @change-check-all="handleChangeCheckAll"
             >
                 <template v-slot:search-rest>
-                    <el-button type="danger" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
+                    <el-button type="danger" :icon="Delete" :loading="loadingBatchDelete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
                     <DownloadButton type="primary" :api="downloadProductReqs" :download-options="downloadOptions"></DownloadButton>
                 </template>
             </ListQueryControl>
             <Text>
             </Text>
 
-            <ProductReqList :list="list" :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
-
-            <FlexRow horizontal="end">
-                <el-pagination v-model:current-page="listControlModel.pageIndex"
-                    v-model:page-size="listControlModel.pageSize" :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper" :total="count" />
-            </FlexRow>
-        </Board>
+            <ProductReqList :list="list" :is-select-all="tableSelectAll"  :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            <CommonPagination
+                v-model:current-page="listControlModel.pageIndex"
+                v-model:page-size="listControlModel.pageSize"
+                :total="count"
+            />
+    </Board>
 
         <ProductReqDetail
             :modelValue="!!detail"

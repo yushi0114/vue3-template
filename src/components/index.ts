@@ -10,6 +10,6 @@ export { default as SelectTree } from './SelectTree.vue';
 export { default as Title } from './Title.vue';
 export { default as Panel } from './Panel.vue';
 export { default as RectLogo } from './RectLogo.vue';
+export { default as Empty } from './Empty.vue';
 export * from './list';
 export * from './scoreResult';
-

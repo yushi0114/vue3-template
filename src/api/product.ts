@@ -67,7 +67,7 @@ export type GetProductOptionsPayload = {
     menuName?: string;
 };
 
-export type GetProductOptionsResponse = { data: ProductEntity[] };
+export type GetProductOptionsResponse = ProductEntity[];
 
 export function getProductOptions(payload: GetProductOptionsPayload): Promise<GetProductOptionsResponse> {
     const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/all' : '/v1/zjfw/product/all';
@@ -78,7 +78,7 @@ export function getProductOptions(payload: GetProductOptionsPayload): Promise<Ge
 
     return api.get(`${DMS_DOMAIN}${url}`, {
         params: payload
-    });
+    }).then(res => res.data);
 }
 // #endregion
 

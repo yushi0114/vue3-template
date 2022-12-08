@@ -3,6 +3,8 @@ import { SORT_TYPE, ARTICLE_STATUS, ARTICLE_STATUS_LABEL } from '@/enums';
 import { pick } from 'lodash';
 import { ARTICLE_STATUS_SELECT_OPTIONS, INIT_ARTICLE_SORT_LIST } from '../constants';
 import type { ArticleSortItem } from '@/types';
+import { cloneDeep } from '@/utils';
+
 type State = ArticleSortItem & {
     status: ARTICLE_STATUS;
 };

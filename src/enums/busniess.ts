@@ -345,3 +345,11 @@ export const ReportTypeUrlMap: Record<ReportType, string> = {
     [ReportType.SCORE]: '/score/detail',
 };
 // #endregion
+
+// #region 新建产品步骤条
+export enum PRODUCT_STEPS {
+    BASE_INFO = '产品基本信息',
+    FILTERS = '过滤项信息',
+    SUCCESS = '发布成功',
+}
+// #endregion

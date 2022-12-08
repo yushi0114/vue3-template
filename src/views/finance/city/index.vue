@@ -4,14 +4,12 @@ import cityTable from './components/CityTable.vue';
 
 <template>
     <PagePanel>
-        <Board class="board">
+        <Board full>
             <cityTable></cityTable>
         </Board>
     </PagePanel>
 </template>
 
-<style lang="postcss" scoped>
-.board {
-    @apply  h-full;
-}
+<style lang="scss" scoped>
+
 </style>

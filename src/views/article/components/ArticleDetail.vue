@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Back, Sell } from '@element-plus/icons-vue';
 import ArticleWrapper from '../components/ArticleWrapper.vue';
 import DetailContent from './DetailContent.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,8 +21,9 @@ const props = defineProps<{
 const ARTICLE_API_MAP = useApiManage(props.module);
 
 // eslint-disable-next-line no-undef
-const state: { data: (ICommonResult & NewsItem) | Recordable } = reactive({
+const state: { data: (ICommonResult & NewsItem) | Recordable; loadingPublish: boolean } = reactive({
     data: {},
+    loadingPublish: false
 });
 
 const { loading: loadingDetail, request: getArticleDetail } = useApi(
@@ -43,10 +45,16 @@ const { loading: loadingDetail, request: getArticleDetail } = useApi(
 );
 
 const publish = async() => {
-    await detailListMap.value
-        .get(tabItem?.value)
-        ._updateNewsStatus({ id: activeId.value, status: ARTICLE_STATUS.PUBLISHED });
-    getArticleDetail();
+    state.loadingPublish = true;
+    try {
+        await detailListMap.value
+            .get(tabItem?.value)
+            ._updateNewsStatus({ id: activeId.value, status: ARTICLE_STATUS.PUBLISHED });
+        state.loadingPublish = false;
+        getArticleDetail();
+    } catch {
+        state.loadingPublish = false;
+    }
 };
 
 watch(activeId, () => {
@@ -70,6 +78,7 @@ onBeforeMount(() => {
             <div class="w-350px">
                 <el-card
                     class="h-full"
+                    shadow="never"
                     :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
                     <article-wrapper
                         class="h-full"
@@ -92,19 +101,22 @@ onBeforeMount(() => {
             <div class="flex-1 min-w-0">
                 <el-card
                     class="h-full overflow-y-auto"
+                    shadow="never"
                     :body-style="{ height: '100%', 'box-sizing': 'border-box', 'overflow-y': 'auto' }">
                     <div class="flex justify-between">
                         <el-button
                             class="mr-2"
+                            :icon="Back"
                             @click="back">
-                            <i-ep-back></i-ep-back>
                             返回</el-button
                         >
                         <el-button
                             v-if="state.data.id && state.data.status !== ARTICLE_STATUS.PUBLISHED"
                             type="primary"
+                            :icon="Sell"
+                            :loading="state.loadingPublish"
                             @click="publish"
-                            ><span class="i-ic-sharp-publish"></span>发布</el-button
+                            >发布</el-button
                         >
                     </div>
                     <detail-content

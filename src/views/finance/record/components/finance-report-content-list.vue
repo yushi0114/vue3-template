@@ -31,16 +31,11 @@
         <el-table-column prop="corpCode" label="统一信用代码"/>
         <el-table-column prop="createTime" sortable label="查询时间"/>
     </el-table>
-    <div class="page-content">
-        <el-pagination
-            class="margin-20-20"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="filterObject.currentPage"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="listData.total">
-        </el-pagination>
-    </div>
+    <CommonPagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="filterObject.currentPage"
+        :total="listData.total" />
 </template>
 
 <script lang="ts" setup>
@@ -109,11 +104,5 @@ async function handleSizeChange(item: number) {
     .search-input {
         max-width: 350px;
     }
-}
-
-.page-content {
-    display: flex;
-    justify-content: right;
-    padding-top: 10px;
 }
 </style>

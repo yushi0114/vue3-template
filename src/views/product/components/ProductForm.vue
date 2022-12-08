@@ -17,7 +17,7 @@ const emits = defineEmits<{
 
 const propsRefs = toRefs(props);
 
-const { formValueChange, PRODUCT_FORM, dynamicForm } = useProductForm(propsRefs.platform, propsRefs.id);
+const { formValueChange, PRODUCT_FORM_ALL, dynamicForm } = useProductForm(propsRefs.platform, propsRefs.id);
 
 const updateSubmit = ref(new Date().getTime());
 
@@ -59,19 +59,19 @@ const handleSubmit = async(values: any) => {
 <template>
     <div>
         <sjc-form
-            :def="PRODUCT_FORM"
+            :def="PRODUCT_FORM_ALL"
             :update-submit="updateSubmit"
             @change="formValueChange"
             @search="handleSubmit"></sjc-form>
         <slot name="footer">
-            <div class="flex-center">
+            <FlexRow horizontal="center">
                 <el-button @click="handleCancel">取消</el-button>
                 <el-button
                     type="primary"
                     @click="handleOk"
                     >确定</el-button
                 >
-            </div>
+            </FlexRow>
         </slot>
     </div>
 </template>

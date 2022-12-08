@@ -27,7 +27,7 @@ const formModel = reactive({
 });
 
 const rules: any = reactive({
-    username: [{ validator: genCheckEmpty('用户名不能为空'), trigger: 'change' }],
+    username: [{ validator: genCheckEmpty('姓名不能为空'), trigger: ['blur', 'change'] }],
 });
 
 async function submit() {
@@ -39,7 +39,7 @@ async function submit() {
             tab: MENU_TAB.MENU_TAB_DMS
         });
         cancel();
-        ElMessage({ message: '修改用戶名成功', type: 'success' });
+        ElMessage({ message: '修改姓名成功', type: 'success' });
         await getUserInfo();
     }
     catch {
@@ -62,7 +62,7 @@ function clear() {
 
 <template>
 <MessageDialog
-    title="修改用户名"
+    title="修改姓名"
     class="nav-user-update-name"
     v-model="modelValue"
     @open="handleOpen"
@@ -75,15 +75,10 @@ function clear() {
         size="large"
         :rules="rules"
         :model="formModel">
-        <el-form-item label="请输入新的用户名" prop="username">
-            <el-input v-model="formModel.username" />
+        <el-form-item label="姓名" prop="username" required>
+            <el-input v-model="formModel.username" placeholder="请输入姓名" />
         </el-form-item>
     </el-form>
 </MessageDialog>
 </template>
 
-<style lang="postcss">
-.nav-user-update-name {
-  @apply;
-}
-</style>

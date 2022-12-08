@@ -27,14 +27,27 @@ const formModel = reactive({
     confirmPassword: ''
 });
 
+function checkOldPassword(rule: any, value: string, callback: ValidateCallback) {
+    if (value === '') {
+        return callback(new Error('旧密码不能为空'));
+    }
+    return checkPassword(rule, value, callback);
+}
+
 function checkNewPassword(rule: any, value: string, callback: ValidateCallback) {
+    if (value === '') {
+        return callback(new Error('新密码不能为空'));
+    }
     if (value === formModel.oldPassword) {
-        return callback(new Error('旧密码不能与原始密码相同'));
+        return callback(new Error('新密码不能与原始密码相同'));
     }
     return checkPassword(rule, value, callback);
 }
 
 function checkConfirmPassword(rule: any, value: string, callback: ValidateCallback) {
+    if (value === '') {
+        return callback(new Error('确认新密码不能为空'));
+    }
     if (value !== formModel.newPassword) {
         return callback(new Error('两次输入的密码不相同'));
     }
@@ -42,9 +55,9 @@ function checkConfirmPassword(rule: any, value: string, callback: ValidateCallba
 }
 
 const rules: any = reactive({
-    oldPassword: [{ validator: checkPassword, trigger: 'change' }],
-    newPassword: [{ validator: checkNewPassword, trigger: 'change' }],
-    confirmPassword: [{ validator: checkConfirmPassword, trigger: 'change' }]
+    oldPassword: [{ validator: checkOldPassword, trigger: ['blur', 'change'], require: true }],
+    newPassword: [{ validator: checkNewPassword, trigger: ['blur', 'change'], require: true }],
+    confirmPassword: [{ validator: checkConfirmPassword, trigger: ['blur', 'change'], require: true }]
 });
 
 async function submit() {
@@ -62,7 +75,7 @@ async function submit() {
             await signout();
         }
         finally {
-            router.replace('/signin');
+            router.replace('/login');
         }
     }
     catch {
@@ -93,25 +106,29 @@ function clear() {
         ref="formRef"
         size="large"
         :rules="rules"
-        :model="formModel">
-        <el-form-item label="输入旧密码" prop="oldPassword">
+        :model="formModel"
+        label-width="100px">
+        <el-form-item label="旧密码" prop="oldPassword" required>
             <el-input
                 v-model="formModel.oldPassword"
                 type="password"
+                placeholder="请输入旧密码"
                 show-password
                 />
         </el-form-item>
-        <el-form-item label="输入新密码" prop="newPassword">
+        <el-form-item label="新密码" prop="newPassword" required>
             <el-input
                 v-model="formModel.newPassword"
                 type="password"
+                placeholder="请输入新密码"
                 show-password
             />
         </el-form-item>
-        <el-form-item label="确认新密码" prop="confirmPassword">
+        <el-form-item label="确认新密码" prop="confirmPassword" required>
             <el-input
                 v-model="formModel.confirmPassword"
                 type="password"
+                placeholder="请确认新密码"
                 show-password
             />
         </el-form-item>

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { Search, View, CircleCloseFilled } from '@element-plus/icons-vue';
+import { View } from '@element-plus/icons-vue';
 import { getAllCorpList } from '@/api/report';
 import type { IReportTable } from '@/types/report';
+import { useListControlModel } from '@/composables';
 
 const dataSource = ref<IReportTable[]>([]);
-
-const searchInput = ref('');
-
-const showError = ref(false);
+const { model: listControlModel } = useListControlModel({
+    initialModel: { corpName: '' }
+});
 
 const allToogle = reactive({
     loading: false,
@@ -21,8 +21,9 @@ const page = reactive({
 
 // 获取企业列表
 const getCorpList = () => {
+    if (!listControlModel.corpName) return;
     const params = {
-        corpName: searchInput.value,
+        corpName: listControlModel.corpName,
         pageNo: page.currentPage,
         pageSize: page.pageSize
     };
@@ -36,26 +37,6 @@ const getCorpList = () => {
         .finally(() => {
             allToogle.loading = false;
         });
-};
-
-const handleInput = () => {
-    showError.value = searchInput.value.length < 2;
-};
-
-// 搜索企业
-const handleSearch = (isClear: boolean) => {
-    if (isClear) {
-        page.currentPage = 1;
-        dataSource.value = [];
-    } else {
-        if (searchInput.value.length >= 2) {
-            page.currentPage = 1;
-            dataSource.value = [];
-            getCorpList();
-        } else {
-            showError.value = true;
-        }
-    }
 };
 
 const router = useRouter();
@@ -113,37 +94,28 @@ onUnmounted(() => {
     TableRef.value && TableRef.value.$refs.bodyWrapper.removeEventListener('mousewheel', scrollBehavior);
 });
 
+watch(listControlModel, () => {
+    dataSource.value = [];
+    page.currentPage = 1;
+    getCorpList();
+});
 </script>
 
 <template>
-    <div class="corp-table">
-        <div class="table-header">
-            <el-input
-                class="searchInput"
-                placeholder="请输入关键字进行查询"
-                v-model.trim="searchInput"
-                size="large"
-                clearable
-                @input="handleInput"
-                @clear="handleSearch(true)"
-                @keyup.enter="handleSearch(false)"
-            >
-                <template #append>
-                    <el-button :icon="Search" @click="handleSearch(false)" />
-                </template>
-            </el-input>
-            <span class="search-tip" v-if="showError">
-                <el-icon :size="16" style="margin-right: 8px">
-                    <CircleCloseFilled />
-                </el-icon>
-                输入内容不能少于2个字符
-            </span>
-        </div>
-        <div class="table-content">
+    <Layout class="corp-table">
+        <ListQueryControl
+            v-model="listControlModel"
+            :filter-row-visible="false"
+            :searchConfig="{
+                label: '请输入关键字进行查询',
+                field: 'corpName',
+            }">
+        </ListQueryControl>
+        <Layout class="table-content">
             <el-table
                 v-loading="allToogle.loading"
                 :data="dataSource"
-                style="width: 100%; height: 650px;"
+                style="width: 100%; height: 770px;"
                 :header-cell-style="{
                     color: '#595959',
                     'background-color': '#f3f4f8'
@@ -165,8 +137,8 @@ onUnmounted(() => {
                     </template>
                 </el-table-column>
             </el-table>
-        </div>
-    </div>
+        </Layout>
+    </Layout>
 
 </template>
 

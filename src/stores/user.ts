@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\stores\user.ts
  * @Author: zys
  * @Date: 2022-11-22 10:47:59
- * @LastEditTime: 2022-11-30 16:56:36
+ * @LastEditTime: 2022-12-06 09:33:23
  * @LastEditors: zys
  * @Reference:
  */
@@ -17,7 +17,7 @@ import {
     type SigninPayload,
     type GetUserInfoPayload,
 } from '@/api';
-import { NavStatusType, type DynamicNavEntity, type UserEntity } from '@/types';
+import type { DynamicNavEntity, UserEntity } from '@/types';
 import { toTree } from '@/utils/tree';
 import { addDynamicRoutes } from '@/router';
 import { useRouter } from 'vue-router';
@@ -36,16 +36,8 @@ export const useUserStore = defineStore('user', () => {
         user: null,
         navs: [],
         navTree: [],
+        // 插入动态导航之前
         prevNavTree: [
-            {
-                id: '',
-                name: '',
-                path: '/home',
-                title: 'Homepage',
-                status: NavStatusType.default,
-                parentId: '',
-                sort: 0,
-            },
         ],
     });
 
@@ -56,7 +48,7 @@ export const useUserStore = defineStore('user', () => {
         return signinApi(user).then((res) => {
             token.set(res.token);
             localStorage.setItem('dms', res.id);
-            return getUserInfo({ tab: user.tab });
+            return Promise.resolve(res);
         });
     }
 

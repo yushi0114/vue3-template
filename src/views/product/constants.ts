@@ -1,5 +1,5 @@
 import { validatorLogo } from '@/utils';
-import { PlatformType, FormType } from '@/enums';
+import { PlatformType, FormType, PRODUCT_STEPS } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
 import type { ITableConfig } from '@/components/SjcTable/types';
 
@@ -957,10 +957,10 @@ export const CANT_CHANGE_FILTER_MAP: { [key in PlatformType]: string[] } = {
 
 // 筛选项单位
 export const FILTER_UNIT_MAP = Object.freeze({
-    '贷款额度': '万元',
-    '融资额度': '万元',
-    '贷款期限': '个月',
-    '融资期限': '个月',
+    贷款额度: '万元',
+    融资额度: '万元',
+    贷款期限: '个月',
+    融资期限: '个月',
 });
 
 // 表格列配置
@@ -982,12 +982,27 @@ export const REQ_TABLE_CONFIG: ITableConfig = reactive({
     appendLabel: '',
     handlerConfig: {
         width: 120,
-        label: ''
+        label: '',
     },
 });
 
-export const PAGE_CONFIG = reactive({
-    pageIndex: 1,
-    pageSize: 10,
-    total: 0,
-});
+export const PRODUCT_STEPS_MAP = {
+    [PRODUCT_STEPS.BASE_INFO]: {
+        title: PRODUCT_STEPS.BASE_INFO,
+        leftBtnText: '取消',
+        rightBtnText: '下一步',
+        updateSubmit: new Date().getTime()
+    },
+    [PRODUCT_STEPS.FILTERS]: {
+        title: PRODUCT_STEPS.FILTERS,
+        leftBtnText: '上一步',
+        rightBtnText: '发布产品',
+        updateSubmit: new Date().getTime()
+    },
+    [PRODUCT_STEPS.SUCCESS]: {
+        title: PRODUCT_STEPS.SUCCESS,
+        leftBtnText: '',
+        rightBtnText: '返回产品列表',
+        updateSubmit: new Date().getTime()
+    },
+};

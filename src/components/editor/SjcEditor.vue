@@ -158,6 +158,11 @@ defineExpose({
             min-height: 400px !important;
             display: grid;
             padding-bottom: $gap-lg;
+
+            .w-e-text-container{
+                word-break: break-all;
+            }
+
             h1 {
                 font-size: 2em !important;
                 margin-block-start: 0.67em !important;

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Plus } from '@element-plus/icons-vue';
 import { PlatformType, OPERATE_TYPE } from '@/enums';
 import Draggable from 'vuedraggable';
 import { useFilter } from '../hooks/useFilter';
@@ -10,12 +11,17 @@ import { CANT_CHANGE_FILTER_MAP, FILTER_UNIT_MAP } from '../constants';
 
 const dragging = ref(false);
 
+const model = ref({
+    search: ''
+});
 const route = useRoute();
 const platform = ref<PlatformType>(Number(route.params.type));
 const filterModalRef = ref<InstanceType<typeof FilterModal> | null>(null);
 const filterOptionsModalRef = ref<InstanceType<typeof FilterOptionsModal> | null>(null);
 const {
     loading,
+    loadingFilter,
+    loadingFilterOptions,
     filters,
     FILTERS_FORM,
     requestUpdateProductFilter,
@@ -25,6 +31,15 @@ const {
     requestUpdateProductFilterSort,
     FILTERS_OPTIONS_FORM,
 } = useFilter(platform);
+
+const formatFilters = computed(() => {
+    const searchKey = model.value.search || '';
+    if (searchKey === '') return filters.value;
+    return filters.value.filter(f => {
+        return f.typeValue.includes(searchKey)
+            || f.filter?.some((fItem) => fItem.filterValue.includes(searchKey));
+    });
+});
 
 function handleTabChange(plat: PlatformType) {
     platform.value = plat;
@@ -100,17 +115,29 @@ const handleDragListChange = () => {
             v-loading="loading"
             full>
             <PlatformTab @tab-change="handleTabChange" />
-            <FlexRow horizontal="end">
-                <el-button
-                    type="primary"
-                    @click="handleOpenFilterModal(undefined)"
-                    ><i-ep-plus />新建类别</el-button
-                >
-            </FlexRow>
+            <ListQueryControl
+                :filterRowVisible="false"
+                v-model="model"
+                :search-config="{
+                    label: '请输入关键字进行查询',
+                    field: 'search',
+                }"
+            >
+                <template v-slot:search-rest>
+                    <el-button
+                        type="primary"
+                        :icon="Plus"
+                        @click="handleOpenFilterModal(undefined)"
+                        >新建类别</el-button
+                    >
+                </template>
+            </ListQueryControl>
             <draggable
-                v-model="filters"
+                class="flex-1"
+                v-model="formatFilters"
                 item-key="id"
                 filter=".disable-drag"
+                v-empty="{ visible: !filters.length }"
                 @start="dragging = true"
                 @end="dragging = false"
                 @sort="handleDragListChange">
@@ -121,27 +148,21 @@ const handleDragListChange = () => {
                         :disabled="!parent.isFilterShow"
                         :label="parent.typeValue">
                         <template #label-rest>
-                            <FlexRow
-                                gap="xs"
-                                class="disable-drag">
-                                <TextHoverable
-                                    v-if="parent.isFilterShow"
-                                    color="regular"
-                                    @click="handleOpenFilterOptionsModal(OPERATE_TYPE.ADD, parent)">
-                                    <i-ep-plus />
-                                </TextHoverable>
-                                <TextHoverable
+                            <FlexRow full gap="xs" class="opt-row">
+                                <CircleOptBtn
                                     v-if="canFilterChange(parent.typeValue)"
-                                    color="regular"
-                                    @click="handleOpenFilterModal(parent)">
-                                    <i-ep-edit />
-                                </TextHoverable>
-                                <TextHoverable
+                                    class="disable-drag pointer"
+                                    @click="handleOpenFilterModal(parent)"
+                                    :disabled="!parent.isFilterShow">
+                                    <i-ep-edit-pen />
+                                </CircleOptBtn>
+                                <CircleOptBtn
                                     v-if="canFilterChange(parent.typeValue)"
-                                    color="regular"
-                                    @click="handleDeleteFilter(parent)">
+                                    class="disable-drag pointer"
+                                    @click="handleDeleteFilter(parent)"
+                                    :disabled="!parent.isFilterShow">
                                     <i-ep-close />
-                                </TextHoverable>
+                                </CircleOptBtn>
                             </FlexRow>
                         </template>
 
@@ -153,32 +174,49 @@ const handleDragListChange = () => {
                             @start="dragging = true"
                             @end="dragging = false"
                             @sort="handleDragListChange">
-                            <template #item="{ element: child }">
-                                <ElTag :class="[child.filterValue === '不限' && 'disable-drag']" :type="child.isFilterShow ? '' : 'info'">
-                                    <FlexRow
-                                        horizontal="between"
-                                        gap="md">
-                                        <div>{{ formatterFilterUnit(parent.typeValue, child.filterValue) }}</div>
+                            <template #item="{ element: child, index }">
+                                <FlexRow gap="xs">
+                                    <ElTag
+                                        :class="[child.filterValue === '不限' && 'disable-drag']"
+                                        :type="child.isFilterShow ? '' : 'info'"
+                                        class="normal-tag"
+                                    >
                                         <FlexRow
-                                            v-if="child.filterValue !== '不限'"
-                                            gap="line"
-                                            class="product-filter-tag-operator disable-drag">
-                                            <TextHoverable
-                                                v-if="parent.isFilterShow"
-                                                color="regular"
-                                                size="xs"
-                                                @click="handleOpenFilterOptionsModal(OPERATE_TYPE.EDIT, child)">
-                                                <i-ep-edit />
-                                            </TextHoverable>
-                                            <TextHoverable
-                                                color="regular"
-                                                size="xs"
-                                                @click="handleDeleteFilter(child)">
-                                                <i-ep-close />
-                                            </TextHoverable>
+                                            horizontal="between"
+                                            gap="md">
+                                            <div>{{ formatterFilterUnit(parent.typeValue, child.filterValue) }}</div>
+                                            <FlexRow
+                                                v-if="child.filterValue !== '不限'"
+                                                gap="line"
+                                                class="product-filter-tag-operator">
+                                                <CircleOptBtn
+                                                    class="disable-drag pointer"
+                                                    size="sm"
+                                                    v-if="parent.isFilterShow"
+                                                    @click="handleOpenFilterOptionsModal(OPERATE_TYPE.EDIT, child)">
+                                                    <i-ep-edit-pen />
+                                                </CircleOptBtn>
+                                                <CircleOptBtn
+                                                    class="disable-drag pointer"
+                                                    size="sm"
+                                                    @click="handleDeleteFilter(child)">
+                                                    <i-ep-close />
+                                                </CircleOptBtn>
+                                            </FlexRow>
                                         </FlexRow>
-                                    </FlexRow>
-                                </ElTag>
+                                    </ElTag>
+                                    <ElTag
+                                        v-if="(index === parent.filter.length - 1)"
+                                        class="disable-drag pointer"
+                                        @click="handleOpenFilterOptionsModal(OPERATE_TYPE.ADD, parent)"
+                                        effect="plain"
+                                        type="info">
+                                        <FlexRow>
+                                            <i-ep-plus />
+                                            新建过滤项
+                                        </FlexRow>
+                                    </ElTag>
+                                </FlexRow>
                             </template>
                         </draggable>
                     </ContentBoard>
@@ -186,17 +224,19 @@ const handleDragListChange = () => {
             </draggable>
             <FilterModal
                 ref="filterModalRef"
+                :loading="loadingFilter"
                 :form="FILTERS_FORM"
                 @submit="handleFilterModalSubmit"></FilterModal>
             <FilterOptionsModal
                 ref="filterOptionsModalRef"
+                :loading="loadingFilterOptions"
                 :form="FILTERS_OPTIONS_FORM"
                 @submit="handleFilterOptionsModalSubmit" />
         </Board>
     </PagePanel>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .product-filter {
     user-select: none;
     &-item {
@@ -208,12 +248,37 @@ const handleDragListChange = () => {
 
 .product-filter-tag-operator {
     line-height: 0;
-    margin-top: calc($gap-line * 2);
 }
 
 .product-filter-group {
     display: flex;
     flex-wrap: wrap;
     gap: $gap-xs;
+}
+
+.disable-drag {
+    cursor: default !important;
+    &.pointer {
+        cursor: pointer !important;
+    }
+}
+
+.opt-row {
+    padding: 0 $gap-xs;
+}
+
+.product-filter-item {
+    border-bottom: 1px solid $color-info-light-8;
+    padding-bottom: $gap-xl;
+}
+
+.opt-control {
+    margin-bottom: $gap-sm;
+}
+
+.normal-tag {
+    border-color: $color-info-light-7;
+    display: flex;
+    align-items: center;
 }
 </style>

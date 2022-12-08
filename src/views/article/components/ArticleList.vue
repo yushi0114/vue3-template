@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-// import { Search } from '@element-plus/icons-vue';
+import { Plus, MoreFilled, SoldOut, Sell, Sort, Delete } from '@element-plus/icons-vue';
 import { ListField } from '@/components';
 import { NEWS_TYPE, ARTICLE_STATUS, ARTICLE_OPERATE_MODE_LABEL, ARTICLE_OPERATE_MODE, ARTICLE_MODULE } from '@/enums';
 // import ArticleFilter from './ArticleFilter.vue';
@@ -78,8 +78,9 @@ watch(listControlModel, () => {
             <template v-slot:search-rest>
                 <el-button
                     type="primary"
+                    :icon="Plus"
                     @click="handleToCreate"
-                    ><i-ep-plus />新建</el-button
+                    >新建</el-button
                 >
             </template>
         </ListQueryControl>
@@ -102,14 +103,15 @@ watch(listControlModel, () => {
                         v-real-img="{ img: scope.row.thumbnail, errImg }"
                         alt="" />
                 </div>
-                <div
+                <FlexColumn
+                    vertical="center"
                     v-else
-                    class="w-67px h-67px flex-center flex-col border border-$el-fill-color">
+                    class="w-67px h-67px border border-$el-fill-color">
                     <div class="w-full h-60% bg-$el-fill-color text-2xl text-center">
                         {{ getDate(scope.row.publishDate).day }}
                     </div>
                     <div class="flex-1">{{ getDate(scope.row.publishDate).yearAndMonth }}</div>
-                </div>
+                </FlexColumn>
             </template>
             <template #append="{ props }">
                 <el-row>
@@ -193,62 +195,73 @@ watch(listControlModel, () => {
                 </el-row>
             </template>
             <template #handler="{ scope }">
-                <div class="flex-center items-end">
-                    <div
-                        :class="['flex-center', scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
+                <FlexRow
+                    vertical="end"
+                    horizontal="center">
+                    <FlexRow
+                        horizontal="center"
+                        :class="[scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
                         <!-- <TextHoverable
                             size="sm"
                             :color="scope.row.status === ARTICLE_STATUS.PUBLISHED ? 'disabled' : 'regular'"
                             @click="handleToEdit(scope)">
                             编辑
                         </TextHoverable> -->
-                        <el-button
-                            type="primary"
-                            text
-                            :disabled="scope.row.status === ARTICLE_STATUS.PUBLISHED"
-                            @click="handleToEdit(scope)">
-                            <el-tooltip
-                                placement="top"
-                                content="编辑">
+                        <el-tooltip
+                            placement="top"
+                            content="编辑">
+                            <el-button
+                                type="primary"
+                                text
+                                :disabled="scope.row.status === ARTICLE_STATUS.PUBLISHED"
+                                @click="handleToEdit(scope)">
                                 <Icon name="ep-edit" />
-                            </el-tooltip>
-                        </el-button>
-                    </div>
+                            </el-button>
+                        </el-tooltip>
+                    </FlexRow>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, scope.row)">
                         <!-- <TextHoverable
                             size="sm"
                             color="regular">
                             更多
                         </TextHoverable> -->
-                        <el-button text>
+                        <Text>
                             <el-tooltip
                                 placement="top"
                                 content="更多">
-                                <Icon name="ep-more-filled" />
+                                <el-button
+                                    text
+                                    :icon="MoreFilled"></el-button>
                             </el-tooltip>
-                        </el-button>
+                        </Text>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item
                                     v-if="scope.row.status === ARTICLE_STATUS.PUBLISHED"
                                     :command="ARTICLE_OPERATE_MODE.OFFLINE"
-                                    ><i-ep-sold-out />{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
+                                    :icon="SoldOut"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-else
-                                    :command="ARTICLE_OPERATE_MODE.PUBLISH">
-                                    <i-ep-sell />{{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
+                                    :command="ARTICLE_OPERATE_MODE.PUBLISH"
+                                    :icon="Sell">
+                                    {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"
-                                    ><i-ep-sort />{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
+                                <el-dropdown-item
+                                    :command="ARTICLE_OPERATE_MODE.SORT"
+                                    :icon="Sort"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE"
-                                    ><i-ep-delete />{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
+                                <el-dropdown-item
+                                    :command="ARTICLE_OPERATE_MODE.DELETE"
+                                    :icon="Delete"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                </div>
+                </FlexRow>
             </template>
         </sjc-table>
     </div>

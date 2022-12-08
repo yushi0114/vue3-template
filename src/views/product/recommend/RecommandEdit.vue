@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { createProductRecommend, updateProductRecommend, getProductOptions, getProductRecommend } from '@/api';
+import { useApi } from '@/composables';
 import { PlatformType, productRecommandTypeMap, SwitchType, type ProductRecommandType } from '@/enums';
 import { router } from '@/router';
 import type { ProductEntity, ProductRecommandEntity } from '@/types';
-import { blobToDataURL } from '@/utils';
+import { blobToDataURL, noop } from '@/utils';
 import type { FormInstance, FormRules, UploadRequestOptions, UploadUserFile } from 'element-plus';
 
 const route = useRoute();
@@ -36,9 +37,12 @@ const rules = reactive<FormRules>({
     ],
 });
 
+const submitLoading = ref(false);
+const { request: requestProductRecommend, loading } = useApi(getProductOptions);
+
 function getProducts() {
-    getProductOptions({ platform: PlatformType.LiaoXinTong, menuName: 'recommend' })
-        .then(res => {
+    requestProductRecommend({ platform: PlatformType.LiaoXinTong, menuName: 'recommend' })
+        .then((res) => {
             products.value = res;
         });
 }
@@ -47,7 +51,6 @@ function getDetail() {
     getProductRecommend({ id: route.query.id as string })
         .then(res => {
             pdt.value = res;
-            console.log(res);
         });
 }
 
@@ -89,14 +92,16 @@ function handleBack() {
 function submit() {
     ruleFormRef.value?.validateField()
         .then(() => {
+            submitLoading.value = true;
             return (isCreation.value ? createProductRecommend : updateProductRecommend)(pdt.value);
         })
         .then(() => {
             ElMessage({ message: `${editName.value}${kindName.value}成功`, type: 'success' });
             handleBack();
         })
-        .catch(() => {
-
+        .catch(noop)
+        .finally(() => {
+            submitLoading.value = false;
         });
 }
 
@@ -112,7 +117,7 @@ onBeforeMount(() => {
 <template>
     <PagePanel>
         <!-- -->
-        <Board full class="recommand-create">
+        <Board full class="recommand-create" v-loading="loading">
             <div>
                 <Text size="xl">{{ editName }}{{ kindName }}</Text>
             </div>
@@ -127,22 +132,31 @@ onBeforeMount(() => {
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="`${kindName}海报`" prop="productPoster">
+                        <div class="re-imgdel" v-if="pdt.productPoster">
+                            <div class="re-imgdel-shadow" @click="(pdt.productPoster = '')">
+                                <Text color="paragraph" size="lg">
+                                    <i-ep-delete />
+                                </Text>
+                            </div>
+                            <img :src="pdt.productPoster" alt="">
+                        </div>
                         <el-upload
-                        :accept="'PNG,JPEG'"
-                        :file-list="fileList"
-                        class="upload-demo"
-                        :limit="1"
-                        :before-upload="beforeUpload"
-                        :http-request="handleUpload"
-                        :on-remove="handleRemove"
-                        list-type="picture">
-                        <el-button type="primary">点击上传</el-button>
-                        <template #tip>
-                            <span class="el-upload__tip" style="margin-left: 16px">
-                                只能上传jpg/jpeg/png文件，且不超过2MB
-                            </span>
-                        </template>
-                    </el-upload>
+                            v-else
+                            :accept="'PNG,JPEG'"
+                            :file-list="fileList"
+                            class="upload-demo"
+                            :limit="1"
+                            :before-upload="beforeUpload"
+                            :http-request="handleUpload"
+                            :on-remove="handleRemove"
+                            list-type="picture">
+                            <el-button type="primary">点击上传</el-button>
+                            <template #tip>
+                                <span class="el-upload__tip" style="margin-left: 16px">
+                                    只能上传jpg/jpeg/png文件，且不超过2MB
+                                </span>
+                            </template>
+                        </el-upload>
                     </el-form-item>
                     <el-form-item label="海报状态" prop="status">
                         <el-switch
@@ -155,7 +169,7 @@ onBeforeMount(() => {
 
                 <FlexRow>
                     <el-button @click="handleBack">返回</el-button>
-                    <el-button type="primary" @click="submit">提交</el-button>
+                    <el-button type="primary" @click="submit" :loading="submitLoading">提交</el-button>
                 </FlexRow>
             </div>
         </Board>
@@ -165,5 +179,26 @@ onBeforeMount(() => {
 <style lang="scss">
 .recommand-edit-form {
     padding-top: $gap-xl;
+
+    & .re-imgdel {
+        width: 200px;
+        position: relative;
+
+        & .re-imgdel-shadow {
+            opacity: 0;
+            position: absolute;
+            left: 0; top: 0; right: 0; bottom: 0;
+            display: flex; justify-content: center; align-items: center;
+            background-color: $overlay-color-lighter;
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        & img {
+            display: block;
+            width: 100%;
+        }
+    }
 }
 </style>

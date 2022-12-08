@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Edit, SoldOut, Sell, Sort, Delete, Search } from '@element-plus/icons-vue';
 import emptyImg from '@/assets/images/no-data.png';
 import {
     NEWS_TYPE,
@@ -29,7 +30,7 @@ const handleActiveIdChange = (id: string) => {
 const getActiveId = computed(() => {
     return props.activeId;
 });
-const { isNewsModule } = useArticleModule(props.module);
+const { isNewsModule, getArticleTypeLabel } = useArticleModule(props.module);
 
 const { params, state, _updateNewsStatus, handleDebounceSearch, handleMoreOperate, handleFilterChange, loadMore } =
     useTable(props.tab, props.module, ARTICLE_PAGE.DETAIL, emit, getActiveId);
@@ -48,10 +49,11 @@ defineExpose({
     <div
         class="article-list-wrapper"
         v-loading="state.loading && !state.loadingMore">
-        <div class="flex-between space-x-2">
+        <FlexRow horizontal="between" class="space-x-2">
             <div class="flex flex-1 space-x-2">
                 <el-input
-                    placeholder="请输入关键字进行查询"
+                    :prefix-icon="Search"
+                    :placeholder="`请输入${getArticleTypeLabel}标题`"
                     v-model.trim="params.searchInput"
                     clearable
                     @input="handleDebounceSearch">
@@ -74,11 +76,13 @@ defineExpose({
             <el-tooltip
                 content="新建"
                 placement="top">
-                <i-ep-plus
-                    class="cursor-pointer"
-                    @click="handleToCreate"></i-ep-plus>
+                <div>
+                    <i-ep-plus
+                        class="cursor-pointer"
+                        @click="handleToCreate" />
+                </div>
             </el-tooltip>
-        </div>
+        </FlexRow>
         <template v-if="state.data.length > 0">
             <ul
                 class="article-list"
@@ -91,7 +95,8 @@ defineExpose({
                     :class="{ active: activeId === item.id }"
                     @click="handleActiveIdChange(item.id)">
                     <div class="article-title-wrap">
-                        <i-ep-document></i-ep-document>
+                        <Icon name="ep-document">
+                        </Icon>
                         <list-field
                             class="flex-1"
                             :class="{ 'text-$el-color-primary': activeId === item.id }"
@@ -110,29 +115,36 @@ defineExpose({
                         </el-tag>
                     </div>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
-                        <i-ep-more-filled class="icon-more"></i-ep-more-filled>
+                        <div>
+                            <Icon class="icon-more" name="ep-more-filled">
+                            </Icon>
+                        </div>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item
                                     :disabled="item.status === ARTICLE_STATUS.PUBLISHED"
                                     :command="ARTICLE_OPERATE_MODE.EDIT"
-                                    ><i-ep-edit />{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
+                                    :icon="Edit"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-if="item.status === ARTICLE_STATUS.PUBLISHED"
                                     :command="ARTICLE_OPERATE_MODE.OFFLINE"
-                                    ><i-ep-sold-out />{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
+                                    :icon="SoldOut"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-else
-                                    :command="ARTICLE_OPERATE_MODE.PUBLISH">
-                                    <i-ep-sell />{{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
+                                    :command="ARTICLE_OPERATE_MODE.PUBLISH" :icon="Sell">
+                                    {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
                                 </el-dropdown-item>
                                 <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"
-                                    ><i-ep-sort />{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
+                                    :icon="Sort"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
                                 </el-dropdown-item>
                                 <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE"
-                                    ><i-ep-delete />{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
+                                :icon="Delete"
+                                    >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -174,7 +186,7 @@ defineExpose({
     }
 }
 .article-list-item {
-    @apply h-30px leading-30px text-sm flex-between flex-nowrap;
+    @apply h-30px leading-30px text-sm flex items-center justify-between flex-nowrap;
     &:hover {
         @apply cursor-pointer text-$el-primary-color bg-$el-fill-color;
     }
@@ -184,12 +196,19 @@ defineExpose({
     &.active .icon-more {
         @apply display-block;
     }
+    &.active .article-title-wrap {
+        @apply mr-0;
+    }
 }
 .article-list-item:hover .icon-more {
     @apply display-block;
 }
+
+.article-list-item:hover .article-title-wrap {
+    @apply mr-0;
+}
 .article-title-wrap {
-    @apply flex items-center flex-1 min-w-0 gap-2;
+    @apply flex items-center flex-1 min-w-0 gap-2 mr-18px;
 }
 .text {
     @apply cursor-pointer flex-1 mr-2;

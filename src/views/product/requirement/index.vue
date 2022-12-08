@@ -1,12 +1,13 @@
 <script lang="ts" setup>
+import { Delete } from '@element-plus/icons-vue';
 import { acceptProgressTypeOptions, PlatformType, platformTypeMap } from '@/enums';
 import { getProductOptions, getProductReqs, getTopOrgs, deleteProductReqs, downloadProductReqs } from '@/api';
 import type { PlainOption, ProductRequirementEntity } from '@/types';
 import { ProductReqList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel, useApi } from '@/composables';
+import { useListControlModel, useApi, useTableCheckbox } from '@/composables';
 
-const { request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
+const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
     onSuccess() {
         ElMessage({
             type: 'success',
@@ -29,7 +30,9 @@ const loading = ref(false);
 const list = ref<ProductRequirementEntity[]>([]);
 const topOrgOptions = ref<PlainOption[]>([]);
 const productOptions = ref<PlainOption[]>([]);
-const ids = ref<string[]>([]);
+
+const { isSelectAll, tableSelectAll, isIndeterminate, ids, handleSelectionChange, handleChangeCheckAll } = useTableCheckbox(list);
+
 const downloadOptions = reactive({
     fileName: `企业申请列表（${platformTypeMap[platform.value]}）.xlsx`,
     params: Object.assign({ platform: platform.value }, listControlModel)
@@ -72,14 +75,10 @@ function goDetail(req: ProductRequirementEntity) {
     detail.value = req;
 }
 
-const handleSelectionChange = (selection: any) => {
-    ids.value = selection.map((item: any) => item.id);
-};
-
 const handleBatchDelete = async() => {
     const idArr = ids.value.map(item => `"${item}"`).join(',');
     try {
-        await ElMessageBox.confirm('确认删除已选中的需求吗？', '删除', {
+        await ElMessageBox.confirm(`确认删除已选中的${ids.value.length}条需求吗？`, '删除', {
             type: 'warning',
         });
         deleteReps(idArr);
@@ -106,7 +105,7 @@ onBeforeMount(() => {
 
     requestPdtOptions({ platform: platform.value })
         .then(res => {
-            productOptions.value = res.data.map(({ id, name }) => ({ name, value: id }));
+            productOptions.value = res.map(({ id, name }) => ({ name, value: id }));
         });
 });
 
@@ -122,6 +121,9 @@ onMounted(() => {
             <PlatformTab @tab-change="handleTabChange" />
             <ListQueryControl
                 v-model="listControlModel"
+                v-model:check-all="isSelectAll"
+                :is-indeterminate="isIndeterminate"
+                :showSelection="!!list.length"
                 :searchConfig="{
                     label: '请输入产品名称',
                     field: 'searchInput'
@@ -142,22 +144,23 @@ onMounted(() => {
                         { name: '结束月份', value: 'endTime', },
                     ]
                 }"
+                @change-check-all="handleChangeCheckAll"
             >
                 <template v-slot:search-rest>
-                    <el-button type="danger" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
+                    <el-button type="danger" :icon="Delete" :loading="loadingBatchDelete" :disabled="!ids.length" @click="handleBatchDelete">批量删除</el-button>
                     <DownloadButton type="primary" :api="downloadProductReqs" :download-options="downloadOptions"></DownloadButton>
                 </template>
             </ListQueryControl>
             <Text>
             </Text>
 
-            <ProductReqList :list="list" :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            <ProductReqList :list="list" :is-select-all="tableSelectAll" :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
 
-            <FlexRow horizontal="end">
-                <el-pagination v-model:current-page="listControlModel.pageIndex"
-                    v-model:page-size="listControlModel.pageSize" :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper" :total="count" />
-            </FlexRow>
+            <CommonPagination
+                v-model:current-page="listControlModel.pageIndex"
+                v-model:page-size="listControlModel.pageSize"
+                :total="count"
+            />
         </Board>
 
         <ProductReqDetail

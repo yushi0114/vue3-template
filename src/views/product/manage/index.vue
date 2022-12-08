@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Plus } from '@element-plus/icons-vue';
 import { onlineTypeOptions, PlatformType, SwitchType, onlineTypeMap } from '@/enums';
 import { getProducts, getTopOrgs, updateProductStatus, deleteProduct, isUsingProduct } from '@/api';
 import type { PlainOption, ProductEntity } from '@/types';
@@ -128,7 +129,7 @@ onBeforeMount(() => {
 
 <template>
     <PagePanel>
-        <Board class="product-manage">
+        <Board class="product-manage" full>
             <PlatformTab @tab-change="handleTabChange" />
             <ListQueryControl
                 v-model="listControlModel"
@@ -143,7 +144,7 @@ onBeforeMount(() => {
                 :sortConfigs="[{ label: '申请时间', field: 'createTime' }]">
                 <template v-slot:search-rest>
                     <RouterLink :to="`${route.path}/new/1`">
-                        <el-button type="primary"><i-ep-plus />新建</el-button>
+                        <el-button type="primary" :icon="Plus">新建</el-button>
                     </RouterLink>
                 </template>
             </ListQueryControl>
@@ -158,14 +159,10 @@ onBeforeMount(() => {
                 @item-offline="handleUpdateStatus"
                 @item-delete="handleDelete" />
 
-            <FlexRow horizontal="end">
-                <el-pagination
-                    v-model:current-page="listControlModel.pageIndex"
-                    v-model:page-size="listControlModel.pageSize"
-                    :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="count" />
-            </FlexRow>
+            <CommonPagination
+                v-model:current-page="listControlModel.pageIndex"
+                v-model:page-size="listControlModel.pageSize"
+                :total="count" />
         </Board>
 
         <ProductEdit
@@ -180,8 +177,8 @@ onBeforeMount(() => {
             :content="detail" />
     </PagePanel>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .product-manage {
-    @apply;
+    height: 100%;
 }
 </style>

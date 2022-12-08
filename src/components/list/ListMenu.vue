@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useVModel } from '@vueuse/core';
+import { useVModel, onKeyStroke } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import type { ControlOptionConfig } from './ListQueryControl.vue';
 
@@ -66,11 +66,15 @@ const getActiveOption = computed(() => {
         return model.value?.[field]?.toString().includes(menuItem.value) ? 'primary' : '';
     };
 });
+
+const clearFilterOptions = () => {
+    props.menu?.forEach((item) => {
+        model.value[item.field] = '';
+    });
+    emits('change');
+};
 // 过滤器初始展开值
-const initialActiveNames =
-    Object.entries(model.value)
-        .filter(([key, value]) => value && props.menu?.map((item) => item.field).includes(key))
-        .map(([key]) => key) ?? [];
+const initialActiveNames = Object.entries(model.value).map(([key]) => key) ?? [];
 const activeNames = ref(initialActiveNames);
 watch(isCtrlKeep, (newValue) => {
     if (!newValue) {
@@ -81,21 +85,33 @@ watch(isCtrlKeep, (newValue) => {
 
 <template>
     <div class="list-menu">
-        <Text
-            size="lg"
-            color="paragraph"
-            class="flex items-center space-x-2"
-            ><span>过滤器</span>
-            <el-tooltip
-                content="按住Ctrl+Click可多选"
-                placement="top">
-                <Icon
-                    class="cursor-pointer w-4 text-[var(--el-text-color-regular)]"
-                    name="fluent-mdl2:info" />
-            </el-tooltip>
-        </Text>
+        <FlexRow horizontal="between">
+            <Text
+                size="md"
+                color="regular">
+                <FlexRow class="gap-1">
+                    <span>过滤器</span>
+                    <el-tooltip
+                        content="按住Ctrl+Click可多选"
+                        placement="top">
+                        <Icon
+                            class="cursor-pointer"
+                            name="ep-warning" />
+                    </el-tooltip>
+                </FlexRow>
+            </Text>
+            <FlexRow
+                class="cursor-pointer mr-4"
+                @click.stop="clearFilterOptions">
+                <TextHoverable
+                    color="regular"
+                    size="sm"
+                    ><FlexRow class="gap-1"><i-ep-brush />清空过滤项</FlexRow></TextHoverable
+                >
+            </FlexRow>
+        </FlexRow>
         <el-collapse
-            class="flex-1 overflow-y-auto !border-r-none"
+            class="flex-1 pl-2 overflow-y-auto !border-r-none"
             v-model="activeNames">
             <el-collapse-item
                 :name="subMenu.field"
@@ -103,20 +119,20 @@ watch(isCtrlKeep, (newValue) => {
                 :key="subMenu.field">
                 <template #title>
                     <Text
-                        color="regular"
+                        color="paragraph"
                         size="sm"
                         >{{ subMenu.label }}</Text
                     >
                 </template>
                 <el-button
-                    class="w-full"
+                    class="w-full justify-start"
                     v-for="menuItem in subMenu.options"
                     :key="menuItem.value"
                     text
                     :type="getActiveOption(subMenu.field, menuItem)"
                     @click="handleMenuItemClick(menuItem, subMenu.field)"
                     ><Text
-                        :color="getActiveOption(subMenu.field, menuItem) || 'regular'"
+                        color="current"
                         size="xs"
                         >{{ menuItem.name }}</Text
                     >
@@ -126,19 +142,37 @@ watch(isCtrlKeep, (newValue) => {
     </div>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 .list-menu {
-    @apply w-full h-full flex flex-col space-y-2 border-r-1 border-r-$el-menu-border-color;
-}
-:deep(.el-button + .el-button) {
-    @apply ml-0;
-}
-:deep(.el-button.el-button--primary) {
-    @apply !bg-[var(--el-fill-color-light)];
-}
-:deep(.el-collapse) {
-    @apply border-y-none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-right: $border;
+    &-title {
+        gap: $gap-line;
+    }
+
+    :deep(.el-button + .el-button) {
+        margin-left: 0;
+    }
+    :deep(.el-button.el-button--primary) {
+        background-color: $color-primary-light-9;
+        color: $color-primary;
+    }
+    :deep(.el-collapse) {
+        border-top: none;
+        border-bottom: none;
+        .el-collapse-item__header {
+            border-bottom: none;
+        }
+        .el-collapse-item__wrap {
+            border-bottom: none;
+        }
+
+        .el-collapse-item__content {
+            padding-bottom: 0;
+        }
+    }
 }
 </style>
-
-<style lang="scss" scoped></style>

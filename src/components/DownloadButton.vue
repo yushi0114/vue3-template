@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Download } from '@element-plus/icons-vue';
 import { useApi } from '@/composables';
 import { downloadByData } from '@/utils';
 import { omit } from 'lodash';
@@ -40,8 +41,9 @@ const handleDownload = () => {
 <template>
     <el-button
         :loading="loading"
+        :icon="Download"
         v-bind="$attrs"
         @click="handleDownload"
-        ><i-ep-download />下载</el-button
+        >下载</el-button
     >
 </template>

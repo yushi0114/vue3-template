@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Back, Sell, Collection } from '@element-plus/icons-vue';
 import { ARTICLE_MODULE, ARTICLE_TYPE_LABEL, ARTICLE_STATUS, ARTICLE_API, UPLOAD_FILE_TYPE } from '@/enums';
 import { ARTICLE_FORM_MAP } from '../constants';
 import { useApi } from '@/composables';
@@ -151,36 +152,37 @@ onMounted(() => {
     <div
         class="article-publish"
         v-loading="loadingDetail">
-        <div class="flex justify-between">
-            <div class="flex-center">
+        <FlexRow horizontal="between">
+            <FlexRow horizontal="center" class="gap-8">
                 <el-button
-                    class="mr-2"
+                    :icon="Back"
                     @click="back"
-                    ><i-ep-back></i-ep-back>返回</el-button
+                    >返回</el-button
                 >
-                <div
-                    class="text-$el-text-color-secondary"
+                <Text
+                    color="regular"
+                    size="sm"
                     v-if="state.laseUpdateTime"
-                    >最近一次编辑时间：{{ state.laseUpdateTime }}</div
+                    >最近一次编辑时间：{{ state.laseUpdateTime }}</Text
                 >
-            </div>
+            </FlexRow>
 
             <div>
                 <el-button
-                    v-loading="loadingCreate || loadingUpdate"
+                    :loading="loadingCreate || loadingUpdate"
+                    :icon="Collection"
                     @click="publish(ARTICLE_STATUS.DRAFT)">
-                    <div class="i-ic-round-save"></div>
                     保存</el-button
                 >
                 <el-button
-                    v-loading="loadingCreate || loadingUpdate"
+                    :loading="loadingCreate || loadingUpdate"
                     type="primary"
+                    :icon="Sell"
                     @click="publish(ARTICLE_STATUS.PUBLISHED)">
-                    <span class="i-ic-sharp-publish"></span>
                     发布</el-button
                 >
             </div>
-        </div>
+        </FlexRow>
         <el-divider />
         <sjc-form
             :def="ARTICLE_FORM"
@@ -189,8 +191,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .article-publish {
-    @apply;
 }
 </style>

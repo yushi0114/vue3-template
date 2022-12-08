@@ -10,9 +10,11 @@ import { isDefind } from '@/utils';
 const props = withDefaults(
     defineProps<{
         form: DefItem[];
+        loading?: boolean;
     }>(),
     {
         form: () => [],
+        loading: false
     }
 );
 
@@ -85,6 +87,7 @@ defineExpose({
             <el-button @click="handleCancel">取 消</el-button>
             <el-button
                 type="primary"
+                :loading="loading"
                 @click="handleOk"
                 >确 定</el-button
             >

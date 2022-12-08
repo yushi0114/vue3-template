@@ -1,14 +1,14 @@
 import { isFunction } from './../utils/func';
 import { isNumber } from '@/utils';
-import { ref, type Ref } from 'vue';
+import { ref } from 'vue';
 import type { HttpError } from '@/api/types';
 
 export type UseApiOption<K, P = any[]> = {
     cache?: boolean | number;
     onSuccess?: (data: K, params: P) => void;
     onError?: (error: HttpError) => void;
+    onFinally?: () => void;
     formatter?: <U = K>(response: K) => U;
-    ready?: Ref<any | undefined>;
 };
 export function useApi<T extends (...args: any[]) => Promise<any>>(
     apiFunc: T,
@@ -67,27 +67,11 @@ export function useApi<T extends (...args: any[]) => Promise<any>>(
             })
             .finally(() => {
                 loading.value = false;
+                if (isFunction(opt.onFinally)) {
+                    opt.onFinally!();
+                }
             });
     }) as T;
-
-    // const request: T = (...args) => {
-    //     if (option?.ready && !option?.ready?.value) {
-    //         waitFn.value.push(() => run(...args));
-    //         return noop;
-    //     }
-    //     return run(...args);
-    // };
-
-    // watch(
-    //     () => option?.ready,
-    //     () => {
-    //         if (option?.ready?.value) {
-    //             waitFn.value.forEach((fn) => {
-    //                 fn();
-    //             });
-    //         }
-    //     }
-    // );
 
     onBeforeUnmount(clear);
     return { loading, request, clear, data };

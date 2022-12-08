@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { createProductRecommend, updateProductRecommend, getProductOptions, getProductRecommend } from '@/api';
+import { useApi } from '@/composables';
 import { PlatformType, productRecommandTypeMap, SwitchType, type ProductRecommandType } from '@/enums';
 import { router } from '@/router';
 import type { ProductEntity, ProductRecommandEntity } from '@/types';
-import { blobToDataURL } from '@/utils';
+import { blobToDataURL, noop } from '@/utils';
 import type { FormInstance, FormRules, UploadRequestOptions, UploadUserFile } from 'element-plus';
 
 const route = useRoute();
@@ -36,9 +37,12 @@ const rules = reactive<FormRules>({
     ],
 });
 
+const submitLoading = ref(false);
+const { request: requestProductRecommend, loading } = useApi(getProductOptions);
+
 function getProducts() {
-    getProductOptions({ platform: PlatformType.LiaoXinTong, menuName: 'recommend' })
-        .then(res => {
+    requestProductRecommend({ platform: PlatformType.LiaoXinTong, menuName: 'recommend' })
+        .then((res) => {
             products.value = res;
         });
 }
@@ -47,7 +51,6 @@ function getDetail() {
     getProductRecommend({ id: route.query.id as string })
         .then(res => {
             pdt.value = res;
-            console.log(res);
         });
 }
 
@@ -89,14 +92,16 @@ function handleBack() {
 function submit() {
     ruleFormRef.value?.validateField()
         .then(() => {
+            submitLoading.value = true;
             return (isCreation.value ? createProductRecommend : updateProductRecommend)(pdt.value);
         })
         .then(() => {
             ElMessage({ message: `${editName.value}${kindName.value}成功`, type: 'success' });
             handleBack();
         })
-        .catch(() => {
-
+        .catch(noop)
+        .finally(() => {
+            submitLoading.value = false;
         });
 }
 
@@ -112,7 +117,7 @@ onBeforeMount(() => {
 <template>
     <PagePanel>
         <!-- -->
-        <Board full class="recommand-create">
+        <Board full class="recommand-create" v-loading="loading">
             <div>
                 <Text size="xl">{{ editName }}{{ kindName }}</Text>
             </div>
@@ -164,7 +169,7 @@ onBeforeMount(() => {
 
                 <FlexRow>
                     <el-button @click="handleBack">返回</el-button>
-                    <el-button type="primary" @click="submit">提交</el-button>
+                    <el-button type="primary" @click="submit" :loading="submitLoading">提交</el-button>
                 </FlexRow>
             </div>
         </Board>

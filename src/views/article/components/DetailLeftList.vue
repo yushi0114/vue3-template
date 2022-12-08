@@ -76,7 +76,7 @@ defineExpose({
                 content="新建"
                 placement="top">
                 <i-ep-plus
-                    class="cursor-pointer"
+                    class="cursor-pointer outline-none"
                     @click="handleToCreate"></i-ep-plus>
             </el-tooltip>
         </FlexRow>

@@ -67,14 +67,10 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button @click="goBack()">
-                        <template #icon>
-                            <Icon :name="'ep:back'"></Icon>
-                        </template>
+                        返回
                     </el-button>
                     <el-button type="primary" @click="submitForm(institutionFormRef)">
-                        <template #icon>
-                            <Icon :name="'ep:edit'"></Icon>
-                        </template>
+                        编辑
                     </el-button>
                 </el-form-item>
             </el-form>

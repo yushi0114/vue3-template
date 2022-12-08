@@ -1,44 +1,47 @@
 <template>
-    <el-form :model="codeForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
-        <el-form-item label="机构分类:" required prop="orgTypeCode">
-            <el-select v-model="codeForm.orgTypeCode" placeholder="请选择机构分类">
-                <el-option
-                    v-for="item in orgTypeCodeList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"/>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="所属城市:" prop="cityCode">
-            <el-select v-model="codeForm.cityCode" placeholder="请选择城市">
-                <el-option
-                    v-for="item in cityCodeList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"/>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="机构名称:" required prop="orgName">
-            <el-input v-model="codeForm.orgName" show-word-limit   maxlength="255" placeholder="请输入机构名称"/>
-        </el-form-item>
-        <el-form-item label="机构编码:" required prop="orgCode">
-            <el-input v-model="codeForm.orgCode" show-word-limit   maxlength="15" placeholder="请输入机构编码"/>
-        </el-form-item>
-        <el-form-item label="机构地址:" required prop="address">
-            <el-input
-                type="textarea"
-                v-model="codeForm.address"
-                show-word-limit
-                maxlength="255"
-                placeholder="请输入机构地址"/>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submitForm(ruleFormRef)">
-                {{ formType === 'edit' ? '编辑' : '创建' }}
-            </el-button>
-            <el-button @click="goBack()">返回</el-button>
-        </el-form-item>
-    </el-form>
+    <div>
+        <div class="form-header">机构编码</div>
+        <el-form :model="codeForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
+            <el-form-item label="机构分类:" required prop="orgTypeCode">
+                <el-select v-model="codeForm.orgTypeCode" placeholder="请选择机构分类">
+                    <el-option
+                        v-for="item in orgTypeCodeList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"/>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="所属城市:" prop="cityCode">
+                <el-select v-model="codeForm.cityCode" placeholder="请选择城市">
+                    <el-option
+                        v-for="item in cityCodeList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"/>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="机构名称:" required prop="orgName">
+                <el-input v-model="codeForm.orgName" show-word-limit   maxlength="255" placeholder="请输入机构名称"/>
+            </el-form-item>
+            <el-form-item label="机构编码:" required prop="orgCode">
+                <el-input v-model="codeForm.orgCode" show-word-limit   maxlength="15" placeholder="请输入机构编码"/>
+            </el-form-item>
+            <el-form-item label="机构地址:" required prop="address">
+                <el-input
+                    type="textarea"
+                    v-model="codeForm.address"
+                    show-word-limit
+                    maxlength="255"
+                    placeholder="请输入机构地址"/>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="goBack()">返回</el-button>
+                <el-button type="primary" @click="submitForm(ruleFormRef)">
+                    {{ formType === 'edit' ? '编辑' : '创建' }}
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -133,6 +136,10 @@ async function goBack() {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.form-header {
+    font-size: 24px;
+    margin: 20px 0 30px;
+}
 
 </style>

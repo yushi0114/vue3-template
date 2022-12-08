@@ -1,83 +1,74 @@
 <template>
-    <el-form
-        class="custom-form"
-        :model="menuForm"
-        :rules="rules"
-        label-width="120px"
-        ref="ruleFormRef"
-        style="width: 700px;">
-        <el-form-item label="菜单名称:" required prop="name">
-            <el-input v-model="menuForm.name"
-                      :maxlength="255"
-                      show-word-limit
-                      placeholder="请输入菜单名称"/>
-        </el-form-item>
-        <el-form-item label="菜单标题:" required prop="title">
-            <el-input v-model="menuForm.title"
-                      :maxlength="32"
-                      show-word-limit
-                      placeholder="请输入菜单标题"/>
-        </el-form-item>
-        <el-form-item label="菜单路径:" required prop="path">
-            <el-input v-model="menuForm.path"
-                      :maxlength="255"
-                      show-word-limit
-                      placeholder="请输入菜单路径"/>
-        </el-form-item>
-        <el-form-item label="菜单描述:" prop="desc">
-            <el-input v-model="menuForm.desc"
-                      :maxlength="255"
-                      show-word-limit
-                      type="textarea"
-                      placeholder="请输入菜单描述"/>
-        </el-form-item>
-        <el-form-item label="菜单图标:" prop="icon">
-            <el-input v-model="menuForm.icon"
-                      :maxlength="255"
-                      show-word-limit
-                      placeholder="请输入菜单图标"/>
-        </el-form-item>
-        <el-form-item label="排序字段:" required prop="sort">
-            <el-input v-model.number="menuForm.sort"
-                      :maxlength="3"
-                      show-word-limit placeholder="请输入排序字段"/>
-        </el-form-item>
-        <el-form-item label="组件名称:" required prop="component">
-            <el-input v-model="menuForm.component"
-                      :maxlength="255"
-                      show-word-limit
-                      placeholder="请输入菜组件称"/>
-        </el-form-item>
-        <el-form-item label="是否启用:" required prop="status">
-            <el-switch v-model="menuForm.status"/>
-        </el-form-item>
-        <el-form-item>
-            <el-button v-if="formType === 'create'" @click="goBack">
-                <template #icon>
-                    <Icon :name="'ep:back'"></Icon>
-                </template>
-            </el-button>
-            <el-button type="primary" @click="submitForm(ruleFormRef)">
-                <template #icon>
-                    <Icon :name="'ep:edit'"></Icon>
-                </template>
-            </el-button>
-        </el-form-item>
-    </el-form>
+    <div>
+        <div class="form-header">菜单管理</div>
+        <el-form
+            class="custom-form"
+            :model="menuForm"
+            :rules="rules"
+            label-width="120px"
+            ref="ruleFormRef"
+            style="width: 700px;">
+            <el-form-item label="菜单名称:" required prop="name">
+                <el-input v-model="menuForm.name"
+                          :maxlength="255"
+                          show-word-limit
+                          placeholder="请输入菜单名称"/>
+            </el-form-item>
+            <el-form-item label="菜单标题:" required prop="title">
+                <el-input v-model="menuForm.title"
+                          :maxlength="32"
+                          show-word-limit
+                          placeholder="请输入菜单标题"/>
+            </el-form-item>
+            <el-form-item label="菜单路径:" required prop="path">
+                <el-input v-model="menuForm.path"
+                          :maxlength="255"
+                          show-word-limit
+                          placeholder="请输入菜单路径"/>
+            </el-form-item>
+            <el-form-item label="菜单描述:" prop="desc">
+                <el-input v-model="menuForm.desc"
+                          :maxlength="255"
+                          show-word-limit
+                          type="textarea"
+                          placeholder="请输入菜单描述"/>
+            </el-form-item>
+            <el-form-item label="菜单图标:" prop="icon">
+                <el-input v-model="menuForm.icon"
+                          :maxlength="255"
+                          show-word-limit
+                          placeholder="请输入菜单图标"/>
+            </el-form-item>
+            <el-form-item label="排序字段:" required prop="sort">
+                <el-input v-model.number="menuForm.sort"
+                          :maxlength="3"
+                          show-word-limit placeholder="请输入排序字段"/>
+            </el-form-item>
+            <el-form-item label="组件名称:" required prop="component">
+                <el-input v-model="menuForm.component"
+                          :maxlength="255"
+                          show-word-limit
+                          placeholder="请输入菜组件称"/>
+            </el-form-item>
+            <el-form-item label="是否启用:" required prop="status">
+                <el-switch v-model="menuForm.status"/>
+            </el-form-item>
+            <el-form-item>
+                <el-button v-if="formType === 'create'" @click="goBack">
+                    返回
+                </el-button>
+                <el-button type="primary" @click="submitForm(ruleFormRef)">
+                    编辑
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import Icon from '@/components/Icon.vue';
-import {
-    createMenu,
-    currentMenuId,
-    editMenu,
-    formType,
-    goTreeView,
-    menuForm,
-} from './menu-list';
+import { createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, } from './menu-list';
 import type { MenuFormType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 import type { ValidateCallback } from '@/utils';
@@ -170,5 +161,9 @@ async function goBack() {
 </script>
 
 <style scoped lang="scss">
+.form-header {
+    font-size: 24px;
+    margin: 20px 0 30px;
+}
 
 </style>

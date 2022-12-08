@@ -26,7 +26,7 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
 </script>
 
 <template>
-  <List class="pdt-list">
+  <List class="pdt-list" v-empty="{visible: !list.length}">
         <ListItem
             v-for="item in list"
             :key="item.id"
@@ -81,6 +81,7 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
 
 <style lang="scss">
 .pdt-list {
+    flex: 1;
     margin-bottom: $gap-md;
 }
 

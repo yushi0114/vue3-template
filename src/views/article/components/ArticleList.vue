@@ -103,7 +103,8 @@ watch(listControlModel, () => {
                         v-real-img="{ img: scope.row.thumbnail, errImg }"
                         alt="" />
                 </div>
-                <FlexColumn vertical="center"
+                <FlexColumn
+                    vertical="center"
                     v-else
                     class="w-67px h-67px border border-$el-fill-color">
                     <div class="w-full h-60% bg-$el-fill-color text-2xl text-center">
@@ -194,8 +195,11 @@ watch(listControlModel, () => {
                 </el-row>
             </template>
             <template #handler="{ scope }">
-                <FlexRow vertical="end" horizontal="center">
-                    <FlexRow horizontal="center"
+                <FlexRow
+                    vertical="end"
+                    horizontal="center">
+                    <FlexRow
+                        horizontal="center"
                         :class="[scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
                         <!-- <TextHoverable
                             size="sm"
@@ -203,17 +207,17 @@ watch(listControlModel, () => {
                             @click="handleToEdit(scope)">
                             编辑
                         </TextHoverable> -->
-                        <el-button
-                            type="primary"
-                            text
-                            :disabled="scope.row.status === ARTICLE_STATUS.PUBLISHED"
-                            @click="handleToEdit(scope)">
-                            <el-tooltip
-                                placement="top"
-                                content="编辑">
+                        <el-tooltip
+                            placement="top"
+                            content="编辑">
+                            <el-button
+                                type="primary"
+                                text
+                                :disabled="scope.row.status === ARTICLE_STATUS.PUBLISHED"
+                                @click="handleToEdit(scope)">
                                 <Icon name="ep-edit" />
-                            </el-tooltip>
-                        </el-button>
+                            </el-button>
+                        </el-tooltip>
                     </FlexRow>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, scope.row)">
                         <!-- <TextHoverable
@@ -225,7 +229,9 @@ watch(listControlModel, () => {
                             <el-tooltip
                                 placement="top"
                                 content="更多">
-                                <el-button text :icon="MoreFilled"></el-button>
+                                <el-button
+                                    text
+                                    :icon="MoreFilled"></el-button>
                             </el-tooltip>
                         </Text>
                         <template #dropdown>
@@ -239,14 +245,17 @@ watch(listControlModel, () => {
                                 <el-dropdown-item
                                     v-else
                                     :command="ARTICLE_OPERATE_MODE.PUBLISH"
-                                    :icon="Sell"
-                                    >
+                                    :icon="Sell">
                                     {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT" :icon="Sort"
+                                <el-dropdown-item
+                                    :command="ARTICLE_OPERATE_MODE.SORT"
+                                    :icon="Sort"
                                     >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE" :icon="Delete"
+                                <el-dropdown-item
+                                    :command="ARTICLE_OPERATE_MODE.DELETE"
+                                    :icon="Delete"
                                     >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>

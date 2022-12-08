@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Edit, SoldOut, Sell, Sort, Delete } from '@element-plus/icons-vue';
+import { Edit, SoldOut, Sell, Sort, Delete, Search } from '@element-plus/icons-vue';
 import emptyImg from '@/assets/images/no-data.png';
 import {
     NEWS_TYPE,
@@ -30,7 +30,7 @@ const handleActiveIdChange = (id: string) => {
 const getActiveId = computed(() => {
     return props.activeId;
 });
-const { isNewsModule } = useArticleModule(props.module);
+const { isNewsModule, getArticleTypeLabel } = useArticleModule(props.module);
 
 const { params, state, _updateNewsStatus, handleDebounceSearch, handleMoreOperate, handleFilterChange, loadMore } =
     useTable(props.tab, props.module, ARTICLE_PAGE.DETAIL, emit, getActiveId);
@@ -52,7 +52,8 @@ defineExpose({
         <FlexRow horizontal="between" class="space-x-2">
             <div class="flex flex-1 space-x-2">
                 <el-input
-                    placeholder="请输入关键字进行查询"
+                    :prefix-icon="Search"
+                    :placeholder="`请输入${getArticleTypeLabel}标题`"
                     v-model.trim="params.searchInput"
                     clearable
                     @input="handleDebounceSearch">
@@ -75,9 +76,11 @@ defineExpose({
             <el-tooltip
                 content="新建"
                 placement="top">
-                <i-ep-plus
-                    class="cursor-pointer"
-                    @click="handleToCreate"></i-ep-plus>
+                <div>
+                    <i-ep-plus
+                        class="cursor-pointer"
+                        @click="handleToCreate" />
+                </div>
             </el-tooltip>
         </FlexRow>
         <template v-if="state.data.length > 0">
@@ -112,8 +115,10 @@ defineExpose({
                         </el-tag>
                     </div>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
-                        <Icon class="icon-more" name="ep-more-filled">
-                        </Icon>
+                        <div>
+                            <Icon class="icon-more" name="ep-more-filled">
+                            </Icon>
+                        </div>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item
@@ -191,12 +196,19 @@ defineExpose({
     &.active .icon-more {
         @apply display-block;
     }
+    &.active .article-title-wrap {
+        @apply mr-0;
+    }
 }
 .article-list-item:hover .icon-more {
     @apply display-block;
 }
+
+.article-list-item:hover .article-title-wrap {
+    @apply mr-0;
+}
 .article-title-wrap {
-    @apply flex items-center flex-1 min-w-0 gap-2;
+    @apply flex items-center flex-1 min-w-0 gap-2 mr-18px;
 }
 .text {
     @apply cursor-pointer flex-1 mr-2;

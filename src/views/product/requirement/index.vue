@@ -46,7 +46,7 @@ function getList() {
     getProductReqs(Object.assign({ platform: platform.value }, listControlModel))
         .then(({ total, data }) => {
             count.value = total;
-            list.value = data;
+            list.value = [];
         })
         .catch(noop)
         .finally(() => {

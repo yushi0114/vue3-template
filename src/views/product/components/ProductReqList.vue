@@ -160,6 +160,7 @@ watch(() => props.isSelectAll, () => {
 
 <style lang="scss">
 .pdt-list {
+    flex: 1;
     margin-bottom: $gap-md;
 }
 

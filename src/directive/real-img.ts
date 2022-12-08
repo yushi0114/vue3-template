@@ -1,17 +1,17 @@
 /*
  * @Description: 加载图片指令
- * @FilePath: \dms-web\src\directives\real-img.ts
+ * @FilePath: \dms-web\src\directive\real-img.ts
  * @Author: zys
  * @Date: 2022-11-14 16:03:53
- * @LastEditTime: 2022-11-17 14:57:57
+ * @LastEditTime: 2022-12-08 11:25:44
  * @LastEditors: zys
  * @Reference:
  */
-import type { App } from 'vue';
 import loading from '../assets/images/loading.gif';
 import errImg from '../assets/images/empty-image.png';
-export const realImg = (app: App) => {
-    app.directive('real-img', async function(el, binding) {
+export const realImg = {
+    name: 'real-img',
+    beforeMount: async(el: HTMLElement, binding: any) => {
         // 指令名称为：real-img
         const imgURL = binding.value.img; // 获取图片地址
         const errorImg = binding.value.errImg || errImg; // 获取错误图片地址
@@ -31,7 +31,7 @@ export const realImg = (app: App) => {
         } else {
             el.setAttribute('src', errorImg);
         }
-    });
+    }
 };
 /** * 检测图片能否存在 * @param url */
 const imageIsExist = (url: string) => {

@@ -20,6 +20,7 @@
         </el-row>
         <!-- 数据表格 -->
         <el-table
+            v-show="tableData.length"
             ref="commonTableRef"
             :data="tableData"
             v-bind="$attrs"
@@ -94,10 +95,17 @@
                         :props="props" />
                 </template>
             </el-table-column>
+            <template #empty>
+                <div></div>
+            </template>
         </el-table>
+        <div
+            v-show="!tableData.length"
+            style="height: 500px"
+            v-empty="{ visible: !tableData.length }"></div>
         <!-- 分页配置 -->
         <div
-            v-if="(showPagination && tableData.length)"
+            v-if="showPagination && tableData.length"
             class="pagination">
             <pagination
                 :page-config="$paginationConfig"
@@ -235,7 +243,7 @@ defineExpose({
     sort,
 });
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .pagination {
     text-align: right;
     margin: 10px 0;

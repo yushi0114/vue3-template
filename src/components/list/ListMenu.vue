@@ -74,10 +74,7 @@ const clearFilterOptions = () => {
     emits('change');
 };
 // 过滤器初始展开值
-const initialActiveNames =
-    Object.entries(model.value)
-        .filter(([key, value]) => value && props.menu?.map((item) => item.field).includes(key))
-        .map(([key]) => key) ?? [];
+const initialActiveNames = Object.entries(model.value).map(([key]) => key) ?? [];
 const activeNames = ref(initialActiveNames);
 watch(isCtrlKeep, (newValue) => {
     if (!newValue) {
@@ -89,23 +86,28 @@ watch(isCtrlKeep, (newValue) => {
 <template>
     <div class="list-menu">
         <FlexRow horizontal="between">
-            <FlexRow class="list-menu-title">
-                <Text
-                    size="md"
+            <Text
+                size="md"
+                color="regular">
+                <FlexRow class="gap-1">
+                    <span>过滤器</span>
+                    <el-tooltip
+                        content="按住Ctrl+Click可多选"
+                        placement="top">
+                        <Icon
+                            class="cursor-pointer"
+                            name="ep-warning" />
+                    </el-tooltip>
+                </FlexRow>
+            </Text>
+            <FlexRow
+                class="cursor-pointer mr-4"
+                @click.stop="clearFilterOptions">
+                <TextHoverable
                     color="regular"
-                    >
-                    过滤器
-                </Text>
-                <el-tooltip
-                    content="按住Ctrl+Click可多选"
-                    placement="top">
-                    <Icon
-                        class="cursor-pointer"
-                        name="ep-warning" />
-                </el-tooltip>
-            </FlexRow>
-            <FlexRow class="cursor-pointer mr-4" @click.stop="clearFilterOptions">
-                <TextHoverable color="regular" size="sm"><FlexRow class="gap-1"><i-ep-brush/>清空过滤项</FlexRow></TextHoverable>
+                    size="sm"
+                    ><FlexRow class="gap-1"><i-ep-brush />清空过滤项</FlexRow></TextHoverable
+                >
             </FlexRow>
         </FlexRow>
         <el-collapse
@@ -155,8 +157,8 @@ watch(isCtrlKeep, (newValue) => {
         margin-left: 0;
     }
     :deep(.el-button.el-button--primary) {
-        background-color: $color-primary;
-        color: $bg-color;
+        background-color: $color-primary-light-9;
+        color: $color-primary;
     }
     :deep(.el-collapse) {
         border-top: none;

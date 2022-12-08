@@ -50,7 +50,7 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
                 >
                 <ListField label="发布日期">{{ data.publishDate }}</ListField>
             </FlexRow>
-            <el-divider style="--el-border-color: #a12e37;margin: 16px 0"></el-divider>
+            <el-divider style="--el-border-color: #a12e37;margin: 0"></el-divider>
             <sjc-editor
                 class="editor"
                 v-model:model-value="data.content"
@@ -65,6 +65,9 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
 <style lang="scss">
 .detail {
     padding: 0 160px;
+    display: flex;
+    flex-direction: column;
+    gap: $gap-md;
     .editor{
         padding: 0 $gap-lg;
     }

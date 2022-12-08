@@ -112,9 +112,11 @@ const handleDragListChange = () => {
                 >
             </FlexRow>
             <draggable
+                class="flex-1"
                 v-model="filters"
                 item-key="id"
                 filter=".disable-drag"
+                v-empty="{ visible: !filters.length }"
                 @start="dragging = true"
                 @end="dragging = false"
                 @sort="handleDragListChange">

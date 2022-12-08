@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { SuccessFilled } from '@element-plus/icons-vue';
 import { PlatformType, PRODUCT_STEPS } from '@/enums';
 import { toRefs, useStepper } from '@vueuse/core';
 import { toFixed } from '@/utils';
@@ -73,7 +74,7 @@ defineExpose({
 <template>
     <div>
         <el-steps
-            class="justify-center"
+            class="justify-center mb-4"
             align-center
             :space="200"
             :active="index"
@@ -95,7 +96,20 @@ defineExpose({
             :update-submit="steps[PRODUCT_STEPS.FILTERS].updateSubmit"
             @change="formValueChange"
             @search="handleSubmit"></sjc-form>
-        <Text v-show="(index === 2)" color="success" align="center">发布成功（待做）</Text>
+        <FlexColumn
+            class="product-success-wrapper"
+            v-show="index === 2">
+            <el-icon
+                class="product-success-image"
+                :size="120">
+                <SuccessFilled />
+            </el-icon>
+            <Text
+                color="success"
+                align="center"
+                >您已成功发布产品！</Text
+            >
+        </FlexColumn>
         <slot name="footer">
             <FlexRow horizontal="center">
                 <el-button
@@ -113,4 +127,12 @@ defineExpose({
     </div>
 </template>
 
-<style lang="postcss"></style>
+<style lang="scss" scoped>
+.product-success-wrapper {
+    margin: 3rem 0;
+    gap: $gap-md;
+}
+.product-success-image {
+    --color: var(--el-color-success-light-3);
+}
+</style>

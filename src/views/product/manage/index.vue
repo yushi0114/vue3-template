@@ -181,8 +181,8 @@ onBeforeMount(() => {
             :content="detail" />
     </PagePanel>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .product-manage {
-    @apply;
+    height: 100%;
 }
 </style>

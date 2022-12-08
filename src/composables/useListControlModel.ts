@@ -26,7 +26,7 @@ export function useListControlModel(opt?: { initialModel?: any; numberFields?: s
     function clear() {
         Object.keys(listControlModel).forEach((key) => (listControlModel[key] = undefined));
         listControlModel.pageIndex = 1;
-        listControlModel.pageSize = 20;
+        listControlModel.pageSize = 10;
     }
 
     onBeforeMount(() => {

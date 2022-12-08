@@ -105,6 +105,7 @@ watch(props.modelValue, (newModel) => {
     Object.keys(newModel).forEach((key) => {
         if (newModel[key] !== model[key]) {
             model[key] = newModel[key];
+            dropdownLabelMap[key] = model[key];
         }
     });
 
@@ -382,8 +383,9 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     gap: $gap-xs;
 }
 
-.lqc-filter-checkbox {
+.lqc-filter-row .lqc-filter-checkbox {
     margin-left: 6px;
+    margin-right: 26px;
 }
 
 .lqc-filter-item {

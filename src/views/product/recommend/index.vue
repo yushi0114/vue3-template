@@ -71,7 +71,7 @@ function handleDelete(rd: ProductRecommandEntity) {
                     <el-button :icon="Plus" type="primary">新建{{ kindName }}</el-button>
                 </RouterLink>
             </FlexRow>
-            <FlexRow class="product-recommand-row">
+            <FlexRow class="product-recommand-row" vertical="start" v-empty="{ visible: !recommands.length }">
                 <ContentBoard
                     hoverable
                     :label="recommand.name"
@@ -96,6 +96,7 @@ function handleDelete(rd: ProductRecommandEntity) {
 
 <style lang="scss">
 .product-recommand-row {
+    flex: 1;
     gap: $gap-xs;
     padding-top: $gap-sm;
     display: flex;

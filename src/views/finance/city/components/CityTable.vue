@@ -209,16 +209,12 @@ const handleCurrentChange = (val: number) => {
                 </el-table-column>
             </el-table>
 
-            <el-pagination
+            <CommonPagination
                 v-model:currentPage="page.currentPage"
                 v-model:page-size="page.pageSize"
-                :page-sizes="[10, 20, 50]"
-                layout="total, sizes, prev, pager, next, jumper"
                 :total="page.total"
-                :background = true
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                class="table-pagination"
             />
 
             <city-detail :drawerVisible="allToogle.drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
@@ -256,11 +252,6 @@ const handleCurrentChange = (val: number) => {
 
         .header-options {
             padding-left: 34px;
-        }
-
-        .table-pagination {
-            margin-top: 20px;
-            justify-content: flex-end;
         }
     }
 }

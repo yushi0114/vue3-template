@@ -42,16 +42,11 @@
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
     </el-table>
-    <div class="page-content">
-        <el-pagination
-            class="margin-20-20"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="filterObject.currentPage"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="listData.total">
-        </el-pagination>
-    </div>
+    <CommonPagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="filterObject.currentPage"
+        :total="listData.total" />
 </template>
 
 <script lang="ts" setup>

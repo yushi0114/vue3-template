@@ -258,16 +258,11 @@ const handleCurrentChange = (val: number) => {
                 </el-table-column>
             </el-table>
 
-            <el-pagination
+            <CommonPagination
                 v-model:current-page="page.currentPage"
                 v-model:page-size="page.pageSize"
-                :page-sizes="[10, 20, 50]"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="page.total"
-                background
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                class="table-pagination"
             />
 
             <ZjfwShopDetail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></ZjfwShopDetail>
@@ -304,10 +299,6 @@ const handleCurrentChange = (val: number) => {
             padding-left: 7px;
         }
 
-        .table-pagination {
-            margin-top: 20px;
-            justify-content: flex-end;
-        }
     }
 }
 </style>

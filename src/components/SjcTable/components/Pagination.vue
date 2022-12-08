@@ -1,9 +1,9 @@
 <template>
-    <el-pagination
+    <CommonPagination
         v-bind="props.pageConfig"
         v-model:current-page="page.currentPage"
         v-model:page-size="page.pageSize"
-        class="justify-end"></el-pagination>
+    ></CommonPagination>
 </template>
 <script lang="ts" setup>
 import type { IPaginationConfig } from '../types';

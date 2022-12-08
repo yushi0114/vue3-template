@@ -5,7 +5,7 @@ import { getProductReqs, getTopOrgs, deleteProductReqs, downloadProductReqs } fr
 import type { PlainOption, ProductRequirementEntity } from '@/types';
 import { ProductReqList, ProductReqDetail } from '../components';
 import { noop } from '@/utils';
-import { useListControlModel, useApi, useTableCheckbox } from '@/composables';
+import { useListControlModel, useApi, useTableCheckbox, useQueryParams } from '@/composables';
 
 const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: string) => deleteProductReqs({ platform: platform.value, idArr }), {
     onSuccess() {
@@ -22,6 +22,10 @@ const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: stri
 
 const { back } = useRouter();
 const route = useRoute();
+const { queryParams } = useQueryParams({
+    productId: '',
+    productName: '',
+});
 const platform = ref<PlatformType>(Number(route.params.p));
 const { model: listControlModel } = useListControlModel({
     numberFields: ['progress'],
@@ -36,13 +40,13 @@ const topOrgOptions = ref<PlainOption[]>([]);
 const detail = ref<ProductRequirementEntity | null>(null);
 const downloadOptions = reactive({
     fileName: `企业申请列表（${platformTypeMap[platform.value]}）.xlsx`,
-    params: Object.assign({ platform: platform.value }, listControlModel)
+    params: Object.assign({ platform: platform.value, productId: queryParams.value.productId }, listControlModel)
 });
 const { request: requestOrgOptions } = useApi(getTopOrgs, { cache: true });
 
 function getList() {
     loading.value = true;
-    getProductReqs(Object.assign({ platform: platform.value }, listControlModel))
+    getProductReqs(Object.assign({ platform: platform.value, productId: queryParams.value.productId }, listControlModel))
         .then(({ total, data }) => {
             count.value = total;
             list.value = data;
@@ -54,7 +58,7 @@ function getList() {
 }
 
 watch(listControlModel, () => {
-    downloadOptions.params = Object.assign({ platform: platform.value }, listControlModel);
+    downloadOptions.params = Object.assign({ platform: platform.value, productId: queryParams.value.productId }, listControlModel);
     nextTick(getList);
 });
 
@@ -113,7 +117,7 @@ onMounted(() => {
                 >
                 <div
                     class="text-$el-text-color-secondary"
-                    >当前产品：{{ listControlModel.productName }}</div
+                    >当前产品：{{ queryParams.productName }}</div
                 >
             </FlexRow>
             <ListQueryControl

@@ -279,7 +279,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                 <el-dropdown
                     :ref="refs.set"
                     trigger="click"
-                    :max-height="height - 300"
+                    :max-height="300"
                     @command="handleDropdownChange">
                     <UseMouseInElement v-slot="{ isOutside }">
                         <FlexRow class="lqc-filter-dropname">
@@ -379,7 +379,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     border-radius: 4px;
     padding: $gap-xs $gap-md;
     background-color: var(--el-color-info-light-9);
-    gap: $gap-xs;
+    gap: $gap-lg;
 }
 
 .lqc-filter-checkbox {
@@ -387,7 +387,6 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 }
 
 .lqc-filter-item {
-    margin-right: $gap-xs;
 }
 
 .lqc-filter-dropname {

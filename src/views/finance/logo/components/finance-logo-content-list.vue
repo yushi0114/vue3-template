@@ -43,11 +43,20 @@
             </template>
         </el-table-column>
     </el-table>
-    <CommonPagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="filterObject.currentPage"
-        :total="listData.total" />
+    <div class="page-content">
+        <el-pagination
+            v-if="listData.total"
+            class="margin-20-20"
+            v-model:current-page="filterObject.currentPage"
+            v-model:page-size="filterObject.currentSize"
+            :page-sizes="[10, 20, 50]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="listData.total"
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange">
+        </el-pagination>
+    </div>
     <logo-form-modal
         v-if="isDialogShow"
         :dialog-visible="isDialogShow"
@@ -147,7 +156,6 @@ async function handleSortChange(params: { prop: 'create_time', order: string }) 
 async function handleSearchList() {
     LoadingService.getInstance().loading();
     filterObject.value.currentPage = 1;
-    filterObject.value.currentSize = 10;
     await getPageList();
     LoadingService.getInstance().stop();
 }
@@ -168,6 +176,7 @@ async function handleCurrentChange(item: number) {
 }
 
 async function handleSizeChange(item: number) {
+    filterObject.value.currentPage = 1;
     filterObject.value.currentSize = item;
     LoadingService.getInstance().loading();
     await getPageList();

@@ -2,7 +2,7 @@ import { PlatformType, FormType } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
 import { NOT_LOGO_TIPS, resolveArrayByKey } from '@/utils';
 import { useApi } from '@/composables';
-import { cloneDeep, isArray, isFunction } from 'lodash';
+import { cloneDeep, isFunction, isArray } from 'lodash';
 import { getTopOrgs, getProductFilters, getProduct, getOrgLogo } from '@/api';
 import type { PlainOption, ProductFilterEntity, OrgEntity, ProductEntity } from '@/types';
 import type { Ref } from 'vue';
@@ -15,9 +15,10 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
             topOrgList.value = data;
             topOrgOptions.value = data.map(({ orgId, orgName }) => ({ name: orgName, value: orgId }));
             PRODUCT_FORM.value[0].selectOptions = topOrgOptions.value;
+            PRODUCT_FORM_ALL.value[0].selectOptions = topOrgOptions.value;
         },
     });
-    const { request: requestProductFilters, data: productFilters } = useApi(
+    const { request: requestProductFilters } = useApi(
         () => getProductFilters({ platform: platform.value }),
         {
             onSuccess(data) {
@@ -27,7 +28,6 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
         }
     );
     const { request: requestProduct } = useApi(() => getProduct({ id: id?.value ?? '', platform: platform.value }), {
-        ready: productFilters,
         onSuccess(data) {
             const ignoreList = ['贷款额度', '贷款期限', '担保方式'];
             const filterList = resolveArrayByKey(data.filterList, 'typeValue', ignoreList);
@@ -40,7 +40,7 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
                     (data as any)[prop] = value;
                 }
             });
-            PRODUCT_FORM.value.forEach((formItem) => {
+            PRODUCT_FORM_ALL.value.forEach((formItem) => {
                 if (
                     data[formItem.keyName as keyof ProductEntity] ||
                     (formItem.formatter && isFunction(formItem.formatter))
@@ -59,16 +59,19 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
     const topOrgOptions = ref<PlainOption[]>([]);
     const topOrgList = ref<OrgEntity[]>([]);
     const PRODUCT_FORM = ref<typeof PRODUCT_FORM_MAP[PlatformType]>(cloneDeep(PRODUCT_FORM_MAP[platform.value]));
-
     const dynamicForm = ref<DefItem[]>([]);
+    const PRODUCT_FORM_ALL = ref(PRODUCT_FORM.value);
     const updateForm = (dynamicForm?: DefItem[]) => {
         if (isArray(dynamicForm)) {
-            PRODUCT_FORM.value = [...PRODUCT_FORM.value, ...dynamicForm];
+            PRODUCT_FORM_ALL.value = [...PRODUCT_FORM.value, ...dynamicForm];
         }
     };
 
     const resetForm = () => {
         PRODUCT_FORM.value = cloneDeep(PRODUCT_FORM_MAP[platform.value]);
+        PRODUCT_FORM_ALL.value = PRODUCT_FORM.value;
+        PRODUCT_FORM.value[0].selectOptions = topOrgOptions.value;
+        PRODUCT_FORM_ALL.value[0].selectOptions = topOrgOptions.value;
     };
 
     const multipleList = ['贷款额度', '贷款期限', '担保方式'];
@@ -180,5 +183,5 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
         requestOrgOptions();
         id?.value && requestProduct();
     });
-    return { PRODUCT_FORM, formValueChange, dynamicForm };
+    return { PRODUCT_FORM, formValueChange, dynamicForm, PRODUCT_FORM_ALL };
 };

@@ -268,6 +268,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
         <FlexRow
             class="lqc-filter-row" v-if="filterRowVisible">
             <el-checkbox
+                class="lqc-filter-checkbox"
                 v-if="showSelection"
                 v-model="modelCheckAll"
                 :indeterminate="isIndeterminate"
@@ -381,6 +382,9 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     gap: $gap-xs;
 }
 
+.lqc-filter-checkbox {
+    margin-left: 6px;
+}
 
 .lqc-filter-item {
     margin-right: $gap-xs;

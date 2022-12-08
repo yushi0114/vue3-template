@@ -97,7 +97,7 @@
         </el-table>
         <!-- 分页配置 -->
         <div
-            v-if="showPagination"
+            v-if="(showPagination && tableData.length)"
             class="pagination">
             <pagination
                 :page-config="$paginationConfig"

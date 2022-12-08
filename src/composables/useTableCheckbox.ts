@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\composables\useTableCheckbox.ts
  * @Author: zys
  * @Date: 2022-12-06 16:09:55
- * @LastEditTime: 2022-12-06 17:31:27
+ * @LastEditTime: 2022-12-07 11:53:59
  * @LastEditors: zys
  * @Reference:
  */
@@ -16,8 +16,6 @@ export const useTableCheckbox = (list: Ref<any[]>) => {
     const tableSelectAll = ref(false);
 
     const isIndeterminate = computed(() => {
-        console.log('list.value：', list.value);
-        console.log('ids：', ids);
         return !isSelectAll.value && !!ids.value.length && list.value.length > ids.value.length;
     });
 

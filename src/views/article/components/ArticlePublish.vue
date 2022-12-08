@@ -152,18 +152,18 @@ onMounted(() => {
     <div
         class="article-publish"
         v-loading="loadingDetail">
-        <div class="flex justify-between">
-            <FlexRow horizontal="center">
+        <FlexRow horizontal="between">
+            <FlexRow horizontal="center" class="gap-8">
                 <el-button
-                    class="mr-2"
                     :icon="Back"
                     @click="back"
                     >返回</el-button
                 >
-                <div
-                    class="text-$el-text-color-secondary"
+                <Text
+                    color="regular"
+                    size="sm"
                     v-if="state.laseUpdateTime"
-                    >最近一次编辑时间：{{ state.laseUpdateTime }}</div
+                    >最近一次编辑时间：{{ state.laseUpdateTime }}</Text
                 >
             </FlexRow>
 
@@ -182,7 +182,7 @@ onMounted(() => {
                     发布</el-button
                 >
             </div>
-        </div>
+        </FlexRow>
         <el-divider />
         <sjc-form
             :def="ARTICLE_FORM"
@@ -191,8 +191,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .article-publish {
-    @apply;
 }
 </style>

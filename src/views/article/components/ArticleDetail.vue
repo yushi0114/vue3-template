@@ -78,6 +78,7 @@ onBeforeMount(() => {
             <div class="w-350px">
                 <el-card
                     class="h-full"
+                    shadow="never"
                     :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
                     <article-wrapper
                         class="h-full"
@@ -100,6 +101,7 @@ onBeforeMount(() => {
             <div class="flex-1 min-w-0">
                 <el-card
                     class="h-full overflow-y-auto"
+                    shadow="never"
                     :body-style="{ height: '100%', 'box-sizing': 'border-box', 'overflow-y': 'auto' }">
                     <div class="flex justify-between">
                         <el-button

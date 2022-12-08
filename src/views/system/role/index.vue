@@ -2,11 +2,11 @@
     <PagePanel>
         <Board full>
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="DMS" name="dms">
-                    <role-config v-if="activeName === 'dms'"></role-config>
-                </el-tab-pane>
                 <el-tab-pane label="征信端" name="cre">
                     <role-config v-if="activeName === 'cre'"></role-config>
+                </el-tab-pane>
+                <el-tab-pane label="DMS" name="dms">
+                    <role-config v-if="activeName === 'dms'"></role-config>
                 </el-tab-pane>
             </el-tabs>
         </Board>

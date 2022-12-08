@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Plus, Search } from '@element-plus/icons-vue';
+import { Plus } from '@element-plus/icons-vue';
 import { PlatformType, OPERATE_TYPE } from '@/enums';
 import Draggable from 'vuedraggable';
 import { useFilter } from '../hooks/useFilter';

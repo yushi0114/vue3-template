@@ -2,7 +2,7 @@
 import ListMenu from './ListMenu.vue';
 // import { useQueryParams } from '@/composables';
 import { UseMouseInElement } from '@vueuse/components';
-import { useTemplateRefsList, useWindowSize, useVModel } from '@vueuse/core';
+import { useTemplateRefsList, useVModel } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
@@ -52,7 +52,6 @@ type DropdownLabelMapType = any
 const model = reactive<ModelType>({});
 const dropdownLabelMap = reactive<DropdownLabelMapType>({});
 const modelCheckAll = useVModel(props, 'checkAll', emits);
-const { height } = useWindowSize();
 const searchTipVisible = ref(false);
 
 watch(() => props.searchConfig, () => {
@@ -313,7 +312,8 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                     />
                 </el-select> -->
             </div>
-            <div class="lqc-date-item" v-if="dateRangeConfig">
+            <FlexRow class="lqc-date-item" gap="xs" v-if="dateRangeConfig">
+                <Text size="sm" bold color="regular">{{ dateRangeConfig.label }}</Text>
                 <el-date-picker
                     type="monthrange"
                     unlink-panels
@@ -325,7 +325,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                     :start-placeholder="dateRangeConfig.options[0].name"
                     :end-placeholder="dateRangeConfig.options[1].name"
                 />
-            </div>
+            </FlexRow>
             <div class="lqc-filter-rest">
                 <slot name="filter-rest" />
             </div>
@@ -407,8 +407,6 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 
 .lqc-sort-item {
     cursor: pointer;
-    margin-left: $gap-xs;
-
     & svg {
         transform: translateY(2px);
         width: 15px;

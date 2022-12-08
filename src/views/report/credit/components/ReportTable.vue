@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Search, View, CircleCloseFilled } from '@element-plus/icons-vue';
+import { View } from '@element-plus/icons-vue';
 import { getAllCorpList } from '@/api/report';
 import type { IReportTable } from '@/types/report';
 import { useListControlModel } from '@/composables';
@@ -8,10 +8,6 @@ const dataSource = ref<IReportTable[]>([]);
 const { model: listControlModel } = useListControlModel({
     initialModel: { corpName: '' }
 });
-
-const searchInput = ref('');
-
-const showError = ref(false);
 
 const allToogle = reactive({
     loading: false,
@@ -41,26 +37,6 @@ const getCorpList = () => {
         .finally(() => {
             allToogle.loading = false;
         });
-};
-
-const handleInput = () => {
-    showError.value = searchInput.value.length < 2;
-};
-
-// 搜索企业
-const handleSearch = (isClear: boolean) => {
-    if (isClear) {
-        page.currentPage = 1;
-        dataSource.value = [];
-    } else {
-        if (searchInput.value.length >= 2) {
-            page.currentPage = 1;
-            dataSource.value = [];
-            getCorpList();
-        } else {
-            showError.value = true;
-        }
-    }
 };
 
 const router = useRouter();

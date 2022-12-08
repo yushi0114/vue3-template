@@ -15,19 +15,19 @@ withDefaults(
 </script>
 
 <template>
-    <el-drawer :size="850">
+    <DetailDrawer>
         <!-- -->
         <template #header>
             <Text>需求详情</Text>
         </template>
-        <ContentBoard label="基本信息" :cols="2">
+        <ContentBoard background label="基本信息" :cols="2">
             <ContentBoardField label="企业名称">{{ content?.corpName }}</ContentBoardField>
             <ContentBoardField label="社会统一信用代码">{{ content?.corpCode }}</ContentBoardField>
             <ContentBoardField label="联系人">{{ content?.contactPerson }}</ContentBoardField>
             <ContentBoardField label="联系电话">{{ content?.contactMobile }}</ContentBoardField>
         </ContentBoard>
 
-        <ContentBoard label="详细信息" :cols="3" v-if="exact && content">
+        <ContentBoard background label="详细信息" :cols="3" v-if="exact && content">
             <ContentBoardField label="是否为小微企业">{{ switchTypeMap[content.mseType] }}</ContentBoardField>
             <ContentBoardField label="是否有抵押物">{{ switchTypeMap[content.pawnType] }}</ContentBoardField>
             <ContentBoardField label="是否可提供担保">{{ switchTypeMap[content.guaranteeType] }}</ContentBoardField>
@@ -41,7 +41,7 @@ withDefaults(
             <ContentBoardField label="近24个月内最长逾期天数">{{ longestOverdueTypeMap[content.longestOverdue] }}</ContentBoardField>
         </ContentBoard>
 
-        <ContentBoard label="贷款需求" :cols="2">
+        <ContentBoard background label="贷款需求" :cols="2">
             <ContentBoardField label="期望融资金额">{{ content?.expectFinancing }}万元</ContentBoardField>
             <ContentBoardField label="期望放款时间">{{ expectTimeTypeMap[content?.expectTime!] }}</ContentBoardField>
         </ContentBoard>
@@ -63,7 +63,7 @@ withDefaults(
                 <ContentAcceptSteps :steps="content.dataSecond" />
             </template>
         </ContentBoard>
-    </el-drawer>
+    </DetailDrawer>
 </template>
 
 <style lang="postcss">

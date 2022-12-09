@@ -3,7 +3,7 @@ import type { RoleListItemType, UserFormType, UserListItemType, UserTabType } fr
 import { addUserApi, deleteUserApi, getTotalRoleListApi, getUserListApi, updateUserApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
 
-export const activeName = ref<UserTabType>('dms');
+export const activeName = ref<UserTabType>('cre');
 export const mode = ref<'form' | 'list'>('list');
 export const currentUserId = ref();
 export const form = ref<UserFormType>({

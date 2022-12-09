@@ -11,3 +11,8 @@ export function getFinanceReportListApi(params: GetFinanceReportListType): Promi
         params
     });
 }
+
+
+export async function deleteFinanceReportApi(params: { ids: string[] }): Promise<void> {
+    // todo
+}

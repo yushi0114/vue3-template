@@ -1,13 +1,16 @@
 <script lang="ts" setup>
-import { Search, Delete } from '@element-plus/icons-vue';
+import { Delete } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import type { CorpUserTable } from '@/types/corpUser';
 import { getBusinessUser, updateBusinessUserStatus, deleteBatchUser } from '@/api/corpUser';
 import LxtShopDetail from './LxtShopDetail.vue';
+import { useListControlModel } from '@/composables';
 
 const userList = ref<CorpUserTable[]>([]);
-const searchInput = ref('');
 const userId = ref('');
+const { model } = useListControlModel({
+    initialModel: { searchInput: '' }
+});
 
 const allToogle = reactive({
     loading: true,
@@ -32,15 +35,10 @@ onMounted(() => {
     getCorpUserList();
 });
 
-const searchUserList = () => {
-    page.currentPage = 1;
-    getCorpUserList();
-};
-
 // 获取列表
 const getCorpUserList = () => {
     const params = {
-        searchInput: searchInput.value,
+        searchInput: model.searchInput,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
         sortField: sort.sortField,
@@ -111,7 +109,7 @@ const changeUserStatus = (row: CorpUserTable, index: number) => {
 
 // 刷新用户列表
 const refreshTable = () => {
-    searchInput.value = '';
+    model.searchInput = '';
     getCorpUserList();
 };
 
@@ -190,26 +188,27 @@ const handleCurrentChange = (val: number) => {
     getCorpUserList();
 };
 
+watch(model, () => {
+    userList.value = [];
+    page.currentPage = 1;
+    getCorpUserList();
+});
 </script>
 
 <template>
     <div class="user-container">
-        <div class="header">
-            <el-input
-                class="searchInput"
-                placeholder="请输入关键字进行查询"
-                v-model.trim="searchInput"
-                size="large"
-                clearable
-                @clear="searchUserList"
-                @keyup.enter="searchUserList"
-            >
-                <template #append>
-                    <el-button :icon="Search" @click="searchUserList" />
-                </template>
-            </el-input>
-            <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
-        </div>
+        <ListQueryControl
+            v-model="model"
+            :filter-row-visible="false"
+            :searchConfig="{
+                label: '请输入关键字进行查询',
+                field: 'searchInput',
+            }">
+
+            <template #search-rest>
+                <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
+            </template>
+        </ListQueryControl>
         <div class="content">
             <LoadingBoard :loading="allToogle.loading" :empty="!userList.length">
             <el-table

@@ -18,7 +18,6 @@
             <el-button
                 type="primary"
                 plain
-                size="small"
                 :disabled="institutionItemData.status === 0"
                 @click="handleCopySecretKey(institutionItemData.secretKey)">
                 <template #icon>
@@ -29,7 +28,6 @@
             <el-button
                 type="success"
                 plain
-                size="small"
                 :disabled="institutionItemData.status === 0"
                 @click="handleRefreshSecretKey">
                 <template #icon>

@@ -4,7 +4,7 @@ import type { RoleFormType, RoleListItemType, RoleTabType, TreeItemType } from '
 import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
 
-export const activeName = ref<RoleTabType>('dms');
+export const activeName = ref<RoleTabType>('cre');
 export const roleMenuTreeData = ref<TreeItemType[]>();
 export const mode = ref<'form' | 'list'>('list');
 export const currentRoleId = ref();

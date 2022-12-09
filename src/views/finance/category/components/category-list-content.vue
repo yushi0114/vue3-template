@@ -168,7 +168,8 @@ function handleRemoveRoleItem(item: RoleListItemType) {
 .search-box {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    align-items: center;
+    padding-bottom: 20px;
 
     .search-input {
         max-width: 350px;

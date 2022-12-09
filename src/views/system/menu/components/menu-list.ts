@@ -3,7 +3,7 @@ import type { MenuFormType, MenuTabType, TreeItemType } from '@/types/system-man
 import { addMenuApi, deleteMenuApi, getMenuDetailByIdApi, getMenuTreeApi, updateMenuApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
 
-export const activeName = ref<MenuTabType>('dms');
+export const activeName = ref<MenuTabType>('fin');
 export const menuTreeData = ref<TreeItemType[]>();
 export const menuForm = ref<MenuFormType>({
     icon: '',

@@ -29,8 +29,8 @@ onMounted(async() => {
     margin-left: 24px;
     padding: 48px 24px 24px;
     height: 100%;
-    border: 1px solid #ebeef5;
-    border-radius: 4px;
+    //border: 1px solid #ebeef5;
+    //border-radius: 4px;
     flex: 1;
     box-sizing: border-box;
     display: flex;

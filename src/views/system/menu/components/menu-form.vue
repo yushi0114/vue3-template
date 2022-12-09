@@ -53,14 +53,14 @@
             <el-form-item label="是否启用:" required prop="status">
                 <el-switch v-model="menuForm.status"/>
             </el-form-item>
-            <el-form-item>
+            <div class="form-footer">
                 <el-button v-if="formType === 'create'" @click="goBack">
-                    返回
+                    取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
-                    编辑
+                    确定
                 </el-button>
-            </el-form-item>
+            </div>
         </el-form>
     </div>
 </template>
@@ -71,8 +71,7 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, } from './menu-list';
 import type { MenuFormType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
-import type { ValidateCallback } from '@/utils';
-import { validateIllegalSymbol } from '@/utils';
+import { type ValidateCallback, validateIllegalSymbol } from '@/utils';
 
 const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
     if (!value) {
@@ -125,7 +124,7 @@ const rules = reactive<FormRules>({
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate((valid, fields) => {
+    await formElement.validate((valid) => {
         if (valid && menuForm.value) {
             handleSaveForm({
                 id: currentMenuId.value,
@@ -166,4 +165,8 @@ async function goBack() {
     margin: 20px 0 30px;
 }
 
+.form-footer {
+    margin: 50px 0;
+    text-align: center;
+}
 </style>

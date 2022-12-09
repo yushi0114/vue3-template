@@ -1,7 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" clearable v-model="filterText">
+            <el-input placeholder="请输入搜索内容" clearable v-model="filterText" :prefix-icon="Search">
             </el-input>
             <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建路由">
                 <template #icon>
@@ -75,6 +75,7 @@
 import { ref } from 'vue';
 import type { TreeItemType } from '@/types/system-manage';
 import Icon from '@/components/Icon.vue';
+import { Search } from '@element-plus/icons-vue';
 import { goCreateFormView, menuTreeData } from './menu-list';
 import type { ElTree } from 'element-plus';
 
@@ -150,7 +151,7 @@ function handleMouseLeave(event: string) {
             text-align: center;
             display: flex;
             align-items: center;
-            margin-left: 15px;
+            margin-left: 5px;
             justify-content: center;
             color: #606266;
             box-sizing: border-box;

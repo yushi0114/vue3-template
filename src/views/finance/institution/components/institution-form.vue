@@ -67,10 +67,10 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button @click="goBack()">
-                        返回
+                        取消
                     </el-button>
                     <el-button type="primary" @click="submitForm(institutionFormRef)">
-                        编辑
+                        确定
                     </el-button>
                 </el-form-item>
             </el-form>

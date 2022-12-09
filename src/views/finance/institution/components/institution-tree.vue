@@ -1,7 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" v-model="filterText" clearable>
+            <el-input placeholder="请输入搜索内容" v-model="filterText" clearable :prefix-icon="Search">
             </el-input>
             <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
                 <template #icon>
@@ -72,6 +72,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import Icon from '@/components/Icon.vue';
+import { Search } from '@element-plus/icons-vue';
 import {
     selectOrgItem,
     goCreateChildLevelFormView,
@@ -153,7 +154,7 @@ function handleMouseLeave(event: string) {
             text-align: center;
             display: flex;
             align-items: center;
-            margin-left: 15px;
+            margin-left: 5px;
             justify-content: center;
             color: #606266;
             box-sizing: border-box;

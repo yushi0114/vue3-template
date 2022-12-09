@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import type { FinanceReportListItemType } from '@/types/finance';
-import { getFinanceReportListApi } from '@/api/finance/finance-report';
+import { deleteFinanceReportApi, getFinanceReportListApi } from '@/api/finance/finance-report';
+import { ElMessage } from 'element-plus';
 
 
 export const listData = ref<{
@@ -48,6 +49,21 @@ export async function getPageList(): Promise<void> {
             listData.value.total = data.total;
             resolve();
         }).catch(() => {
+            resolve();
+        });
+    });
+}
+
+
+export async function deleteItems(ids: string[]): Promise<void> {
+    return new Promise((resolve) => {
+        console.log(ids);
+        deleteFinanceReportApi({ ids }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+        }).finally(() => {
             resolve();
         });
     });

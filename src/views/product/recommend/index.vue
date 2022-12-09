@@ -92,25 +92,6 @@ function handleDelete(rd: ProductRecommandEntity) {
                     <el-button :icon="Plus" type="primary">新建{{ kindName }}</el-button>
                 </RouterLink>
             </FlexRow>
-            <FlexRow class="product-recommand-row" vertical="start">
-                <ContentBoard
-                    hoverable
-                    :label="recommand.name"
-                    v-for="(recommand, i) in recommands"
-                    :key="i">
-                    <template #label-rest>
-                        <FlexRow gap="xs">
-                            <TextHoverable color="regular" @click="handleEdit(recommand)">
-                                <i-ep-edit />
-                            </TextHoverable>
-                            <TextHoverable color="regular" @click="handleDelete(recommand)">
-                                <i-ep-delete />
-                            </TextHoverable>
-                        </FlexRow>
-                    </template>
-                    <img class="product-recommand-poster" :src="recommand.productPoster" />
-                </ContentBoard>
-            </FlexRow>
             </LoadingBoard>
         </Board>
     </PagePanel>

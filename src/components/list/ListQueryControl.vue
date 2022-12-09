@@ -381,6 +381,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     padding: $gap-xs $gap-md;
     background-color: var(--el-color-info-light-9);
     gap: $gap-lg;
+    min-height: 2rem;
 }
 
 .lqc-filter-row .lqc-filter-checkbox {

@@ -9,3 +9,8 @@ export function getFinanceScoreListApi(params: GetFinanceScoreListType): Promise
 }> {
     return api.get(`${DMS_DOMAIN}/v1/org/score/log/list`, { params });
 }
+
+
+export async function deleteFinanceScoreApi(params: { ids: string[] }): Promise<void> {
+    // todo
+}

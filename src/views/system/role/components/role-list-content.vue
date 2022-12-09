@@ -2,7 +2,7 @@
     <div class="search-box">
         <el-input class="search-input"
                   size="large"
-                  placeholder="请输入搜索内容"
+                  placeholder="请输入关键字进行搜索"
                   @clear="handleClear"
                   @keyup.enter="handleSearchRoleList"
                   clearable
@@ -202,7 +202,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding-bottom: 20px;
 
     .search-input {
         max-width: 350px;

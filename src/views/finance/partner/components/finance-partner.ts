@@ -9,7 +9,7 @@ import type {
 } from '@/types/finance';
 
 
-export const activeName = ref<FinancePartnerTabType>('zjfw');
+export const activeName = ref<FinancePartnerTabType>('sjzx');
 export const mode = ref<'form' | 'list'>('list');
 export const currentId = ref();
 export const form = ref<FinancePartnerFormType>({

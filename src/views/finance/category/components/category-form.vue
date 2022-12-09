@@ -128,9 +128,9 @@ const rules = reactive<FormRules>({
     ]
 });
 
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async(formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    await formEl.validate(async (valid) => {
+    await formEl.validate(async(valid) => {
         if (valid) {
             let checkedNodeIds = menuTree.value?.getCheckedNodes(false, true)
                 .map((item: TreeNodeData) => item.id as string);

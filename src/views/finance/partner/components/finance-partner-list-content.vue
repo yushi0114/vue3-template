@@ -1,64 +1,57 @@
 <template>
-    <div class="search-box">
-        <el-input
-            class="search-input"
-            size="large"
-            placeholder="请输入合作伙伴名称进行查询"
-            @clear="handleClear"
-            clearable
-            @keyup.enter="handleSearchList"
-            v-model="filterObject.searchInput">
-            <template #append>
-                <el-button :icon="Search" @click="handleSearchList" />
-            </template>
-        </el-input>
-        <el-button type="primary" :icon="Plus" @click="handleCreateNewItem">新建</el-button>
-    </div>
-    <el-table
-        :data="listData.list" style="width: 100%"
-        @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }"
-        :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }">
-        <el-table-column prop="name" label="合作伙伴"/>
-        <el-table-column prop="imgUrl" label="LOGO">
-            <template #default="scope">
-                <el-image style="height: 40px;" :src="scope.row.imgUrl"></el-image>
-            </template>
-        </el-table-column>
-        <el-table-column>
-            <template #header>
-                <span class="header-options">操作</span>
-            </template>
-            <template #default="scope">
-                <el-button text :icon="EditPen"  @click.prevent="handleEditItem(scope.row)" />
-                <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
-            </template>
-        </el-table-column>
-    </el-table>
+    <ListQueryControl
+        v-model="filterObject"
+        :filterRowVisible="false"
+        :searchConfig="{
+            label: '请输入机构名称进行查询',
+            field: 'searchInput',
+        }">
+        <template v-slot:search-rest>
+            <el-button type="primary" :icon="Plus" @click="handleCreateNewItem">新建</el-button>
+        </template>
+    </ListQueryControl>
+    <LoadingBoard :loading="loading" :empty="!listData.list.length">
+        <el-table
+            :data="listData.list" style="width: 100%"
+            @sort-change="handleSortChange"
+            :default-sort="{ prop: 'updateTime', order: 'descending' }"
+            :header-cell-style="{
+                        color: '#595959',
+                        'background-color': '#f3f4f8'
+                    }">
+            <el-table-column prop="name" label="合作伙伴"/>
+            <el-table-column prop="imgUrl" label="LOGO">
+                <template #default="scope">
+                    <el-image style="height: 40px;" :src="scope.row.imgUrl"></el-image>
+                </template>
+            </el-table-column>
+            <el-table-column>
+                <template #header>
+                    <span class="header-options">操作</span>
+                </template>
+                <template #default="scope">
+                    <el-button text :icon="EditPen"  @click.prevent="handleEditItem(scope.row)" />
+                    <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
+                </template>
+            </el-table-column>
+        </el-table>
+    </LoadingBoard>
     <div class="page-content">
-        <el-pagination
-            v-if="listData.total"
-            class="margin-20-20"
+        <CommonPagination
             v-model:current-page="filterObject.currentPage"
             v-model:page-size="filterObject.currentSize"
-            :page-sizes="[10, 20, 50]"
-            layout="total, sizes, prev, pager, next, jumper"
             :total="listData.total"
-            background
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange">
-        </el-pagination>
+        </CommonPagination>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
+import { Plus, EditPen, Delete } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
-import { LoadingService } from '@/views/system/loading-service';
 import {
+    loading,
     activeName,
     currentId,
     fileList,
@@ -69,7 +62,6 @@ import {
     listData,
     mode,
     remove,
-    resetFilterObject,
     resetForm
 } from '@/views/finance/partner/components/finance-partner';
 import type { FinancePartnerListItemType } from '@/types/finance';
@@ -80,8 +72,7 @@ function formatSortType(value: string) {
 }
 
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
-    console.log(params);
-    LoadingService.getInstance().loading();
+    // console.log(params);
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = params.prop;
@@ -89,25 +80,13 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
     await getPageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 async function handleSearchList() {
-    LoadingService.getInstance().loading();
     filterObject.value.currentPage = 1;
     await getPageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
-}
-
-async function handleClear() {
-    LoadingService.getInstance().loading();
-    resetFilterObject();
-    await getPageList({
-        tab: activeName.value
-    });
-    LoadingService.getInstance().stop();
 }
 
 function handleEditItem(item: FinancePartnerListItemType) {
@@ -134,21 +113,17 @@ async function handleCreateNewItem() {
 
 async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
-    LoadingService.getInstance().loading();
     await getPageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     filterObject.value.currentPage = 1;
     filterObject.value.currentSize = item;
-    LoadingService.getInstance().loading();
     await getPageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 function handleRemoveItem(item: FinancePartnerListItemType) {
@@ -172,6 +147,7 @@ function handleRemoveItem(item: FinancePartnerListItemType) {
         .catch(() => {});
 }
 
+watch(() => filterObject.value.searchInput, handleSearchList);
 </script>
 
 <style scoped lang="scss">

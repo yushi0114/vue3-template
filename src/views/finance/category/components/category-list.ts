@@ -16,6 +16,7 @@ import type {
 } from '@/types/finance';
 import { ElMessage } from 'element-plus';
 
+export const loading = ref(false);
 export const allSystemMenuTree = ref<AllSystemMenuTreeItem[]>();
 export const orgTypeModuleList = ref<(OrgTypeMenuItem & { label: string; value: string })[]>();
 export const mode = ref<'form' | 'list'>('list');
@@ -83,9 +84,11 @@ export async function goEditFormView(item: FinanceCategoryListItemType) {
 
 export async function setAllSystemMenuTree(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getAllSystemMenuTree().then(data => {
             allSystemMenuTree.value = data;
         }).finally(() => {
+            loading.value = false;
             resolve();
         });
     });
@@ -94,6 +97,7 @@ export async function setAllSystemMenuTree(): Promise<void> {
 
 export async function setOrgTypeModuleList(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getOrgTypeModuleList().then(data => {
             orgTypeModuleList.value = data.map(item => ({
                 ...item,
@@ -102,12 +106,14 @@ export async function setOrgTypeModuleList(): Promise<void> {
             }));
         }).finally(() => {
             resolve();
+            loading.value = false;
         });
     });
 }
 
 export async function setFinanceCategoryList(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getFinanceCategoryListApi({
             pageIndex: financeFilterObject.currentPage,
             pageSize: financeFilterObject.currentSize,
@@ -119,6 +125,7 @@ export async function setFinanceCategoryList(): Promise<void> {
             categoryList.total = 1;
         }).finally(() => {
             resolve();
+            loading.value = false;
         });
     });
 }
@@ -126,6 +133,7 @@ export async function setFinanceCategoryList(): Promise<void> {
 
 export async function addFinanceCategory(params: AddFinanceCategoryType): Promise<boolean> {
     return new Promise((resolve) => {
+        loading.value = true;
         addFinanceCategoryApi(params).then(() => {
             ElMessage({
                 type: 'success',
@@ -137,6 +145,7 @@ export async function addFinanceCategory(params: AddFinanceCategoryType): Promis
                 type: 'error',
                 message: '创建失败',
             });
+            loading.value = false;
             resolve(false);
         });
     });
@@ -144,6 +153,7 @@ export async function addFinanceCategory(params: AddFinanceCategoryType): Promis
 
 export async function updateFinanceCategory(params: UpdateFinanceCategoryType): Promise<boolean> {
     return new Promise((resolve) => {
+        loading.value = true;
         updateFinanceCategoryApi(params).then(() => {
             ElMessage({
                 type: 'success',
@@ -155,6 +165,7 @@ export async function updateFinanceCategory(params: UpdateFinanceCategoryType): 
                 type: 'error',
                 message: '更新失败',
             });
+            loading.value = false;
             resolve(false);
         });
     });
@@ -162,6 +173,7 @@ export async function updateFinanceCategory(params: UpdateFinanceCategoryType): 
 
 export async function deleteFinanceCategory(id: string): Promise<boolean> {
     return new Promise((resolve) => {
+        loading.value = true;
         deleteFinanceCategoryApi({ id }).then(() => {
             ElMessage({
                 type: 'success',
@@ -173,6 +185,7 @@ export async function deleteFinanceCategory(id: string): Promise<boolean> {
                 type: 'error',
                 message: '删除失败',
             });
+            loading.value = false;
             resolve(false);
         });
     });

@@ -11,10 +11,10 @@ import {
 import type { FinanceCodeFormType, FinanceCodeListItemType } from '@/types/finance';
 import { getAllCityListApi } from '@/api/finance/finance-city';
 import { getOrgTypeDicApi } from '@/api/finance/finance-category';
-import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
 import { downloadByBase64, downloadByData } from '@/utils';
 
+export const loading = ref(false);
 export const mode = ref<'form' | 'list'>('list');
 export const cityCodeList = ref();
 export const orgTypeCodeList = ref();
@@ -112,6 +112,7 @@ export async function setOrgTypeCodeList(): Promise<void> {
 
 export async function addFinanceCode(): Promise<boolean> {
     return new Promise((resolve) => {
+        loading.value = true;
         addFinanceCodeApi({
             ...codeForm.value
         }).then(() => {
@@ -125,6 +126,7 @@ export async function addFinanceCode(): Promise<boolean> {
                 type: 'error',
                 message: '创建失败',
             });
+            loading.value = false;
             resolve(false);
         });
     });
@@ -135,6 +137,7 @@ export async function updateFinanceCode(): Promise<boolean> {
         if (!currentCodeId.value) {
             return;
         }
+        loading.value = true;
         updateFinanceCodeApi({
             id: currentCodeId.value,
             ...codeForm.value
@@ -149,6 +152,7 @@ export async function updateFinanceCode(): Promise<boolean> {
                 type: 'error',
                 message: '更新失败',
             });
+            loading.value = false;
             resolve(false);
         });
     });
@@ -169,6 +173,7 @@ export async function deleteFinanceCode(id: string): Promise<boolean> {
                 type: 'error',
                 message: '删除失败',
             });
+            loading.value = false;
             resolve(false);
         });
     });
@@ -176,6 +181,7 @@ export async function deleteFinanceCode(id: string): Promise<boolean> {
 
 export async function setFinanceCodeList(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getFinanceCodeListApi({
             pageIndex: financeCodeFilterObject.currentPage,
             pageSize: financeCodeFilterObject.currentSize,
@@ -189,6 +195,7 @@ export async function setFinanceCodeList(): Promise<void> {
             codeList.total = data.pageTotal;
         }).finally(() => {
             resolve();
+            loading.value = false;
         });
     });
 }

@@ -39,7 +39,7 @@ const percentage = computed(() => {
 <style lang="scss">
 .list-progress {
     width: 100%;
-    max-width: 350px;
+    max-width: 35%;
     flex: 1;
     display: flex;
     align-items: center;

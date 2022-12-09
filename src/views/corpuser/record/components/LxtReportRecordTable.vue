@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { Search, Delete } from '@element-plus/icons-vue';
+import { Delete } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { getRecordList, deleteBatchRecord } from '@/api/corpReportRecord';
 import type { CorpRepoteRecordTable } from '@/types/corpReportRecord';
+import { useListControlModel } from '@/composables';
 
 const reportRecordList = ref<CorpRepoteRecordTable[]>([]);
-
-const searchInput = ref('');
+const { model } = useListControlModel({
+    initialModel: { searchInput: '' }
+});
 
 const allToogle = reactive({
     loading: true,
@@ -33,7 +35,7 @@ onMounted(() => {
 // 获取列表
 const getReportRecordList = () => {
     const params = {
-        searchInput: searchInput.value,
+        searchInput: model.searchInput,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
         sortField: sort.sortField,
@@ -50,11 +52,6 @@ const getReportRecordList = () => {
         .finally(() => {
             allToogle.loading = false;
         });
-};
-
-const searchRecordList = () => {
-    page.currentPage = 1;
-    getReportRecordList();
 };
 
 const handleSortChange = ({ prop, order } : { prop: string, order: string }) => {
@@ -131,7 +128,7 @@ const handleDelete = (row: CorpRepoteRecordTable) => {
 
 // 刷新列表
 const refreshTable = () => {
-    searchInput.value = '';
+    model.searchInput = '';
     getReportRecordList();
 };
 
@@ -146,26 +143,27 @@ const handleCurrentChange = (val: number) => {
     getReportRecordList();
 };
 
+watch(model, () => {
+    reportRecordList.value = [];
+    page.currentPage = 1;
+    getReportRecordList();
+});
 </script>
 
 <template>
     <div class="record-container">
-        <div class="header">
-            <el-input
-                class="searchInput"
-                placeholder="请输入关键字进行查询"
-                v-model.trim="searchInput"
-                size="large"
-                clearable
-                @clear="searchRecordList"
-                @keyup.enter="searchRecordList"
-            >
-                <template #append>
-                    <el-button :icon="Search" @click="searchRecordList" />
-                </template>
-            </el-input>
-            <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
-        </div>
+        <ListQueryControl
+            v-model="model"
+            :filter-row-visible="false"
+            :searchConfig="{
+                label: '请输入关键字进行查询',
+                field: 'searchInput',
+            }">
+
+            <template #search-rest>
+                <el-button type="danger" :icon="Delete" :disabled="allToogle.batchDeleteToogle" @click="batchDelete">批量删除</el-button>
+            </template>
+        </ListQueryControl>
         <div class="content">
             <LoadingBoard :loading="allToogle.loading" :empty="!reportRecordList.length">
             <el-table

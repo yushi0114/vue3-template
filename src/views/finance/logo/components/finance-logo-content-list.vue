@@ -43,20 +43,13 @@
             </template>
         </el-table-column>
     </el-table>
-    <div class="page-content">
-        <el-pagination
-            v-if="listData.total"
-            class="margin-20-20"
-            v-model:current-page="filterObject.currentPage"
-            v-model:page-size="filterObject.currentSize"
-            :page-sizes="[10, 20, 50]"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="listData.total"
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange">
-        </el-pagination>
-    </div>
+    <CommonPagination
+        v-model:current-page="filterObject.currentPage"
+        v-model:page-size="filterObject.currentSize"
+        :total="listData.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange">
+    </CommonPagination>
     <logo-form-modal
         v-if="isDialogShow"
         :dialog-visible="isDialogShow"

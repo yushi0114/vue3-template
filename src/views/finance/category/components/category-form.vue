@@ -138,8 +138,9 @@ const submitForm = async(formEl: FormInstance | undefined) => {
                 return;
             }
             LoadingService.getInstance().loading();
+            let status = false;
             if (formType.value === 'create') {
-                await addFinanceCategory({
+                status = await addFinanceCategory({
                     ...categoryForm.value,
                     menuIdArr: checkedNodeIds
                 });
@@ -147,13 +148,15 @@ const submitForm = async(formEl: FormInstance | undefined) => {
                 if (!currentCategoryId.value) {
                     return;
                 }
-                await updateFinanceCategory({
+                status = await updateFinanceCategory({
                     id: currentCategoryId.value,
                     ...categoryForm.value,
                     menuIdArr: checkedNodeIds
                 });
             }
-            await goListView();
+            if (status) {
+                await goListView();
+            }
             LoadingService.getInstance().stop();
         }
     });

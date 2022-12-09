@@ -22,7 +22,6 @@ export type AddRoleType = {
     menuIdArr: string[];
     desc: string;
     tab: RoleTabType;
-    menuName: string;
 }
 
 export type UpdateRoleType = AddRoleType & {
@@ -32,5 +31,4 @@ export type UpdateRoleType = AddRoleType & {
 export type DeleteRoleType = {
     roleId: string;
     tab: RoleTabType;
-    menuName: string;
 }

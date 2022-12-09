@@ -44,7 +44,7 @@
 import { reactive, ref } from 'vue';
 import type { ElTree, FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus';
-import { activeName, addRole, formType, handleGoBack, roleForm, roleMenuTreeData, updateRole } from './role-list';
+import { addRole, formType, handleGoBack, roleForm, roleMenuTreeData, updateRole } from './role-list';
 import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 import { validateIllegalSymbol } from '@/utils';
@@ -77,20 +77,24 @@ async function submitForm(formElement: FormInstance | undefined) {
                 return;
             }
             LoadingService.getInstance().loading();
+            let status: boolean;
             if (formType.value === 'create') {
-                console.log(activeName.value);
-                await addRole(checkedNodeIds);
+                status = await addRole(checkedNodeIds);
             } else {
-                await updateRole(checkedNodeIds);
+                status = await updateRole(checkedNodeIds);
+            }
+            if (status) {
+                await handleGoBack();
             }
             LoadingService.getInstance().stop();
-            await handleGoBack();
         }
     });
 }
 
 async function goBack() {
+    LoadingService.getInstance().loading();
     await handleGoBack();
+    LoadingService.getInstance().stop();
 }
 
 
@@ -100,10 +104,12 @@ async function goBack() {
 .custom-form {
     width: 700px;
 }
+
 .form-header {
     font-size: 24px;
     margin: 20px 0 30px;
 }
+
 .form-footer {
     margin: 50px 0;
     text-align: center;

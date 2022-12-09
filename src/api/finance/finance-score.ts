@@ -11,6 +11,6 @@ export function getFinanceScoreListApi(params: GetFinanceScoreListType): Promise
 }
 
 
-export async function deleteFinanceScoreApi(params: { ids: string[] }): Promise<void> {
-    // todo
+export async function deleteFinanceScoreApi(params: { idArr: string[] }): Promise<void> {
+    return api.post(`${DMS_DOMAIN}/v1/del/score/log`, params);
 }

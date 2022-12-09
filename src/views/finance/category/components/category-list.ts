@@ -88,8 +88,8 @@ export async function setAllSystemMenuTree(): Promise<void> {
         getAllSystemMenuTree().then(data => {
             allSystemMenuTree.value = data;
         }).finally(() => {
-            resolve();
             loading.value = false;
+            resolve();
         });
     });
 
@@ -131,7 +131,7 @@ export async function setFinanceCategoryList(): Promise<void> {
 }
 
 
-export async function addFinanceCategory(params: AddFinanceCategoryType): Promise<void> {
+export async function addFinanceCategory(params: AddFinanceCategoryType): Promise<boolean> {
     return new Promise((resolve) => {
         loading.value = true;
         addFinanceCategoryApi(params).then(() => {
@@ -139,14 +139,19 @@ export async function addFinanceCategory(params: AddFinanceCategoryType): Promis
                 type: 'success',
                 message: '创建成功',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '创建失败',
+            });
             loading.value = false;
+            resolve(false);
         });
     });
 }
 
-export async function updateFinanceCategory(params: UpdateFinanceCategoryType): Promise<void> {
+export async function updateFinanceCategory(params: UpdateFinanceCategoryType): Promise<boolean> {
     return new Promise((resolve) => {
         loading.value = true;
         updateFinanceCategoryApi(params).then(() => {
@@ -154,14 +159,19 @@ export async function updateFinanceCategory(params: UpdateFinanceCategoryType): 
                 type: 'success',
                 message: '创建成功',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '更新失败',
+            });
             loading.value = false;
+            resolve(false);
         });
     });
 }
 
-export async function deleteFinanceCategory(id: string): Promise<void> {
+export async function deleteFinanceCategory(id: string): Promise<boolean> {
     return new Promise((resolve) => {
         loading.value = true;
         deleteFinanceCategoryApi({ id }).then(() => {
@@ -169,9 +179,14 @@ export async function deleteFinanceCategory(id: string): Promise<void> {
                 type: 'success',
                 message: '删除成功',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '删除失败',
+            });
             loading.value = false;
+            resolve(false);
         });
     });
 }

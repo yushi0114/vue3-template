@@ -95,7 +95,7 @@ export async function getMenuData(id: string): Promise<void> {
 
 }
 
-export async function createMenu(menuForm: MenuFormType): Promise<void> {
+export async function createMenu(menuForm: MenuFormType): Promise<boolean> {
     return new Promise((resolve) => {
         addMenuApi({
             ...menuForm,
@@ -108,14 +108,14 @@ export async function createMenu(menuForm: MenuFormType): Promise<void> {
                 type: 'success',
                 message: '创建成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            resolve(false);
         });
     });
 }
 
-export async function editMenu(id: string, menuForm: MenuFormType): Promise<void> {
+export async function editMenu(id: string, menuForm: MenuFormType): Promise<boolean> {
     return new Promise((resolve) => {
         updateMenuApi({
             id,
@@ -128,15 +128,15 @@ export async function editMenu(id: string, menuForm: MenuFormType): Promise<void
                 type: 'success',
                 message: '更新成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            resolve(false);
         });
     });
 }
 
 
-export async function removeMenus(willDeleteIds: string[]): Promise<void> {
+export async function removeMenus(willDeleteIds: string[]): Promise<boolean> {
     return new Promise((resolve) => {
         deleteMenuApi({
             tab: activeName.value,
@@ -147,9 +147,13 @@ export async function removeMenus(willDeleteIds: string[]): Promise<void> {
                 type: 'success',
                 message: '删除成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            ElMessage({
+                type: 'error',
+                message: '删除失败',
+            });
+            resolve(false);
         });
     });
 

@@ -286,12 +286,6 @@ const print = () => {
         min-height: 100vh;
         overflow-y: auto;
 
-        .header {
-            height: 45px !important;
-            border-bottom: 1px solid #d7dee4;
-            background-color: #28313d;
-        }
-
         .authority-content {
             display: flex;
             align-items: center;

@@ -55,10 +55,23 @@ export async function getPageList(): Promise<void> {
     });
 }
 
-export async function deleteItems(ids: string[]): Promise<void> {
+export async function deleteItems(params: {
+    id: string;
+    account: string
+}[]): Promise<void> {
     return new Promise((resolve) => {
-        console.log(ids);
-        deleteFinanceOrgUserApi({ ids }).then(() => {
+        const apiParams = params.reduce((pre: {
+            idList: string[],
+            accountList: string[]
+        }, cur) => {
+            pre.accountList.push(cur.account);
+            pre.idList.push(cur.id);
+            return pre;
+        }, {
+            idList: [],
+            accountList: []
+        });
+        deleteFinanceOrgUserApi(apiParams).then(() => {
             ElMessage({
                 type: 'success',
                 message: '删除成功',

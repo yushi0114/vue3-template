@@ -56,13 +56,13 @@ export enum ARTICLE_MODULE {
 
 // 文章操作枚举
 export enum ARTICLE_OPERATE_MODE {
-    PUBLISH = 0,
-    OFFLINE = 1,
-    SORT = 2,
-    DELETE = 3,
-    EDIT = 4,
-    SET_HOT = 5,
-    CANCEL_HOT = 6,
+    PUBLISH = '0',
+    OFFLINE = '1',
+    SORT = '2',
+    DELETE = '3',
+    EDIT = '4',
+    SET_HOT = '5',
+    CANCEL_HOT = '6',
 }
 
 // 文章操作label枚举

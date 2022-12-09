@@ -60,7 +60,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="roleFilterObject.currentPage"
-        :total="roleList.total" />
+        :total="roleList.total"/>
 </template>
 
 <script lang="ts" setup>
@@ -70,6 +70,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     activeName,
     currentRoleId,
+    deleteRole,
     formType,
     getRolePageList,
     getTreeData,
@@ -80,7 +81,7 @@ import {
     roleForm,
     roleList
 } from './role-list';
-import { deleteRoleApi, getRoleMenuIdsApi } from '@/api/system-manage';
+import { getRoleMenuIdsApi } from '@/api/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 
 function formatSortType(value: string) {
@@ -175,14 +176,9 @@ function handleRemoveRoleItem(item: RoleListItemType) {
         }
     )
         .then(async () => {
-            await deleteRoleApi({
+            await deleteRole({
                 roleId: item.id,
-                tab: activeName.value,
-                menuName: ''
-            });
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
+                tab: activeName.value
             });
             await getRolePageList({
                 tab: activeName.value

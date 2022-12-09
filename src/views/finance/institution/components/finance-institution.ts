@@ -345,15 +345,20 @@ export async function createOrg(params: {
         parentId: string;
         selected: number;
     }[]
-}): Promise<void> {
+}): Promise<boolean> {
     return new Promise((resolve) => {
         addOrgApi(params).then(() => {
             ElMessage({
                 type: 'success',
                 message: '创建机构成功！',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '创建机构失败！',
+            });
+            resolve(false);
         });
     });
 }
@@ -370,15 +375,20 @@ export async function updateOrg(params: {
         parentId: string;
         selected: number;
     }[]
-}): Promise<void> {
+}): Promise<boolean> {
     return new Promise((resolve) => {
         updateOrgApi(params).then(() => {
             ElMessage({
                 type: 'success',
                 message: '更新机构成功！',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '更新机构失败！',
+            });
+            resolve(false);
         });
     });
 }
@@ -388,30 +398,40 @@ export async function deleteOrg(params: {
         id: string;
         orgLevel: number;
     }[]
-}): Promise<void> {
+}): Promise<boolean> {
     return new Promise((resolve) => {
         deleteOrgApi(params).then(() => {
             ElMessage({
                 type: 'success',
                 message: '机构删除成功！',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '机构删除失败！',
+            });
+            resolve(false);
         });
     });
 }
 
 export async function refreshSecretKey(params: {
     id: string
-}): Promise<void> {
+}): Promise<boolean> {
     return new Promise((resolve) => {
         refreshOrgKeyApi(params).then(() => {
             ElMessage({
                 type: 'success',
                 message: '机构密钥更新成功！',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '机构密钥更新失败！',
+            });
+            resolve(false);
         });
     });
 }

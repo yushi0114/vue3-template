@@ -21,10 +21,10 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="机构名称:" required prop="orgName">
-                <el-input v-model="codeForm.orgName" show-word-limit   maxlength="255" placeholder="请输入机构名称"/>
+                <el-input v-model="codeForm.orgName" show-word-limit maxlength="255" placeholder="请输入机构名称"/>
             </el-form-item>
             <el-form-item label="机构编码:" required prop="orgCode">
-                <el-input v-model="codeForm.orgCode" show-word-limit   maxlength="15" placeholder="请输入机构编码"/>
+                <el-input v-model="codeForm.orgCode" show-word-limit maxlength="15" placeholder="请输入机构编码"/>
             </el-form-item>
             <el-form-item label="机构地址:" required prop="address">
                 <el-input
@@ -116,19 +116,24 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     await formEl.validate(async (valid) => {
         if (valid) {
             LoadingService.getInstance().loading();
+            let status: boolean;
             if (formType.value === 'create') {
-                await addFinanceCode();
+                status = await addFinanceCode();
             } else {
-                await updateFinanceCode();
+                status = await updateFinanceCode();
+            }
+            if (status) {
+                await handleGoBack();
             }
             LoadingService.getInstance().stop();
-            await handleGoBack();
         }
     });
 };
 
 async function goBack() {
+    LoadingService.getInstance().loading();
     await handleGoBack();
+    LoadingService.getInstance().stop();
 }
 
 

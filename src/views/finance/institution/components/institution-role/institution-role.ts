@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import type { RoleFormType, RoleListItemType } from '@/views/system/type/role-list.type';
+import type { RoleFormType, RoleListItemType } from '@/types/system-manage';
 import { ElMessage } from 'element-plus';
 import {
     addFinanceOrgRoleApi,
@@ -123,7 +123,7 @@ export async function getRolePageList(orgId: string): Promise<void> {
     });
 }
 
-export async function addRole(checkedNodeIds: string[]): Promise<void> {
+export async function addRole(checkedNodeIds: string[]): Promise<boolean> {
     return new Promise((resolve) => {
         addFinanceOrgRoleApi({
             ...roleForm.value,
@@ -134,14 +134,18 @@ export async function addRole(checkedNodeIds: string[]): Promise<void> {
                 type: 'success',
                 message: '创建成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            ElMessage({
+                type: 'error',
+                message: '创建失败',
+            });
+            resolve(false);
         });
     });
 }
 
-export async function updateRole(checkedNodeIds: string[]): Promise<void> {
+export async function updateRole(checkedNodeIds: string[]): Promise<boolean> {
     return new Promise((resolve) => {
         updateFinanceOrgRoleApi({
             roleId: currentRoleId.value,
@@ -153,15 +157,19 @@ export async function updateRole(checkedNodeIds: string[]): Promise<void> {
                 type: 'success',
                 message: '更新成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            ElMessage({
+                type: 'error',
+                message: '更新失败',
+            });
+            resolve(false);
         });
     });
 
 }
 
-export async function deleteRole(id: string): Promise<void> {
+export async function deleteRole(id: string): Promise<boolean> {
     return new Promise((resolve) => {
         deleteFinanceOrgRoleApi({
             roleId: id,
@@ -170,9 +178,13 @@ export async function deleteRole(id: string): Promise<void> {
                 type: 'success',
                 message: '删除成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            ElMessage({
+                type: 'error',
+                message: '删除失败',
+            });
+            resolve(false);
         });
     });
 

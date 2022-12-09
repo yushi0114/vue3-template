@@ -77,18 +77,19 @@ const rules = reactive<FormRules>({
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async (valid, fields) => {
+    await formElement.validate(async (valid) => {
         if (valid) {
             LoadingService.getInstance().loading();
+            let status: boolean;
             if (formType.value === 'create') {
-                await addUser();
+                status = await addUser();
             } else {
-                await updateUser();
+                status = await updateUser();
             }
-            await handleGoBack();
+            if (status) {
+                await handleGoBack();
+            }
             LoadingService.getInstance().stop();
-        } else {
-            console.log('error submit!', fields);
         }
     });
 }
@@ -105,10 +106,12 @@ async function goBack() {
 .custom-form {
     width: 700px;
 }
+
 .form-header {
     font-size: 24px;
     margin: 20px 0 30px;
 }
+
 .form-footer {
     margin: 50px 0;
     text-align: center;

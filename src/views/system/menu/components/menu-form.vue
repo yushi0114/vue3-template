@@ -141,13 +141,16 @@ async function handleSaveForm(params: {
     type: 'create' | 'edit' | 'empty'
 }) {
     LoadingService.getInstance().loading();
+    let status = false;
     if (params.type === 'create') {
-        await createMenu(params.form);
+        status = await createMenu(params.form);
     }
     if (params.type === 'edit' && params.id) {
-        await editMenu(params.id, params.form);
+        status = await editMenu(params.id, params.form);
     }
-    await goTreeView();
+    if (status) {
+        await goTreeView();
+    }
     LoadingService.getInstance().stop();
 }
 

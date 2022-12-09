@@ -9,3 +9,8 @@ export function getFinanceOrgUserListApi(params: GetFinanceOrgUserListType): Pro
 }> {
     return api.get(`${DMS_DOMAIN}/v1/org/user/list`, { params });
 }
+
+
+export async function deleteFinanceOrgUserApi(params: { ids: string[] }): Promise<void> {
+    // return api.get(`${DMS_DOMAIN}/v1/org/user/list`, { params });
+}

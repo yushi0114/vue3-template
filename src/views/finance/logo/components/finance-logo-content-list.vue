@@ -189,7 +189,7 @@ async function handleSizeChange(item: number) {
 .search-box {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    padding-bottom: 20px;
 
     .search-input {
         width: 350px;

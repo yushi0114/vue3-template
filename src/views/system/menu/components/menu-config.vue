@@ -6,7 +6,7 @@
                 @operateTreeItem="handleOperateTreeItem($event)"></MenuTree>
         </div>
         <div class="menu-content">
-            <el-empty v-if="formType === 'empty'" description="暂无数据"/>
+            <el-empty v-if="formType === 'empty'" description="请在左侧选择菜单~"/>
             <MenuForm v-else></MenuForm>
         </div>
     </div>

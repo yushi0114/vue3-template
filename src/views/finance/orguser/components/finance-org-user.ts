@@ -1,6 +1,7 @@
 import { ref } from 'vue';
-import { getFinanceOrgUserListApi } from '@/api/finance/finance-org-user';
+import { deleteFinanceOrgUserApi, getFinanceOrgUserListApi } from '@/api/finance/finance-org-user';
 import type { FinanceOrgUserListItemType } from '@/types/finance';
+import { ElMessage } from 'element-plus';
 
 
 export const listData = ref<{
@@ -49,6 +50,20 @@ export async function getPageList(): Promise<void> {
             listData.value.total = data.total;
             resolve();
         }).catch(() => {
+            resolve();
+        });
+    });
+}
+
+export async function deleteItems(ids: string[]): Promise<void> {
+    return new Promise((resolve) => {
+        console.log(ids);
+        deleteFinanceOrgUserApi({ ids }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+        }).finally(() => {
             resolve();
         });
     });

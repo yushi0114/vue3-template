@@ -1,8 +1,9 @@
 <template>
     <div class="search-box">
         <el-input
+            size="large"
             class="search-input"
-            placeholder="请输入搜索内容"
+            placeholder="请输入关键字进行搜索"
             @clear="handleClear"
             clearable
             @keyup.enter="handleSearchList"
@@ -180,10 +181,11 @@ function handleRemoveItem(item: UserListItemType) {
 .search-box {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 10px 0;
 
     .search-input {
-        max-width: 220px;
+        max-width: 350px;
     }
 }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="search-box">
-        <el-input class="search-input" placeholder="请输入搜索内容" @clear="handleClear" clearable
+        <el-input size="large" class="search-input" placeholder="请输入关键字进行搜索" @clear="handleClear" clearable
                   v-model="roleFilterObject.searchInput">
             <template #append>
                 <el-button @click="handleSearchRoleList">
@@ -159,10 +159,11 @@ function handleRemoveRoleItem(item: RoleListItemType) {
 .search-box {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 10px 0;
 
     .search-input {
-        max-width: 220px;
+        max-width: 350px;
     }
 }
 </style>

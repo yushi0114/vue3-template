@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { AcceptProgressType, expectTimeTypeMap, requirmentProgressTypeMap } from '@/enums';
+import { colorStatusMap, expectTimeTypeMap, requirmentProgressTypeMap } from '@/enums';
 import type { RequirementEntity } from '@/types';
 import { ItemOperate, ListField, ListProgress, RectLogo, type ListOperatorOption } from '@/components';
 import { TABLE_CONFIG, TABLE_COLUMNS} from '../constants';
@@ -24,14 +24,6 @@ const emits = defineEmits<{
 }>();
 
 const sjcTableRef = ref();
-const colorStatusMap: Record<AcceptProgressType, string> = {
-    [AcceptProgressType.all]: 'warning',
-    [AcceptProgressType.undo]: 'warning',
-    [AcceptProgressType.doing]: '',
-    [AcceptProgressType.done]: 'success',
-    [AcceptProgressType.refuse]: 'exception',
-    [AcceptProgressType.undoIn48]: 'warning'
-};
 
 function handleOperate(opt: ListOperatorOption<ItemOperate>, item: RequirementEntity) {
     if (opt.disabled) return;

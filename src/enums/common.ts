@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\enums\common.ts
  * @Author: zys
  * @Date: 2022-11-04 15:03:26
- * @LastEditTime: 2022-12-09 15:41:41
+ * @LastEditTime: 2022-12-09 16:08:08
  * @LastEditors: zys
  * @Reference:
  */
@@ -73,11 +73,4 @@ export enum OPERATE_TYPE {
     EDIT = 'edit',
     DELETE = 'delete',
     READ = 'read',
-}
-
-export enum PROCESS_BAR_STATUS {
-    SUCCESS = 'success',
-    EXCEPTION = 'exception',
-    WARNING = 'warning',
-    NORMAL = '',
 }

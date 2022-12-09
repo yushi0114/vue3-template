@@ -91,7 +91,7 @@ const handleViewReport = (type: ReportType) => {
             <template #label-rest>
                 <FlexRow>
                     <el-button size="small" @click="handleViewReport(ReportType.CREDIT)">征信报告</el-button>
-                    <el-button size="small" @click="handleViewReport(ReportType.CREDIT)">信用评分详情</el-button>
+                    <el-button size="small" @click="handleViewReport(ReportType.SCORE)">信用评分详情</el-button>
                 </FlexRow>
             </template>
             <ScoreResult :score-result="score.result" />

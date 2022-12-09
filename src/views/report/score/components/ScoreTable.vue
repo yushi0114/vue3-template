@@ -46,7 +46,7 @@ const getCorpList = () => {
 const router = useRouter();
 const handleView = (row: IScoreTable) => {
     const routerUrl = router.resolve({
-        path: '/score/detail',
+        path: '/report-score/detail',
         query: {
             corpName: row.corpName,
             corpCode: row.corpCode

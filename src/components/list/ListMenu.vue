@@ -159,8 +159,24 @@ watch(isCtrlKeep, (newValue) => {
     :deep(.el-button.el-button--primary) {
         background-color: $color-primary-light-9;
         color: $color-primary;
+        &:focus {
+            background-color: $color-primary-light-9;
+            color: $color-primary;
+        }
+    }
+    :deep(.el-button) {
+        &:hover {
+            background-color: $color-primary-light-9;
+            color: $color-primary;
+        }
+        &:focus {
+            background-color: inherit;
+        }
     }
     :deep(.el-collapse) {
+        &::-webkit-scrollbar {
+            width: 0;
+        }
         border-top: none;
         border-bottom: none;
         .el-collapse-item__header {
@@ -172,6 +188,7 @@ watch(isCtrlKeep, (newValue) => {
 
         .el-collapse-item__content {
             padding-bottom: 0;
+            padding-right: 32px;
         }
     }
 }

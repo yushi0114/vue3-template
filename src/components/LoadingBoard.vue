@@ -23,14 +23,14 @@ withDefaults(
 <template>
     <Layout class="loading-board">
         <!-- -->
-        <Layout v-if="loading" v-loading="loading" element-loading-text="加载中"></Layout>
-        <Layout v-else-if="empty">
+        <Layout v-show="loading" v-loading="loading" element-loading-text="加载中"></Layout>
+        <Layout v-show="!loading && empty">
             <el-empty
                 :image="image"
                 :image-size="imageSize"
                 :description="description" />
         </Layout>
-        <Layout v-else>
+        <Layout v-show="(!loading && !empty)">
             <slot></slot>
         </Layout>
     </Layout>

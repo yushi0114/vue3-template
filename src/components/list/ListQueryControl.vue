@@ -351,6 +351,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     gap: $gap-xs;
     .lqc-type-row {
         width: 250px;
+        box-sizing: border-box;
         overflow-y: auto;
         background-color: $bg-color;
     }
@@ -360,6 +361,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
 }
 
 .lqc-search-row {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-
+import { Clock } from '@element-plus/icons-vue';
 const props = withDefaults(
     defineProps<{
         label?: string,
@@ -24,7 +24,12 @@ const percentage = computed(() => {
 <template>
     <div class="list-progress">
         <Text size="xs" color="regular" v-if="label">{{ label }}:</Text>
-        <el-progress class="list-progress-inner" :percentage="percentage" :status="(status as any)" :format="format" />
+        <FlexRow class="list-progress-inner">
+            <el-progress class="flex-1" :percentage="percentage" :status="(status as any)" :format="format" />
+            <el-icon color="var(--el-color-primary)" v-if="!status">
+                <Clock />
+            </el-icon>
+        </FlexRow>
         <Text size="xs" :color="status as any || 'primary'" class="list-progress-desc">
             <slot></slot>
         </Text>
@@ -34,7 +39,7 @@ const percentage = computed(() => {
 <style lang="scss">
 .list-progress {
     width: 100%;
-    max-width: 300px;
+    max-width: 350px;
     flex: 1;
     display: flex;
     align-items: center;

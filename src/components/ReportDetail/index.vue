@@ -290,7 +290,6 @@ const print = () => {
             height: 45px !important;
             border-bottom: 1px solid #d7dee4;
             background-color: #28313d;
-            color: #fff;
         }
 
         .authority-content {

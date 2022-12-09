@@ -31,35 +31,42 @@ function handleClick(opt: ListOperatorOption) {
 </script>
 
 <template>
-    <FlexRow class="i-list-operator" horizontal="end" gap="md" :class="{ fixed }">
+    <FlexRow class="i-list-operator" horizontal="center" gap="md" :class="{ fixed }">
         <!-- -->
         <div :class="['ili-operator', outer.disabled && 'cursor-not-allowed']" v-for="(outer, i) in outerOperators"
             :key="i">
             <el-tooltip
-                class="box-item"
                 effect="dark"
                 :content="outer.name"
                 placement="top"
             >
-                <TextHoverable size="sm" :color="outer.disabled ? 'disabled' : 'regular'" @click="handleClick(outer)">
+                <CircleOptBtn size="lg" :disabled="outer.disabled"  @click="handleClick(outer)">
                     <Icon :name="(outer.icon || 'ep-search')" />
-                </TextHoverable>
+                </CircleOptBtn>
+                <!-- <TextHoverable size="sm" :color="outer.disabled ? 'disabled' : 'regular'" @click="handleClick(outer)">
+                </TextHoverable> -->
             </el-tooltip>
         </div>
         <div class="ili-operator" v-if="innerOperators.length > 0">
-            <el-dropdown>
-                <TextHoverable size="sm" color="regular">
-                    <i-ep-more class="ili-more" />
-                </TextHoverable>
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item v-for="(inner, i) in innerOperators" :key="i" @click="handleClick(inner)"
-                            :disabled="inner.disabled">
-                            <Icon :name="(inner.icon || 'ep-search')" /> {{ inner.name }}
-                        </el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
+            <el-tooltip
+                effect="dark"
+                content="更多"
+                placement="top"
+            >
+                <el-dropdown>
+                    <CircleOptBtn size="lg">
+                        <i-ep-more class="ili-more" />
+                    </CircleOptBtn>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item v-for="(inner, i) in innerOperators" :key="i" @click="handleClick(inner)"
+                                :disabled="inner.disabled">
+                                <Icon :name="(inner.icon || 'ep-search')" /> {{ inner.name }}
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </el-tooltip>
         </div>
     </FlexRow>
 </template>

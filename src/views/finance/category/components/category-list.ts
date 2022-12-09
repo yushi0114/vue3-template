@@ -84,11 +84,9 @@ export async function goEditFormView(item: FinanceCategoryListItemType) {
 
 export async function setAllSystemMenuTree(): Promise<void> {
     return new Promise((resolve) => {
-        loading.value = true;
         getAllSystemMenuTree().then(data => {
             allSystemMenuTree.value = data;
         }).finally(() => {
-            loading.value = false;
             resolve();
         });
     });
@@ -97,7 +95,6 @@ export async function setAllSystemMenuTree(): Promise<void> {
 
 export async function setOrgTypeModuleList(): Promise<void> {
     return new Promise((resolve) => {
-        loading.value = true;
         getOrgTypeModuleList().then(data => {
             orgTypeModuleList.value = data.map(item => ({
                 ...item,
@@ -106,7 +103,6 @@ export async function setOrgTypeModuleList(): Promise<void> {
             }));
         }).finally(() => {
             resolve();
-            loading.value = false;
         });
     });
 }
@@ -124,8 +120,8 @@ export async function setFinanceCategoryList(): Promise<void> {
             categoryList.list = data.data as unknown as FinanceCategoryListItemType[];
             categoryList.total = 1;
         }).finally(() => {
-            resolve();
             loading.value = false;
+            resolve();
         });
     });
 }

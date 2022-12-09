@@ -30,7 +30,14 @@
                     color: '#595959',
                     'background-color': '#f3f4f8'
                 }">
-        <el-table-column prop="name" label="名称" width="180"/>
+        <el-table-column label="名称">
+            <template #default="scope">
+                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                        scope.row.name
+                    }}
+                </TextHoverable>
+            </template>
+        </el-table-column>
         <el-table-column prop="desc" label="描述" width="180"/>
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
@@ -61,6 +68,10 @@
         @current-change="handleCurrentChange"
         :current-page="roleFilterObject.currentPage"
         :total="roleList.total"/>
+    <role-detail
+        :drawer-visible="isDrawerShow"
+        :data-detail="dataDetail"
+        @close="handleDrawerClose"></role-detail>
 </template>
 
 <script lang="ts" setup>
@@ -83,6 +94,12 @@ import {
 } from './role-list';
 import { getRoleMenuIdsApi } from '@/api/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
+import type { FinanceCategoryListItemType } from '@/types/finance';
+import RoleDetail from '@/views/system/role/components/role-detail.vue';
+
+const dataDetail = ref<RoleListItemType>();
+const isDrawerShow = ref<boolean>(false);
+
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -163,6 +180,25 @@ async function handleCreateNewRole() {
     LoadingService.getInstance().loading();
     await getTreeData();
     LoadingService.getInstance().stop();
+}
+
+async function handleToDetail(item: FinanceCategoryListItemType) {
+    LoadingService.getInstance().loading();
+    await getTreeData();
+    const menuList = await getRoleMenuIdsApi({
+        tab: activeName.value,
+        roleId: item.id
+    });
+    dataDetail.value = {
+        ...item,
+        menuIdArr: menuList
+    };
+    isDrawerShow.value = true;
+    LoadingService.getInstance().stop();
+}
+
+function handleDrawerClose() {
+    isDrawerShow.value = false;
 }
 
 function handleRemoveRoleItem(item: RoleListItemType) {

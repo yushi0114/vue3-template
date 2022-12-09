@@ -30,7 +30,14 @@
                     color: '#595959',
                     'background-color': '#f3f4f8'
                 }">
-        <el-table-column prop="name" label="姓名" width="180"/>
+        <el-table-column label="姓名">
+            <template #default="scope">
+                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                        scope.row.name
+                    }}
+                </TextHoverable>
+            </template>
+        </el-table-column>
         <el-table-column prop="account" label="手机号" width="180"/>
         <el-table-column prop="roleName" label="角色" width="180"></el-table-column>
         <el-table-column prop="createTime" sortable label="创建时间"/>
@@ -64,7 +71,11 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="userFilterObject.currentPage"
-        :total="userTableData.total" />
+        :total="userTableData.total"/>
+    <user-detail
+        :drawer-visible="isDrawerShow"
+        :data-detail="dataDetail"
+        @close="handleDrawerClose"></user-detail>
 </template>
 
 <script lang="ts" setup>
@@ -72,17 +83,24 @@ import Icon from '@/components/Icon.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     activeName,
-    currentUserId, deleteUser,
+    currentUserId,
+    deleteUser,
+    form,
     formType,
     getUserListData,
     mode,
-    resetUserFilterObject, resetUserForm,
+    resetUserFilterObject,
+    resetUserForm,
     userFilterObject,
-    form,
     userTableData
 } from '@/views/system/user/components/user-list';
 import type { UserListItemType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
+import UserDetail from '@/views/system/user/components/user-detail.vue';
+
+const dataDetail = ref<UserListItemType>();
+const isDrawerShow = ref<boolean>(false);
+
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -164,7 +182,7 @@ function handleRemoveItem(item: UserListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
+        .then(async () => {
             await deleteUser({
                 account: item.account,
                 id: item.id
@@ -179,6 +197,15 @@ function handleRemoveItem(item: UserListItemType) {
                 message: '取消删除',
             });
         });
+}
+
+function handleToDetail(item: UserListItemType) {
+    dataDetail.value = item;
+    isDrawerShow.value = true;
+}
+
+function handleDrawerClose() {
+    isDrawerShow.value = false;
 }
 
 </script>

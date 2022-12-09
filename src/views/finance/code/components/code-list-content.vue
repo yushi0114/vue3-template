@@ -71,7 +71,14 @@
                 color: '#595959',
                 'background-color': '#f3f4f8'
             }">
-                <el-table-column prop="orgName" label="机构名称"/>
+            <el-table-column label="机构名称">
+                <template #default="scope">
+                    <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                            scope.row.orgName
+                        }}
+                    </TextHoverable>
+                </template>
+            </el-table-column>
                 <el-table-column prop="orgCode" label="机构编码" width="180"/>
                 <el-table-column prop="orgTypeName" label="机构分类" width="180"/>
                 <el-table-column prop="createBy" label="创建者" width="180"/>
@@ -104,6 +111,10 @@
         @current-change="handleCurrentChange"
         :current-page="financeCodeFilterObject.currentPage"
         :total="codeList.total" />
+    <code-detail
+        :drawer-visible="isDrawerShow"
+        :data-detail="dataDetail"
+        @close="handleDrawerClose"></code-detail>
 </template>
 
 <script lang="ts" setup>
@@ -121,6 +132,11 @@ import {
     loading,
 } from './code-list';
 import type { FinanceCodeListItemType } from '@/types/finance';
+import CodeDetail from '@/views/finance/code/components/code-detail.vue';
+
+const dataDetail = ref<FinanceCodeListItemType>();
+const isDrawerShow = ref<boolean>(false);
+
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -151,6 +167,15 @@ async function handleUpload(param: UploadRequestOptions) {
 
 async function handleCreateNewItem() {
     await goCreateFormView();
+}
+
+function handleToDetail(item: FinanceCategoryListItemType) {
+    dataDetail.value = item;
+    isDrawerShow.value = true;
+}
+
+function handleDrawerClose() {
+    isDrawerShow.value = false;
 }
 
 async function handleEditItem(item: FinanceCodeListItemType) {

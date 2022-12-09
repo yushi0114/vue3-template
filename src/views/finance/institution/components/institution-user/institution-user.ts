@@ -7,7 +7,7 @@ import {
     updateFinanceOrgUserApi
 } from '@/api/finance/finance-institution';
 import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
-import type { UserFormType, RoleListItemType } from '@/types/system-manage';
+import type { RoleListItemType, UserFormType } from '@/types/system-manage';
 import { ElMessage } from 'element-plus';
 
 export const mode = ref<'form' | 'list'>('list');
@@ -18,6 +18,10 @@ export const form = ref<UserFormType>({
     account: '',
     status: false
 });
+
+export function setInstitutionUserMode(value: 'form' | 'list') {
+    mode.value = value
+}
 
 export const formType = ref<'create' | 'edit'>('edit');
 export const totalRoleList = ref<RoleListItemType[]>();

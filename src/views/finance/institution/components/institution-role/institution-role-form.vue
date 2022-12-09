@@ -27,16 +27,17 @@
                     autocomplete="off"/>
             </el-form-item>
             <el-form-item label="配置菜单:" required>
-                <div style="margin-top: 10px">
+                <div style="margin-top: 10px; width: 100%;">
                     <el-tree
-                        v-if="roleMenuTreeData"
+                        v-if="roleMenuTreeData?.length"
                         ref="menuTree"
-                        :data="roleMenuTreeData"
+                        :data="roleMenuTreeData?.length"
                         show-checkbox
                         node-key="id"
                         :default-checked-keys="roleForm.menuIdArr"
                         :default-expand-all="true">
                     </el-tree>
+                    <div v-else class="empty-tree">暂无数据</div>
                 </div>
             </el-form-item>
             <el-form-item>
@@ -118,6 +119,15 @@ onMounted(() => {
 <style scoped lang="scss">
 .custom-form {
     width: 700px;
+}
+
+.empty-tree {
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    font-size: 14px;
+    color: #909399;
+    width: 100%;
 }
 
 .form-header {

@@ -1,7 +1,6 @@
 import { ref } from 'vue';
 import { addRoleApi, deleteRoleApi, getMenuTreeApi, getRoleListApi, updateRoleApi } from '@/api/system-manage';
 import type { RoleFormType, RoleListItemType, RoleTabType, TreeItemType } from '@/types/system-manage';
-import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
 
 export const activeName = ref<RoleTabType>('cre');
@@ -153,3 +152,4 @@ export async function deleteRole(params: {
         });
     });
 }
+

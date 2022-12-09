@@ -46,6 +46,8 @@ export type ExportFinanceCodeType = {
 
 export type FinanceCodeListItemType = FinanceCodeFormType & {
     id: string;
+    cityName: string;
+    orgTypeName: string;
     createBy: string,
     createTime: string,
     updateBy: string,

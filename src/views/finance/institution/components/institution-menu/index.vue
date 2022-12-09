@@ -1,6 +1,7 @@
 <template>
     <div class="user-manage-container">
         <el-tree
+            v-if="typeMenuTree.length"
             ref="menuTreeTemplateRef"
             :data="typeMenuTree"
             show-checkbox
@@ -8,7 +9,8 @@
             :default-expand-all="true"
             :default-checked-keys="defaultCheckedKey">
         </el-tree>
-        <div class="footer">
+        <div v-else class="empty-tree">暂无数据</div>
+        <div class="menu-footer">
             <el-button>
                 重置
             </el-button>
@@ -91,7 +93,16 @@ async function handleUpdate() {
     max-width: 40%;
 }
 
-.footer {
+.empty-tree {
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    font-size: 14px;
+    color: #909399;
+    width: 100%;
+}
+
+.menu-footer {
     text-align: left;
     margin: 40px 0;
 }

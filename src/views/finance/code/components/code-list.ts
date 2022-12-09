@@ -15,6 +15,7 @@ import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
 import { downloadByBase64, downloadByData } from '@/utils';
 
+export const loading = ref(false);
 export const mode = ref<'form' | 'list'>('list');
 export const cityCodeList = ref();
 export const orgTypeCodeList = ref();
@@ -114,6 +115,7 @@ export async function setOrgTypeCodeList(): Promise<void> {
 
 export async function addFinanceCode(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         addFinanceCodeApi({
             ...codeForm.value
         }).then(() => {
@@ -122,6 +124,7 @@ export async function addFinanceCode(): Promise<void> {
                 message: '创建成功',
             });
         }).finally(() => {
+            loading.value = false;
             resolve();
         });
     });
@@ -132,6 +135,7 @@ export async function updateFinanceCode(): Promise<void> {
         if (!currentCodeId.value) {
             return;
         }
+        loading.value = true;
         updateFinanceCodeApi({
             id: currentCodeId.value,
             ...codeForm.value
@@ -142,6 +146,7 @@ export async function updateFinanceCode(): Promise<void> {
             });
         }).finally(() => {
             resolve();
+            loading.value = false;
         });
     });
 }
@@ -164,6 +169,7 @@ export async function deleteFinanceCode(id: string): Promise<void> {
 
 export async function setFinanceCodeList(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getFinanceCodeListApi({
             pageIndex: financeCodeFilterObject.currentPage,
             pageSize: financeCodeFilterObject.currentSize,
@@ -177,6 +183,7 @@ export async function setFinanceCodeList(): Promise<void> {
             codeList.total = data.pageTotal;
         }).finally(() => {
             resolve();
+            loading.value = false;
         });
     });
 }

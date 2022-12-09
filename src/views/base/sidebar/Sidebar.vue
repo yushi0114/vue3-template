@@ -85,12 +85,11 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                             :to="optChild.defaultPath!"
                             custom
                             v-slot="{ href, navigate, isExactActive }">
-                            <FlexRow class="sidebar-sub-block">
+                            <FlexRow class="sidebar-sub-block" @click="navigate">
                                 <a
                                     class="sidebar-sub-link"
                                     :class="{ active: isExactActive || currentRoute.fullPath.replace(/\d+$/, '').startsWith(href.replace(/\/\d+$/, '')) }"
-                                    :href="href"
-                                    @click="navigate">
+                                    :href="href">
                                     <div>
                                         <Icon class="sidebar-sub-icon" :name="optChild.icon || 'ep-files'" />
                                     </div>
@@ -177,8 +176,11 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 
 .sidebar-root-icon {
-    @apply h-4 w-4 mt-0.5;
+    @apply mt-0.5;
+    width: 1rem;
+    height: 1rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .sidebar-sub-icon {
@@ -220,6 +222,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 .sidebar-sub-block {
     @apply h-8 text-sm pl-9;
+    cursor: pointer;
 }
 
 .sidebar-sub-link {

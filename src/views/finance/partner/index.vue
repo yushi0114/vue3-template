@@ -28,6 +28,11 @@ async function handleClick(tab: TabsPaneContext) {
     });
 }
 
+onBeforeMount(() => {
+    mode.value = 'list';
+    activeName.value = 'sjzx';
+});
+
 onMounted(async() => {
     await getPageList({
         tab: activeName.value

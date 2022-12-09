@@ -15,14 +15,9 @@
 import CategoryForm from './components/category-form.vue';
 import CategoryListContent from './components/category-list-content.vue';
 
-import { mode, setFinanceCategoryList } from './components/category-list';
-import { LoadingService } from '@/views/system/loading-service';
+import { mode } from './components/category-list';
 
-onMounted(async() => {
-    LoadingService.getInstance().loading();
-    await setFinanceCategoryList();
-    LoadingService.getInstance().stop();
-});
+
 </script>
 
 <style scoped lang="scss">

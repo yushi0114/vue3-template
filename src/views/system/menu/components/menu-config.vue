@@ -38,13 +38,15 @@ async function handleOperateTreeItem(params: {
                 type: 'warning',
             }
         )
-            .then(async() => {
+            .then(async () => {
                 if (!params?.willDeleteList || !params.willDeleteList.length) {
                     return;
                 }
                 LoadingService.getInstance().loading();
-                await removeMenus(params.willDeleteList.map(item => item.id));
-                await goTreeView();
+                const status = await removeMenus(params.willDeleteList.map(item => item.id));
+                if (status) {
+                    await goTreeView();
+                }
                 LoadingService.getInstance().stop();
             })
             .catch(() => {

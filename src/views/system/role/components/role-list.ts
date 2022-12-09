@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { addRoleApi, getMenuTreeApi, getRoleListApi, updateRoleApi } from '@/api/system-manage';
+import { addRoleApi, deleteRoleApi, getMenuTreeApi, getRoleListApi, updateRoleApi } from '@/api/system-manage';
 import type { RoleFormType, RoleListItemType, RoleTabType, TreeItemType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
@@ -58,11 +58,9 @@ export function resetRoleFilterObject() {
 export async function handleGoBack() {
     mode.value = 'list';
     currentRoleId.value = undefined;
-    LoadingService.getInstance().loading();
     await getRolePageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 export async function getTreeData(name?: RoleTabType): Promise<void> {
@@ -97,43 +95,61 @@ export async function getRolePageList(params: {
     });
 }
 
-export async function addRole(checkedNodeIds: string[]): Promise<void> {
+export async function addRole(checkedNodeIds: string[]): Promise<boolean> {
     return new Promise((resolve) => {
         addRoleApi({
             ...roleForm.value,
             menuIdArr: checkedNodeIds,
-            tab: activeName.value,
-            menuName: ''
+            tab: activeName.value
         }).then(() => {
             ElMessage({
                 type: 'success',
                 message: '创建成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            resolve(false);
         });
     });
 
 }
 
-export async function updateRole(checkedNodeIds: string[]): Promise<void> {
+export async function updateRole(checkedNodeIds: string[]): Promise<boolean> {
     return new Promise((resolve) => {
         updateRoleApi({
             roleId: currentRoleId.value,
             ...roleForm.value,
             menuIdArr: checkedNodeIds,
             tab: activeName.value,
-            menuName: ''
         }).then(() => {
             ElMessage({
                 type: 'success',
                 message: '更新成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            resolve(false);
         });
     });
+}
 
+export async function deleteRole(params: {
+    roleId: string;
+    tab: RoleTabType
+}): Promise<boolean> {
+    return new Promise((resolve) => {
+        deleteRoleApi(params).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            });
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '删除失败',
+            });
+            resolve(false);
+        });
+    });
 }

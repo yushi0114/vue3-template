@@ -11,7 +11,6 @@ import {
 import type { FinanceCodeFormType, FinanceCodeListItemType } from '@/types/finance';
 import { getAllCityListApi } from '@/api/finance/finance-city';
 import { getOrgTypeDicApi } from '@/api/finance/finance-category';
-import { LoadingService } from '@/views/system/loading-service';
 import { ElMessage } from 'element-plus';
 import { downloadByBase64, downloadByData } from '@/utils';
 
@@ -55,9 +54,7 @@ export const financeCodeFilterObject = reactive<{
 export async function handleGoBack() {
     mode.value = 'list';
     currentCodeId.value = undefined;
-    LoadingService.getInstance().loading();
     await setFinanceCodeList();
-    LoadingService.getInstance().stop();
 }
 
 
@@ -113,7 +110,7 @@ export async function setOrgTypeCodeList(): Promise<void> {
 
 }
 
-export async function addFinanceCode(): Promise<void> {
+export async function addFinanceCode(): Promise<boolean> {
     return new Promise((resolve) => {
         loading.value = true;
         addFinanceCodeApi({
@@ -123,14 +120,19 @@ export async function addFinanceCode(): Promise<void> {
                 type: 'success',
                 message: '创建成功',
             });
-        }).finally(() => {
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '创建失败',
+            });
             loading.value = false;
-            resolve();
+            resolve(false);
         });
     });
 }
 
-export async function updateFinanceCode(): Promise<void> {
+export async function updateFinanceCode(): Promise<boolean> {
     return new Promise((resolve) => {
         if (!currentCodeId.value) {
             return;
@@ -144,15 +146,19 @@ export async function updateFinanceCode(): Promise<void> {
                 type: 'success',
                 message: '更新成功',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '更新失败',
+            });
             loading.value = false;
+            resolve(false);
         });
     });
 }
 
-
-export async function deleteFinanceCode(id: string): Promise<void> {
+export async function deleteFinanceCode(id: string): Promise<boolean> {
     return new Promise((resolve) => {
         deleteFinanceCodeApi({
             id
@@ -161,8 +167,14 @@ export async function deleteFinanceCode(id: string): Promise<void> {
                 type: 'success',
                 message: '删除成功',
             });
-        }).finally(() => {
-            resolve();
+            resolve(true);
+        }).catch(() => {
+            ElMessage({
+                type: 'error',
+                message: '删除失败',
+            });
+            loading.value = false;
+            resolve(false);
         });
     });
 }
@@ -229,7 +241,7 @@ export async function downloadExcelTemplate(): Promise<void> {
             .then((res) => {
                 downloadByBase64(res, '机构编码字典模板.xlsx');
             }).finally(() => {
-                resolve();
-            });
+            resolve();
+        });
     });
 }

@@ -107,7 +107,7 @@ export async function getRoleListData(params: {
     });
 }
 
-export async function addUser(): Promise<void> {
+export async function addUser(): Promise<boolean> {
     return new Promise((resolve) => {
         addUserApi({
             ...form.value,
@@ -119,14 +119,18 @@ export async function addUser(): Promise<void> {
                 type: 'success',
                 message: '创建成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            ElMessage({
+                type: 'error',
+                message: '创建失败',
+            });
+            resolve(false);
         });
     });
 }
 
-export async function updateUser(): Promise<void> {
+export async function updateUser(): Promise<boolean> {
     return new Promise((resolve) => {
         updateUserApi({
             id: currentUserId.value,
@@ -139,9 +143,13 @@ export async function updateUser(): Promise<void> {
                 type: 'success',
                 message: '更新用户成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            ElMessage({
+                type: 'error',
+                message: '更新用户失败',
+            });
+            resolve(false);
         });
     });
 }
@@ -149,7 +157,7 @@ export async function updateUser(): Promise<void> {
 export async function deleteUser(params: {
     account: string;
     id: string;
-}): Promise<void> {
+}): Promise<boolean> {
     return new Promise((resolve) => {
         deleteUserApi({
             menuName: '',
@@ -161,9 +169,13 @@ export async function deleteUser(params: {
                 type: 'success',
                 message: '删除用户成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            ElMessage({
+                type: 'success',
+                message: '删除用户失败',
+            });
+            resolve(false);
         });
     });
 }

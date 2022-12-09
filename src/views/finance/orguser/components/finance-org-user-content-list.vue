@@ -82,7 +82,10 @@ import type { FinanceOrgUserListItemType } from '@/types/finance';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const isDeleteEnabled = ref<boolean>(true);
-const willDeleteList = ref<string[]>([]);
+const willDeleteList = ref<{
+    id: string;
+    account: string;
+}[]>([]);
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -130,8 +133,12 @@ async function handleSizeChange(item: number) {
 
 async function handleSelectionChange(list: FinanceOrgUserListItemType[]) {
     isDeleteEnabled.value = false;
-    willDeleteList.value = list.map(item => item.id);
+    willDeleteList.value = list.map(item => ({
+        id: item.id,
+        account: item.account
+    }));
     if (list.length === 0) {
+        willDeleteList.value = [];
         isDeleteEnabled.value = true;
     }
 }

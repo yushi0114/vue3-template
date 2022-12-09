@@ -13,6 +13,6 @@ export function getFinanceReportListApi(params: GetFinanceReportListType): Promi
 }
 
 
-export async function deleteFinanceReportApi(params: { ids: string[] }): Promise<void> {
-    // todo
+export async function deleteFinanceReportApi(params: { idArr: string[] }): Promise<void> {
+    return api.post(`${DMS_DOMAIN}/v1/del/report/log`, params);
 }

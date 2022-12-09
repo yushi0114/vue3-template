@@ -89,12 +89,15 @@ async function submitForm(formElement: FormInstance | undefined) {
                 return;
             }
             LoadingService.getInstance().loading();
+            let status: boolean;
             if (formType.value === 'create') {
-                await addRole(checkedNodeIds);
+                status = await addRole(checkedNodeIds);
             } else {
-                await updateRole(checkedNodeIds);
+                status = await updateRole(checkedNodeIds);
             }
-            await goBackListView();
+            if (status) {
+                await goBackListView();
+            }
             LoadingService.getInstance().stop();
         }
     });
@@ -116,6 +119,7 @@ onMounted(() => {
 .custom-form {
     width: 700px;
 }
+
 .form-header {
     font-size: 24px;
     margin: 20px 0 30px;

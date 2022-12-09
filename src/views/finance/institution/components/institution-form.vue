@@ -107,6 +107,7 @@ function sortValidator(rule: any, value: any, callback: ValidateCallback) {
         callback();
     }
 }
+
 const orgUIList = computed(() => orgDic.value.map(item => ({
     ...item,
     value: item.id,
@@ -174,8 +175,9 @@ async function createOrEditInstitution() {
         return { ...items, selected };
     });
     LoadingService.getInstance().loading();
+    let status: boolean;
     if (willCreateOrEditInstitutionData.value.id) {
-        await updateOrg({
+        status = await updateOrg({
             id: willCreateOrEditInstitutionData.value.id,
             orgLevel: willCreateOrEditInstitutionData.value.level,
             orgDictionaryId: institutionForm.value.orgDictionaryId,
@@ -185,7 +187,7 @@ async function createOrEditInstitution() {
             menuArr: newTreeMenu
         });
     } else {
-        await createOrg({
+        status = await createOrg({
             orgLevel: willCreateOrEditInstitutionData.value.level,
             orgDictionaryId: institutionForm.value.orgDictionaryId,
             desc: institutionForm.value.desc,
@@ -195,7 +197,9 @@ async function createOrEditInstitution() {
             menuArr: newTreeMenu
         });
     }
-    await goBoardView();
+    if (status) {
+        await goBoardView();
+    }
     LoadingService.getInstance().stop();
 }
 

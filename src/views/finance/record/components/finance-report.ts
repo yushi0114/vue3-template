@@ -62,8 +62,8 @@ export async function deleteItems(ids: string[]): Promise<void> {
     loading.value = true;
 
     return new Promise((resolve) => {
-        // console.log(ids);
-        deleteFinanceReportApi({ ids }).then(() => {
+        console.log(ids);
+        deleteFinanceReportApi({ idArr: ids }).then(() => {
             ElMessage({
                 type: 'success',
                 message: '删除成功',
@@ -71,7 +71,6 @@ export async function deleteItems(ids: string[]): Promise<void> {
         }).finally(() => {
             resolve();
             loading.value = false;
-
         });
     });
 }

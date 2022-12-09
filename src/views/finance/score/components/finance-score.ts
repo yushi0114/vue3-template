@@ -61,14 +61,14 @@ export async function deleteItems(ids: string[]): Promise<void> {
     return new Promise((resolve) => {
         // console.log(ids);
         loading.value = true;
-        deleteFinanceScoreApi({ ids }).then(() => {
+        deleteFinanceScoreApi({ idArr: ids }).then(() => {
             ElMessage({
                 type: 'success',
                 message: '删除成功',
             });
         }).finally(() => {
-            resolve();
             loading.value = false;
+            resolve();
         });
     });
 }

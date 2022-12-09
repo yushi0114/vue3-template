@@ -22,7 +22,7 @@
             </el-tabs>
         </div>
         <div v-else class="noDataContainer">
-            <el-empty description="暂无数据"/>
+            <el-empty description="请在左侧选择机构~"/>
         </div>
     </div>
     <div class="menu-container" style="overflow-y: auto" v-if="mode === 'form'">

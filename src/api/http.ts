@@ -81,6 +81,10 @@ service.interceptors.response.use(res => {
         router.replace('/login');
     } else if (code === HttpStatus.internalServerError) {
         console.error(msg);
+        ElMessage({
+            message: msg,
+            type: 'error'
+        });
         return Promise.reject(new Error(msg));
     } else if (code !== HttpStatus.ok) {
         ElMessage({

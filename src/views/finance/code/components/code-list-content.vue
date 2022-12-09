@@ -1,22 +1,12 @@
 <template>
-    <div class="search-box">
-        <el-input
-            class="search-input"
-            size="large"
-            placeholder="请输入关键字进行搜索"
-            clearable
-            @keyup.enter="handleSearchList"
-            @clear="handleClear"
-            v-model="financeCodeFilterObject.searchInput">
-            <template #append>
-                <el-button @click="handleSearchList">
-                    <template #icon>
-                        <Icon :name="'ep:search'"></Icon>
-                    </template>
-                </el-button>
-            </template>
-        </el-input>
-        <div class="right-control">
+    <ListQueryControl
+        v-model="financeCodeFilterObject"
+        :filterRowVisible="false"
+        :searchConfig="{
+            label: '请输入关键字进行查询',
+            field: 'searchInput',
+        }">
+        <template v-slot:search-rest>
             <el-button @click="handleDownloadExcelTemplate">
                 <template #icon>
                     <Icon :name="'ep:download'"></Icon>
@@ -69,45 +59,46 @@
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
-        </div>
-
-    </div>
-    <el-table
-        :data="codeList.list"
-        style="width: 100%"
-        @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }"
-        :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }">
-        <el-table-column prop="orgName" label="机构名称"/>
-        <el-table-column prop="orgCode" label="机构编码" width="180"/>
-        <el-table-column prop="orgTypeName" label="机构分类" width="180"/>
-        <el-table-column prop="createBy" label="创建者" width="180"/>
-        <el-table-column prop="createTime" sortable label="创建时间"/>
-        <el-table-column prop="updateTime" sortable label="更新时间"/>
-        <el-table-column label="操作" width="180">
-            <template #default="scope">
-                <el-button
-                    type="primary"
-                    size="small"
-                    @click.prevent="handleEditItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:edit'"></Icon>
-                    </template>
-                </el-button>
-                <el-button
+        </template>
+    </ListQueryControl>
+    <LoadingBoard :loading="loading" :empty="!codeList.list.length">
+        <el-table
+            :data="codeList.list"
+            style="width: 100%"
+            @sort-change="handleSortChange"
+            :default-sort="{ prop: 'updateTime', order: 'descending' }"
+            :header-cell-style="{
+                color: '#595959',
+                'background-color': '#f3f4f8'
+            }">
+                <el-table-column prop="orgName" label="机构名称"/>
+                <el-table-column prop="orgCode" label="机构编码" width="180"/>
+                <el-table-column prop="orgTypeName" label="机构分类" width="180"/>
+                <el-table-column prop="createBy" label="创建者" width="180"/>
+                <el-table-column prop="createTime" sortable label="创建时间"/>
+                <el-table-column prop="updateTime" sortable label="更新时间"/>
+                <el-table-column label="操作" width="180">
+                    <template #default="scope">
+                        <el-button
+                        type="primary"
+                        size="small"
+                        @click.prevent="handleEditItem(scope.row)">
+                        <template #icon>
+                            <Icon :name="'ep:edit'"></Icon>
+                        </template>
+                    </el-button>
+                    <el-button
                     type="danger"
                     size="small"
                     @click.prevent="handleRemoveItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:delete'"></Icon>
-                    </template>
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+                        <template #icon>
+                            <Icon :name="'ep:delete'"></Icon>
+                        </template>
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </LoadingBoard>
     <CommonPagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -117,7 +108,6 @@
 
 <script lang="ts" setup>
 import type { UploadRequestOptions } from 'element-plus';
-import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     codeList,
     deleteFinanceCode,
@@ -127,9 +117,9 @@ import {
     goCreateFormView,
     goEditFormView,
     importFinanceCodeList,
-    setFinanceCodeList
+    setFinanceCodeList,
+    loading,
 } from './code-list';
-import { LoadingService } from '@/views/system/loading-service';
 import type { FinanceCodeListItemType } from '@/types/finance';
 
 function formatSortType(value: string) {
@@ -155,22 +145,16 @@ function beforeUpload(file: File) {
 }
 
 async function handleUpload(param: UploadRequestOptions) {
-    LoadingService.getInstance().loading();
     await importFinanceCodeList(param.file);
     await setFinanceCodeList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewItem() {
-    LoadingService.getInstance().loading();
     await goCreateFormView();
-    LoadingService.getInstance().stop();
 }
 
 async function handleEditItem(item: FinanceCodeListItemType) {
-    LoadingService.getInstance().loading();
     await goEditFormView(item);
-    LoadingService.getInstance().stop();
 }
 
 async function handleDownloadList() {
@@ -181,44 +165,28 @@ async function handleDownloadExcelTemplate() {
     await downloadExcelTemplate();
 }
 
-async function handleClear() {
-    financeCodeFilterObject.currentPage = 1;
-    financeCodeFilterObject.currentSize = 10;
-    LoadingService.getInstance().loading();
-    await setFinanceCodeList();
-    LoadingService.getInstance().stop();
-}
-
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
-    LoadingService.getInstance().loading();
     financeCodeFilterObject.currentPage = 1;
     financeCodeFilterObject.currentSize = 10;
     financeCodeFilterObject.sortField = params.prop === 'updateTime' ? 'update_time' : 'create_time';
     financeCodeFilterObject.sortType = formatSortType(params.order);
     await setFinanceCodeList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleSearchList() {
     financeCodeFilterObject.currentPage = 1;
     financeCodeFilterObject.currentSize = 10;
-    LoadingService.getInstance().loading();
     await setFinanceCodeList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleCurrentChange(item: number) {
     financeCodeFilterObject.currentPage = item;
-    LoadingService.getInstance().loading();
     await setFinanceCodeList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     financeCodeFilterObject.currentSize = item;
-    LoadingService.getInstance().loading();
     await setFinanceCodeList();
-    LoadingService.getInstance().stop();
 }
 
 function handleRemoveItem(item: FinanceCodeListItemType) {
@@ -231,11 +199,9 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
-            LoadingService.getInstance().loading();
+        .then(async() => {
             await deleteFinanceCode(item.id);
             await setFinanceCodeList();
-            LoadingService.getInstance().stop();
         })
         .catch(() => {
             ElMessage({
@@ -244,27 +210,11 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
             });
         });
 }
+
+watch(() => financeCodeFilterObject.searchInput, handleSearchList);
+
+onMounted(setFinanceCodeList);
 </script>
 
 <style scoped lang="scss">
-.search-box {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 20px;
-
-    .search-input {
-        max-width: 350px;
-    }
-}
-
-.right-control {
-    display: flex;
-    align-items: center;
-}
-
-.dropdown-icon {
-    font-size: 14px;
-    cursor: pointer;
-    padding: 0 4px;
-}
 </style>

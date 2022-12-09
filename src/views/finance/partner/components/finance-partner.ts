@@ -1,5 +1,4 @@
 import { ref } from 'vue';
-import { LoadingService } from '@/views/system/loading-service';
 import { type UploadUserFile, ElMessage } from 'element-plus';
 import { FinancePartnerService } from '@/api/finance/finance-partner';
 import type {
@@ -9,6 +8,7 @@ import type {
 } from '@/types/finance';
 
 
+export const loading = ref(false);
 export const activeName = ref<FinancePartnerTabType>('sjzx');
 export const mode = ref<'form' | 'list'>('list');
 export const currentId = ref();
@@ -63,17 +63,22 @@ export function resetFilterObject() {
 export async function handleGoBack() {
     mode.value = 'list';
     currentId.value = undefined;
-    LoadingService.getInstance().loading();
-    await getPageList({
-        tab: activeName.value
-    });
-    LoadingService.getInstance().stop();
+    loading.value = true;
+    try {
+        await getPageList({
+            tab: activeName.value
+        });
+    }
+    finally {
+        loading.value = false;
+    }
 }
 
 export async function getPageList(params: {
     tab: FinancePartnerTabType,
 }): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         new FinancePartnerService(params.tab).getInstance().getList({
             ...params,
             pageIndex: filterObject.value.currentPage,
@@ -88,6 +93,8 @@ export async function getPageList(params: {
             resolve();
         }).catch(() => {
             resolve();
+        }).finally(() => {
+            loading.value = false;
         });
     });
 }
@@ -113,6 +120,7 @@ export async function add(): Promise<void> {
 
 export async function update(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         new FinancePartnerService(activeName.value).getInstance().update({
             id: currentId.value,
             ...form.value,
@@ -126,6 +134,8 @@ export async function update(): Promise<void> {
             resolve();
         }).catch(() => {
             resolve();
+        }).finally(() => {
+            loading.value = false;
         });
     });
 
@@ -133,6 +143,7 @@ export async function update(): Promise<void> {
 
 export async function remove(params: { id: string }): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         new FinancePartnerService(activeName.value).getInstance().delete({
             id: params.id,
             menuName: ''
@@ -144,6 +155,8 @@ export async function remove(params: { id: string }): Promise<void> {
             resolve();
         }).catch(() => {
             resolve();
+        }).finally(() => {
+            loading.value = false;
         });
     });
 }

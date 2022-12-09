@@ -3,7 +3,7 @@ import type { FinanceReportListItemType } from '@/types/finance';
 import { deleteFinanceReportApi, getFinanceReportListApi } from '@/api/finance/finance-report';
 import { ElMessage } from 'element-plus';
 
-
+export const loading = ref(false);
 export const listData = ref<{
     total: number;
     list: FinanceReportListItemType[];
@@ -37,6 +37,7 @@ export function resetFilterObject() {
 }
 
 export async function getPageList(): Promise<void> {
+    loading.value = true;
     return new Promise((resolve) => {
         getFinanceReportListApi({
             pageIndex: filterObject.value.currentPage,
@@ -50,14 +51,18 @@ export async function getPageList(): Promise<void> {
             resolve();
         }).catch(() => {
             resolve();
+        }).finally(() => {
+            loading.value = false;
         });
     });
 }
 
 
 export async function deleteItems(ids: string[]): Promise<void> {
+    loading.value = true;
+
     return new Promise((resolve) => {
-        console.log(ids);
+        // console.log(ids);
         deleteFinanceReportApi({ ids }).then(() => {
             ElMessage({
                 type: 'success',
@@ -65,6 +70,8 @@ export async function deleteItems(ids: string[]): Promise<void> {
             });
         }).finally(() => {
             resolve();
+            loading.value = false;
+
         });
     });
 }

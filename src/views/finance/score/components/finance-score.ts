@@ -3,7 +3,7 @@ import type { FinanceScoreListItemType } from '@/types/finance';
 import { deleteFinanceScoreApi, getFinanceScoreListApi } from '@/api/finance/finance-score';
 import { ElMessage } from 'element-plus';
 
-
+export const loading = ref(false);
 export const listData = ref<{
     total: number;
     list: FinanceScoreListItemType[];
@@ -37,6 +37,7 @@ export function resetFilterObject() {
 }
 
 export async function getPageList(): Promise<void> {
+    loading.value = true;
     return new Promise((resolve) => {
         getFinanceScoreListApi({
             pageIndex: filterObject.value.currentPage,
@@ -50,13 +51,16 @@ export async function getPageList(): Promise<void> {
             resolve();
         }).catch(() => {
             resolve();
+        }).finally(() => {
+            loading.value = false;
         });
     });
 }
 
 export async function deleteItems(ids: string[]): Promise<void> {
     return new Promise((resolve) => {
-        console.log(ids);
+        // console.log(ids);
+        loading.value = true;
         deleteFinanceScoreApi({ ids }).then(() => {
             ElMessage({
                 type: 'success',
@@ -64,6 +68,7 @@ export async function deleteItems(ids: string[]): Promise<void> {
             });
         }).finally(() => {
             resolve();
+            loading.value = false;
         });
     });
 }

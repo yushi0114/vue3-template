@@ -150,104 +150,69 @@ watch(model, () => {
 </script>
 
 <template>
-    <div class="city-table">
-        <ListQueryControl
-            v-model="model"
-            :filter-row-visible="false"
-            :searchConfig="{
-                label: '请输入关键字进行查询',
-                field: 'searchInput',
-            }">
+    <ListQueryControl
+        v-model="model"
+        :filter-row-visible="false"
+        :searchConfig="{
+            label: '请输入关键字进行查询',
+            field: 'searchInput',
+        }">
 
-            <template #search-rest>
-                <el-button type="primary" :icon="Plus" @click="handleCreateCity">新建</el-button>
-            </template>
-        </ListQueryControl>
-        <div class="table-content">
-            <el-table
-                v-loading="allToogle.loading"
-                :data="dataSource"
-                :default-sort="{ prop: 'sort', order: 'ascending' }"
-                @sort-change="handleSortChange"
-                style="width: 100%"
-                :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }"
-            >
-                <el-table-column label="城市名称">
-                    <template #default="scope">
-                        <div @click="handleToDetail(scope.row)" class="underline-text">{{ scope.row.name }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="code" label="行政区划代码" />
-                <el-table-column prop="sort" label="排序" sortable/>
-                <el-table-column prop="createBy" label="创建者" />
-                <el-table-column prop="createTime" label="创建时间" sortable />
-                <el-table-column prop="updateTime" label="更新时间" sortable />
-                <el-table-column>
-                    <template #header>
-                        <span class="header-options">操作</span>
-                    </template>
-                    <template #default="scope">
-                        <el-button
-                            :icon="EditPen"
-                            text
-                            @click="handleEdit(scope.row)"
-                        ></el-button>
-                        <el-button
-                            :icon="Delete"
-                            text
-                            @click="handleDelete(scope.row)"
-                        ></el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+        <template #search-rest>
+            <el-button type="primary" :icon="Plus" @click="handleCreateCity">新建</el-button>
+        </template>
+    </ListQueryControl>
+    <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
+        <el-table
+            :data="dataSource"
+            :default-sort="{ prop: 'sort', order: 'ascending' }"
+            @sort-change="handleSortChange"
+            style="width: 100%"
+            :header-cell-style="{
+                color: '#595959',
+                'background-color': '#f3f4f8'
+            }"
+        >
+            <el-table-column label="城市名称">
+                <template #default="scope">
+                    <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{ scope.row.name }}</TextHoverable>
+                </template>
+            </el-table-column>
+            <el-table-column prop="code" label="行政区划代码" />
+            <el-table-column prop="sort" label="排序" sortable/>
+            <el-table-column prop="createBy" label="创建者" />
+            <el-table-column prop="createTime" label="创建时间" sortable />
+            <el-table-column prop="updateTime" label="更新时间" sortable />
+            <el-table-column>
+                <template #header>
+                    <span class="header-options">操作</span>
+                </template>
+                <template #default="scope">
+                    <el-button
+                        :icon="EditPen"
+                        text
+                        @click="handleEdit(scope.row)"
+                    ></el-button>
+                    <el-button
+                        :icon="Delete"
+                        text
+                        @click="handleDelete(scope.row)"
+                    ></el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </LoadingBoard>
+    <CommonPagination
+        v-model:currentPage="page.currentPage"
+        v-model:page-size="page.pageSize"
+        :total="page.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+    />
 
-            <CommonPagination
-                v-model:currentPage="page.currentPage"
-                v-model:page-size="page.pageSize"
-                :total="page.total"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-            />
-
-            <city-detail :drawerVisible="allToogle.drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
-            <city-modal :dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
-        </div>
-    </div>
+    <city-detail :drawerVisible="allToogle.drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
+    <city-modal :dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
 </template>
 
 <style lang="scss" scoped>
-.city-table {
-
-    .table-header {
-        min-height: 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        .searchInput {
-            width: 350px;
-        }
-    }
-
-    .table-content {
-        :deep(.el-table__cell) {
-            padding: 12px;
-        }
-
-        .underline-text {
-            text-decoration: underline;
-            cursor: pointer;
-            &:hover {
-                color: #1B5CFF;
-            }
-        }
-
-        .header-options {
-            padding-left: 34px;
-        }
-    }
-}
 </style>

@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\directive\empty.ts
  * @Author: zys
  * @Date: 2022-12-08 11:30:28
- * @LastEditTime: 2022-12-08 14:47:21
+ * @LastEditTime: 2022-12-08 16:18:30
  * @LastEditors: zys
  * @Reference:
  */
@@ -32,6 +32,9 @@ export default {
         // mount方法不再像vue2一样支持未挂载的实例，必须得挂载，即必须得给参数
         const instance = app.mount(parent);
         const component = instance.$el;
+        console.log('component: ', component);
+        console.log('el：', el);
+        console.log(el.lastChild, visible);
         if (visible) {
             el.appendChild(component);
         } else {

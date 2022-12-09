@@ -111,6 +111,7 @@ const handleClose = () => {
                 </el-input>
             </div>
             <div class="content">
+            <LoadingBoard :loading="loading" :empty="!shopCarInfoList.length">
                 <el-table
                     v-loading="loading"
                     :data="shopCarInfoList"
@@ -169,6 +170,7 @@ const handleClose = () => {
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                 />
+                </LoadingBoard>
             </div>
         </el-drawer>
     </div>

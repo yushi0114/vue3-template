@@ -8,7 +8,7 @@ withDefaults(
         list?: ProductEntity[],
     }>(),
     {
-        list: () => []
+        list: () => [],
     }
 );
 
@@ -26,7 +26,8 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
 </script>
 
 <template>
-  <List class="pdt-list" v-empty="{visible: !list.length}">
+
+    <List class="pdt-list">
         <ListItem
             v-for="item in list"
             :key="item.id"

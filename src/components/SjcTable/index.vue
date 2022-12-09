@@ -101,8 +101,7 @@
         </el-table>
         <div
             v-show="!tableData.length"
-            style="height: 500px"
-            v-empty="{ visible: !tableData.length }"></div>
+            style="height: 500px"></div>
         <!-- 分页配置 -->
         <div
             v-if="showPagination && tableData.length"

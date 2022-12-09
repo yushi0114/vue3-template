@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="i-list">
+  <div class="i-list" v-bind="$attrs">
     <slot />
   </div>
 </template>

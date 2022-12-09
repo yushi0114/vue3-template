@@ -193,7 +193,7 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
         {
             type: FormType.INPUT,
             label: '参考利率范围', // 字段
-            span: 8,
+            span: 12,
             keyName: 'referenceRateStart', // 字段名
             placeholder: '请填写参考利率范围起始值', // 提示内容
             disabled: false, // 是否禁用
@@ -239,7 +239,7 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
         {
             type: FormType.TEXT,
             label: '', // 字段
-            labelWidth: '20px',
+            labelWidth: '10px',
             keyName: 'space1',
             span: 0.5,
             defaultValue: '-',
@@ -248,9 +248,9 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
         {
             type: FormType.INPUT,
             label: '', // 字段
-            span: 6,
+            span: 8,
             keyName: 'referenceRateEnd', // 字段名
-            labelWidth: '20px',
+            labelWidth: '10px',
             placeholder: '请填写参考利率范围结束值', // 提示内容
             disabled: false, // 是否禁用
             showWordLimit: false,
@@ -501,7 +501,7 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
         {
             type: FormType.INPUT,
             label: '参考利率范围', // 字段
-            span: 8,
+            span: 12,
             keyName: 'referenceRateStart', // 字段名
             placeholder: '请填写参考利率范围起始值', // 提示内容
             disabled: false, // 是否禁用
@@ -556,7 +556,7 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
         {
             type: FormType.INPUT,
             label: '', // 字段
-            span: 6,
+            span: 8,
             keyName: 'referenceRateEnd', // 字段名
             labelWidth: '20px',
             placeholder: '请填写参考利率范围结束值', // 提示内容
@@ -597,11 +597,12 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
         },
         {
             type: FormType.UNIT,
-            label: '%',
+            label: '',
             labelWidth: '3px',
             span: 0.5,
             keyName: 'unit', // 字段名
             isIgnoreKey: true,
+            defaultValue: '%'
         },
         {
             type: FormType.SWITCH,
@@ -991,18 +992,18 @@ export const PRODUCT_STEPS_MAP = {
         title: PRODUCT_STEPS.BASE_INFO,
         leftBtnText: '取消',
         rightBtnText: '下一步',
-        updateSubmit: new Date().getTime()
+        updateSubmit: new Date().getTime(),
     },
     [PRODUCT_STEPS.FILTERS]: {
         title: PRODUCT_STEPS.FILTERS,
         leftBtnText: '上一步',
         rightBtnText: '发布产品',
-        updateSubmit: new Date().getTime()
+        updateSubmit: new Date().getTime(),
     },
     [PRODUCT_STEPS.SUCCESS]: {
         title: PRODUCT_STEPS.SUCCESS,
         leftBtnText: '',
         rightBtnText: '返回产品列表',
-        updateSubmit: new Date().getTime()
+        updateSubmit: new Date().getTime(),
     },
 };

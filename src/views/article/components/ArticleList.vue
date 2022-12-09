@@ -84,10 +84,10 @@ watch(listControlModel, () => {
                 >
             </template>
         </ListQueryControl>
+        <LoadingBoard :loading="state.loading" :empty="!state.data.length">
         <sjc-table
             ref="sjcTableRef"
             :table-data="state.data"
-            :loading="state.loading"
             :columns="TABLE_COLUMNS"
             :show-header="false"
             row-class-name="tr-item"
@@ -264,6 +264,7 @@ watch(listControlModel, () => {
                 </FlexRow>
             </template>
         </sjc-table>
+        </LoadingBoard>
     </div>
 </template>
 

@@ -139,14 +139,15 @@ onMounted(() => {
                     <DownloadButton type="primary" :api="downloadAgileReqs" :download-options="downloadOptions"></DownloadButton>
                 </template>
             </ListQueryControl>
-
-            <ReqList :loading="loading" :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            <LoadingBoard :loading="loading" :empty="!list.length">
+            <ReqList :is-select-all="tableSelectAll" :list="list" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
 
             <CommonPagination
                 v-model:current-page="listControlModel.pageIndex"
                 v-model:page-size="listControlModel.pageSize"
                 :total="count"
             />
+            </LoadingBoard>
         </Board>
         <AgileReqDetail :modelValue="!!detailContent" @closed="detailContent = null" :content="detailContent" />
     </PagePanel>

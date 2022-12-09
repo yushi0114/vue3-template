@@ -120,6 +120,7 @@ onMounted(() => {
                     >当前产品：{{ queryParams.productName }}</div
                 >
             </FlexRow>
+            <LoadingBoard :loading="loading" :empty="!list.length">
             <ListQueryControl
                 v-model="listControlModel"
                 v-model:check-all="isSelectAll"
@@ -160,6 +161,7 @@ onMounted(() => {
                 v-model:page-size="listControlModel.pageSize"
                 :total="count"
             />
+        </LoadingBoard>
     </Board>
 
         <ProductReqDetail

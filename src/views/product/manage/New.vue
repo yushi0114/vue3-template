@@ -18,9 +18,9 @@ const { push } = useRouter();
 const route = useRoute();
 const platform = ref<PlatformType>(Number(route.params.type));
 
-function handleTabChange(plat: PlatformType) {
-    platform.value = plat;
-}
+// function handleTabChange(plat: PlatformType) {
+//     platform.value = plat;
+// }
 
 const handleClose = () => {
     push(route.path.replace(/\/new\/\d+$/, ''));
@@ -34,7 +34,7 @@ const handleSubmit = (params: any) => {
 <template>
     <PagePanel class="product-manage-new">
         <Board full>
-            <PlatformTab @tab-change="handleTabChange" />
+            <!-- <PlatformTab @tab-change="handleTabChange" /> -->
             <!--  -->
             <ProductStepsForm
                 ref="productStepsFormRef"

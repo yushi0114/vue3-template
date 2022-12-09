@@ -136,9 +136,6 @@ watch(() => props.isSelectAll, () => {
 </template>
 
 <style lang="scss">
-.req-list {
-    margin-bottom: $gap-md;
-}
 
 .req-list-item {
     display: flex;

@@ -1,62 +1,55 @@
 <template>
-    <div class="search-box">
-        <el-input
-            class="search-input"
-            size="large"
-            placeholder="请输入机构名称进行查询"
-            @clear="handleClear"
-            clearable
-            @keyup.enter="handleSearchList"
-            v-model="filterObject.searchInput">
-            <template #append>
-                <el-button :icon="Search" @click="handleSearchList" />
+    <Board full>
+        <ListQueryControl
+            v-model="filterObject"
+            :filterRowVisible="false"
+            :searchConfig="{
+                label: '请输入机构名称进行查询',
+                field: 'searchInput',
+            }">
+            <template v-slot:search-rest>
+                <el-button type="primary" :icon="Plus" @click="showDialog">新建</el-button>
             </template>
-        </el-input>
-        <el-button type="primary" :icon="Plus" @click="showDialog">新建</el-button>
-    </div>
-    <el-table
-        :data="listData.list" style="width: 100%"
-        @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }"
-        :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }">
-        <el-table-column prop="orgName" label="所属机构"/>
-        <el-table-column label="分类">
-            <template #default>
-                <el-tag type="success">银行</el-tag>
-            </template>
-        </el-table-column>
-        <el-table-column label="LOGO">
-            <template #default="scope">
-                <el-image :src="scope.row.logoContent" style="height: 40px"></el-image>
-            </template>
-        </el-table-column>
-        <el-table-column>
-            <template #header>
-                <span class="header-options">操作</span>
-            </template>
-            <template #default="scope">
-                <el-button text :icon="EditPen" @click.prevent="handleEditItem(scope.row)" />
-                <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
-            </template>
-        </el-table-column>
-    </el-table>
-    <div class="page-content">
-        <el-pagination
-            v-if="listData.total"
-            class="margin-20-20"
+        </ListQueryControl>
+        <LoadingBoard :loading="loading" :empty="!listData.list.length">
+            <el-table
+                :data="listData.list" style="width: 100%"
+                @sort-change="handleSortChange"
+                :default-sort="{ prop: 'updateTime', order: 'descending' }"
+                :header-cell-style="{
+                            color: '#595959',
+                            'background-color': '#f3f4f8'
+                        }">
+                <el-table-column prop="orgName" label="所属机构"/>
+                <el-table-column label="分类">
+                    <template #default>
+                        <el-tag type="success">银行</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="LOGO">
+                    <template #default="scope">
+                        <el-image :src="scope.row.logoContent" style="height: 40px"></el-image>
+                    </template>
+                </el-table-column>
+                <el-table-column>
+                    <template #header>
+                        <span class="header-options">操作</span>
+                    </template>
+                    <template #default="scope">
+                        <el-button text :icon="EditPen" @click.prevent="handleEditItem(scope.row)" />
+                        <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
+                    </template>
+                </el-table-column>
+            </el-table>
+        </LoadingBoard>
+        <CommonPagination
             v-model:current-page="filterObject.currentPage"
             v-model:page-size="filterObject.currentSize"
-            :page-sizes="[10, 20, 50]"
-            layout="total, sizes, prev, pager, next, jumper"
             :total="listData.total"
-            background
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange">
-        </el-pagination>
-    </div>
+        </CommonPagination>
+    </Board>
     <logo-form-modal
         v-if="isDialogShow"
         :dialog-visible="isDialogShow"
@@ -67,9 +60,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
+import { Plus, EditPen, Delete } from '@element-plus/icons-vue';
 import { LoadingService } from '@/views/system/loading-service';
-import { filterObject, getPageList, listData, resetFilterObject } from './finance-logo';
+import { filterObject, getPageList, listData, resetFilterObject, loading } from './finance-logo';
 import LogoFormModal from '@/views/finance/logo/components/logo-form-modal.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { deleteLogoApi } from '@/api/finance/finance-logo';
@@ -144,45 +137,38 @@ function handleRemoveItem(params: {
 }
 
 async function handleSortChange(params: { prop: 'create_time', order: string }) {
-    LoadingService.getInstance().loading();
     filterObject.value.currentPage = 1;
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = params.prop;
     filterObject.value.sortType = formatSortType(params.order);
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleSearchList() {
-    LoadingService.getInstance().loading();
     filterObject.value.currentPage = 1;
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleClear() {
-    LoadingService.getInstance().loading();
     resetFilterObject();
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 
 async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
-    LoadingService.getInstance().loading();
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     filterObject.value.currentPage = 1;
     filterObject.value.currentSize = item;
-    LoadingService.getInstance().loading();
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
+watch(() => filterObject.value.searchInput, handleSearchList);
+
+onMounted(getPageList);
 </script>
 
 <style scoped lang="scss">

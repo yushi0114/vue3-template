@@ -83,7 +83,6 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
 <style lang="scss">
 .pdt-list {
     flex: 1;
-    margin-bottom: $gap-md;
 }
 
 .pdt-list-item {

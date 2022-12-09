@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue';
+import { Plus, EditPen, Delete } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { fetchCityList, deleteCity } from '@/api/city';
 import type { ICityTable } from '@/types/city';
@@ -8,8 +8,7 @@ import CityDetail from './CityDetail.vue';
 import CityModal from './CityModal.vue';
 
 const dataSource = ref<ICityTable[]>([]);
-
-const searchInput = ref('');
+const model = reactive({ searchInput: '' });
 
 const allToogle = reactive({
     loading: true,
@@ -46,7 +45,7 @@ onMounted(() => {
 // 获取城市列表
 const getCityList = () => {
     const params = {
-        name: searchInput.value,
+        name: model.searchInput,
         pageIndex: page.currentPage,
         pageSize: page.pageSize,
         sortField: sort.sortField,
@@ -67,11 +66,6 @@ const getCityList = () => {
 
 // 刷新城市列表
 const refreshTable = () => {
-    page.currentPage = 1;
-    getCityList();
-};
-
-const handleSearch = () => {
     page.currentPage = 1;
     getCityList();
 };
@@ -148,26 +142,27 @@ const handleCurrentChange = (val: number) => {
     getCityList();
 };
 
+watch(model, () => {
+    dataSource.value = [];
+    page.currentPage = 1;
+    getCityList();
+});
 </script>
 
 <template>
     <div class="city-table">
-        <div class="table-header">
-            <el-input
-                class="searchInput"
-                placeholder="请输入关键字进行查询"
-                v-model.trim="searchInput"
-                size="large"
-                clearable
-                @clear="handleSearch"
-                @keyup.enter="handleSearch"
-            >
-                <template #append>
-                    <el-button :icon="Search" @click="handleSearch" />
-                </template>
-            </el-input>
-            <el-button type="primary" :icon="Plus" @click="handleCreateCity">新建</el-button>
-        </div>
+        <ListQueryControl
+            v-model="model"
+            :filter-row-visible="false"
+            :searchConfig="{
+                label: '请输入关键字进行查询',
+                field: 'searchInput',
+            }">
+
+            <template #search-rest>
+                <el-button type="primary" :icon="Plus" @click="handleCreateCity">新建</el-button>
+            </template>
+        </ListQueryControl>
         <div class="table-content">
             <el-table
                 v-loading="allToogle.loading"

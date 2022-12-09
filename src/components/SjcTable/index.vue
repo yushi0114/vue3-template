@@ -99,13 +99,9 @@
                 <div></div>
             </template>
         </el-table>
-        <div
-            v-show="!tableData.length"
-            style="height: 500px"></div>
         <!-- 分页配置 -->
         <div
-            v-if="showPagination && tableData.length"
-            class="pagination">
+            v-if="showPagination && tableData.length">
             <pagination
                 :page-config="$paginationConfig"
                 @page-change="pageChange"></pagination>
@@ -243,10 +239,6 @@ defineExpose({
 });
 </script>
 <style lang="scss" scoped>
-.pagination {
-    text-align: right;
-    margin: 10px 0;
-}
 .close {
     position: relative;
     width: 16px;

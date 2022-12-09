@@ -74,7 +74,7 @@ defineExpose({
 <template>
     <div class="pdt-steps-form">
         <el-steps
-            class="justify-center mb-4"
+            class="mb-64px ml-16"
             align-center
             :space="200"
             :active="index"
@@ -132,13 +132,14 @@ defineExpose({
 
 <style lang="scss" scoped>
 .pdt-steps-form {
+    padding-top: 64px;
     align-self: center;
-    width: 800px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     &-step {
-        width: 600px;
+        width: 45%;
         align-self: center;
     }
 }
@@ -151,6 +152,6 @@ defineExpose({
 }
 
 :deep(.el-step) {
-    flex-basis: 300px !important;
+    flex-basis: 33% !important;
 }
 </style>

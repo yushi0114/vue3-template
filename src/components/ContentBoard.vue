@@ -21,7 +21,7 @@ withDefaults(
     <div class="i-content-board" :class="{ background, hoverable }">
         <!-- -->
         <div class="icb-label" :class="{ disabled }">
-            <Text :color="disabled ? 'placeholder' : 'paragraph'" bold>{{ label }}</Text>
+            <Text :color="disabled ? 'placeholder' : 'paragraph'" size="sm">{{ label }}</Text>
             <slot name="label-rest"></slot>
         </div>
         <div class="icb-content">

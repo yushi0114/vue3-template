@@ -24,12 +24,12 @@ withDefaults(
     <Layout class="loading-board">
         <!-- -->
         <Layout v-if="loading" v-loading="loading" element-loading-text="加载中"></Layout>
-        <div v-else-if="empty">
+        <Layout v-else-if="empty">
             <el-empty
                 :image="image"
                 :image-size="imageSize"
                 :description="description" />
-        </div>
+        </Layout>
         <Layout v-else>
             <slot></slot>
         </Layout>

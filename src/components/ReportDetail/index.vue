@@ -19,9 +19,20 @@ import gasInfo from './components/businessInfo/gasInfo/index.vue';
 import realestate from './components/guaranty/realestate/index.vue';
 import chattel from './components/guaranty/chattel/index.vue';
 import close from './components/guaranty/close/index.vue';
+import patentInformation from './components/intellectualProperty/patentInformation/index.vue';
+import softwareCopyright from './components/intellectualProperty/softwareCopyright/index.vue';
+import trademarkInformation from './components/intellectualProperty/trademarkInformation/index.vue';
+import copyright from './components/intellectualProperty/copyright/index.vue';
+import websiteFiling from './components/intellectualProperty/websiteFiling/index.vue';
+import courtAnnouncement from './components/judicial/courtAnnouncement/index.vue';
+import openAnnouncement from './components/judicial/openAnnouncement/index.vue';
+import filingInformation from './components/judicial/filingInformation/index.vue';
+import adjudicativeDocument from './components/judicial/adjudicativeDocument/index.vue';
+import imExCredit from './components/customs/imExCredit/index.vue';
 import punish from './components/punish/index.vue';
 import abnormal from './components/abnormal/index.vue';
 
+const { state: { user }, getUserInfo } = useUserStore();
 const route = useRoute();
 const allToogle = reactive({
     loading: false,
@@ -49,20 +60,30 @@ const reportList = reactive({
     realestate: [],
     chattel: [],
     close: [],
+    patentInformation: [],
+    softwareCopyright: [],
+    trademarkInformation: [],
+    copyright: [],
+    websiteFiling: [],
+    courtAnnouncement: [],
+    openAnnouncement: [],
+    filingInformation: [],
+    adjudicativeDocument: [],
+    imExCredit: {},
     punish: [],
     abnormal: [],
 });
 
 const reportInfo = reactive({
     createTime: new Date().toLocaleString(),
-    account: '',
-    searchName: ''
+    account: user?.account ?? '',
+    searchName: user?.name ?? '',
 });
 
 const watermarkConfig = reactive({
-    textName: '',
-    textAccount: '',
-    textTime: '',
+    textName: reportInfo.searchName,
+    textAccount: reportInfo.account,
+    textTime: reportInfo.createTime,
     textColor: '#c7c7c7',
     width: 400,
     height: 200,
@@ -70,12 +91,11 @@ const watermarkConfig = reactive({
 });
 
 onMounted(() => {
-    getUserInfo();
+    !user?.account && _getUserInfo();
     getReportDetail();
 });
 
-const getUserInfo = () => {
-    const { getUserInfo } = useUserStore();
+const _getUserInfo = () => {
     getUserInfo().then((res: any) => {
         watermarkConfig.textAccount = reportInfo.account = res.account;
         watermarkConfig.textName = reportInfo.searchName = res.name;
@@ -123,6 +143,16 @@ const getReportDetail = () => {
                     reportList.realestate = res.realestate;
                     reportList.chattel = res.chattel;
                     reportList.close = res.close;
+                    reportList.patentInformation = res.patent;
+                    reportList.softwareCopyright = res.software;
+                    reportList.trademarkInformation = res.brand;
+                    reportList.copyright = res.work;
+                    reportList.websiteFiling = res.website;
+                    reportList.courtAnnouncement = res.announcement;
+                    reportList.openAnnouncement = res.hearing;
+                    reportList.filingInformation = res.register;
+                    reportList.adjudicativeDocument = res.judgement;
+                    reportList.imExCredit = res.credit ?? {};
                     reportList.punish = res.punish;
                     reportList.abnormal = res.abnormal;
                 }
@@ -208,6 +238,31 @@ const print = () => {
                     <close :close="reportList.close"></close>
 
                     <div class="title-content">
+                    <div class="title-line"></div>
+                        <span class="title">知识产权信息</span>
+                    </div>
+                    <patent-information :patentInformation="reportList.patentInformation"></patent-information>
+                    <software-copyright :softwareCopyright="reportList.softwareCopyright"></software-copyright>
+                    <trademark-information :trademarkInformation="reportList.trademarkInformation"></trademark-information>
+                    <copyright :copyright="reportList.copyright"></copyright>
+                    <website-filing :websiteFiling="reportList.websiteFiling"></website-filing>
+
+                    <div class="title-content">
+                        <div class="title-line"></div>
+                        <span class="title">司法信息</span>
+                    </div>
+                    <court-announcement :courtAnnouncement="reportList.courtAnnouncement"></court-announcement>
+                    <open-announcement :openAnnouncement="reportList.openAnnouncement"></open-announcement>
+                    <filing-information :filingInformation="reportList.filingInformation"></filing-information>
+                    <adjudicative-document :adjudicativeDocument="reportList.adjudicativeDocument"></adjudicative-document>
+
+                    <div class="title-content">
+                        <div class="title-line"></div>
+                        <span class="title">海关信息</span>
+                    </div>
+                    <im-ex-credit :imExCredit="reportList.imExCredit"></im-ex-credit>
+
+                    <div class="title-content">
                         <div class="title-line"></div>
                         <span class="title">负面信息</span>
                     </div>
@@ -223,7 +278,7 @@ const print = () => {
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .report-page-content {
     .credit-content {
         width: 100%;
@@ -324,8 +379,19 @@ const print = () => {
                     height: 60px;
                     cursor: pointer;
                 }
+                .report-no-data {
+                    font-size: 14px;
+                    margin: 10px 0 20px 20px;
+                    font-weight: bold;
+                }
             }
         }
+    }
+    .mt10 {
+        margin-top: 10px;
+    }
+    .mb60 {
+        margin-bottom: 60px;
     }
 }
 </style>

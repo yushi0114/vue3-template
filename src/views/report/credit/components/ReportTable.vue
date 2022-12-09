@@ -5,7 +5,7 @@ import type { IReportTable } from '@/types/report';
 import { useListControlModel } from '@/composables';
 
 const dataSource = ref<IReportTable[]>([]);
-const { model: listControlModel } = useListControlModel({
+const { model } = useListControlModel({
     initialModel: { corpName: '' }
 });
 
@@ -21,9 +21,9 @@ const page = reactive({
 
 // 获取企业列表
 const getCorpList = () => {
-    if (!listControlModel.corpName) return;
+    if (!model.corpName) return;
     const params = {
-        corpName: listControlModel.corpName,
+        corpName: model.corpName,
         pageNo: page.currentPage,
         pageSize: page.pageSize
     };
@@ -94,7 +94,7 @@ onUnmounted(() => {
     TableRef.value && TableRef.value.$refs.bodyWrapper.removeEventListener('mousewheel', scrollBehavior);
 });
 
-watch(listControlModel, () => {
+watch(model, () => {
     dataSource.value = [];
     page.currentPage = 1;
     getCorpList();
@@ -104,7 +104,7 @@ watch(listControlModel, () => {
 <template>
     <Layout class="corp-table">
         <ListQueryControl
-            v-model="listControlModel"
+            v-model="model"
             :filter-row-visible="false"
             :searchConfig="{
                 label: '请输入关键字进行查询',

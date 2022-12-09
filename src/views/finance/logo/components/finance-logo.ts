@@ -11,6 +11,8 @@ export const listData = ref<{
     list: []
 });
 
+export const loading = ref(false);
+
 export const filterObject = ref<{
     currentSize: number;
     currentPage: number;
@@ -37,6 +39,7 @@ export function resetFilterObject() {
 
 export async function getPageList(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getFinanceLogoList({
             pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
@@ -50,6 +53,6 @@ export async function getPageList(): Promise<void> {
             resolve();
         }).catch(() => {
             resolve();
-        });
+        }).finally(() => loading.value = false);
     });
 }

@@ -314,7 +314,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                 </el-select> -->
             </div>
             <FlexRow class="lqc-date-item" gap="xs" v-if="dateRangeConfig">
-                <Text size="sm" bold color="regular">{{ dateRangeConfig.label }}</Text>
+                <Text size="sm" bold color="regular">{{ dateRangeConfig.label }}：</Text>
                 <el-date-picker
                     type="monthrange"
                     unlink-panels
@@ -385,7 +385,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 
 .lqc-filter-row .lqc-filter-checkbox {
     margin-left: 6px;
-    margin-right: 26px;
+    margin-right: $gap-md;
 }
 
 .lqc-filter-item {

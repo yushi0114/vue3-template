@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 withDefaults(
     defineProps<{
-        size?: 'sm' | 'md',
+        size?: 'sm' | 'md' | 'lg',
         disabled?: boolean
     }>(),
     {
@@ -36,6 +36,12 @@ withDefaults(
         width: 1.2rem;
         height: 1.2rem;
         font-size: 0.75rem;
+    }
+
+    &.lg {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 1rem;
     }
 }
 </style>

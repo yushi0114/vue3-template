@@ -1,14 +1,18 @@
 <script lang="ts" setup>
 import { Clock } from '@element-plus/icons-vue';
+import { PROCESS_BAR_STATUS } from '@/enums';
+
 const props = withDefaults(
     defineProps<{
         label?: string,
         progress?: number,
-        status?: string
+        status?: PROCESS_BAR_STATUS;
+        hasIcon?: boolean,
     }>(),
     {
         progress: 0,
-        status: 'warning'
+        status: PROCESS_BAR_STATUS.WARNING,
+        hasIcon: true
     }
 );
 
@@ -25,8 +29,8 @@ const percentage = computed(() => {
     <div class="list-progress">
         <Text size="xs" color="regular" v-if="label">{{ label }}:</Text>
         <FlexRow class="list-progress-inner">
-            <el-progress class="flex-1" :percentage="percentage" :status="(status as any)" :format="format" />
-            <el-icon color="var(--el-color-primary)" v-if="!status">
+            <el-progress class="flex-1" :show-text="!!status" :percentage="percentage" :status="(status as any)" :format="format" />
+            <el-icon style="margin-left:5px;" color="var(--el-color-primary)" v-if="hasIcon && status === PROCESS_BAR_STATUS.NORMAL">
                 <Clock />
             </el-icon>
         </FlexRow>

@@ -205,17 +205,9 @@ const handleDragListChange = () => {
                                             </FlexRow>
                                         </FlexRow>
                                     </ElTag>
-                                    <ElTag
-                                        v-if="(index === parent.filter.length - 1)"
-                                        class="disable-drag pointer"
-                                        @click="handleOpenFilterOptionsModal(OPERATE_TYPE.ADD, parent)"
-                                        effect="plain"
-                                        type="info">
-                                        <FlexRow>
-                                            <i-ep-plus />
-                                            新建过滤项
-                                        </FlexRow>
-                                    </ElTag>
+                                    <el-button v-if="(index === parent.filter.length - 1)" class="disable-drag pointer" size="small" :icon="Plus" @click="handleOpenFilterOptionsModal(OPERATE_TYPE.ADD, parent)">
+                                        <Text color="regular" size="xs">新建过滤项</Text>
+                                    </el-button>
                                 </FlexRow>
                             </template>
                         </draggable>

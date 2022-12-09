@@ -55,6 +55,14 @@ export enum AcceptProgressType {
     undoIn48 = 4
 }
 
+
+export enum PROCESS_BAR_STATUS {
+    SUCCESS = 'success',
+    EXCEPTION = 'exception',
+    WARNING = 'warning',
+    NORMAL = '',
+}
+
 export const acceptProgressTypeMap: Record<AcceptProgressType, string> = Object.freeze({
     [AcceptProgressType.all]: '全部',
     [AcceptProgressType.undo]: '未受理',
@@ -67,6 +75,15 @@ export const acceptProgressTypeMap: Record<AcceptProgressType, string> = Object.
 export const requirmentProgressTypeMap: Record<AcceptProgressType, string> = Object.assign({}, acceptProgressTypeMap, {
     [AcceptProgressType.undoIn48]: '意向银行都没有受理'
 });
+
+export const colorStatusMap: Record<AcceptProgressType, PROCESS_BAR_STATUS> = {
+    [AcceptProgressType.all]: PROCESS_BAR_STATUS.WARNING,
+    [AcceptProgressType.undo]: PROCESS_BAR_STATUS.WARNING,
+    [AcceptProgressType.doing]: PROCESS_BAR_STATUS.NORMAL,
+    [AcceptProgressType.done]: PROCESS_BAR_STATUS.SUCCESS,
+    [AcceptProgressType.refuse]: PROCESS_BAR_STATUS.EXCEPTION,
+    [AcceptProgressType.undoIn48]: PROCESS_BAR_STATUS.WARNING
+};
 
 export const acceptProgressTypeOptions: PlainOption<AcceptProgressType>[] = [
     { name: acceptProgressTypeMap[AcceptProgressType.undo], value: AcceptProgressType.undo },
@@ -341,8 +358,8 @@ export const ReportTypeOptions: PlainOption<ReportType>[] = [
 ];
 
 export const ReportTypeUrlMap: Record<ReportType, string> = {
-    [ReportType.CREDIT]: '/report/detail',
-    [ReportType.SCORE]: '/score/detail',
+    [ReportType.CREDIT]: '/report-credit/detail',
+    [ReportType.SCORE]: '/report-score/detail',
 };
 // #endregion
 

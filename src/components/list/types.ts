@@ -12,4 +12,5 @@ export enum ItemOperate {
     edit = 'item-edit',
     delete = 'item-delete',
     reqDetail = 'item-req-detail',
+    create = 'item-create',
 }

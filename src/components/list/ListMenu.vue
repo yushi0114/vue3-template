@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Warning, Brush } from '@element-plus/icons-vue';
 import { useVModel, onKeyStroke } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import type { ControlOptionConfig } from './ListQueryControl.vue';
@@ -94,9 +95,11 @@ watch(isCtrlKeep, (newValue) => {
                     <el-tooltip
                         content="按住Ctrl+Click可多选"
                         placement="top">
-                        <Icon
+                        <el-icon
                             class="cursor-pointer"
-                            name="ep-warning" />
+                            color="var(--i-text-color-regular)">
+                            <Warning />
+                        </el-icon>
                     </el-tooltip>
                 </FlexRow>
             </Text>
@@ -105,8 +108,12 @@ watch(isCtrlKeep, (newValue) => {
                 @click.stop="clearFilterOptions">
                 <TextHoverable
                     color="regular"
-                    size="sm"
-                    ><FlexRow class="gap-1"><i-ep-brush />清空过滤项</FlexRow></TextHoverable
+                    size="xs"
+                    ><FlexRow class="gap-1">
+                        <el-icon>
+                            <Brush /> </el-icon
+                        >清空过滤项</FlexRow
+                    ></TextHoverable
                 >
             </FlexRow>
         </FlexRow>

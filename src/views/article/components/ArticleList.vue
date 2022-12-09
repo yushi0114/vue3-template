@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Plus, MoreFilled, SoldOut, Sell, Sort, Delete } from '@element-plus/icons-vue';
-import { ListField } from '@/components';
+import { ListField, ItemOperate } from '@/components';
 import { NEWS_TYPE, ARTICLE_STATUS, ARTICLE_OPERATE_MODE_LABEL, ARTICLE_OPERATE_MODE, ARTICLE_MODULE } from '@/enums';
 // import ArticleFilter from './ArticleFilter.vue';
 import { useTable, useJumpLink, useArticleModule } from '../hooks';
@@ -198,15 +198,28 @@ watch(listControlModel, () => {
                 <FlexRow
                     vertical="end"
                     horizontal="center">
-                    <FlexRow
+                    <ListOperator
+                        :max-out-count="1"
+                        @[ItemOperate.edit]="handleToEdit(scope)"
+                        @operate="(opt) => handleMoreOperate(opt.value, scope.row)"
+                        :operators="[
+                            { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                            scope.row.status === ARTICLE_STATUS.PUBLISHED ? {
+                                name: ARTICLE_OPERATE_MODE_LABEL.OFFLINE,
+                                value: ARTICLE_OPERATE_MODE.OFFLINE,
+                                icon: 'ep-sold-out'
+                            } : {
+                                name: ARTICLE_OPERATE_MODE_LABEL.PUBLISH,
+                                value: ARTICLE_OPERATE_MODE.PUBLISH,
+                                icon: 'ep-sell'
+                            },
+                            { name: ARTICLE_OPERATE_MODE_LABEL.SORT, value: ARTICLE_OPERATE_MODE.SORT, icon: 'ep-sort' },
+                            { name: ARTICLE_OPERATE_MODE_LABEL.DELETE, value: ARTICLE_OPERATE_MODE.DELETE, icon: 'ep-delete' },
+                        ]"
+                    />
+                    <!-- <FlexRow
                         horizontal="center"
                         :class="[scope.row.status === ARTICLE_STATUS.PUBLISHED && 'cursor-not-allowed']">
-                        <!-- <TextHoverable
-                            size="sm"
-                            :color="scope.row.status === ARTICLE_STATUS.PUBLISHED ? 'disabled' : 'regular'"
-                            @click="handleToEdit(scope)">
-                            编辑
-                        </TextHoverable> -->
                         <el-tooltip
                             placement="top"
                             content="编辑">
@@ -220,11 +233,6 @@ watch(listControlModel, () => {
                         </el-tooltip>
                     </FlexRow>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, scope.row)">
-                        <!-- <TextHoverable
-                            size="sm"
-                            color="regular">
-                            更多
-                        </TextHoverable> -->
                         <Text>
                             <el-tooltip
                                 placement="top"
@@ -260,7 +268,7 @@ watch(listControlModel, () => {
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
-                    </el-dropdown>
+                    </el-dropdown> -->
                 </FlexRow>
             </template>
         </sjc-table>

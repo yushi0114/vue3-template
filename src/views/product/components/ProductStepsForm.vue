@@ -51,7 +51,7 @@ const handleSubmitBaseInfo = (values: any) => {
     }
     goToNext();
 };
-const handleSubmit = async (values: any) => {
+const handleSubmit = async(values: any) => {
     let sortIdArr: any[] = [];
     dynamicForm.value.forEach((item) => {
         if (values[item.keyName] && isArray(values[item.keyName])) {

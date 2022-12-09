@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { ProductEntity } from '@/types';
 import { List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption, ItemOperate } from '@/components';
-import { SwitchType } from '@/enums';
+import { SwitchType, PROCESS_BAR_STATUS } from '@/enums';
 
 withDefaults(
     defineProps<{
@@ -59,7 +59,8 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
                     <ListProgress
                         label="成功率"
                         :progress="Number(item.successRate) * 100"
-                        status=""
+                        :status="PROCESS_BAR_STATUS.NORMAL"
+                        :has-icon="false"
                     >
                         {{ Number(item.successRate) * 100 }}%
                     </ListProgress>

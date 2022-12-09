@@ -5,7 +5,7 @@
                 :data-source="menuTreeData"
                 @operateTreeItem="handleOperateTreeItem($event)"></MenuTree>
         </div>
-        <div class="menu-content">
+        <div class="form-content" :class="{'menu-content': formType !== 'create'}">
             <el-empty v-if="formType === 'empty'" description="请在左侧选择菜单~"/>
             <MenuForm v-else></MenuForm>
         </div>
@@ -38,7 +38,7 @@ async function handleOperateTreeItem(params: {
                 type: 'warning',
             }
         )
-            .then(async () => {
+            .then(async() => {
                 if (!params?.willDeleteList || !params.willDeleteList.length) {
                     return;
                 }
@@ -92,13 +92,17 @@ async function handleOperateTreeItem(params: {
     .menu-content {
         margin-left: 24px;
         padding: 48px 24px 24px;
-        height: 100%;
         border: 1px solid #ebeef5;
         border-radius: 4px;
         flex: 1;
         box-sizing: border-box;
+    }
+
+    .form-content {
         display: flex;
         justify-content: center;
+        width: 100%;
+        height: 100%;
         overflow-y: auto;
     }
 }

@@ -38,10 +38,8 @@
                 </div>
             </el-form-item>
             <el-form-item>
-                <el-button @click="goBack()">返回</el-button>
-                <el-button type="primary" @click="submitForm(ruleFormRef)">
-                    {{ formType === 'edit' ? '编辑' : '创建' }}
-                </el-button>
+                <el-button @click="goBack()">取消</el-button>
+                <el-button type="primary" @click="submitForm(ruleFormRef)">确定</el-button>
             </el-form-item>
         </el-form>
     </div>

@@ -244,6 +244,7 @@ watch(model, () => {
                 </template>
             </el-table-column>
             <TableOperatorColumn
+                width="120"
                 @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
                 :operators="[
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },

@@ -25,9 +25,9 @@ function handleOperate(opt: ListOperatorOption, scope: any) {
 </script>
 
 <template>
-  <el-table-column class="table-operator-column">
+  <el-table-column class="table-operator-column" v-bind="$attrs" header-align="center">
     <template #header>
-        <span class="toc-header">{{ label }}</span>
+        <FlexRow horizontal="center" class="toc-header">{{ label }}</FlexRow>
     </template>
     <template #default="scope">
         <ListOperator

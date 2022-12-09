@@ -2,6 +2,7 @@
 import { View } from '@element-plus/icons-vue';
 import { getAllCorpList } from '@/api/score';
 import type { IScoreTable } from '@/types/score';
+import { useThrottleFn } from '@vueuse/core';
 import { useListControlModel } from '@/composables';
 
 const dataSource = ref<IScoreTable[]>([]);
@@ -74,27 +75,18 @@ function scrollBehavior(e: any) {
     }
 }
 
-// 防抖
-const debounce = (fn: Function, time?: number) => {
-    let timer: any;
-    return function(e: any) {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-            fn(e);
-        }, time);
-    };
-};
+const throttledFn = useThrottleFn((e) => {
+    scrollBehavior(e);
+}, 400);
 
 onMounted(() => {
     // 挂载
-    TableRef.value && TableRef.value.$refs.bodyWrapper.addEventListener('mousewheel', debounce(scrollBehavior, 300));
+    TableRef.value && TableRef.value.$refs.bodyWrapper.addEventListener('mousewheel', throttledFn);
 });
 
 onUnmounted(() => {
     // 卸载
-    TableRef.value && TableRef.value.$refs.bodyWrapper.removeEventListener('mousewheel', scrollBehavior);
+    TableRef.value && TableRef.value.$refs.bodyWrapper.removeEventListener('mousewheel', throttledFn);
 });
 
 watch(listControlModel, () => {

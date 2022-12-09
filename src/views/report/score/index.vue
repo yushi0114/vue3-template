@@ -3,7 +3,7 @@ import ScoreTableTable from './components/ScoreTable.vue';
 </script>
 
 <template>
-    <PagePanel>
+    <PagePanel full>
         <Board class="score">
             <ScoreTableTable></ScoreTableTable>
         </Board>

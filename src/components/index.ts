@@ -12,4 +12,5 @@ export { default as Panel } from './Panel.vue';
 export { default as RectLogo } from './RectLogo.vue';
 export { default as Empty } from './Empty.vue';
 export * from './list';
+export * from './table';
 export * from './scoreResult';

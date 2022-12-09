@@ -118,16 +118,18 @@ onBeforeMount(() => {
     <PagePanel>
         <!-- -->
         <Board full class="recommand-create" v-loading="loading">
-            <div>
+            <div class="form-header">
                 <Text size="xl">{{ editName }}{{ kindName }}</Text>
             </div>
             <div class="recommand-edit-form">
                 <el-form
+                    class="custom-form"
                     :model="pdt"
                     :rules="rules"
+                    label-width="120px"
                     ref="ruleFormRef">
                     <el-form-item :label="`${kindName}名称`" prop="orgProductId">
-                        <el-select v-model="pdt.orgProductId">
+                        <el-select v-model="pdt.orgProductId" style="width: 100%">
                             <el-option v-for="pdt in products" :key="pdt.id" :value="pdt.id" :label="pdt.name" />
                         </el-select>
                     </el-form-item>
@@ -158,27 +160,43 @@ onBeforeMount(() => {
                             </template>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item label="海报状态" prop="status">
+                    <el-form-item label="海报状态" prop="status" required>
                         <el-switch
                             v-model="pdt.status"
                             :active-value="SwitchType.on"
                             :inactive-value="SwitchType.off"
                         />
                     </el-form-item>
+                    <div class="form-footer">
+                        <el-button @click="handleBack">取消</el-button>
+                        <el-button type="primary" @click="submit" :loading="submitLoading">确定</el-button>
+                    </div>
                 </el-form>
-
-                <FlexRow>
-                    <el-button @click="handleBack">返回</el-button>
-                    <el-button type="primary" @click="submit" :loading="submitLoading">提交</el-button>
-                </FlexRow>
             </div>
         </Board>
     </PagePanel>
 </template>
 
 <style lang="scss">
+.recommand-create {
+    .form-header {
+        margin: 20px auto 30px;
+        width: 500px;
+    }
+}
+
 .recommand-edit-form {
     padding-top: $gap-xl;
+
+    .custom-form {
+        margin: 0 auto;
+        width: 500px;
+    }
+
+    .form-footer {
+        margin: 50px 0;
+        text-align: center;
+    }
 
     & .re-imgdel {
         width: 200px;

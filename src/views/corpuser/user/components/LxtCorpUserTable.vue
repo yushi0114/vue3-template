@@ -211,46 +211,39 @@ watch(model, () => {
             </template>
         </ListQueryControl>
         <LoadingBoard :loading="allToogle.loading" :empty="!userList.length">
-        <el-table
-            :data="userList"
-            :default-sort="{ prop: 'createTime', order: 'descending' }"
-            @sort-change="handleSortChange"
-            @selection-change="handleSelectionChange"
-            style="width: 100%"
-            :header-cell-style="{
-                color: '#595959',
-                'background-color': '#f3f4f8'
-            }"
-        >
-            <el-table-column
-                type="selection"
-                width="55">
-            </el-table-column>
-            <el-table-column prop="account" label="用户名">
-                <template #default="scope">
-                    <div @click="handleToDetail(scope.row)" class="underline-text">{{ scope.row.account }}</div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="createTime" label="创建时间" sortable />
-            <el-table-column prop="updateTime" label="更新时间" sortable />
-            <el-table-column label="状态">
-                <template #default="scope">
-                    <el-switch
-                        v-model="scope.row.status"
-                        :active-value="1"
-                        :inactive-value="0"
-                        @change="changeUserStatus(scope.row, scope.$index)"
-                    ></el-switch>
-                </template>
-            </el-table-column>
-            <TableOperatorColumn
-                width="120"
-                @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
-                :operators="[
-                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
-                ]">
-            </TableOperatorColumn>
-        </el-table>
+            <CommonTable
+                :data="userList"
+                :default-sort="{ prop: 'createTime', order: 'descending' }"
+                @sort-change="handleSortChange"
+                @selection-change="handleSelectionChange"
+            >
+                <el-table-column type="selection" width="55" />
+                <el-table-column prop="account" label="用户名">
+                    <template #default="scope">
+                        <div @click="handleToDetail(scope.row)" class="underline-text">{{ scope.row.account }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="createTime" label="创建时间" sortable />
+                <el-table-column prop="updateTime" label="更新时间" sortable />
+                <el-table-column label="状态">
+                    <template #default="scope">
+                        <el-switch
+                            v-model="scope.row.status"
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change="changeUserStatus(scope.row, scope.$index)"
+                        ></el-switch>
+                    </template>
+                </el-table-column>
+                <TableOperatorColumn
+                    width="120"
+                    @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
+                    :operators="[
+                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                    ]">
+                </TableOperatorColumn>
+            </CommonTable>
+        </LoadingBoard>
 
         <CommonPagination
             v-model:current-page="page.currentPage"
@@ -259,7 +252,6 @@ watch(model, () => {
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
         />
-        </LoadingBoard>
 
         <LxtShopDetail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></LxtShopDetail>
     </div>

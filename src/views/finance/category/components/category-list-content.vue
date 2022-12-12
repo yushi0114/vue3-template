@@ -16,44 +16,27 @@
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="loading" :empty="!categoryList.list">
-        <el-table
+        <CommonTable
             :data="categoryList.list"
-            style="width: 100%"
             @sort-change="handleSortChange"
             :default-sort="{ prop: 'updateTime', order: 'descending' }"
-            :header-cell-style="{
-                        color: '#595959',
-                        'background-color': '#f3f4f8'
-                    }">
+        >
             <el-table-column prop="name" label="名称" width="180"/>
             <el-table-column prop="desc" label="描述" width="180"/>
             <el-table-column prop="sort" label="排序" width="180"/>
             <el-table-column prop="createBy" label="创建者" width="180"/>
             <el-table-column prop="createTime" sortable label="创建时间"/>
             <el-table-column prop="updateTime" sortable label="更新时间"/>
-            <el-table-column label="操作" width="180">
-                <template #default="scope">
-                    <el-button
-                        type="primary"
-                        size="small"
-                        @click.prevent="handleEditRoleItem(scope.row)"
-                    >
-                        <template #icon>
-                            <Icon :name="'ep:edit'"></Icon>
-                        </template>
-                    </el-button>
-                    <el-button
-                        type="danger"
-                        size="small"
-                        @click.prevent="handleRemoveRoleItem(scope.row)"
-                    >
-                        <template #icon>
-                            <Icon :name="'ep:delete'"></Icon>
-                        </template>
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+            <TableOperatorColumn
+                width="120"
+                @[ItemOperate.edit]="(scope: any) => handleEditRoleItem(scope.row)"
+                @[ItemOperate.delete]="(scope: any) => handleRemoveRoleItem(scope.row)"
+                :operators="[
+                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]">
+            </TableOperatorColumn>
+        </CommonTable>
     </LoadingBoard>
     <CommonPagination
         @size-change="handleSizeChange"
@@ -75,6 +58,7 @@ import {
     loading
 } from './category-list';
 import type { FinanceCategoryListItemType } from '@/types/finance';
+import { ItemOperate } from '@/components';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';

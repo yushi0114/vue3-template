@@ -17,40 +17,26 @@
             新建
         </el-button>
     </div>
-    <el-table
-        :data="roleList.list" style="width: 100%"
+    <CommonTable
+        :data="roleList.list"
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }"
-        :header-cell-style="{
-            color: '#595959',
-            'background-color': '#f3f4f8'
-        }">
+    >
         <el-table-column prop="name" label="名称"/>
         <el-table-column prop="desc" label="描述" width="180"/>
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
         <el-table-column prop="createBy" label="创建人"/>
-        <el-table-column label="操作" width="180">
-            <template #default="scope">
-                <el-button
-                    type="primary"
-                    size="small"
-                    @click.prevent="handleEditRoleItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:edit'"></Icon>
-                    </template>
-                </el-button>
-                <el-button
-                    type="danger"
-                    size="small"
-                    @click.prevent="handleRemoveRoleItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:delete'"></Icon>
-                    </template>
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+        <TableOperatorColumn
+            width="120"
+            @[ItemOperate.edit]="(scope: any) => handleEditRoleItem(scope.row)"
+            @[ItemOperate.delete]="(scope: any) => handleRemoveRoleItem(scope.row)"
+            :operators="[
+                { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+            ]">
+        </TableOperatorColumn>
+    </CommonTable>
     <CommonPagination
         class="margin-20-20"
         @size-change="handleSizeChange"
@@ -61,7 +47,7 @@
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
-import type { RoleListItemType } from '@/views/system/type/role-list.type';
+import type { RoleListItemType } from '@/types/system-manage/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     deleteRole,
@@ -73,6 +59,7 @@ import {
 } from './institution-role';
 import { LoadingService } from '@/views/system/loading-service';
 import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
+import { ItemOperate } from '@/components';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -140,7 +127,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteRole(item.id);
             LoadingService.getInstance().loading();
             await getRolePageList(currentInstitutionId.value);

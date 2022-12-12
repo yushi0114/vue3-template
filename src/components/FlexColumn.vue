@@ -18,44 +18,45 @@ withDefaults(
         <slot />
     </div>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .i-flex-column {
-    @apply flex flex-col;
+    display: flex;
+    flex-direction: column;
 }
 
 .i-flex-column-horizontal-center {
-    @apply items-center;
+    align-items: center;
 }
 
 .i-flex-column-horizontal-start {
-    @apply items-start;
+    align-items: flex-start;
 }
 
 .i-flex-column-horizontal-end {
-    @apply items-end;
+    align-items: flex-end;
 }
 
 .i-flex-column-vertical-start {
-    @apply justify-start;
+    justify-content: flex-start;
 }
 
 .i-flex-column-vertical-center {
-    @apply justify-center;
+    justify-content: center;
 }
 
 .i-flex-column-vertical-end {
-    @apply justify-end;
+    justify-content: flex-end;
 }
 
 .i-flex-column-vertical-between {
-    @apply justify-between;
+    justify-content: space-between;
 }
 
 .i-flex-column-vertical-around {
-    @apply justify-around;
+    justify-content: space-around;
 }
 
 .i-flex-column-vertical-evenly {
-    @apply justify-evenly;
+    justify-content: space-evenly;
 }
 </style>

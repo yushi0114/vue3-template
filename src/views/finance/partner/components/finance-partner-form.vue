@@ -1,4 +1,7 @@
 <template>
+    <div class="form-header">
+        <Text size="xl">{{ editName }}合作伙伴</Text>
+    </div>
     <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
         <el-form-item label="合作伙伴名称" required prop="name">
             <el-input
@@ -50,6 +53,11 @@ import {
     update
 } from '@/views/finance/partner/components/finance-partner';
 import { blobToDataURL, validateIllegalSymbol } from '@/utils';
+
+
+const editName = computed(() => {
+    return formType.value === 'create' ? '新建' : '编辑';
+});
 
 
 const dialogImageUrl = ref();
@@ -132,9 +140,12 @@ async function goBack() {
 </script>
 
 <style scoped lang="scss">
+.form-header {
+    margin: 20px auto 30px;
+    width: 700px;
+}
 .custom-form {
     margin: 0 auto;
-    padding: 40px 0;
     width: 700px;
 }
 

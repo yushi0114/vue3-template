@@ -15,7 +15,7 @@ withDefaults(
     <Icon class="i-icon" :icon="name" />
 </template>
 
-<style lang="scss">
+<style lang="css">
 .i-icon {
     --color: inherit;
     height: 1em;

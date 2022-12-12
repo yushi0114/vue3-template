@@ -8,8 +8,7 @@
   </div>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .i-list {
-  @apply;
 }
 </style>

@@ -31,10 +31,10 @@
         <el-form-item label="状态" required prop="status">
             <el-switch v-model="form.status"/>
         </el-form-item>
-        <el-form-item>
+        <div class="form-footer">
             <el-button @click="goBack()">取消</el-button>
             <el-button type="primary" @click="submitForm(ruleFormRef)">确定</el-button>
-        </el-form-item>
+        </div>
     </el-form>
 </template>
 
@@ -133,7 +133,13 @@ async function goBack() {
 
 <style scoped lang="scss">
 .custom-form {
-    width: 700px;
+    margin: 0 auto;
     padding: 40px 0;
+    width: 700px;
+}
+
+.form-footer {
+    margin: 50px 0;
+    text-align: center;
 }
 </style>

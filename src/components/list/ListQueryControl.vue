@@ -248,6 +248,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                     size="large"
                     clearable
                     :placeholder="searchConfig.label"
+                    @clear="handleSearch(model[searchConfig!.field] = '')"
                     class="lqc-search-input"
                     @input="checkSearchInput(model[searchConfig!.field])"
                     @keyup.enter="handleSearch(model[searchConfig!.field])"
@@ -365,7 +366,8 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 }
 
 .lqc-search-row {
-    margin-bottom: $gap-md;
+    padding-top: $gap-xs;
+    margin-bottom: $gap-lg;
 }
 
 .lqc-search-input {

@@ -38,7 +38,7 @@ async function handleClick(tab: TabsPaneContext) {
     LoadingService.getInstance().stop();
 }
 
-onMounted(async () => {
+onMounted(async() => {
     LoadingService.getInstance().loading();
     await getUserListData({
         tab: activeName.value

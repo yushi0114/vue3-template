@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { View } from '@element-plus/icons-vue';
 import { getAllCorpList } from '@/api/score';
 import type { IScoreTable } from '@/types/score';
 import { useThrottleFn } from '@vueuse/core';
 import { useListControlModel } from '@/composables';
+import { ItemOperate } from '@/components';
 
 const dataSource = ref<IScoreTable[]>([]);
 
@@ -120,18 +120,13 @@ watch(listControlModel, () => {
             >
                 <el-table-column fixed prop="corpName" label="企业名称" />
                 <el-table-column prop="corpCode" label="统一社会信用代码" />
-                <el-table-column>
-                    <template #header>
-                        <span class="header-options">操作</span>
-                    </template>
-                    <template #default="scope">
-                        <el-button
-                            :icon="View"
-                            text
-                            @click="handleView(scope.row)"
-                        ></el-button>
-                    </template>
-                </el-table-column>
+                <TableOperatorColumn
+                    width="120"
+                    @[ItemOperate.detail]="(scope: any) => handleView(scope.row)"
+                    :operators="[
+                        { name: '查看', value: ItemOperate.detail, icon: 'ep-view' },
+                    ]">
+                </TableOperatorColumn>
             </el-table>
             </LoadingBoard>
         </Layout>

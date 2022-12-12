@@ -25,15 +25,15 @@
                     <el-image style="height: 40px;" :src="scope.row.imgUrl"></el-image>
                 </template>
             </el-table-column>
-            <el-table-column>
-                <template #header>
-                    <span class="header-options">操作</span>
-                </template>
-                <template #default="scope">
-                    <el-button text :icon="EditPen"  @click.prevent="handleEditItem(scope.row)" />
-                    <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
-                </template>
-            </el-table-column>
+            <TableOperatorColumn
+                width="180"
+                @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
+                @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
+                :operators="[
+                    { name: '删除', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]">
+            </TableOperatorColumn>
         </el-table>
     </LoadingBoard>
     <div class="page-content">
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus, EditPen, Delete } from '@element-plus/icons-vue';
+import { Plus } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
 import {
     loading,
@@ -66,6 +66,7 @@ import {
 } from '@/views/finance/partner/components/finance-partner';
 import type { FinancePartnerListItemType } from '@/types/finance';
 import { dataURLToFile } from '@/utils';
+import { ItemOperate } from '@/components';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';

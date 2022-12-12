@@ -5,6 +5,7 @@ import type { CorpUserTable } from '@/types/corpUser';
 import { getZfBusinessUser, updateZfBusinessUserStatus, deleteZfBatchUser } from '@/api/corpUser';
 import ZjfwShopDetail from './ZjfwShopDetail.vue';
 import { useListControlModel } from '@/composables';
+import { ItemOperate } from '@/components';
 
 const userList = ref<CorpUserTable[]>([]);
 const userId = ref('');
@@ -244,18 +245,13 @@ watch(model, () => {
                         ></el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column>
-                    <template #header>
-                        <span class="header-options">操作</span>
-                    </template>
-                    <template #default="scope">
-                        <el-button
-                            :icon="Delete"
-                            text
-                            @click="handleDelete(scope.row)"
-                        ></el-button>
-                    </template>
-                </el-table-column>
+                <TableOperatorColumn
+                    width="120"
+                    @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
+                    :operators="[
+                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                    ]">
+                </TableOperatorColumn>
             </el-table>
 
             <CommonPagination

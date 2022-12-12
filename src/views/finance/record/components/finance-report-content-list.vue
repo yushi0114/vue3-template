@@ -34,20 +34,13 @@
             <el-table-column prop="corpName" label="企业名称"/>
             <el-table-column prop="corpCode" label="统一信用代码"/>
             <el-table-column prop="createTime" sortable label="查询时间"/>
-            <el-table-column>
-                <template #header>
-                    <span class="header-options">操作</span>
-                </template>
-                <template #default="scope">
-                    <el-button
-                        text
-                        @click="handleDeleteItem(scope.row)">
-                        <template #icon>
-                            <Icon :name="'ep:delete'"></Icon>
-                        </template>
-                    </el-button>
-                </template>
-            </el-table-column>
+            <TableOperatorColumn
+                width="120"
+                @[ItemOperate.delete]="(scope: any) => handleDeleteItem(scope.row)"
+                :operators="[
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]">
+            </TableOperatorColumn>
         </el-table>
     </LoadingBoard>
     <CommonPagination
@@ -62,6 +55,7 @@ import Icon from '@/components/Icon.vue';
 import { deleteItems, filterObject, getPageList, listData, loading } from './finance-report';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FinanceReportListItemType } from '@/types/finance';
+import { ItemOperate } from '@/components';
 
 const isDeleteEnabled = ref<boolean>(true);
 const willDeleteList = ref<string[]>([]);

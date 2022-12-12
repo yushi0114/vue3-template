@@ -4,6 +4,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { getZfRecordList, deleteBatchZfRecord } from '@/api/corpReportRecord';
 import type { CorpRepoteRecordTable } from '@/types/corpReportRecord';
 import { useListControlModel } from '@/composables';
+import { ItemOperate } from '@/components';
 
 const reportRecordList = ref<CorpRepoteRecordTable[]>([]);
 const { model } = useListControlModel({
@@ -189,18 +190,13 @@ watch(model, () => {
                 </el-table-column>
                 <el-table-column prop="corpCode" label="统一社会信用代码"/>
                 <el-table-column prop="createTime" label="查询时间" sortable />
-                <el-table-column>
-                    <template #header>
-                        <span class="header-options">操作</span>
-                    </template>
-                    <template #default="scope">
-                        <el-button
-                            :icon="Delete"
-                            text
-                            @click="handleDelete(scope.row)"
-                        ></el-button>
-                    </template>
-                </el-table-column>
+                <TableOperatorColumn
+                width="120"
+                    @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
+                    :operators="[
+                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                    ]">
+                </TableOperatorColumn>
             </el-table>
 
             <CommonPagination

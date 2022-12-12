@@ -212,17 +212,11 @@ watch(model, () => {
         </ListQueryControl>
         <div class="content">
             <LoadingBoard :loading="allToogle.loading" :empty="!userList.length">
-            <el-table
-                v-loading="allToogle.loading"
+            <CommonTable
                 :data="userList"
                 :default-sort="{ prop: 'createTime', order: 'descending' }"
                 @sort-change="handleSortChange"
                 @selection-change="handleSelectionChange"
-                style="width: 100%"
-                :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }"
             >
                 <el-table-column
                     type="selection"
@@ -252,7 +246,7 @@ watch(model, () => {
                         { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                     ]">
                 </TableOperatorColumn>
-            </el-table>
+            </CommonTable>
 
             <CommonPagination
                 v-model:current-page="page.currentPage"

@@ -51,7 +51,6 @@ onMounted(async() => {
     justify-content: space-between;
     align-items: center;
     flex: 1;
-    background: #ffffff;
     overflow-y: auto;
 
     &::v-deep(.el-tabs__header) {

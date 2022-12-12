@@ -164,15 +164,10 @@ watch(model, () => {
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
-        <el-table
+        <CommonTable
             :data="dataSource"
             :default-sort="{ prop: 'sort', order: 'ascending' }"
             @sort-change="handleSortChange"
-            style="width: 100%"
-            :header-cell-style="{
-                color: '#595959',
-                'background-color': '#f3f4f8'
-            }"
         >
             <el-table-column label="城市名称">
                 <template #default="scope">
@@ -193,7 +188,7 @@ watch(model, () => {
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                 ]">
             </TableOperatorColumn>
-        </el-table>
+        </CommonTable>
     </LoadingBoard>
     <CommonPagination
         v-model:currentPage="page.currentPage"

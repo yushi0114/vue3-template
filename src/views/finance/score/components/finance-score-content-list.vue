@@ -16,15 +16,12 @@
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="loading" :empty="!listData.list.length">
-        <el-table
-            :data="listData.list" style="width: 100%"
+        <CommonTable
+            :data="listData.list"
             @sort-change="handleSortChange"
             @selection-change="handleSelectionChange"
             :default-sort="{ prop: 'createTime', order: 'descending' }"
-            :header-cell-style="{
-                color: '#595959',
-                'background-color': '#f3f4f8'
-            }">
+        >
             <el-table-column
                 type="selection"
                 width="55">
@@ -41,7 +38,7 @@
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                 ]">
             </TableOperatorColumn>
-        </el-table>
+        </CommonTable>
     </LoadingBoard>
     <CommonPagination
         @size-change="handleSizeChange"

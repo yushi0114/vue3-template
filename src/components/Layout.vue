@@ -7,19 +7,22 @@ withDefaults(
 </script>
 <template>
     <div class="i-layout" v-bind="$attrs" :class="['i-layout-' + type]">
-        <slot />
+        <slot></slot>
     </div>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .i-layout {
-    @apply h-full flex-1 flex overflow-auto;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    overflow: auto;
 }
 
 .i-layout-vertical {
-    @apply flex-col;
+    flex-direction: column;
 }
 
 .i-layout-horizontal {
-    @apply flex-row;
+    flex-direction: row;
 }
 </style>

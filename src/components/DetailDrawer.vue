@@ -4,8 +4,11 @@
 
 <template>
     <el-drawer modal-class="detail-drawer" size="60%" v-bind="$attrs">
-        <template v-for="(item, key, index) in $slots" :key="index" v-slot:[key]>
-            <slot :name="key"></slot>
+        <template
+            v-for="(_, key, index) in $slots"
+            :key="index"
+            v-slot:[key]="props">
+            <slot :name="key" v-bind="props"></slot>
         </template>
     </el-drawer>
 </template>

@@ -62,31 +62,27 @@
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="loading" :empty="!codeList.list.length">
-        <el-table
+        <CommonTable
             :data="codeList.list"
-            style="width: 100%"
             @sort-change="handleSortChange"
             :default-sort="{ prop: 'updateTime', order: 'descending' }"
-            :header-cell-style="{
-                color: '#595959',
-                'background-color': '#f3f4f8'
-            }">
-                <el-table-column prop="orgName" label="机构名称"/>
-                <el-table-column prop="orgCode" label="机构编码" width="180"/>
-                <el-table-column prop="orgTypeName" label="机构分类" width="180"/>
-                <el-table-column prop="createBy" label="创建者" width="180"/>
-                <el-table-column prop="createTime" sortable label="创建时间"/>
-                <el-table-column prop="updateTime" sortable label="更新时间"/>
-                <TableOperatorColumn
-                    width="120"
-                    @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
-                    @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
-                    :operators="[
-                        { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
-                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
-                    ]">
-                </TableOperatorColumn>
-        </el-table>
+        >
+            <el-table-column prop="orgName" label="机构名称"/>
+            <el-table-column prop="orgCode" label="机构编码" width="180"/>
+            <el-table-column prop="orgTypeName" label="机构分类" width="180"/>
+            <el-table-column prop="createBy" label="创建者" width="180"/>
+            <el-table-column prop="createTime" sortable label="创建时间"/>
+            <el-table-column prop="updateTime" sortable label="更新时间"/>
+            <TableOperatorColumn
+                width="120"
+                @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
+                @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
+                :operators="[
+                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]">
+            </TableOperatorColumn>
+        </CommonTable>
     </LoadingBoard>
     <CommonPagination
         @size-change="handleSizeChange"

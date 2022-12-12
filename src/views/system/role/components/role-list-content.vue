@@ -22,14 +22,11 @@
             新建
         </el-button>
     </div>
-    <el-table
-        :data="roleList.list" style="width: 100%"
+    <CommonTable
+        :data="roleList.list"
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }"
-        :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }">
+    >
         <el-table-column prop="name" label="名称" width="180"/>
         <el-table-column prop="desc" label="描述" width="180"/>
         <el-table-column prop="createTime" sortable label="创建时间"/>
@@ -55,7 +52,7 @@
                 </el-button>
             </template>
         </el-table-column>
-    </el-table>
+    </CommonTable>
     <CommonPagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -175,7 +172,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteRole({
                 roleId: item.id,
                 tab: activeName.value

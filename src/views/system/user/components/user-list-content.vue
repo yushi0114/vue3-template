@@ -17,13 +17,10 @@
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="loading" :empty="!userTableData.list.length">
-        <el-table :data="userTableData.list" style="width: 100%"
+        <CommonTable :data="userTableData.list"
               @sort-change="handleSortChange"
               :default-sort="{ prop: 'updateTime', order: 'descending' }"
-              :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }">
+        >
             <el-table-column prop="name" label="姓名" width="180"/>
             <el-table-column prop="account" label="手机号" width="180"/>
             <el-table-column prop="roleName" label="角色" width="180"></el-table-column>
@@ -39,7 +36,7 @@
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                 ]">
             </TableOperatorColumn>
-        </el-table>
+        </CommonTable>
     </LoadingBoard>
     <CommonPagination
         @size-change="handleSizeChange"
@@ -58,7 +55,7 @@ import {
     formType,
     getUserListData,
     mode,
-    resetUserFilterObject, resetUserForm,
+    resetUserForm,
     userFilterObject,
     form,
     userTableData
@@ -88,15 +85,6 @@ async function handleSearchList() {
     LoadingService.getInstance().loading();
     userFilterObject.value.currentPage = 0;
     userFilterObject.value.currentSize = 10;
-    await getUserListData({
-        tab: activeName.value
-    });
-    LoadingService.getInstance().stop();
-}
-
-async function handleClear() {
-    LoadingService.getInstance().loading();
-    resetUserFilterObject();
     await getUserListData({
         tab: activeName.value
     });

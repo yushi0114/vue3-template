@@ -16,15 +16,11 @@
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="loading" :empty="!categoryList.list">
-        <el-table
+        <CommonTable
             :data="categoryList.list"
-            style="width: 100%"
             @sort-change="handleSortChange"
             :default-sort="{ prop: 'updateTime', order: 'descending' }"
-            :header-cell-style="{
-                        color: '#595959',
-                        'background-color': '#f3f4f8'
-                    }">
+        >
             <el-table-column prop="name" label="名称" width="180"/>
             <el-table-column prop="desc" label="描述" width="180"/>
             <el-table-column prop="sort" label="排序" width="180"/>
@@ -40,7 +36,7 @@
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                 ]">
             </TableOperatorColumn>
-        </el-table>
+        </CommonTable>
     </LoadingBoard>
     <CommonPagination
         @size-change="handleSizeChange"

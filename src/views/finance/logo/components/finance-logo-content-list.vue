@@ -12,14 +12,11 @@
             </template>
         </ListQueryControl>
         <LoadingBoard :loading="loading" :empty="!listData.list.length">
-            <el-table
-                :data="listData.list" style="width: 100%"
+            <CommonTable
+                :data="listData.list"
                 @sort-change="handleSortChange"
                 :default-sort="{ prop: 'updateTime', order: 'descending' }"
-                :header-cell-style="{
-                            color: '#595959',
-                            'background-color': '#f3f4f8'
-                        }">
+            >
                 <el-table-column prop="orgName" label="所属机构"/>
                 <el-table-column label="分类">
                     <template #default>
@@ -40,7 +37,7 @@
                         { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                     ]">
                 </TableOperatorColumn>
-            </el-table>
+            </CommonTable>
         </LoadingBoard>
         <CommonPagination
             v-model:current-page="filterObject.currentPage"

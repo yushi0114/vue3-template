@@ -22,6 +22,9 @@ const page = reactive({
     pageSize: 15
 });
 
+const tableBodyRef = computed<HTMLElement | null>(() => TableRef.value?.$refs?.table.$refs.bodyWrapper);
+
+
 // 获取企业列表
 const getCorpList = () => {
     if (!listControlModel.corpName) return;
@@ -62,7 +65,7 @@ function scrollBehavior(e: any) {
     const scrollDirection = e.deltaY > 0 ? 'down' : 'up';
     if (scrollDirection === 'down') {
         // 获取提供实际滚动的容器
-        const dom = TableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0];
+        const dom = tableBodyRef.value!.getElementsByClassName('el-scrollbar__wrap')[0];
         const { clientHeight, scrollTop, scrollHeight } = dom;
         if (clientHeight === scrollHeight) {
             return;
@@ -81,12 +84,12 @@ const throttledFn = useThrottleFn((e) => {
 
 onMounted(() => {
     // 挂载
-    TableRef.value && TableRef.value.$refs.bodyWrapper.addEventListener('mousewheel', throttledFn);
+    tableBodyRef.value?.addEventListener('mousewheel', throttledFn);
 });
 
 onUnmounted(() => {
     // 卸载
-    TableRef.value && TableRef.value.$refs.bodyWrapper.removeEventListener('mousewheel', throttledFn);
+    tableBodyRef.value?.removeEventListener('mousewheel', throttledFn);
 });
 
 watch(listControlModel, () => {
@@ -108,26 +111,21 @@ watch(listControlModel, () => {
         </ListQueryControl>
         <Layout class="table-content flex-wrap">
             <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
-            <el-table
-                v-loading="allToogle.loading"
-                :data="dataSource"
-                style="width: 100%; height: 770px;"
-                :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }"
-                ref="TableRef"
-            >
-                <el-table-column fixed prop="corpName" label="企业名称" />
-                <el-table-column prop="corpCode" label="统一社会信用代码" />
-                <TableOperatorColumn
-                    width="120"
-                    @[ItemOperate.detail]="(scope: any) => handleView(scope.row)"
-                    :operators="[
-                        { name: '查看', value: ItemOperate.detail, icon: 'ep-view' },
-                    ]">
-                </TableOperatorColumn>
-            </el-table>
+                <CommonTable
+                    v-loading="allToogle.loading"
+                    :data="dataSource"
+                    ref="TableRef"
+                >
+                    <el-table-column fixed prop="corpName" label="企业名称" />
+                    <el-table-column prop="corpCode" label="统一社会信用代码" />
+                    <TableOperatorColumn
+                        width="120"
+                        @[ItemOperate.detail]="(scope: any) => handleView(scope.row)"
+                        :operators="[
+                            { name: '查看', value: ItemOperate.detail, icon: 'ep-view' },
+                        ]">
+                    </TableOperatorColumn>
+                </CommonTable>
             </LoadingBoard>
         </Layout>
     </Layout>

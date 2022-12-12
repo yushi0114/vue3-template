@@ -211,21 +211,13 @@ watch(model, () => {
             </template>
         </ListQueryControl>
         <LoadingBoard :loading="allToogle.loading" :empty="!userList.length">
-            <el-table
+            <CommonTable
                 :data="userList"
                 :default-sort="{ prop: 'createTime', order: 'descending' }"
                 @sort-change="handleSortChange"
                 @selection-change="handleSelectionChange"
-                style="width: 100%"
-                :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }"
             >
-                <el-table-column
-                    type="selection"
-                    width="55">
-                </el-table-column>
+                <el-table-column type="selection" width="55" />
                 <el-table-column prop="account" label="用户名">
                     <template #default="scope">
                         <div @click="handleToDetail(scope.row)" class="underline-text">{{ scope.row.account }}</div>
@@ -250,7 +242,7 @@ watch(model, () => {
                         { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                     ]">
                 </TableOperatorColumn>
-            </el-table>
+            </CommonTable>
         </LoadingBoard>
 
         <CommonPagination

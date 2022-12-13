@@ -25,9 +25,7 @@ async function handleOperateTreeItem(params: {
     willDeleteList?: { id: string }[]
 }) {
     if (params.type === 'edit') {
-        LoadingService.getInstance().loading();
         await goEditFormView(params.id);
-        LoadingService.getInstance().stop();
     } else if (params.type === 'remove') {
         ElMessageBox.confirm(
             '确定要删除当前菜单吗？',
@@ -38,7 +36,7 @@ async function handleOperateTreeItem(params: {
                 type: 'warning',
             }
         )
-            .then(async () => {
+            .then(async() => {
                 if (!params?.willDeleteList || !params.willDeleteList.length) {
                     return;
                 }

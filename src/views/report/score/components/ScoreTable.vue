@@ -110,7 +110,10 @@ watch(listControlModel, () => {
             }">
         </ListQueryControl>
         <Layout class="table-content flex-wrap">
-            <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
+            <LoadingBoard
+                description="请输入企业名称进行查询"
+                :loading="allToogle.loading"
+                :empty="!dataSource.length">
                 <CommonTable
                     v-loading="allToogle.loading"
                     :data="dataSource"

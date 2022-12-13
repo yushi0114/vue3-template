@@ -70,7 +70,6 @@ import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, } from './menu-list';
 import type { MenuFormType } from '@/types/system-manage';
-import { LoadingService } from '@/views/system/loading-service';
 import { type ValidateCallback, validateIllegalSymbol } from '@/utils';
 
 const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
@@ -138,9 +137,8 @@ async function submitForm(formElement: FormInstance | undefined) {
 async function handleSaveForm(params: {
     id?: string;
     form: MenuFormType,
-    type: 'create' | 'edit' | 'empty'
+    type: 'create' | 'edit' | 'empty' | 'detail'
 }) {
-    LoadingService.getInstance().loading();
     let status = false;
     if (params.type === 'create') {
         status = await createMenu(params.form);
@@ -151,13 +149,10 @@ async function handleSaveForm(params: {
     if (status) {
         await goTreeView();
     }
-    LoadingService.getInstance().stop();
 }
 
 async function goBack() {
-    LoadingService.getInstance().loading();
     await goTreeView();
-    LoadingService.getInstance().stop();
 }
 
 </script>

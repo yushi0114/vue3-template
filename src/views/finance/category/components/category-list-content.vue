@@ -69,10 +69,11 @@ import {
 } from './category-list';
 import type { FinanceCategoryListItemType } from '@/types/finance';
 import CategoryDetail from '@/views/finance/category/components/category-detail.vue';
+import { ItemOperate } from '@/components';
 
 const dataDetail = ref<FinanceCategoryListItemType>();
 const isDrawerShow = ref<boolean>(false);
-import { ItemOperate } from '@/components';
+
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';

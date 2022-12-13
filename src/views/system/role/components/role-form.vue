@@ -30,7 +30,7 @@
                 </div>
             </el-form-item>
             <div class="form-footer">
-                <el-button @click="goBack()">
+                <el-button @click="handleGoBack">
                     取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -44,7 +44,6 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { ElTree, FormInstance, FormRules } from 'element-plus';
-import { ElMessage } from 'element-plus';
 import { addRole, formType, handleGoBack, roleForm, roleMenuTreeData, updateRole } from './role-list';
 import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
@@ -66,7 +65,7 @@ const rules = reactive<FormRules>({
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async (valid) => {
+    await formElement.validate(async(valid) => {
         if (valid) {
             let checkedNodeIds = menuTree.value?.getCheckedNodes(false, true)
                 .map((item: TreeNodeData) => item.id as string);
@@ -91,13 +90,6 @@ async function submitForm(formElement: FormInstance | undefined) {
         }
     });
 }
-
-async function goBack() {
-    LoadingService.getInstance().loading();
-    await handleGoBack();
-    LoadingService.getInstance().stop();
-}
-
 
 </script>
 

@@ -95,7 +95,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="financeCodeFilterObject.currentPage"
-        :total="codeList.total" />
+        :total="codeList.total"/>
     <code-detail
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"
@@ -113,16 +113,15 @@ import {
     goCreateFormView,
     goEditFormView,
     importFinanceCodeList,
-    setFinanceCodeList,
     loading,
+    setFinanceCodeList,
 } from './code-list';
 import type { FinanceCodeListItemType } from '@/types/finance';
 import CodeDetail from '@/views/finance/code/components/code-detail.vue';
+import { ItemOperate } from '@/components';
 
 const dataDetail = ref<FinanceCodeListItemType>();
 const isDrawerShow = ref<boolean>(false);
-
-import { ItemOperate } from '@/components';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -155,7 +154,7 @@ async function handleCreateNewItem() {
     await goCreateFormView();
 }
 
-function handleToDetail(item: FinanceCategoryListItemType) {
+function handleToDetail(item: FinanceCodeListItemType) {
     dataDetail.value = item;
     isDrawerShow.value = true;
 }
@@ -210,7 +209,7 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
+        .then(async () => {
             await deleteFinanceCode(item.id);
             await setFinanceCodeList();
         })

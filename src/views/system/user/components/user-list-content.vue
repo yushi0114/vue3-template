@@ -68,7 +68,6 @@ import {
     formType,
     getUserListData,
     mode,
-    resetUserFilterObject,
     resetUserForm,
     userFilterObject,
     userTableData
@@ -76,11 +75,10 @@ import {
 import type { UserListItemType } from '@/types/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
 import UserDetail from '@/views/system/user/components/user-detail.vue';
+import { ItemOperate } from '@/components';
 
 const dataDetail = ref<UserListItemType>();
 const isDrawerShow = ref<boolean>(false);
-
-import { ItemOperate } from '@/components';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';

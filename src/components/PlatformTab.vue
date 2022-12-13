@@ -45,8 +45,7 @@ function handleTab(tabname: TabPaneName) {
   </div>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .platform-tab {
-  @apply;
 }
 </style>

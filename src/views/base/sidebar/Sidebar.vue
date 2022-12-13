@@ -164,7 +164,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 .sidebar-root-block {
     @apply flex items-center px-3 h-10 rounded-sm mb-0.5;
-    color: #5E5E5E;
+    color: var(--el-text-color-regular);
     &.active {
         color: var(--el-color-primary);
         background: var(--el-color-primary-light-9);

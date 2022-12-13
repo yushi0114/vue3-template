@@ -1,6 +1,6 @@
 <template>
     <PagePanel>
-        <Board full>
+        <Board full v-loading="loading">
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="征信端" name="cre">
                     <role-config v-if="activeName === 'cre'"></role-config>
@@ -23,28 +23,29 @@ import {
     getRolePageList,
     mode,
     resetRoleFilterObject,
-    roleFilterObject
+    roleFilterObject,
+    loading
 } from '@/views/system/role/components/role-list';
-import { LoadingService } from '@/views/system/loading-service';
 
 const handleClick = async(tab: TabsPaneContext) => {
-    LoadingService.getInstance().loading();
     mode.value = 'list';
     resetRoleFilterObject();
     await getRolePageList({
         tab: tab.paneName as RoleTabType
     });
-    LoadingService.getInstance().stop();
 };
 
 onMounted(async() => {
-    LoadingService.getInstance().loading();
     roleFilterObject.value.currentSize = 10;
     roleFilterObject.value.currentPage = 0;
     await getRolePageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
+});
+
+onUnmounted(() => {
+    mode.value = 'list';
+    resetRoleFilterObject();
 });
 </script>
 

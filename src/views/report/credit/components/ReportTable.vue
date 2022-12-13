@@ -106,7 +106,10 @@ watch(model, () => {
             }">
         </ListQueryControl>
         <Layout class="table-content">
-            <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
+            <LoadingBoard
+                description="请输入企业名称进行查询"
+                :loading="allToogle.loading"
+                :empty="!dataSource.length">
             <CommonTable
                 :data="dataSource"
                 ref="TableRef"

@@ -34,7 +34,11 @@ export type MenuItemType = {
 }
 
 
-export type MenuTabType = 'dms' | 'cre' | 'fin';
+export enum MenuTabType {
+    dms = 'dms',
+    credit = 'cre',
+    finance = 'fin'
+}
 
 export type MenuRouteType = Omit<MenuFormType, 'status'> & {
     status: 0 | 1;

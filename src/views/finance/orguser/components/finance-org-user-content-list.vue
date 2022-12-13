@@ -61,7 +61,6 @@
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
-import { LoadingService } from '@/views/system/loading-service';
 import { deleteItems, filterObject, getPageList, listData, loading } from './finance-org-user';
 import type { FinanceOrgUserListItemType } from '@/types/finance';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -78,35 +77,27 @@ function formatSortType(value: string) {
 }
 
 async function handleSortChange(params: { prop: 'create_ime', order: string }) {
-    LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = 'create_time';
     filterObject.value.sortType = formatSortType(params.order);
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleSearchList() {
-    LoadingService.getInstance().loading();
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
-    LoadingService.getInstance().loading();
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
-    LoadingService.getInstance().loading();
     await getPageList();
-    LoadingService.getInstance().stop();
 }
 
 async function handleSelectionChange(list: FinanceOrgUserListItemType[]) {
@@ -132,10 +123,8 @@ async function handleDeleteItems() {
         }
     )
         .then(async() => {
-            LoadingService.getInstance().loading();
             await deleteItems(willDeleteList.value);
             await getPageList();
-            LoadingService.getInstance().stop();
         })
         .catch(() => {
             ElMessage({
@@ -156,10 +145,8 @@ async function handleDeleteItem(item: FinanceOrgUserListItemType) {
         }
     )
         .then(async() => {
-            LoadingService.getInstance().loading();
             await deleteItems([{id: item.id , account: item.account}]);
             await getPageList();
-            LoadingService.getInstance().stop();
         })
         .catch(() => {
             ElMessage({

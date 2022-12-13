@@ -89,9 +89,9 @@ watch(filterText, (val) => {
     treeRef.value!.filter(val);
 });
 
-const filterNode = (value: string, data: TreeItemType) => {
+const filterNode = (value: string, data: any) => {
     if (!value) return true;
-    return data.label.includes(value);
+    return (data as TreeItemType).label.includes(value);
 };
 
 function handleAddNewMenu() {

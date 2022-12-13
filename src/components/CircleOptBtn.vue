@@ -19,6 +19,7 @@ withDefaults(
 
 <style lang="scss">
 .i-circle-opt-btn {
+    cursor: pointer;
     border-radius: 9999px;
     color: $text-color-secondary;
 

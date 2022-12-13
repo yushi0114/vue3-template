@@ -5,11 +5,11 @@ import { useListControlModel } from '@/composables';
 import { useThrottleFn } from '@vueuse/core';
 import { ItemOperate } from '@/components';
 
+const router = useRouter();
 const dataSource = ref<IReportTable[]>([]);
 const { model } = useListControlModel({
     initialModel: { corpName: '' }
 });
-
 const allToogle = reactive({
     loading: false,
 });
@@ -42,10 +42,10 @@ const getCorpList = () => {
         });
 };
 
-const router = useRouter();
+
 const handleView = (row: IReportTable) => {
     const routerUrl = router.resolve({
-        path: '/report-credit/detail',
+        path: `${router.currentRoute.value.path}/detail`,
         query: {
             corpName: row.corpName,
             corpCode: row.corpCode

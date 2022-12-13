@@ -12,9 +12,9 @@ export function useListControlModel(opt?: { initialModel?: any; numberFields?: s
     //     initialValue: listControlModel,
     // });
 
-    watch(listControlModel, (newModel, OldModel) => {
+    watch(listControlModel, (newModel, oldModel) => {
         const schemaChanged = Object.keys(newModel).some((k) => {
-            return newModel[k] !== OldModel[k] && k !== 'pageIndex';
+            return newModel[k] !== oldModel[k] && k !== 'pageIndex';
         });
         // Object.assign(params, model);
         console.log(newModel, schemaChanged);

@@ -49,7 +49,7 @@ const getCorpList = () => {
 const router = useRouter();
 const handleView = (row: IScoreTable) => {
     const routerUrl = router.resolve({
-        path: '/report-score/detail',
+        path: `${router.currentRoute.value.path}/detail`,
         query: {
             corpName: row.corpName,
             corpCode: row.corpCode

@@ -22,21 +22,15 @@ import type { TabsPaneContext } from 'element-plus';
 import MenuConfig from '@/views/system/menu/components/menu-config.vue';
 import { activeName, getTreeData, setFormType } from './components/menu-list';
 import type { MenuTabType } from '@/types/system-manage';
-import { LoadingService } from '@/views/system/loading-service';
-
 
 async function handleClick(tab: TabsPaneContext) {
-    LoadingService.getInstance().loading();
     setFormType('empty');
     await getTreeData({ tab: tab.paneName as MenuTabType });
-    LoadingService.getInstance().stop();
 }
 
 onMounted(async() => {
-    LoadingService.getInstance().loading();
     await getTreeData();
     setFormType('empty');
-    LoadingService.getInstance().stop();
 });
 </script>
 

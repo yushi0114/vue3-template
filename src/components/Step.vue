@@ -48,7 +48,8 @@ withDefaults(
 </template>
 <style lang="postcss">
 .i-step {
-    @apply relative flex-1;
+    position: relative;
+    flex: 1;
 }
 
 .i-step-default {
@@ -67,52 +68,66 @@ withDefaults(
 }
 
 .i-step-align-end.i-step-horizontal {
-    @apply w-5;
+    width: 1.25rem;
 }
 
 .i-step-align-end.i-step-vertical {
-    @apply h-6;
+    height: 1.5rem;
 }
 
 .i-step:last-of-type .i-step-line {
-    @apply hidden;
+    display: none;
 }
 
 
 .i-step-success {
     & .i-step-line {
-        @apply text-current;
+        color: currentColor;
     }
 }
 
 .i-step-line {
-    @apply absolute bg-gray-200;
+    position: absolute;
+    @apply bg-gray-200;
 }
 
 
 .i-step-horizontal .i-step-line {
-    @apply left-0 top-2.5 w-full h-0.5 -mt-px;
+
+    left: 0; top: 0.625rem; width: 100%; height: 0.125rem; margin-top: -1px;
 }
 
 .i-step-vertical .i-step-line {
-    @apply left-3 top-1 h-full w-0.5 -ml-px self-start;
+    left: 0.75rem; top: 0.25rem; height: 100%; width: 0.125rem; margin-left: -1px;
+    @apply self-start;
 }
 
 .i-step-circle {
-    @apply absolute rounded-full overflow-hidden cursor-default;
+    position: absolute; border-radius: 9999px; overflow: hidden; cursor: default;
 }
 
 .i-step-vertical .i-step-circle {
-    @apply left-0 top-1;
+    left: 0; top: 0.25rem;
 }
 
 .i-step-horizontal .i-step-circle {
-    @apply left-0 top-0;
+    left: 0; top: 0;
 }
 
 
 .i-step-circle-uncheck {
-    @apply w-5 h-5 bg-white text-current border-2 border-current rounded-full overflow-hidden flex justify-center items-center text-xs font-semibold;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: white;
+    color: currentColor;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @apply text-xs font-semibold;
 }
 
 .dark .i-step-circle-uncheck {
@@ -120,21 +135,33 @@ withDefaults(
 }
 
 .i-step-circle-check {
-    @apply w-5 h-5 fill-current text-white bg-indigo-500 flex justify-center items-center text-xs font-semibold;
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @apply bg-indigo-500 text-xs font-semibold;
 }
 
 .i-step-check-icon {
-    @apply w-5 h-5 text-current rounded-full border-2 border-current;
-
+    width: 1.25rem;
+    height: 1.25rem;
+    color: currentColor;
+    border: 2px solid currentColor;
+    border-radius: 50%;
     background-color: var(--deep-bg-color);
 }
 
 
 .i-step-horizontal .i-step-content {
-    @apply pt-9 pl-2;
+    padding-top: 2.25rem;
+    padding-left: 0.5rem;
 }
 
 .i-step-vertical .i-step-content {
-    @apply pl-9;
+    padding-left: 2.25rem;
 }
 </style>

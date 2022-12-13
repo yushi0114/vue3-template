@@ -34,7 +34,7 @@ const size = computed(() => {
     </Text>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .list-field {
     &.hoverable {
         cursor: pointer;

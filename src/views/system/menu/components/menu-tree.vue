@@ -122,7 +122,7 @@ function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'cr
 function handleNodeClick(data: TreeItemType) {
     emit('operateTreeItem', {
         id: data.id,
-        type: 'edit'
+        type: 'detail'
     });
 }
 

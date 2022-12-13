@@ -94,7 +94,7 @@ import { LoadingService } from '@/views/system/loading-service';
 import type { FinanceCategoryListItemType } from '@/types/finance';
 import RoleDetail from '@/views/system/role/components/role-detail.vue';
 
-const dataDetail = ref<RoleListItemType>();
+const dataDetail = ref<RoleListItemType & {menuIdArr: string[]}>();
 const isDrawerShow = ref<boolean>(false);
 
 

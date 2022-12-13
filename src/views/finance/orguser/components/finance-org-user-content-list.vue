@@ -157,7 +157,7 @@ async function handleDeleteItem(item: FinanceOrgUserListItemType) {
     )
         .then(async() => {
             LoadingService.getInstance().loading();
-            await deleteItems([item.id]);
+            await deleteItems([{id: item.id , account: item.account}]);
             await getPageList();
             LoadingService.getInstance().stop();
         })

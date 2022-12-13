@@ -14,7 +14,10 @@ export type RoleListItemType = {
 }
 
 
-export type RoleTabType = 'dms' | 'cre';
+export enum RoleTabType {
+    dms = 'dms',
+    credit = 'cre'
+}
 
 
 export type AddRoleType = {

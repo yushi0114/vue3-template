@@ -1,27 +1,21 @@
 <template>
-    <div class="search-box">
-        <el-input class="search-input"
-                  size="large"
-                  placeholder="请输入关键字进行搜索"
-                  @clear="handleClear"
-                  @keyup.enter="handleSearchRoleList"
-                  clearable
-                  v-model="roleFilterObject.searchInput">
-            <template #append>
-                <el-button @click="handleSearchRoleList">
-                    <template #icon>
-                        <Icon :name="'ep:search'"></Icon>
-                    </template>
-                </el-button>
-            </template>
-        </el-input>
-        <el-button type="primary" @click="handleCreateNewRole">
-            <template #icon>
-                <Icon :name="'ep:plus'"></Icon>
-            </template>
-            新建
-        </el-button>
-    </div>
+    <ListQueryControl
+        v-model="roleFilterObject"
+        :filter-row-visible="false"
+        :searchConfig="{
+            label: '请输入关键字进行查询',
+            field: 'searchInput',
+        }">
+
+        <template #search-rest>
+            <el-button type="primary" @click="handleCreateNewRole">
+                <template #icon>
+                    <Icon :name="'ep:plus'"></Icon>
+                </template>
+                新建
+            </el-button>
+        </template>
+    </ListQueryControl>
     <CommonTable
         :data="roleList.list"
         @sort-change="handleSortChange"
@@ -32,26 +26,15 @@
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
         <el-table-column prop="createBy" label="创建人"/>
-        <el-table-column label="操作" width="180">
-            <template #default="scope">
-                <el-button
-                    type="primary"
-                    size="small"
-                    @click.prevent="handleEditRoleItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:edit'"></Icon>
-                    </template>
-                </el-button>
-                <el-button
-                    type="danger"
-                    size="small"
-                    @click.prevent="handleRemoveRoleItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:delete'"></Icon>
-                    </template>
-                </el-button>
-            </template>
-        </el-table-column>
+        <TableOperatorColumn
+            width="180"
+            @[ItemOperate.delete]="(scope: any) => handleRemoveRoleItem(scope.row)"
+            @[ItemOperate.edit]="(scope: any) => handleEditRoleItem(scope.row)"
+            :operators="[
+                { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+            ]">
+        </TableOperatorColumn>
     </CommonTable>
     <CommonPagination
         @size-change="handleSizeChange"
@@ -72,7 +55,6 @@ import {
     getRolePageList,
     getTreeData,
     mode,
-    resetRoleFilterObject,
     resetRoleForm,
     roleFilterObject,
     roleForm,
@@ -80,6 +62,7 @@ import {
 } from './role-list';
 import { getRoleMenuIdsApi } from '@/api/system-manage';
 import { LoadingService } from '@/views/system/loading-service';
+import { ItemOperate } from '@/components';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -87,7 +70,6 @@ function formatSortType(value: string) {
 
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
     console.log(params);
-    LoadingService.getInstance().loading();
     roleFilterObject.value.currentPage = 1;
     roleFilterObject.value.currentSize = 10;
     roleFilterObject.value.sortField = params.prop;
@@ -95,26 +77,14 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
     await getRolePageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 async function handleSearchRoleList() {
-    LoadingService.getInstance().loading();
     roleFilterObject.value.currentPage = 1;
     roleFilterObject.value.currentSize = 10;
     await getRolePageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
-}
-
-async function handleClear() {
-    LoadingService.getInstance().loading();
-    resetRoleFilterObject();
-    await getRolePageList({
-        tab: activeName.value
-    });
-    LoadingService.getInstance().stop();
 }
 
 async function handleEditRoleItem(item: RoleListItemType) {
@@ -137,29 +107,23 @@ async function handleEditRoleItem(item: RoleListItemType) {
 
 async function handleCurrentChange(item: number) {
     roleFilterObject.value.currentPage = item;
-    LoadingService.getInstance().loading();
     await getRolePageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     roleFilterObject.value.currentSize = item;
-    LoadingService.getInstance().loading();
     await getRolePageList({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 async function handleCreateNewRole() {
     mode.value = 'form';
     formType.value = 'create';
     resetRoleForm();
-    LoadingService.getInstance().loading();
     await getTreeData();
-    LoadingService.getInstance().stop();
 }
 
 function handleRemoveRoleItem(item: RoleListItemType) {
@@ -188,17 +152,10 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             });
         });
 }
+
+watch(() => roleFilterObject.value.searchInput, handleSearchRoleList);
 </script>
 
 <style scoped lang="scss">
-.search-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
 
-    .search-input {
-        max-width: 350px;
-    }
-}
 </style>

@@ -12,7 +12,8 @@ import type {
     UpdateMenuType,
     UpdateRoleType,
     UpdateUserType,
-    UserListItemType
+    UserListItemType,
+    UserTabType
 } from '@/types/system-manage';
 
 
@@ -83,7 +84,7 @@ export function getRoleListApi(params: {
 }
 
 export function getTotalRoleListApi(params: {
-    tab: RoleTabType
+    tab: UserTabType
 }) {
     return api.get(`${DMS_DOMAIN}/v1/role/all`, {
         params
@@ -127,7 +128,7 @@ export function deleteUserApi(params: DeleteUserType) {
 
 export function getUserListApi(params: {
     searchInput?: string,
-    tab: RoleTabType,
+    tab: UserTabType,
     pageIndex: number,
     pageSize: number
     sortField: 'updateTime' | 'createTime',

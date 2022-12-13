@@ -25,28 +25,27 @@ import {
     userFilterObject
 } from '@/views/system/user/components/user-list';
 import type { UserTabType } from '@/types/system-manage';
-import { LoadingService } from '@/views/system/loading-service';
-
 
 async function handleClick(tab: TabsPaneContext) {
-    LoadingService.getInstance().loading();
     mode.value = 'list';
     userFilterObject.value.searchInput = '';
     await getUserListData({
         tab: tab.paneName as UserTabType
     });
-    LoadingService.getInstance().stop();
 }
 
 onMounted(async() => {
-    LoadingService.getInstance().loading();
     await getUserListData({
         tab: activeName.value
     });
     await getRoleListData({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
+});
+
+onUnmounted(() => {
+    mode.value = 'list';
+    userFilterObject.value.searchInput = '';
 });
 </script>
 

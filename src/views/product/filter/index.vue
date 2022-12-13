@@ -187,7 +187,7 @@ const handleDragListChange = () => {
                                             <div>{{ formatterFilterUnit(parent.typeValue, child.filterValue) }}</div>
                                             <FlexRow
                                                 v-if="child.filterValue !== '不限'"
-                                                gap="line"
+                                                gap="xs"
                                                 class="product-filter-tag-operator">
                                                 <CircleOptBtn
                                                     class="disable-drag pointer"

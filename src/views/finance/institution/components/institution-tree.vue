@@ -96,9 +96,9 @@ watch(filterText, (val) => {
     treeRef.value!.filter(val);
 });
 
-const filterNode = (value: string, data: FinanceInstitutionTreeItemType) => {
+const filterNode = (value: string, data: any) => {
     if (!value) return true;
-    return data.orgName.includes(value);
+    return (data as FinanceInstitutionTreeItemType).orgName.includes(value);
 };
 
 async function handleAddNewMenu() {

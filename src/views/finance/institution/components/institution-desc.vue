@@ -5,7 +5,7 @@
                 <i class="el-icon-school"></i>
                 机构名称
             </template>
-            {{ institutionItemData.orgName }}
+            {{ institutionItemData?.orgName }}
         </el-descriptions-item>
         <el-descriptions-item :contentStyle="{ 'text-align': 'left' }">
             <template #label>
@@ -13,13 +13,13 @@
                 机构密钥
             </template>
             <el-button link disabled size="small" class="secret">
-                {{ institutionItemData.secretKey }}
+                {{ institutionItemData?.secretKey }}
             </el-button>
             <el-button
                 type="primary"
                 plain
-                :disabled="institutionItemData.status === 0"
-                @click="handleCopySecretKey(institutionItemData.secretKey)">
+                :disabled="institutionItemData?.status === 0"
+                @click="handleCopySecretKey(institutionItemData?.secretKey || '')">
                 <template #icon>
                     <Icon :name="'ep:document-copy'"></Icon>
                 </template>
@@ -28,7 +28,7 @@
             <el-button
                 type="success"
                 plain
-                :disabled="institutionItemData.status === 0"
+                :disabled="institutionItemData?.status === 0"
                 @click="handleRefreshSecretKey">
                 <template #icon>
                     <Icon :name="'ep:refresh'"></Icon>
@@ -41,7 +41,7 @@
                 <i class="el-icon-office-building"></i>
                 机构描述
             </template>
-            {{ institutionItemData.desc || '暂无' }}
+            {{ institutionItemData?.desc || '暂无' }}
         </el-descriptions-item>
     </el-descriptions>
 </template>
@@ -75,7 +75,7 @@ function handleRefreshSecretKey() {
             cancelButtonText: '取消',
             type: 'warning'
         }
-    ).then(async () => {
+    ).then(async() => {
         LoadingService.getInstance().loading();
         await refreshSecretKey({
             id: currentInstitutionId.value

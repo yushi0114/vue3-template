@@ -5,7 +5,7 @@ import type {
     FinanceInstitutionTreeItemType,
     FinanceInstitutionType
 } from '@/types/finance';
-import type { RoleListItemType } from '@/views/system/type/role-list.type';
+import type { RoleListItemType } from '@/types/system-manage';
 
 
 export async function getFinanceInstitutionTreeApi(params: { typeCode: string }): Promise<FinanceInstitutionTreeItemType[]> {

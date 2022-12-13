@@ -350,12 +350,6 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 .list-query-control {
     display: flex;
     gap: $gap-xs;
-    .lqc-type-row {
-        width: 250px;
-        box-sizing: border-box;
-        overflow-y: auto;
-        background-color: $bg-color;
-    }
 }
 
 .lqc-filter-wrapper {
@@ -376,14 +370,27 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 
 .lqc-search-tip {
     margin: 0 $gap-xs;
-    width: 240px;
+    width: 220px;
+    & .el-alert__content {
+        display: flex;
+        align-items: center;
+    }
 }
 
-.lqc-type-row,
+.lqc-type-row {
+    padding: $gap-xs;
+    margin-right: $gap-xs;
+    padding-right: $gap-lg;
+    width: 220px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: $border;
+}
 .lqc-filter-row {
     border-radius: 4px;
     padding: $gap-xs $gap-md;
-    background-color: var(--el-color-info-light-9);
+    background-color: $color-info-light-9;
     gap: $gap-lg;
     min-height: 2rem;
 }

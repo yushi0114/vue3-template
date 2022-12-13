@@ -173,9 +173,7 @@ watch(model, () => {
                 @sort-change="handleSortChange"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column
-                    type="selection"
-                    width="55">
+                <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column prop="inquiry" label="查询账号"></el-table-column>
                 <el-table-column prop="corpName" label="企业名称">
@@ -207,25 +205,10 @@ watch(model, () => {
 
 <style lang="scss" scoped>
 .record-container {
-    .header {
-        min-height: 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 6px;
-        margin-bottom: 20px;
-
-        .searchInput {
-            width: 350px;
-        }
-    }
 
     .content {
         :deep(.el-table__cell) {
             padding: 12px;
-        }
-        .header-options {
-            padding-left: 7px;
         }
 
         .text-ellipsis {

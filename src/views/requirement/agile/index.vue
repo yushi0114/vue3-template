@@ -111,7 +111,7 @@ onMounted(() => {
                 v-model="listControlModel"
                 v-model:check-all="isSelectAll"
                 :is-indeterminate="isIndeterminate"
-                :showSelection="!!list.length"
+                showSelection
                 :searchConfig="{
                     label: '请输入企业名称',
                     field: 'searchInput'

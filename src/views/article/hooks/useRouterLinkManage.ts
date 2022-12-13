@@ -12,28 +12,26 @@ import type { NewsItem, PolicyItem, TAB_ITEM } from '@/types';
 
 export const useRouterLinkManage = (module: ARTICLE_MODULE) => {
     const { path } = useRoute();
-    const [base, listUrl] = path.split('/');
-    const _path = `${base}/${listUrl}`;
     const LINK_MAP = {
         [ARTICLE_MODULE.NEWS_LXT]: {
-            [LINK_TYPE.ADD]: _path + LINK_TYPE.ADD,
-            [LINK_TYPE.EDIT]: _path + LINK_TYPE.EDIT,
-            [LINK_TYPE.DETAIL]: _path + LINK_TYPE.DETAIL,
+            [LINK_TYPE.ADD]: path + LINK_TYPE.ADD,
+            [LINK_TYPE.EDIT]: path + LINK_TYPE.EDIT,
+            [LINK_TYPE.DETAIL]: path + LINK_TYPE.DETAIL,
         },
         [ARTICLE_MODULE.POLICY_LXT]: {
-            [LINK_TYPE.ADD]: _path + LINK_TYPE.ADD,
-            [LINK_TYPE.EDIT]: _path + LINK_TYPE.EDIT,
-            [LINK_TYPE.DETAIL]: _path + LINK_TYPE.DETAIL,
+            [LINK_TYPE.ADD]: path + LINK_TYPE.ADD,
+            [LINK_TYPE.EDIT]: path + LINK_TYPE.EDIT,
+            [LINK_TYPE.DETAIL]: path + LINK_TYPE.DETAIL,
         },
         [ARTICLE_MODULE.NEWS_ZJFW]: {
-            [LINK_TYPE.ADD]: _path + LINK_TYPE.ADD,
-            [LINK_TYPE.EDIT]: _path + LINK_TYPE.EDIT,
-            [LINK_TYPE.DETAIL]: _path + LINK_TYPE.DETAIL,
+            [LINK_TYPE.ADD]: path + LINK_TYPE.ADD,
+            [LINK_TYPE.EDIT]: path + LINK_TYPE.EDIT,
+            [LINK_TYPE.DETAIL]: path + LINK_TYPE.DETAIL,
         },
         [ARTICLE_MODULE.POLICY_ZJFW]: {
-            [LINK_TYPE.ADD]: _path + LINK_TYPE.ADD,
-            [LINK_TYPE.EDIT]: _path + LINK_TYPE.EDIT,
-            [LINK_TYPE.DETAIL]: _path + LINK_TYPE.DETAIL,
+            [LINK_TYPE.ADD]: path + LINK_TYPE.ADD,
+            [LINK_TYPE.EDIT]: path + LINK_TYPE.EDIT,
+            [LINK_TYPE.DETAIL]: path + LINK_TYPE.DETAIL,
         },
     };
 

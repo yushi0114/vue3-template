@@ -78,7 +78,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                             </FlexRow>
                         </a>
                     </FlexRow>
-                    <div class="sidebar-sub-list" v-show="parentLink.expanded">
+                    <div class="sidebar-sub-list" v-show="parentLink.expanded && expand">
                         <RouterLink
                             v-for="optChild in opt.children"
                             :key="optChild.id"

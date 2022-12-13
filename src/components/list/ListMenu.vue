@@ -86,25 +86,24 @@ watch(isCtrlKeep, (newValue) => {
 
 <template>
     <div class="list-menu">
-        <FlexRow horizontal="between">
+        <FlexRow horizontal="between" class="lm-header">
             <Text
-                size="md"
+                size="sm"
                 color="regular">
-                <FlexRow class="gap-1">
+                <FlexRow gap="xs">
                     <span>过滤器</span>
                     <el-tooltip
                         content="按住Ctrl+Click可多选"
                         placement="top">
                         <el-icon
-                            class="cursor-pointer"
-                            color="var(--i-text-color-regular)">
+                            class="lm-tooltip">
                             <Warning />
                         </el-icon>
                     </el-tooltip>
                 </FlexRow>
             </Text>
             <FlexRow
-                class="cursor-pointer mr-4"
+                class="lm-clear"
                 @click.stop="clearFilterOptions">
                 <TextHoverable
                     color="regular"
@@ -117,8 +116,9 @@ watch(isCtrlKeep, (newValue) => {
                 >
             </FlexRow>
         </FlexRow>
+        <el-divider></el-divider>
         <el-collapse
-            class="flex-1 pl-2 overflow-y-auto !border-r-none"
+            class="lm-content"
             v-model="activeNames">
             <el-collapse-item
                 :name="subMenu.field"
@@ -126,13 +126,13 @@ watch(isCtrlKeep, (newValue) => {
                 :key="subMenu.field">
                 <template #title>
                     <Text
-                        color="paragraph"
+                        color="regular"
                         size="sm"
                         >{{ subMenu.label }}</Text
                     >
                 </template>
                 <el-button
-                    class="w-full justify-start"
+                    class="lm-button"
                     v-for="menuItem in subMenu.options"
                     :key="menuItem.value"
                     text
@@ -155,11 +155,41 @@ watch(isCtrlKeep, (newValue) => {
     height: 100%;
     display: flex;
     flex-direction: column;
-    border-right: $border;
     &-title {
         gap: $gap-line;
     }
 
+    & .lm-header {
+        height: 40px;
+        border-radius: 4px;
+        padding: 0 $gap-xs;
+        margin-left: -$gap-xs;
+        margin-right: -$gap-xs;
+        background-color: $color-info-light-9;
+    }
+
+    & .lm-clear {
+        cursor: pointer;
+    }
+    & .lm-content {
+        overflow-x: hidden;
+        flex: 1; overflow-y: auto; border-right-style: none !important;
+    }
+
+    & .lm-button {
+        width: 100%; justify-content: flex-start;
+    }
+
+    & .lm-tooltip {
+        cursor: pointer;
+        margin-top: $gap-line;
+        color: var(--i-text-color-regular);
+    }
+
+    .el-divider {
+        margin-top: $gap-md;
+        margin-bottom: $gap-xs;
+    }
     :deep(.el-button + .el-button) {
         margin-left: 0;
     }
@@ -171,6 +201,17 @@ watch(isCtrlKeep, (newValue) => {
             color: $color-primary;
         }
     }
+
+    &:deep(.el-collapse-item__arrow) {
+        margin-right: 0;
+        transform: rotateZ(90deg);
+        color: $color-primary-light-5;
+
+        &.is-active {
+            transform: rotateZ(-90deg);
+        }
+    }
+
     :deep(.el-button) {
         &:hover {
             background-color: $color-primary-light-9;
@@ -188,6 +229,7 @@ watch(isCtrlKeep, (newValue) => {
         border-bottom: none;
         .el-collapse-item__header {
             border-bottom: none;
+            height: 30px;
         }
         .el-collapse-item__wrap {
             border-bottom: none;
@@ -195,7 +237,6 @@ watch(isCtrlKeep, (newValue) => {
 
         .el-collapse-item__content {
             padding-bottom: 0;
-            padding-right: 32px;
         }
     }
 }

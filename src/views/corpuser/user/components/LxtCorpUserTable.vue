@@ -217,10 +217,10 @@ watch(model, () => {
                 @sort-change="handleSortChange"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column type="selection" width="55" />
+                <el-table-column type="selection" align="center" width="55" />
                 <el-table-column prop="account" label="用户名">
                     <template #default="scope">
-                        <div @click="handleToDetail(scope.row)" class="underline-text">{{ scope.row.account }}</div>
+                        <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{ scope.row.account }}</TextHoverable>
                     </template>
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间" sortable />
@@ -260,17 +260,5 @@ watch(model, () => {
 
 <style lang="scss" scoped>
 .user-container {
-    .header {
-        min-height: 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 6px;
-        margin-bottom: 20px;
-
-        .searchInput {
-            width: 350px;
-        }
-    }
 }
 </style>

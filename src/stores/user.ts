@@ -1,12 +1,3 @@
-/*
- * @Description:
- * @FilePath: \dms-web\src\stores\user.ts
- * @Author: zys
- * @Date: 2022-11-22 10:47:59
- * @LastEditTime: 2022-12-06 09:33:23
- * @LastEditors: zys
- * @Reference:
- */
 import { computed, reactive } from 'vue';
 import { defineStore } from 'pinia';
 import {
@@ -28,17 +19,13 @@ import { isFunction } from '@/utils';
 import { genDynamicComponent } from '@/views';
 export const useUserStore = defineStore('user', () => {
     const state = reactive<{
-        user: UserEntity | null;
-        navs: DynamicNavEntity[];
-        navTree: DynamicNavEntity[];
-        prevNavTree: DynamicNavEntity[];
+        user: UserEntity | null
+        navs: DynamicNavEntity[]
+        navTree: DynamicNavEntity[]
     }>({
         user: null,
         navs: [],
         navTree: [],
-        // 插入动态导航之前
-        prevNavTree: [
-        ],
     });
 
     const router = useRouter();
@@ -70,17 +57,17 @@ export const useUserStore = defineStore('user', () => {
 
         return getUserInfoApi(queryParams)
             .then((user) => {
-                console.log('user: ', user);
+                // console.log('user: ', user);
                 state.user = user;
                 return dynamicNavs(user.roleId);
             })
             .then((navs) => {
-                console.log('navs: ', navs);
                 const validNavs = navs.filter((nav) => isFunction(genDynamicComponent(nav.component!)));
-                state.navs = validNavs;
-                return addDynamicRoutes(router, validNavs).then(() => {
-                    state.navTree = toTree({}, validNavs);
-                    console.log('state.navTree: ', state.navTree);
+                return addDynamicRoutes(router, validNavs).then((formatNavs) => {
+                    // console.log('navs: ', formatNavs);
+                    state.navs = formatNavs;
+                    state.navTree = toTree({}, formatNavs);
+                    // console.log('state.navTree: ', state.navTree);
                     return state.user as UserEntity;
                 });
             })

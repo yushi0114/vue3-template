@@ -23,9 +23,8 @@
     >
         <el-table-column label="名称">
             <template #default="scope">
-                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
-                        scope.row.name
-                    }}
+                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">
+                    {{ scope.row.name }}
                 </TextHoverable>
             </template>
         </el-table-column>

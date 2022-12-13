@@ -7,19 +7,19 @@ import { Base } from '@/views/base';
 import RiskTip from '@/components/RiskTip/index.vue';
 
 // @/store/user signin()
-export const SIGNIN_PATH = '/login';
-export const ROOT_PATH = '/';
-export const ERROR_404_PATH = '/error-404';
+export const ROOT_PATH = '/fstack';
+export const SIGNIN_PATH = ROOT_PATH + '/login';
+export const ERROR_404_PATH = ROOT_PATH + '/error-404';
+export const DEFAULT_REDIRECT_PATH = ROOT_PATH + '/dashboard';
 export const ROOT_NAME = 'base';
 
 const routes: RouteRecordRaw[] = [
     {
         path: ROOT_PATH,
         name: ROOT_NAME,
-        // redirect: ROOT_PATH,
         component: Base,
         children: [],
-        redirect: '/dashboard',
+        redirect: DEFAULT_REDIRECT_PATH,
     },
     {
         path: SIGNIN_PATH,
@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
         component: Signin,
     },
     {
-        path: '/leave',
+        path: ROOT_PATH + '/leave',
         name: 'leave',
         component: RiskTip,
     },
@@ -42,7 +42,9 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
     const navAddedPromises = navs.map((nav) => {
         // 生成 侧边栏的默认路径
         // demo-permission/:id => demo-permission/0
+        nav.path = ROOT_PATH + nav.path;
         nav.defaultPath = nav.path.replace(/\/:\w+/g, '/0');
+        // console.log('fffffff', nav.defaultPath);
 
         // 添加接口返回的动态路由
         router.addRoute(ROOT_NAME, {
@@ -57,7 +59,7 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
         // 动态添加本地路由
         // 由接口返回的 `component` 字段，还会读取同名的 ts 配置文件,
         // 如果没有此文件则跳过此步骤
-        // 例如 `/demo/permission/index` -> `/demo/permission/index.ts`
+        // 例如 `/product/manage/index` -> `/views/product/manage/index.ts`
         // 此文件必须导出 `export const routes`
         const configFile = genDynamicViewConfig(nav.component!);
         return (
@@ -74,7 +76,7 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
                         },
                     };
                     if (route?.meta?.notRootChild) {
-                        router.addRoute( newRoute);
+                        router.addRoute(newRoute);
                     } else {
                         router.addRoute(ROOT_NAME, newRoute);
                     }
@@ -91,5 +93,7 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
                 title: 'Not Found',
             },
         });
+
+        return navs;
     });
 }

@@ -22,6 +22,10 @@ export const roleForm = ref<RoleFormType>({
     menuIdArr: []
 });
 
+export function setInstitutionRoleMode(value: 'form' | 'list') {
+    mode.value = value;
+}
+
 export const roleList = ref<{
     total: number;
     list: RoleListItemType[];

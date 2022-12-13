@@ -1,9 +1,15 @@
 export type UserListItemType = {
     id: string;
     account: string;
+    desc?: string;
     name: string;
     roleId: string;
+    roleName: string;
     status: 0 | 1;
+    createBy: string,
+    createTime: string,
+    updateBy: string,
+    updateTime: string
 }
 
 

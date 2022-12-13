@@ -17,6 +17,22 @@ export type MenuFormType = {
     status: boolean
 }
 
+export type MenuItemType = {
+    name: string,
+    title: string,
+    path: string,
+    desc: string,
+    icon: string,
+    sort: number,
+    component: string,
+    status: number
+    parentId: string,
+    createBy: string,
+    createTime: string,
+    updateBy: string,
+    updateTime: string
+}
+
 
 export enum MenuTabType {
     dms = 'dms',

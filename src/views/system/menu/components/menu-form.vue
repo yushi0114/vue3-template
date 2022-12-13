@@ -137,7 +137,7 @@ async function submitForm(formElement: FormInstance | undefined) {
 async function handleSaveForm(params: {
     id?: string;
     form: MenuFormType,
-    type: 'create' | 'edit' | 'empty'
+    type: 'create' | 'edit' | 'empty' | 'detail'
 }) {
     let status = false;
     if (params.type === 'create') {

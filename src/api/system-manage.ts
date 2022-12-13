@@ -5,7 +5,7 @@ import type {
     AddUserType,
     DeleteMenuType,
     DeleteRoleType,
-    DeleteUserType,
+    DeleteUserType, MenuItemType,
     MenuRouteType,
     MenuTabType,
     RoleTabType,
@@ -61,7 +61,7 @@ export function getMenuTreeByRoleId(roleId: string) {
     });
 }
 
-export function getMenuDetailByIdApi(id: string, tab: MenuTabType) {
+export function getMenuDetailByIdApi(id: string, tab: MenuTabType): Promise<{data: MenuItemType[]}> {
     return api.get(`${DMS_DOMAIN}/v1/menu/detail`, {
         params: {
             id,
@@ -107,7 +107,7 @@ export function deleteRoleApi(params: DeleteRoleType) {
 export function getRoleMenuIdsApi(params: {
     tab: RoleTabType;
     roleId: string;
-}) {
+}): Promise<string[]> {
     return api.get(`${DMS_DOMAIN}/v1/role/menu/ids`, {
         params
     });

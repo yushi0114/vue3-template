@@ -10,7 +10,11 @@ export type RoleListItemType = {
     id: string;
     name: string;
     desc?: string;
-    roleIds?: string[]
+    roleIds?: string[];
+    createBy: string,
+    createTime: string,
+    updateBy: string,
+    updateTime: string
 }
 
 

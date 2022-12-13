@@ -19,8 +19,14 @@ import {
     updateOrgApi
 } from '@/api/finance/finance-institution';
 import { ElMessage } from 'element-plus';
-import { getRolePageList } from '@/views/finance/institution/components/institution-role/institution-role';
-import { getUserPageList } from '@/views/finance/institution/components/institution-user/institution-user';
+import {
+    getRolePageList,
+    setInstitutionRoleMode
+} from '@/views/finance/institution/components/institution-role/institution-role';
+import {
+    getUserPageList,
+    setInstitutionUserMode
+} from '@/views/finance/institution/components/institution-user/institution-user';
 
 // 机构分类列表
 export const categoryList = ref<FinanceCategoryListItemType[]>();
@@ -228,9 +234,11 @@ export async function changeOrgDetailTabView(view: OrgDetailTabViewType) {
         console.log('do first');
     }
     if (view === 'roleList') {
+        setInstitutionRoleMode('list');
         await getRolePageList(currentInstitutionId.value);
     }
     if (view === 'userList') {
+        setInstitutionUserMode('list');
         await getUserPageList(currentInstitutionId.value);
     }
 }

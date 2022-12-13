@@ -145,7 +145,7 @@ async function handleDeleteItem(item: FinanceOrgUserListItemType) {
         }
     )
         .then(async() => {
-            await deleteItems([item.id]);
+            await deleteItems([{id: item.id , account: item.account}]);
             await getPageList();
         })
         .catch(() => {

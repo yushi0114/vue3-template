@@ -7,7 +7,7 @@
             field: 'searchInput',
         }">
         <template v-slot:search-rest>
-            <el-button type="primary" @click="handleCreateNewRole">
+            <el-button type="primary" @click="handleCreateNewItem">
                 <template #icon>
                     <Icon :name="'ep:plus'"></Icon>
                 </template>
@@ -21,7 +21,14 @@
             @sort-change="handleSortChange"
             :default-sort="{ prop: 'updateTime', order: 'descending' }"
         >
-            <el-table-column prop="name" label="名称" width="180"/>
+            <el-table-column label="名称">
+                <template #default="scope">
+                    <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                            scope.row.name
+                        }}
+                    </TextHoverable>
+                </template>
+            </el-table-column>
             <el-table-column prop="desc" label="描述" width="180"/>
             <el-table-column prop="sort" label="排序" width="180"/>
             <el-table-column prop="createBy" label="创建者" width="180"/>
@@ -42,23 +49,31 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="financeFilterObject.currentPage"
-        :total="categoryList.total" />
+        :total="categoryList.total"/>
+    <category-detail
+        :drawer-visible="isDrawerShow"
+        :data-detail="dataDetail"
+        @close="handleDrawerClose"></category-detail>
 </template>
 
 <script lang="ts" setup>
-import type { RoleListItemType } from '@/types/system-manage/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     categoryList,
-    financeFilterObject,
     deleteFinanceCategory,
+    financeFilterObject,
     goCreateFormView,
     goEditFormView,
-    setFinanceCategoryList,
-    loading
+    loading,
+    setFinanceCategoryList
 } from './category-list';
 import type { FinanceCategoryListItemType } from '@/types/finance';
+import CategoryDetail from '@/views/finance/category/components/category-detail.vue';
 import { ItemOperate } from '@/components';
+
+const dataDetail = ref<FinanceCategoryListItemType>();
+const isDrawerShow = ref<boolean>(false);
+
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -92,11 +107,20 @@ async function handleSizeChange(item: number) {
     await setFinanceCategoryList();
 }
 
-async function handleCreateNewRole() {
+async function handleCreateNewItem() {
     await goCreateFormView();
 }
 
-function handleRemoveRoleItem(item: RoleListItemType) {
+function handleToDetail(item: FinanceCategoryListItemType) {
+    dataDetail.value = item;
+    isDrawerShow.value = true;
+}
+
+function handleDrawerClose() {
+    isDrawerShow.value = false;
+}
+
+function handleRemoveRoleItem(item: FinanceCategoryListItemType) {
     ElMessageBox.confirm(
         '确定要删除当前机构分类吗？',
         '警告',
@@ -106,7 +130,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
+        .then(async () => {
             await deleteFinanceCategory(item.id);
             await setFinanceCategoryList();
         })

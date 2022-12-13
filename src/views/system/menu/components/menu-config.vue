@@ -7,6 +7,7 @@
         </div>
         <div class="form-content" :class="{'menu-content': formType !== 'create'}">
             <el-empty v-if="formType === 'empty'" description="请在左侧选择菜单~"/>
+            <menu-detail v-else-if="formType === 'detail'" :data-detail="menuDetailData" ></menu-detail>
             <MenuForm v-else></MenuForm>
         </div>
     </div>
@@ -16,16 +17,30 @@
 import MenuTree from './menu-tree.vue';
 import MenuForm from './menu-form.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { formType, goCreateFormView, goEditFormView, goTreeView, menuTreeData, removeMenus } from './menu-list';
+import {
+    formType,
+    goCreateFormView,
+    goDetailFormView,
+    goEditFormView,
+    goTreeView,
+    menuTreeData,
+    removeMenus
+} from './menu-list';
 import { LoadingService } from '@/views/system/loading-service';
+import MenuDetail from '@/views/system/menu/components/menu-detail.vue';
+import type { MenuItemType } from '@/types/system-manage';
+
+const menuDetailData = ref<MenuItemType>();
 
 async function handleOperateTreeItem(params: {
     id: string,
-    type: 'edit' | 'remove' | 'create',
+    type: 'edit' | 'remove' | 'create' | 'detail',
     willDeleteList?: { id: string }[]
 }) {
     if (params.type === 'edit') {
         await goEditFormView(params.id);
+    } else if (params.type === 'detail') {
+        menuDetailData.value = await goDetailFormView(params.id);
     } else if (params.type === 'remove') {
         ElMessageBox.confirm(
             '确定要删除当前菜单吗？',
@@ -36,7 +51,7 @@ async function handleOperateTreeItem(params: {
                 type: 'warning',
             }
         )
-            .then(async() => {
+            .then(async () => {
                 if (!params?.willDeleteList || !params.willDeleteList.length) {
                     return;
                 }
@@ -100,7 +115,7 @@ async function handleOperateTreeItem(params: {
 
     .form-content {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         width: 100%;
         height: 100%;
         overflow-y: auto;

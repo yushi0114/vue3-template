@@ -120,6 +120,7 @@ export async function addFinanceCode(): Promise<boolean> {
                 type: 'success',
                 message: '创建成功',
             });
+            loading.value = false;
             resolve(true);
         }).catch(() => {
             ElMessage({
@@ -167,6 +168,7 @@ export async function deleteFinanceCode(id: string): Promise<boolean> {
                 type: 'success',
                 message: '删除成功',
             });
+            loading.value = false;
             resolve(true);
         }).catch(() => {
             ElMessage({
@@ -208,7 +210,6 @@ export async function exportFinanceCodeList(): Promise<void> {
             sortField: financeCodeFilterObject.sortField,
             sortType: financeCodeFilterObject.sortType,
         }).then(data => {
-            console.log(data);
             downloadByData(data, '机构编码字典.xlsx');
             resolve();
         });
@@ -241,7 +242,7 @@ export async function downloadExcelTemplate(): Promise<void> {
             .then((res) => {
                 downloadByBase64(res, '机构编码字典模板.xlsx');
             }).finally(() => {
-            resolve();
-        });
+                resolve();
+            });
     });
 }

@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { type MenuFormType, MenuTabType, type TreeItemType } from '@/types/system-manage';
+import { type MenuFormType, type MenuItemType, MenuTabType, type TreeItemType } from '@/types/system-manage';
 import { addMenuApi, deleteMenuApi, getMenuDetailByIdApi, getMenuTreeApi, updateMenuApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/stores';
@@ -19,7 +19,7 @@ export const menuForm = ref<MenuFormType>({
 });
 export const parentId = ref();
 export const currentMenuId = ref();
-export const formType = ref<'create' | 'edit' | 'empty'>('edit');
+export const formType = ref<'create' | 'edit' | 'empty' | 'detail'>('edit');
 
 const { getUserInfo } = useUserStore();
 
@@ -37,7 +37,7 @@ export function setCurrentMenuId(value?: string) {
     currentMenuId.value = value;
 }
 
-export function setFormType(value: 'create' | 'edit' | 'empty') {
+export function setFormType(value: 'create' | 'edit' | 'empty' | 'detail') {
     formType.value = value;
 }
 
@@ -61,8 +61,7 @@ export async function goTreeView() {
         await getTreeData({ tab: activeName.value });
         currentMenuId.value = undefined;
         formType.value = 'empty';
-    }
-    finally {
+    } finally {
         loading.value = false;
     }
 }
@@ -78,7 +77,19 @@ export function goCreateFormView(parentId?: string) {
 export async function goEditFormView(id: string) {
     setFormType('edit');
     setCurrentMenuId(id);
-    await getMenuData(id);
+    const result = await getMenuData(id);
+    if (result) {
+        menuForm.value = {
+            ...result,
+            status: result.status === 1
+        };
+    }
+}
+
+export async function goDetailFormView(id: string): Promise<MenuItemType | undefined> {
+    setFormType('detail');
+    setCurrentMenuId(id);
+    return getMenuData(id);
 }
 
 export async function getTreeData(params?: {
@@ -99,17 +110,13 @@ export async function getTreeData(params?: {
 
 }
 
-export async function getMenuData(id: string): Promise<void> {
+export async function getMenuData(id: string): Promise<MenuItemType | undefined> {
     return new Promise((resolve) => {
         loading.value = true;
         getMenuDetailByIdApi(id, activeName.value).then(data => {
-            menuForm.value = {
-                ...data.data[0],
-                status: data.data[0].status === 1
-            };
-            resolve();
+            resolve(data.data[0]);
         }).catch(() => {
-            resolve();
+            resolve(undefined);
         }).finally(() => {
             loading.value = false;
         });

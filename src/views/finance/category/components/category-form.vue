@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="form-header">机构编码</div>
+        <div class="form-header">机构分类</div>
         <el-form :model="categoryForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
             <el-form-item label="机构分类:" required prop="name">
                 <el-input v-model="categoryForm.name" placeholder="请输入分类名称" show-word-limit maxlength="255"/>

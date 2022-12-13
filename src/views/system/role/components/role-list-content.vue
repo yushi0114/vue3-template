@@ -72,7 +72,6 @@ import {
     roleList
 } from './role-list';
 import { getRoleMenuIdsApi } from '@/api/system-manage';
-import { LoadingService } from '@/views/system/loading-service';
 import type { FinanceCategoryListItemType } from '@/types/finance';
 import RoleDetail from '@/views/system/role/components/role-detail.vue';
 import { ItemOperate } from '@/components';
@@ -105,7 +104,6 @@ async function handleSearchRoleList() {
 }
 
 async function handleEditRoleItem(item: RoleListItemType) {
-    LoadingService.getInstance().loading();
     mode.value = 'form';
     formType.value = 'edit';
     currentRoleId.value = item.id;
@@ -119,7 +117,6 @@ async function handleEditRoleItem(item: RoleListItemType) {
         desc: item.desc ?? '',
         menuIdArr: menuList as unknown as string[]
     };
-    LoadingService.getInstance().stop();
 }
 
 async function handleCurrentChange(item: number) {
@@ -144,7 +141,6 @@ async function handleCreateNewRole() {
 }
 
 async function handleToDetail(item: FinanceCategoryListItemType) {
-    LoadingService.getInstance().loading();
     await getTreeData();
     const menuList = await getRoleMenuIdsApi({
         tab: activeName.value,
@@ -155,7 +151,6 @@ async function handleToDetail(item: FinanceCategoryListItemType) {
         menuIdArr: menuList
     };
     isDrawerShow.value = true;
-    LoadingService.getInstance().stop();
 }
 
 function handleDrawerClose() {

@@ -1,13 +1,30 @@
 <template>
-    <div>
-        <div class="form-header">菜单管理</div>
+    <div style="height: max-content">
+        <div v-if="formType === 'create'" class="form-header">菜单管理</div>
         <el-form
-            class="custom-form"
+            :class="[{ 'custom-create-form': formType !== 'create'}]"
+            :label-position="formType === 'create' ? 'right' : 'top'"
             :model="menuForm"
             :rules="rules"
             label-width="120px"
             ref="ruleFormRef"
             style="width: 700px;">
+            <el-form-item label="父级菜单" required prop="parentId">
+                <el-select
+                    v-model="menuForm.parentId"
+                    style="width: 100%"
+                    filterable
+                    clearable
+                    placeholder="请选择父级菜单">
+                    <el-option
+                        v-for="item in firstLevelMenuList"
+                        :key="item.id"
+                        :label="item.label"
+                        :value="item.value"
+                        :title="item.label">
+                    </el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="菜单名称:" required prop="name">
                 <el-input v-model="menuForm.name"
                           :maxlength="255"
@@ -53,7 +70,7 @@
             <el-form-item label="是否启用:" required prop="status">
                 <el-switch v-model="menuForm.status"/>
             </el-form-item>
-            <div class="form-footer">
+            <div :class="[formType === 'create' ? 'form-footer' : 'form-edit-footer']">
                 <el-button v-if="formType === 'create'" @click="goBack">
                     取消
                 </el-button>
@@ -68,7 +85,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import { createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, } from './menu-list';
+import { createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, menuTreeData, } from './menu-list';
 import type { MenuFormType } from '@/types/system-manage';
 import { type ValidateCallback, validateIllegalSymbol } from '@/utils';
 
@@ -83,8 +100,36 @@ const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
     }
 };
 
+const firstLevelMenuList = computed(() => {
+    const arr = [
+        {
+            id: '0',
+            label: '顶层菜单',
+            value: '0'
+        }
+    ];
+    return arr.concat(menuTreeData.value?.reduce((pre: {
+        id: string;
+        label: string;
+        value: string
+    }[], cur) => {
+        if (cur.id !== currentMenuId.value) {
+            pre.push({
+                id: cur.id,
+                label: cur.label,
+                value: cur.id
+            });
+        }
+        return pre;
+    }, []) ?? []);
+});
+
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
+    parentId: [
+        { required: true, message: '请选择父级菜单', trigger: ['blur', 'change'] },
+        validateIllegalSymbol
+    ],
     name: [
         { required: true, message: '请输入菜单名称', trigger: 'blur' },
         { min: 0, max: 255, message: '菜单名称不能超过255个字符', trigger: 'blur' },
@@ -166,5 +211,16 @@ async function goBack() {
 .form-footer {
     margin: 50px 0;
     text-align: center;
+}
+
+.form-edit-footer {
+    margin: 50px 0;
+    text-align: center;
+}
+
+.custom-create-form {
+    &::v-deep(.el-form-item__label) {
+        font-weight: bold;
+    }
 }
 </style>

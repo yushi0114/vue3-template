@@ -30,8 +30,8 @@
                 <div style="margin-top: 10px; width: 100%;">
                     <el-tree
                         v-if="roleMenuTreeData?.length"
-                        ref="menuTree"
-                        :data="roleMenuTreeData?.length"
+                        ref="institutionMenuTree"
+                        :data="roleMenuTreeData"
                         show-checkbox
                         node-key="id"
                         :default-checked-keys="roleForm.menuIdArr"
@@ -61,7 +61,7 @@ import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 import { validateIllegalSymbol } from '@/utils';
 
-const menuTree = ref<InstanceType<typeof ElTree>>();
+const institutionMenuTree = ref<InstanceType<typeof ElTree>>();
 const roleNameRef = ref();
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
@@ -80,7 +80,7 @@ async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
     await formElement.validate(async (valid) => {
         if (valid) {
-            let checkedNodeIds = menuTree.value?.getCheckedNodes(false, true)
+            let checkedNodeIds = institutionMenuTree.value?.getCheckedNodes(false, true)
                 .map((item: TreeNodeData) => item.id as string);
             if (!checkedNodeIds) {
                 ElMessage({

@@ -14,7 +14,8 @@ export type MenuFormType = {
     icon: string,
     sort: number,
     component: string,
-    status: boolean
+    status: boolean,
+    parentId: string
 }
 
 export type MenuItemType = {

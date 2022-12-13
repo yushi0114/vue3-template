@@ -18,9 +18,8 @@
     </ListQueryControl>
     <LoadingBoard :loading="loading" :empty="!userTableData.list.length">
         <CommonTable :data="userTableData.list"
-              @sort-change="handleSortChange"
-              :default-sort="{ prop: 'updateTime', order: 'descending' }"
-        >
+                     @sort-change="handleSortChange"
+                     :default-sort="{ prop: 'updateTime', order: 'descending' }">
             <el-table-column label="姓名">
                 <template #default="scope">
                     <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
@@ -54,39 +53,46 @@
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"
         @close="handleDrawerClose"></user-detail>
+    <user-form-dialog
+        :dialog-visible="isDialogShow"
+        @close="handleCloseDialog"></user-form-dialog>
 </template>
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
-    loading,
     activeName,
     currentUserId,
     deleteUser,
     form,
     formType,
-    getUserListData,
-    mode,
+    getUserListData, handleGoBack,
+    loading,
     resetUserForm,
     userFilterObject,
     userTableData
 } from '@/views/system/user/components/user-list';
 import type { UserListItemType } from '@/types/system-manage';
-import { LoadingService } from '@/views/system/loading-service';
 import UserDetail from '@/views/system/user/components/user-detail.vue';
 import { ItemOperate } from '@/components';
+import UserFormDialog from '@/views/system/user/components/user-form-dialog.vue';
 
 const dataDetail = ref<UserListItemType>();
 const isDrawerShow = ref<boolean>(false);
+
+const isDialogShow = ref<boolean>(false);
+
+async function handleCloseDialog() {
+    isDialogShow.value = false;
+    await handleGoBack();
+}
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
-    console.log(params);
-    LoadingService.getInstance().loading();
     userFilterObject.value.currentPage = 0;
     userFilterObject.value.currentSize = 10;
     userFilterObject.value.sortField = params.prop;
@@ -94,21 +100,19 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
     await getUserListData({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 async function handleSearchList() {
-    LoadingService.getInstance().loading();
     userFilterObject.value.currentPage = 0;
     userFilterObject.value.currentSize = 10;
     await getUserListData({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 function handleEditItem(item: UserListItemType) {
-    mode.value = 'form';
+    isDialogShow.value = true;
+    formType.value = 'edit';
     form.value.roleId = item.roleId;
     form.value.account = item.account;
     form.value.name = item.name;
@@ -117,7 +121,7 @@ function handleEditItem(item: UserListItemType) {
 }
 
 async function handleCreateNewItem() {
-    mode.value = 'form';
+    isDialogShow.value = true;
     formType.value = 'create';
     currentUserId.value = '';
     resetUserForm();
@@ -125,20 +129,16 @@ async function handleCreateNewItem() {
 
 async function handleCurrentChange(item: number) {
     userFilterObject.value.currentPage = item;
-    LoadingService.getInstance().loading();
     await getUserListData({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 async function handleSizeChange(item: number) {
     userFilterObject.value.currentSize = item;
-    LoadingService.getInstance().loading();
     await getUserListData({
         tab: activeName.value
     });
-    LoadingService.getInstance().stop();
 }
 
 function handleRemoveItem(item: UserListItemType) {
@@ -180,15 +180,3 @@ function handleDrawerClose() {
 watch(() => userFilterObject.value.searchInput, handleSearchList);
 </script>
 
-<style scoped lang="scss">
-.search-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
-
-    .search-input {
-        max-width: 350px;
-    }
-}
-</style>

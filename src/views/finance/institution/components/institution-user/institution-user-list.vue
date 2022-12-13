@@ -27,7 +27,14 @@
               @sort-change="handleSortChange"
               :default-sort="{ prop: 'updateTime', order: 'descending' }"
     >
-        <el-table-column prop="name" label="姓名"/>
+        <el-table-column label="姓名">
+            <template #default="scope">
+                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                        scope.row.name
+                    }}
+                </TextHoverable>
+            </template>
+        </el-table-column>
         <el-table-column prop="account" label="手机号"/>
         <el-table-column prop="roleName" label="角色"></el-table-column>
         <el-table-column prop="createTime" sortable label="创建时间"/>
@@ -48,6 +55,10 @@
         @current-change="handleCurrentChange"
         :current-page="filterObject.currentPage"
         :total="listData.total" />
+    <institution-user-detail
+        :drawer-visible="isDrawerShow"
+        :data-detail="dataDetail"
+        @close="handleDrawerClose"></institution-user-detail>
 </template>
 
 <script lang="ts" setup>
@@ -70,6 +81,11 @@ import type { UserListItemType } from '@/types/system-manage/user-list.type';
 import { LoadingService } from '@/views/system/loading-service';
 import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
 import { ItemOperate } from '@/components';
+import InstitutionUserDetail from '@/views/finance/institution/components/institution-user/institution-user-detail.vue';
+
+const dataDetail = ref<UserListItemType>();
+const isDrawerShow = ref<boolean>(false);
+
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -160,6 +176,15 @@ function handleRemoveItem(item: UserListItemType) {
                 message: '取消删除',
             });
         });
+}
+
+function handleToDetail(item: UserListItemType) {
+    dataDetail.value = item;
+    isDrawerShow.value = true;
+}
+
+function handleDrawerClose() {
+    isDrawerShow.value = false;
 }
 
 </script>

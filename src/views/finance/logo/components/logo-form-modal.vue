@@ -49,7 +49,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { type FormInstance, type FormRules, type UploadFile, type UploadRequestOptions, type UploadUserFile, ElMessage } from 'element-plus';
+import {
+    ElMessage,
+    type FormInstance,
+    type FormRules,
+    type UploadFile,
+    type UploadRequestOptions,
+    type UploadUserFile
+} from 'element-plus';
 import { addLogoApi, getFirstLevelOrgAll, updateLogoApi } from '@/api/finance/finance-logo';
 import { blobToDataURL, dataURLToFile } from '@/utils';
 
@@ -174,7 +181,7 @@ async function updateLogo(params: {
 
 async function handleUploadToServer(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async(valid) => {
+    await formElement.validate(async (valid) => {
         if (valid) {
             isLoading.value = true;
             if (props.currentLogo) {
@@ -198,7 +205,7 @@ async function handleUploadToServer(formElement: FormInstance | undefined) {
 }
 
 
-onMounted(async() => {
+onMounted(async () => {
     await setOrgList();
     if (props.currentLogo) {
         fileList.value = [{

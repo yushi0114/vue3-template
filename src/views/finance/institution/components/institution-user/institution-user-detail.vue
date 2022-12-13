@@ -25,7 +25,7 @@ const handleClose = () => {
 <template>
     <el-drawer
         v-model="drawerVisible"
-        title="系统用户详情"
+        title="机构用户详情"
         size="50%"
         :before-close="handleClose"
     >

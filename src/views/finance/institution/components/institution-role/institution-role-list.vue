@@ -22,7 +22,14 @@
         @sort-change="handleSortChange"
         :default-sort="{ prop: 'updateTime', order: 'descending' }"
     >
-        <el-table-column prop="name" label="名称"/>
+        <el-table-column label="名称">
+            <template #default="scope">
+                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                        scope.row.name
+                    }}
+                </TextHoverable>
+            </template>
+        </el-table-column>
         <el-table-column prop="desc" label="描述" width="180"/>
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
@@ -42,7 +49,11 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="roleFilterObject.currentPage"
-        :total="roleList.total" />
+        :total="roleList.total"/>
+    <institution-role-detail
+        :drawer-visible="isDrawerShow"
+        :data-detail="dataDetail"
+        @close="handleDrawerClose"></institution-role-detail>
 </template>
 
 <script lang="ts" setup>
@@ -51,15 +62,22 @@ import type { RoleListItemType } from '@/types/system-manage/role-list.type';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     deleteRole,
+    getOrgRoleMenuIds,
     getRolePageList,
-    goCreateFormView, goEditFormView,
+    goCreateFormView,
+    goEditFormView,
     resetRoleFilterObject,
     roleFilterObject,
-    roleList
+    roleList,
+    getTreeData
 } from './institution-role';
 import { LoadingService } from '@/views/system/loading-service';
 import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
 import { ItemOperate } from '@/components';
+import InstitutionRoleDetail from '@/views/finance/institution/components/institution-role/institution-role-detail.vue';
+
+const dataDetail = ref<RoleListItemType & { menuIdArr: string[] }>();
+const isDrawerShow = ref<boolean>(false);
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -127,7 +145,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async() => {
+        .then(async () => {
             await deleteRole(item.id);
             LoadingService.getInstance().loading();
             await getRolePageList(currentInstitutionId.value);
@@ -140,6 +158,25 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             });
         });
 }
+
+
+async function handleToDetail(item: RoleListItemType) {
+    await getTreeData();
+    const menuList = await getOrgRoleMenuIds(item.id);
+    if (!menuList?.length) {
+        return;
+    }
+    dataDetail.value = {
+        ...item,
+        menuIdArr: menuList
+    };
+    isDrawerShow.value = true;
+}
+
+function handleDrawerClose() {
+    isDrawerShow.value = false;
+}
+
 </script>
 
 <style scoped lang="scss">

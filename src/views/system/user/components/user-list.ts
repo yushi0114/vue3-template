@@ -5,7 +5,6 @@ import { ElMessage } from 'element-plus';
 
 export const loading = ref(false);
 export const activeName = ref<UserTabType>('cre');
-export const mode = ref<'form' | 'list'>('list');
 export const currentUserId = ref();
 export const form = ref<UserFormType>({
     name: '',
@@ -54,7 +53,6 @@ export const roleUIList = computed(() => totalRoleList.value?.map(item => ({
 })));
 
 export async function handleGoBack() {
-    mode.value = 'list';
     currentUserId.value = undefined;
     resetUserForm();
     await getUserListData({

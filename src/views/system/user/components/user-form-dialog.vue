@@ -1,6 +1,13 @@
 <template>
-    <div>
-        <div class="form-header">用户管理</div>
+    <el-dialog
+        :model-value="dialogVisible"
+        :title=" formType === 'create' ? '新建用户' : '编辑用户'"
+        :width="'650px'"
+        :close-on-click-modal="false"
+        :modal-append-to-body="true"
+        append-to-body
+        destroy-on-close
+        @close="handleClose">
         <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
             <el-form-item label="姓名:" required prop="name">
                 <el-input v-model="form.name"
@@ -26,32 +33,42 @@
             <el-form-item label="状态:" required prop="status">
                 <el-switch v-model="form.status"/>
             </el-form-item>
-            <div class="form-footer">
+            <FlexRow horizontal="center">
                 <el-button @click="goBack()">
                     取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
                     确定
                 </el-button>
-            </div>
+            </FlexRow>
         </el-form>
-    </div>
+    </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { type PropType, reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import {
     addUser,
     form,
     formType,
-    handleGoBack,
     roleUIList,
     updateUser
 } from '@/views/system/user/components/user-list';
-import { LoadingService } from '@/views/system/loading-service';
-import type { ValidateCallback } from '@/utils';
-import { isPhoneNumber, validateIllegalSymbol } from '@/utils';
+import { type ValidateCallback, isPhoneNumber, validateIllegalSymbol } from '@/utils';
+
+defineProps({
+    dialogVisible: {
+        type: Boolean as PropType<boolean>,
+        default: false
+    }
+});
+
+const emits = defineEmits(['close']);
+
+function handleClose() {
+    emits('close');
+}
 
 const validatePhoneId = (rule: any, value: any, callback: ValidateCallback) => {
     if (!isPhoneNumber(value)) {
@@ -79,7 +96,6 @@ async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
     await formElement.validate(async (valid) => {
         if (valid) {
-            LoadingService.getInstance().loading();
             let status: boolean;
             if (formType.value === 'create') {
                 status = await addUser();
@@ -87,25 +103,19 @@ async function submitForm(formElement: FormInstance | undefined) {
                 status = await updateUser();
             }
             if (status) {
-                await handleGoBack();
+                emits('close');
             }
-            LoadingService.getInstance().stop();
         }
     });
 }
 
 async function goBack() {
-    LoadingService.getInstance().loading();
-    await handleGoBack();
-    LoadingService.getInstance().stop();
+    emits('close');
 }
 
 </script>
 
 <style scoped lang="scss">
-.custom-form {
-    width: 700px;
-}
 
 .form-header {
     font-size: 24px;

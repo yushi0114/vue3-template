@@ -1,13 +1,13 @@
 <template>
     <div class="menu-container">
         <div class="menu-tree" v-if="formType !== 'create'">
-            <MenuTree
-                :data-source="menuTreeData"
-                @operateTreeItem="handleOperateTreeItem($event)"></MenuTree>
+            <MenuTree></MenuTree>
         </div>
-        <div class="form-content" :class="{'menu-content': formType !== 'create'}">
-            <el-empty v-if="formType === 'empty'" description="请在左侧选择菜单~"/>
-            <menu-detail v-else-if="formType === 'detail'" :data-detail="menuDetailData" ></menu-detail>
+        <div :class="[{'menu-content': formType !== 'create', 'menu-create-content': formType === 'create'}, 'form-content']">
+            <div class="empty-box" v-if="formType === 'empty'">
+                <el-empty description="请在左侧选择菜单~"/>
+            </div>
+            <menu-detail v-else-if="formType === 'detail'" :data-detail="menuDetailData"></menu-detail>
             <MenuForm v-else></MenuForm>
         </div>
     </div>
@@ -16,62 +16,11 @@
 <script lang="ts" setup>
 import MenuTree from './menu-tree.vue';
 import MenuForm from './menu-form.vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
 import {
     formType,
-    goCreateFormView,
-    goDetailFormView,
-    goEditFormView,
-    goTreeView,
-    menuTreeData,
-    removeMenus
+    menuDetailData
 } from './menu-list';
-import { LoadingService } from '@/views/system/loading-service';
 import MenuDetail from '@/views/system/menu/components/menu-detail.vue';
-import type { MenuItemType } from '@/types/system-manage';
-
-const menuDetailData = ref<MenuItemType>();
-
-async function handleOperateTreeItem(params: {
-    id: string,
-    type: 'edit' | 'remove' | 'create' | 'detail',
-    willDeleteList?: { id: string }[]
-}) {
-    if (params.type === 'edit') {
-        await goEditFormView(params.id);
-    } else if (params.type === 'detail') {
-        menuDetailData.value = await goDetailFormView(params.id);
-    } else if (params.type === 'remove') {
-        ElMessageBox.confirm(
-            '确定要删除当前菜单吗？',
-            '警告',
-            {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }
-        )
-            .then(async () => {
-                if (!params?.willDeleteList || !params.willDeleteList.length) {
-                    return;
-                }
-                LoadingService.getInstance().loading();
-                const status = await removeMenus(params.willDeleteList.map(item => item.id));
-                if (status) {
-                    await goTreeView();
-                }
-                LoadingService.getInstance().stop();
-            })
-            .catch(() => {
-                ElMessage({
-                    type: 'info',
-                    message: '取消删除',
-                });
-            });
-    } else if (params.type === 'create') {
-        goCreateFormView(params.id);
-    }
-}
 
 </script>
 
@@ -110,10 +59,24 @@ async function handleOperateTreeItem(params: {
         border: 1px solid #ebeef5;
         border-radius: 4px;
         flex: 1;
-        box-sizing: border-box;
+    }
+
+    .menu-create-content {
+        margin-left: 24px;
+        padding: 48px 24px 24px;
+        flex: 1;
+        justify-content: center!important;
+    }
+
+    .empty-box {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     .form-content {
+        box-sizing: border-box;
         display: flex;
         justify-content: flex-start;
         width: 100%;

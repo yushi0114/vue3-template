@@ -15,9 +15,10 @@ export const menuForm = ref<MenuFormType>({
     desc: '',
     sort: 1,
     component: '',
-    status: false
+    status: false,
+    parentId: '0'
 });
-export const parentId = ref();
+export const menuDetailData = ref<MenuItemType>();
 export const currentMenuId = ref();
 export const formType = ref<'create' | 'edit' | 'empty' | 'detail'>('edit');
 
@@ -30,7 +31,12 @@ function updateSidebar(tab: MenuTabType) {
 }
 
 export function setParentId(value?: string) {
-    parentId.value = value;
+    // parentId.value = value;
+    if (value) {
+        menuForm.value.parentId = value;
+    } else {
+        menuForm.value.parentId = '0';
+    }
 }
 
 export function setCurrentMenuId(value?: string) {
@@ -50,7 +56,8 @@ export function resetMenuForm() {
         desc: '',
         sort: 1,
         component: '',
-        status: false
+        status: false,
+        parentId: '0'
     };
 }
 
@@ -78,6 +85,9 @@ export async function goEditFormView(id: string) {
     setFormType('edit');
     setCurrentMenuId(id);
     const result = await getMenuData(id);
+    await getTreeData({
+        tab: activeName.value
+    });
     if (result) {
         menuForm.value = {
             ...result,
@@ -131,8 +141,7 @@ export async function createMenu(menuForm: MenuFormType): Promise<boolean> {
             ...menuForm,
             status: menuForm.status ? 1 : 0,
             menuName: '',
-            tab: activeName.value,
-            parentId: parentId.value ?? 0
+            tab: activeName.value
         }).then(() => {
             ElMessage({
                 type: 'success',

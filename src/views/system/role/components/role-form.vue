@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="form-content">
         <div class="form-header">角色管理</div>
         <el-form class="custom-form" :model="roleForm" :rules="rules" label-width="120px" ref="ruleFormRef">
             <el-form-item label="角色名称:" required prop="name">
@@ -29,14 +29,14 @@
                     <div v-else class="empty-tree"></div>
                 </div>
             </el-form-item>
-            <div class="form-footer">
+            <FlexRow horizontal="center">
                 <el-button @click="handleGoBack">
                     取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
                     确定
                 </el-button>
-            </div>
+            </FlexRow>
         </el-form>
     </div>
 </template>
@@ -45,7 +45,6 @@
 import { reactive, ref } from 'vue';
 import type { ElTree, FormInstance, FormRules } from 'element-plus';
 import { addRole, formType, handleGoBack, roleForm, roleMenuTreeData, updateRole } from './role-list';
-import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
 import { validateIllegalSymbol } from '@/utils';
 
@@ -76,7 +75,6 @@ async function submitForm(formElement: FormInstance | undefined) {
                 });
                 return;
             }
-            LoadingService.getInstance().loading();
             let status: boolean;
             if (formType.value === 'create') {
                 status = await addRole(checkedNodeIds);
@@ -86,7 +84,6 @@ async function submitForm(formElement: FormInstance | undefined) {
             if (status) {
                 await handleGoBack();
             }
-            LoadingService.getInstance().stop();
         }
     });
 }
@@ -94,6 +91,9 @@ async function submitForm(formElement: FormInstance | undefined) {
 </script>
 
 <style scoped lang="scss">
+.form-content {
+    margin: 0 auto;
+}
 .custom-form {
     width: 700px;
 }

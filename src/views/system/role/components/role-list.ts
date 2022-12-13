@@ -90,8 +90,8 @@ export async function getTreeData(name?: RoleTabType): Promise<void> {
 export async function getRolePageList(params: {
     tab: RoleTabType,
 }): Promise<void> {
+    loading.value = true;
     return new Promise((resolve) => {
-        loading.value = true;
         getRoleListApi({
             ...params,
             pageIndex: roleFilterObject.value.currentPage,

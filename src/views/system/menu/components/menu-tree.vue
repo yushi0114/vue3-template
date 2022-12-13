@@ -31,6 +31,7 @@
                         :width="100">
                         <div class="popover-list">
                             <el-button
+                                v-if="data.parentId === '0'"
                                 @click="handleOperateTreeItem(data, 'create')"
                                 text
                                 class="custom-btn"
@@ -76,20 +77,28 @@ import { ref } from 'vue';
 import type { TreeItemType } from '@/types/system-manage';
 import Icon from '@/components/Icon.vue';
 import { Search } from '@element-plus/icons-vue';
-import { goCreateFormView, menuTreeData } from './menu-list';
+import {
+    goCreateFormView,
+    goDetailFormView,
+    goEditFormView,
+    goTreeView,
+    menuDetailData,
+    menuTreeData,
+    removeMenus
+} from './menu-list';
 import type { ElTree } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { LoadingService } from '@/views/system/loading-service';
 
-const emit = defineEmits(['nodeClickHandle', 'operateTreeItem']);
 
 const activeId = ref();
-
 const treeRef = ref<InstanceType<typeof ElTree>>();
 const filterText = ref('');
 watch(filterText, (val) => {
     treeRef.value!.filter(val);
 });
 
-const filterNode = (value: string, data: any) => {
+function filterNode(value: string, data: any) {
     if (!value) return true;
     return (data as TreeItemType).label.includes(value);
 };
@@ -106,23 +115,53 @@ function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {
     return arr;
 }
 
-function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'create') {
+async function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'create') {
     let willDeleteList: { id: string }[] | undefined;
+    if (type === 'edit') {
+        await goEditFormView(item.id);
+        await nextTick(() => {
+            treeRef.value?.setCurrentKey(item.id);
+        });
+    }
+    if (type === 'create') {
+        await goCreateFormView(item.id);
+    }
     if (type === 'remove') {
         willDeleteList = lookForAllId([item], []);
+        ElMessageBox.confirm(
+            '确定要删除当前菜单吗？',
+            '警告',
+            {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        )
+            .then(async () => {
+                if (!willDeleteList || !willDeleteList?.length) {
+                    return;
+                }
+                LoadingService.getInstance().loading();
+                const status = await removeMenus(willDeleteList.map(item => item.id));
+                if (status) {
+                    await goTreeView();
+                }
+                LoadingService.getInstance().stop();
+            })
+            .catch(() => {
+                ElMessage({
+                    type: 'info',
+                    message: '取消删除',
+                });
+            });
     }
-    emit('operateTreeItem', {
-        id: item.id,
-        type,
-        willDeleteList
-    });
 }
 
 
-function handleNodeClick(data: TreeItemType) {
-    emit('operateTreeItem', {
-        id: data.id,
-        type: 'detail'
+async function handleNodeClick(data: TreeItemType) {
+    menuDetailData.value = await goDetailFormView(data.id);
+    await nextTick(() => {
+        treeRef.value?.setCurrentKey(data.id);
     });
 }
 

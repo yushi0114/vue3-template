@@ -3,6 +3,7 @@ import type { RoleListItemType, UserFormType, UserListItemType, UserTabType } fr
 import { addUserApi, deleteUserApi, getTotalRoleListApi, getUserListApi, updateUserApi } from '@/api/system-manage';
 import { ElMessage } from 'element-plus';
 
+export const loading = ref(false);
 export const activeName = ref<UserTabType>('cre');
 export const mode = ref<'form' | 'list'>('list');
 export const currentUserId = ref();
@@ -75,6 +76,7 @@ export async function getUserListData(params: {
     tab: UserTabType,
 }): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getUserListApi({
             ...params,
             pageIndex: userFilterObject.value.currentPage,
@@ -88,6 +90,8 @@ export async function getUserListData(params: {
             resolve();
         }).catch(() => {
             resolve();
+        }).finally(() => {
+            loading.value = false;
         });
     });
 }

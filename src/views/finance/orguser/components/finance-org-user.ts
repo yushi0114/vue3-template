@@ -3,6 +3,7 @@ import { deleteFinanceOrgUserApi, getFinanceOrgUserListApi } from '@/api/finance
 import type { FinanceOrgUserListItemType } from '@/types/finance';
 import { ElMessage } from 'element-plus';
 
+export const loading = ref(false);
 
 export const listData = ref<{
     total: number;
@@ -38,6 +39,7 @@ export function resetFilterObject() {
 
 export async function getPageList(): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         getFinanceOrgUserListApi({
             pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
@@ -51,6 +53,8 @@ export async function getPageList(): Promise<void> {
             resolve();
         }).catch(() => {
             resolve();
+        }).finally(() => {
+            loading.value = false;
         });
     });
 }
@@ -60,6 +64,7 @@ export async function deleteItems(params: {
     account: string
 }[]): Promise<void> {
     return new Promise((resolve) => {
+        loading.value = true;
         const apiParams = params.reduce((pre: {
             idList: string[],
             accountList: string[]
@@ -78,6 +83,7 @@ export async function deleteItems(params: {
             });
         }).finally(() => {
             resolve();
+            loading.value = true;
         });
     });
 }

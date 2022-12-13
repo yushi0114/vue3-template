@@ -23,40 +23,26 @@
             新建
         </el-button>
     </div>
-    <el-table :data="listData.list" style="width: 100%"
+    <CommonTable :data="listData.list"
               @sort-change="handleSortChange"
               :default-sort="{ prop: 'updateTime', order: 'descending' }"
-              :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }">
+    >
         <el-table-column prop="name" label="姓名"/>
         <el-table-column prop="account" label="手机号"/>
         <el-table-column prop="roleName" label="角色"></el-table-column>
         <el-table-column prop="createTime" sortable label="创建时间"/>
         <el-table-column prop="updateTime" sortable label="更新时间"/>
         <el-table-column prop="createBy" label="创建人"/>
-        <el-table-column label="操作" width="180">
-            <template #default="scope">
-                <el-button
-                    type="primary"
-                    size="small"
-                    @click.prevent="handleEditItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:edit'"></Icon>
-                    </template>
-                </el-button>
-                <el-button
-                    type="danger"
-                    size="small"
-                    @click.prevent="handleRemoveItem(scope.row)">
-                    <template #icon>
-                        <Icon :name="'ep:delete'"></Icon>
-                    </template>
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+        <TableOperatorColumn
+            width="120"
+            @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
+            @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
+            :operators="[
+                { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+            ]">
+        </TableOperatorColumn>
+    </CommonTable>
     <CommonPagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -80,9 +66,10 @@ import {
     resetFilterObject,
     resetUserForm
 } from './institution-user';
-import type { UserListItemType } from '@/views/system/type/user-list.type';
+import type { UserListItemType } from '@/types/system-manage/user-list.type';
 import { LoadingService } from '@/views/system/loading-service';
 import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
+import { ItemOperate } from '@/components';
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -160,7 +147,7 @@ function handleRemoveItem(item: UserListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteUser({
                 account: item.account,
                 id: item.id

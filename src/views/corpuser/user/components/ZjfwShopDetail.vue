@@ -112,14 +112,8 @@ const handleClose = () => {
             </div>
             <div class="content">
             <LoadingBoard :loading="loading" :empty="!shopCarInfoList.length">
-                <el-table
-                    v-loading="loading"
+                <CommonTable
                     :data="shopCarInfoList"
-                    style="width: 100%"
-                    :header-cell-style="{
-                        color: '#595959',
-                        'background-color': '#f3f4f8'
-                    }"
                 >
                     <el-table-column prop="name" label="产品名称">
                         <template #default="scope">
@@ -161,7 +155,7 @@ const handleClose = () => {
                             ></el-switch>
                         </template>
                     </el-table-column>
-                </el-table>
+                </CommonTable>
 
                 <CommonPagination
                     v-model:current-page="page.currentPage"

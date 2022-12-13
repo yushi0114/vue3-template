@@ -71,9 +71,13 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
                 :max-out-count="1"
                 @operate="(opt: ListOperatorOption<ItemOperate>) => handleOperate(opt, item)"
                 :operators="[
-                    { name: '查看申请企业', value: ItemOperate.reqDetail },
-                    { name: isOnline ? '下架' : '上架', value: isOnline ? ItemOperate.offline : ItemOperate.online },
-                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit', disabled: isOnline },
+                    { name: '查看申请企业', value: ItemOperate.reqDetail, icon: 'ep-view' },
+                    {
+                        name: isOnline ? '下架' : '上架',
+                        value: isOnline ? ItemOperate.offline : ItemOperate.online,
+                        icon: isOnline ? 'ep-sold-out' : 'ep-sell',
+                    },
+                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen', disabled: isOnline },
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', disabled: isOnline },
                 ]"
             />

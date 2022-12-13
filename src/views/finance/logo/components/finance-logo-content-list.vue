@@ -12,14 +12,11 @@
             </template>
         </ListQueryControl>
         <LoadingBoard :loading="loading" :empty="!listData.list.length">
-            <el-table
-                :data="listData.list" style="width: 100%"
+            <CommonTable
+                :data="listData.list"
                 @sort-change="handleSortChange"
                 :default-sort="{ prop: 'updateTime', order: 'descending' }"
-                :header-cell-style="{
-                            color: '#595959',
-                            'background-color': '#f3f4f8'
-                        }">
+            >
                 <el-table-column prop="orgName" label="所属机构"/>
                 <el-table-column label="分类">
                     <template #default>
@@ -31,16 +28,16 @@
                         <el-image :src="scope.row.logoContent" style="height: 40px"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column>
-                    <template #header>
-                        <span class="header-options">操作</span>
-                    </template>
-                    <template #default="scope">
-                        <el-button text :icon="EditPen" @click.prevent="handleEditItem(scope.row)" />
-                        <el-button text :icon="Delete" @click.prevent="handleRemoveItem(scope.row)" />
-                    </template>
-                </el-table-column>
-            </el-table>
+                <TableOperatorColumn
+                    width="120"
+                    @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
+                    @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
+                    :operators="[
+                        { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                    ]">
+                </TableOperatorColumn>
+            </CommonTable>
         </LoadingBoard>
         <CommonPagination
             v-model:current-page="filterObject.currentPage"
@@ -60,12 +57,13 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus, EditPen, Delete } from '@element-plus/icons-vue';
+import { Plus } from '@element-plus/icons-vue';
 import { LoadingService } from '@/views/system/loading-service';
 import { filterObject, getPageList, listData, resetFilterObject, loading } from './finance-logo';
 import LogoFormModal from '@/views/finance/logo/components/logo-form-modal.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { deleteLogoApi } from '@/api/finance/finance-logo';
+import { ItemOperate } from '@/components';
 
 const isDialogShow = ref<boolean>(false);
 const dialogType = ref<'create' | 'edit'>('create');

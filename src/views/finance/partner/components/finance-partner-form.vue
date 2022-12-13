@@ -1,4 +1,7 @@
 <template>
+    <div class="form-header">
+        <Text size="xl">{{ editName }}合作伙伴</Text>
+    </div>
     <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
         <el-form-item label="合作伙伴名称" required prop="name">
             <el-input
@@ -31,10 +34,10 @@
         <el-form-item label="状态" required prop="status">
             <el-switch v-model="form.status"/>
         </el-form-item>
-        <el-form-item>
+        <div class="form-footer">
             <el-button @click="goBack()">取消</el-button>
             <el-button type="primary" @click="submitForm(ruleFormRef)">确定</el-button>
-        </el-form-item>
+        </div>
     </el-form>
 </template>
 
@@ -50,6 +53,11 @@ import {
     update
 } from '@/views/finance/partner/components/finance-partner';
 import { blobToDataURL, validateIllegalSymbol } from '@/utils';
+
+
+const editName = computed(() => {
+    return formType.value === 'create' ? '新建' : '编辑';
+});
 
 
 const dialogImageUrl = ref();
@@ -132,8 +140,17 @@ async function goBack() {
 </script>
 
 <style scoped lang="scss">
-.custom-form {
+.form-header {
+    margin: 20px auto 30px;
     width: 700px;
-    padding: 40px 0;
+}
+.custom-form {
+    margin: 0 auto;
+    width: 700px;
+}
+
+.form-footer {
+    margin: 50px 0;
+    text-align: center;
 }
 </style>

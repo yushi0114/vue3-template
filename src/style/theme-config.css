@@ -2,40 +2,40 @@
     --el-color-white: #ffffff;
     --el-color-black: #000000;
     --el-color-primary: #1B5CFF;
-    --el-color-primary-light-3: #1C5CFF;
-    --el-color-primary-light-5: #4580FF;
-    --el-color-primary-light-7: #6FA1FF;
-    --el-color-primary-light-8: #E9F2FF;
+    --el-color-primary-light-3: #4580FF;
+    --el-color-primary-light-5: #6FA1FF;
+    --el-color-primary-light-7: #A9C7FF;
+    --el-color-primary-light-8: #CAE0FF;
     --el-color-primary-light-9: #E9F2FF;
-    --el-color-primary-dark-2: #4580FF;
+    --el-color-primary-dark-2: #295AC3;
     --el-color-success: #47C93A;
-    --el-color-success-light-3: #47C93A;
-    --el-color-success-light-5: #6ED760;
-    --el-color-success-light-7: #98E38A;
-    --el-color-success-light-8: #F4FFF0;
+    --el-color-success-light-3: #6ED760;
+    --el-color-success-light-5: #98E38A;
+    --el-color-success-light-7: #BDEAB4;
+    --el-color-success-light-8: #D9EFD4;
     --el-color-success-light-9: #F4FFF0;
-    --el-color-success-dark-2: #6ED760;
+    --el-color-success-dark-2: #34B627;
     --el-color-warning: #FFBA01;
-    --el-color-warning-light-3: #FFBA01;
-    --el-color-warning-light-5: #FFCD29;
-    --el-color-warning-light-7: #FFDC52;
-    --el-color-warning-light-8: #FFFCE6;
+    --el-color-warning-light-3: #FFCD29;
+    --el-color-warning-light-5: #FFDC52;
+    --el-color-warning-light-7: #FFE47A;
+    --el-color-warning-light-8: #FFF3C2;
     --el-color-warning-light-9: #FFFCE6;
-    --el-color-warning-dark-2: #FFCD29;
+    --el-color-warning-dark-2: #D0A200;
     --el-color-danger: #FF4957;
-    --el-color-danger-light-3: #FF4957;
-    --el-color-danger-light-5: #FF7077;
-    --el-color-danger-light-7: #FF999B;
-    --el-color-danger-light-8: #FFF1F0;
+    --el-color-danger-light-3: #FF7077;
+    --el-color-danger-light-5: #FF999B;
+    --el-color-danger-light-7: #FFBABB;
+    --el-color-danger-light-8: #FFD8D8;
     --el-color-danger-light-9: #FFF1F0;
-    --el-color-danger-dark-2: #FF7077;
-    --el-color-error: #FF4957;
-    --el-color-error-light-3: #FF4957;
-    --el-color-error-light-5: #FF7077;
-    --el-color-error-light-7: #FF999B;
-    --el-color-error-light-8: #FFF1F0;
-    --el-color-error-light-9: #FFF1F0;
-    --el-color-error-dark-2: #FF7077;
+    --el-color-danger-dark-2: #DA3A46;
+    --el-color-error: var(--el-color-danger);
+    --el-color-error-light-3: var(--el-color-danger-light-3);
+    --el-color-error-light-5: var(--el-color-danger-light-5);
+    --el-color-error-light-7: var(--el-color-danger-light-7);
+    --el-color-error-light-8: var(--el-color-danger-light-8);
+    --el-color-error-light-9: var(--el-color-danger-light-9);
+    --el-color-error-dark-2: var(--el-color-danger-dark-2);
     --el-color-info: #909399;
     --el-color-info-light-3: #b1b3b8;
     --el-color-info-light-5: #c8c9cc;
@@ -196,8 +196,4 @@ html.dark {
     /* modal - css vars */
     --w-e-modal-button-bg-color: #fafafa;
     --w-e-modal-button-border-color: #d9d9d9;
-}
-
-.el-table {
-    --el-table-row-hover-bg-color: transparent !important;
 }

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { Plus, EditPen, Delete } from '@element-plus/icons-vue';
+import { Plus } from '@element-plus/icons-vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { fetchCityList, deleteCity } from '@/api/city';
 import type { ICityTable } from '@/types/city';
 
 import CityDetail from './CityDetail.vue';
 import CityModal from './CityModal.vue';
+import { ItemOperate } from '@/components';
 
 const dataSource = ref<ICityTable[]>([]);
 const model = reactive({ searchInput: '' });
@@ -163,15 +164,10 @@ watch(model, () => {
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
-        <el-table
+        <CommonTable
             :data="dataSource"
             :default-sort="{ prop: 'sort', order: 'ascending' }"
             @sort-change="handleSortChange"
-            style="width: 100%"
-            :header-cell-style="{
-                color: '#595959',
-                'background-color': '#f3f4f8'
-            }"
         >
             <el-table-column label="城市名称">
                 <template #default="scope">
@@ -183,24 +179,16 @@ watch(model, () => {
             <el-table-column prop="createBy" label="创建者" />
             <el-table-column prop="createTime" label="创建时间" sortable />
             <el-table-column prop="updateTime" label="更新时间" sortable />
-            <el-table-column>
-                <template #header>
-                    <span class="header-options">操作</span>
-                </template>
-                <template #default="scope">
-                    <el-button
-                        :icon="EditPen"
-                        text
-                        @click="handleEdit(scope.row)"
-                    ></el-button>
-                    <el-button
-                        :icon="Delete"
-                        text
-                        @click="handleDelete(scope.row)"
-                    ></el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+            <TableOperatorColumn
+                width="120"
+                @[ItemOperate.edit]="(scope: any) => handleEdit(scope.row)"
+                @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
+                :operators="[
+                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]">
+            </TableOperatorColumn>
+        </CommonTable>
     </LoadingBoard>
     <CommonPagination
         v-model:currentPage="page.currentPage"

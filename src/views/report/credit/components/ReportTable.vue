@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { View } from '@element-plus/icons-vue';
 import { getAllCorpList } from '@/api/report';
 import type { IReportTable } from '@/types/report';
 import { useListControlModel } from '@/composables';
 import { useThrottleFn } from '@vueuse/core';
+import { ItemOperate } from '@/components';
 
 const dataSource = ref<IReportTable[]>([]);
 const { model } = useListControlModel({
@@ -19,6 +19,8 @@ const page = reactive({
     currentPage: 1,
     pageSize: 15
 });
+
+const tableBodyRef = computed<HTMLElement | null>(() => TableRef.value?.$refs?.table.$refs.bodyWrapper);
 
 // 获取企业列表
 const getCorpList = () => {
@@ -59,7 +61,7 @@ function scrollBehavior(e: any) {
     const scrollDirection = e.deltaY > 0 ? 'down' : 'up';
     if (scrollDirection === 'down') {
         // 获取提供实际滚动的容器
-        const dom = TableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0];
+        const dom = tableBodyRef.value!.getElementsByClassName('el-scrollbar__wrap')[0];
         const { clientHeight, scrollTop, scrollHeight } = dom;
         if (clientHeight === scrollHeight) {
             return;
@@ -78,12 +80,12 @@ const throttledFn = useThrottleFn((e) => {
 
 onMounted(() => {
     // 挂载
-    TableRef.value && TableRef.value.$refs.bodyWrapper.addEventListener('mousewheel', throttledFn);
+    tableBodyRef.value?.addEventListener('mousewheel', throttledFn);
 });
 
 onUnmounted(() => {
     // 卸载
-    TableRef.value && TableRef.value.$refs.bodyWrapper.removeEventListener('mousewheel', throttledFn);
+    tableBodyRef.value?.removeEventListener('mousewheel', throttledFn);
 });
 
 watch(model, () => {
@@ -105,30 +107,20 @@ watch(model, () => {
         </ListQueryControl>
         <Layout class="table-content">
             <LoadingBoard :loading="allToogle.loading" :empty="!dataSource.length">
-            <el-table
+            <CommonTable
                 :data="dataSource"
-                style="width: 100%; height: 770px;"
-                :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }"
                 ref="TableRef"
             >
                 <el-table-column fixed prop="corpName" label="企业名称" />
                 <el-table-column prop="corpCode" label="统一社会信用代码" />
-                <el-table-column>
-                    <template #header>
-                        <span class="header-options">操作</span>
-                    </template>
-                    <template #default="scope">
-                        <el-button
-                            :icon="View"
-                            text
-                            @click="handleView(scope.row)"
-                        ></el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+                <TableOperatorColumn
+                    width="120"
+                    @[ItemOperate.detail]="(scope: any) => handleView(scope.row)"
+                    :operators="[
+                        { name: '查看', value: ItemOperate.detail, icon: 'ep-view' },
+                    ]">
+                </TableOperatorColumn>
+            </CommonTable>
             </LoadingBoard>
         </Layout>
     </Layout>

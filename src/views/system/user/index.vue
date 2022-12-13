@@ -38,7 +38,7 @@ async function handleClick(tab: TabsPaneContext) {
     LoadingService.getInstance().stop();
 }
 
-onMounted(async () => {
+onMounted(async() => {
     LoadingService.getInstance().loading();
     await getUserListData({
         tab: activeName.value
@@ -61,7 +61,6 @@ onMounted(async () => {
     justify-content: space-between;
     align-items: center;
     flex: 1;
-    background: #ffffff;
     overflow-y: auto;
 }
 

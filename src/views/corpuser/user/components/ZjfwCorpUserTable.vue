@@ -5,6 +5,7 @@ import type { CorpUserTable } from '@/types/corpUser';
 import { getZfBusinessUser, updateZfBusinessUserStatus, deleteZfBatchUser } from '@/api/corpUser';
 import ZjfwShopDetail from './ZjfwShopDetail.vue';
 import { useListControlModel } from '@/composables';
+import { ItemOperate } from '@/components';
 
 const userList = ref<CorpUserTable[]>([]);
 const userId = ref('');
@@ -211,17 +212,11 @@ watch(model, () => {
         </ListQueryControl>
         <div class="content">
             <LoadingBoard :loading="allToogle.loading" :empty="!userList.length">
-            <el-table
-                v-loading="allToogle.loading"
+            <CommonTable
                 :data="userList"
                 :default-sort="{ prop: 'createTime', order: 'descending' }"
                 @sort-change="handleSortChange"
                 @selection-change="handleSelectionChange"
-                style="width: 100%"
-                :header-cell-style="{
-                    color: '#595959',
-                    'background-color': '#f3f4f8'
-                }"
             >
                 <el-table-column
                     type="selection"
@@ -244,19 +239,14 @@ watch(model, () => {
                         ></el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column>
-                    <template #header>
-                        <span class="header-options">操作</span>
-                    </template>
-                    <template #default="scope">
-                        <el-button
-                            :icon="Delete"
-                            text
-                            @click="handleDelete(scope.row)"
-                        ></el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+                <TableOperatorColumn
+                    width="120"
+                    @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
+                    :operators="[
+                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                    ]">
+                </TableOperatorColumn>
+            </CommonTable>
 
             <CommonPagination
                 v-model:current-page="page.currentPage"

@@ -22,6 +22,7 @@ withDefaults(
     cursor: pointer;
     border-radius: 9999px;
     color: $text-color-secondary;
+    transition: .2s ease-in-out background, .2s ease-in-out color;
 
     &:hover {
         background: $color-primary;

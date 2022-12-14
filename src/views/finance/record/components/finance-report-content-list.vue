@@ -39,12 +39,12 @@
                 ]">
             </TableOperatorColumn>
         </CommonTable>
+        <CommonPagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="filterObject.currentPage"
+            :total="listData.total"/>
     </LoadingBoard>
-    <CommonPagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="filterObject.currentPage"
-        :total="listData.total"/>
 </template>
 
 <script lang="ts" setup>

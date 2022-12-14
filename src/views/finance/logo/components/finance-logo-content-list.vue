@@ -38,14 +38,14 @@
                     ]">
                 </TableOperatorColumn>
             </CommonTable>
+            <CommonPagination
+                v-model:current-page="filterObject.currentPage"
+                v-model:page-size="filterObject.currentSize"
+                :total="listData.total"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange">
+            </CommonPagination>
         </LoadingBoard>
-        <CommonPagination
-            v-model:current-page="filterObject.currentPage"
-            v-model:page-size="filterObject.currentSize"
-            :total="listData.total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange">
-        </CommonPagination>
     </Board>
     <logo-form-modal
         v-if="isDialogShow"

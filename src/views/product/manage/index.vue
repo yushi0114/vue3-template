@@ -153,23 +153,22 @@ onBeforeMount(() => {
                         </RouterLink>
                     </template>
                 </ListQueryControl>
-                <Text> </Text>
                 <LoadingBoard :loading="loading" :empty="!list.length">
-                <ProductList
-                    :loading="loading"
-                    :list="list"
-                    @item-detail="goDetail"
-                    @item-req-detail="goReqDetail"
-                    @item-edit="handleEdit"
-                    @item-online="handleUpdateStatus"
-                    @item-offline="handleUpdateStatus"
-                    @item-delete="handleDelete" />
+                    <ProductList
+                        :loading="loading"
+                        :list="list"
+                        @item-detail="goDetail"
+                        @item-req-detail="goReqDetail"
+                        @item-edit="handleEdit"
+                        @item-online="handleUpdateStatus"
+                        @item-offline="handleUpdateStatus"
+                        @item-delete="handleDelete" />
 
-                <CommonPagination
-                    v-model:current-page="listControlModel.pageIndex"
-                    v-model:page-size="listControlModel.pageSize"
-                    :total="count" />
-            </LoadingBoard>
+                    <CommonPagination
+                        v-model:current-page="listControlModel.pageIndex"
+                        v-model:page-size="listControlModel.pageSize"
+                        :total="count" />
+                </LoadingBoard>
         </Board>
 
         <ProductEdit

@@ -46,7 +46,7 @@ withDefaults(
             <ContentBoardField label="期望放款时间">{{ expectTimeTypeMap[content?.expectTime!] }}</ContentBoardField>
         </ContentBoard>
 
-        <ContentBoard label="放款信息" :cols="4" v-if="content?.progress === AcceptProgressType.done">
+        <ContentBoard background label="放款信息" :cols="4" v-if="content?.progress === AcceptProgressType.done">
             <ContentBoardField label="产品名称">{{ content?.productName }}</ContentBoardField>
             <ContentBoardField label="实际放款金额">{{ content?.loanAmount }}万元</ContentBoardField>
             <ContentBoardField label="实际贷款期限">{{ loanTermTypeMap[content?.loanTerm!] }}</ContentBoardField>

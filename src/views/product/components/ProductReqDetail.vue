@@ -4,6 +4,7 @@ import type { RequirementEntity } from '@/types';
 import { useApi } from '@/composables';
 import { ScoreResult } from '@/components';
 import { AcceptProgressType, expectRateTypeMap, expectTimeTypeMap, loanTermTypeMap, ReportType, ReportTypeUrlMap } from '@/enums';
+import { ROOT_PATH } from '@/router';
 
 const router = useRouter();
 const props = withDefaults(
@@ -50,7 +51,7 @@ function handleClosed() {
 
 const handleViewReport = (type: ReportType) => {
     const routerUrl = router.resolve({
-        path: ReportTypeUrlMap[type],
+        path: ROOT_PATH + ReportTypeUrlMap[type],
         query: {
             corpCode: props.content?.corpCode,
             corpName: props.content?.corpName,

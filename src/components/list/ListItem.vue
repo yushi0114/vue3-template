@@ -27,8 +27,8 @@ withDefaults(
         background-color: var(--el-color-info-light-9);
     }
 
-    &.disabled {
-        opacity: 0.6;
-    }
+    // &.disabled {
+    //     opacity: 0.6;
+    // }
 }
 </style>

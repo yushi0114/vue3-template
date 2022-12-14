@@ -115,8 +115,12 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                     target: `http://${proxyHost}:10209`,
                     changeOrigin: true,
                 },
+                // '/dms-service': {
+                //     target: `http://${proxyHost}:10208`,
+                //     changeOrigin: true,
+                // },
                 '/dms-service': {
-                    target: `http://${proxyHost}:10208`,
+                    target: 'http://192.168.31.198:10215',
                     changeOrigin: true,
                 },
                 '/lncredit': {

@@ -22,7 +22,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button @click="goBack()">
-                    返回
+                    取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
                     编辑
@@ -37,8 +37,7 @@ import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { addUser, form, formType, handleGoBack, roleUIList, updateUser } from './institution-user';
 import { LoadingService } from '@/views/system/loading-service';
-import type { ValidateCallback } from '@/utils';
-import { isPhoneNumber, validateIllegalSymbol } from '@/utils';
+import { isPhoneNumber, type ValidateCallback, validateIllegalSymbol } from '@/utils';
 
 const validatePhoneId = (rule: any, value: any, callback: ValidateCallback) => {
     if (!isPhoneNumber(value)) {

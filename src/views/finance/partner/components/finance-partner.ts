@@ -99,7 +99,7 @@ export async function getPageList(params: {
     });
 }
 
-export async function add(): Promise<void> {
+export async function add(): Promise<boolean> {
     return new Promise((resolve) => {
         new FinancePartnerService(activeName.value).getInstance().add({
             ...form.value,
@@ -110,17 +110,16 @@ export async function add(): Promise<void> {
                 type: 'success',
                 message: '创建成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
+            resolve(false);
         });
     });
 
 }
 
-export async function update(): Promise<void> {
+export async function update(): Promise<boolean> {
     return new Promise((resolve) => {
-        loading.value = true;
         new FinancePartnerService(activeName.value).getInstance().update({
             id: currentId.value,
             ...form.value,
@@ -131,11 +130,9 @@ export async function update(): Promise<void> {
                 type: 'success',
                 message: '更新成功',
             });
-            resolve();
+            resolve(true);
         }).catch(() => {
-            resolve();
-        }).finally(() => {
-            loading.value = false;
+            resolve(false);
         });
     });
 

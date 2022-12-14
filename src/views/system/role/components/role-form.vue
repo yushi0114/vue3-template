@@ -2,20 +2,20 @@
     <div class="form-content">
         <div class="form-header">角色管理</div>
         <el-form class="custom-form" :model="roleForm" :rules="rules" label-width="120px" ref="ruleFormRef">
-            <el-form-item label="角色名称:" required prop="name">
+            <el-form-item label="角色名称" required prop="name">
                 <el-input v-model="roleForm.name"
                           :maxlength="100"
                           show-word-limit
                           placeholder="请输入角色名称"/>
             </el-form-item>
-            <el-form-item label="角色描述:" prop="desc">
+            <el-form-item label="角色描述" prop="desc">
                 <el-input v-model="roleForm.desc"
                           :maxlength="255"
                           show-word-limit
                           type="textarea"
                           placeholder="请输入角色描述"/>
             </el-form-item>
-            <el-form-item label="配置菜单:" required>
+            <el-form-item label="配置菜单" required>
                 <div style="margin-top: 10px; width: 100%">
                     <el-tree
                         v-if="roleMenuTreeData?.length"

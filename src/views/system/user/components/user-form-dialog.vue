@@ -9,19 +9,19 @@
         destroy-on-close
         @close="handleClose">
         <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
-            <el-form-item label="姓名:" required prop="name">
+            <el-form-item label="姓名" required prop="name">
                 <el-input v-model="form.name"
                           :maxlength="50"
                           show-word-limit
                           placeholder="请输入姓名"/>
             </el-form-item>
-            <el-form-item label="手机号:" required prop="account">
+            <el-form-item label="手机号" required prop="account">
                 <el-input v-model="form.account"
                           :maxlength="11"
                           show-word-limit
                           placeholder="请输入手机号" :disabled="formType === 'edit'"/>
             </el-form-item>
-            <el-form-item label="角色:" required prop="roleId">
+            <el-form-item label="角色" required prop="roleId">
                 <el-select v-model="form.roleId" placeholder="请选择角色">
                     <el-option
                         v-for="item in roleUIList"
@@ -30,7 +30,7 @@
                         :value="item.value"/>
                 </el-select>
             </el-form-item>
-            <el-form-item label="状态:" required prop="status">
+            <el-form-item label="状态" required prop="status">
                 <el-switch v-model="form.status"/>
             </el-form-item>
             <FlexRow horizontal="center">

@@ -42,6 +42,10 @@
             @current-change="handleCurrentChange">
         </CommonPagination>
     </div>
+    <finance-partner-form-modal
+        v-if="isDialogShow"
+        :dialog-visible="isDialogShow"
+        @close="handleDialogClose"></finance-partner-form-modal>
 </template>
 
 <script lang="ts" setup>
@@ -57,20 +61,34 @@ import {
     formType,
     getPageList,
     listData,
-    mode,
     remove,
     resetForm
 } from '@/views/finance/partner/components/finance-partner';
 import type { FinancePartnerListItemType } from '@/types/finance';
 import { dataURLToFile } from '@/utils';
 import { ItemOperate } from '@/components';
+import FinancePartnerFormModal from '@/views/finance/partner/components/finance-partner-form-modal.vue';
+
+const isDialogShow = ref<boolean>(false);
+const dialogType = ref<'create' | 'edit'>('create');
+
+function showDialog() {
+    dialogType.value = 'create';
+    isDialogShow.value = true;
+}
+
+async function handleDialogClose() {
+    isDialogShow.value = false;
+    await getPageList({
+        tab: activeName.value
+    });
+}
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
-    // console.log(params);
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = params.prop;
@@ -88,7 +106,6 @@ async function handleSearchList() {
 }
 
 function handleEditItem(item: FinancePartnerListItemType) {
-    mode.value = 'form';
     formType.value = 'edit';
     form.value.name = item.name;
     form.value.imgUrl = item.imgUrl;
@@ -100,13 +117,14 @@ function handleEditItem(item: FinancePartnerListItemType) {
     ];
     form.value.status = item.status === 1;
     currentId.value = item.id;
+    showDialog();
 }
 
 async function handleCreateNewItem() {
-    mode.value = 'form';
     formType.value = 'create';
     currentId.value = '';
     resetForm();
+    showDialog();
 }
 
 async function handleCurrentChange(item: number) {

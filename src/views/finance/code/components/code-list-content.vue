@@ -13,7 +13,7 @@
                 </template>
                 下载Excel模板
             </el-button>
-            <el-button type="primary" @click="handleCreateNewItem">
+            <el-button style="margin-left: 15px;" type="primary" @click="handleCreateNewItem">
                 <template #icon>
                     <Icon :name="'ep:plus'"></Icon>
                 </template>
@@ -21,7 +21,7 @@
             </el-button>
             <el-dropdown placement="bottom-end">
                 <div class="dropdown-icon">
-                    <Icon style="transform: rotate(90deg)" :name="'ep:more'"></Icon>
+                    <Icon style="transform: rotate(90deg);margin-left: 10px;" :name="'ep:more'"></Icon>
                 </div>
                 <template #dropdown>
                     <el-dropdown-menu>

@@ -50,7 +50,7 @@ import {
     cityCodeList,
     codeForm,
     formType,
-    handleGoBack,
+    goListView,
     orgTypeCodeList,
     updateFinanceCode
 } from './code-list';
@@ -123,7 +123,7 @@ const submitForm = async(formEl: FormInstance | undefined) => {
                 status = await updateFinanceCode();
             }
             if (status) {
-                await handleGoBack();
+                await goListView();
             }
             LoadingService.getInstance().stop();
         }
@@ -132,7 +132,7 @@ const submitForm = async(formEl: FormInstance | undefined) => {
 
 async function goBack() {
     LoadingService.getInstance().loading();
-    await handleGoBack();
+    await goListView();
     LoadingService.getInstance().stop();
 }
 

@@ -52,7 +52,6 @@ export const financeFilterObject = reactive<{
     sortType: 'desc',
 });
 
-
 export async function goListView() {
     mode.value = 'list';
     currentCategoryId.value = undefined;

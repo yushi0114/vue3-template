@@ -14,7 +14,12 @@
 <script lang="ts" setup>
 import CodeForm from './components/code-form.vue';
 import CodeListContent from './components/code-list-content.vue';
-import { mode } from './components/code-list';
+import { currentCodeId, mode } from './components/code-list';
+
+onMounted(async () => {
+    mode.value = 'list';
+    currentCodeId.value = undefined;
+});
 </script>
 
 <style scoped lang="scss">

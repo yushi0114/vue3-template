@@ -1,6 +1,6 @@
 <template>
     <div style="height: max-content">
-        <div v-if="formType === 'create'" class="form-header">菜单管理</div>
+        <div v-if="formType === 'create'" class="form-header">新建菜单</div>
         <el-form
             :class="[{ 'custom-create-form': formType !== 'create'}]"
             :label-position="formType === 'create' ? 'right' : 'top'"
@@ -25,53 +25,53 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="菜单名称:" required prop="name">
+            <el-form-item label="菜单名称" required prop="name">
                 <el-input v-model="menuForm.name"
                           :maxlength="255"
                           show-word-limit
                           placeholder="请输入菜单名称"/>
             </el-form-item>
-            <el-form-item label="菜单标题:" required prop="title">
+            <el-form-item label="菜单标题" required prop="title">
                 <el-input v-model="menuForm.title"
                           :maxlength="32"
                           show-word-limit
                           placeholder="请输入菜单标题"/>
             </el-form-item>
-            <el-form-item label="菜单路径:" required prop="path">
+            <el-form-item label="菜单路径" required prop="path">
                 <el-input v-model="menuForm.path"
                           :maxlength="255"
                           show-word-limit
                           placeholder="请输入菜单路径"/>
             </el-form-item>
-            <el-form-item label="菜单描述:" prop="desc">
+            <el-form-item label="菜单描述" prop="desc">
                 <el-input v-model="menuForm.desc"
                           :maxlength="255"
                           show-word-limit
                           type="textarea"
                           placeholder="请输入菜单描述"/>
             </el-form-item>
-            <el-form-item label="菜单图标:" prop="icon">
+            <el-form-item label="菜单图标" prop="icon">
                 <el-input v-model="menuForm.icon"
                           :maxlength="255"
                           show-word-limit
                           placeholder="请输入菜单图标"/>
             </el-form-item>
-            <el-form-item label="排序字段:" required prop="sort">
+            <el-form-item label="排序字段" required prop="sort">
                 <el-input v-model.number="menuForm.sort"
                           :maxlength="3"
                           show-word-limit placeholder="请输入排序字段"/>
             </el-form-item>
-            <el-form-item label="组件名称:" required prop="component">
+            <el-form-item label="组件名称" required prop="component">
                 <el-input v-model="menuForm.component"
                           :maxlength="255"
                           show-word-limit
                           placeholder="请输入菜组件称"/>
             </el-form-item>
-            <el-form-item label="是否启用:" required prop="status">
+            <el-form-item label="是否启用" required prop="status">
                 <el-switch v-model="menuForm.status"/>
             </el-form-item>
             <div :class="[formType === 'create' ? 'form-footer' : 'form-edit-footer']">
-                <el-button v-if="formType === 'create'" @click="goBack">
+                <el-button @click="goBack">
                     取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -99,6 +99,8 @@ const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
         callback();
     }
 };
+
+const emits = defineEmits(['editToDetail']);
 
 const firstLevelMenuList = computed(() => {
     const arr = [
@@ -198,6 +200,9 @@ async function handleSaveForm(params: {
 
 async function goBack() {
     await goTreeView();
+    if (formType.value === 'edit') {
+        emits('editToDetail');
+    }
 }
 
 </script>

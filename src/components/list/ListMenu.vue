@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { Warning, Brush } from '@element-plus/icons-vue';
-import { useVModel, onKeyStroke } from '@vueuse/core';
+import { Brush, Warning } from '@element-plus/icons-vue';
+import { onKeyStroke, useVModel } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import type { ControlOptionConfig } from './ListQueryControl.vue';
 
@@ -47,18 +47,38 @@ onKeyStroke(
 );
 
 const handleMenuItemClick = (item: PlainOption<any>, field: string) => {
-    // 多选筛选处理
-    if (isCtrlKeep.value && props.multipleFields?.includes(field)) {
-        // 点击添加筛选添加
-        if (!model.value[field]?.toString().includes(item.value)) {
-            model.value[field] = model.value[field] ? `${model.value[field]},${item.value}` : item.value;
-            return;
+    // fix by songxiwen 2022/12/14
+    if (props.multipleFields?.includes(field)) {
+        if (isCtrlKeep.value && Array.isArray(model.value[field])) {
+            if (model.value[field].includes(item.value)) {
+                model.value[field] = model.value[field].filter((innerItem: any) => innerItem !== item.value);
+            } else {
+                model.value[field].push(item.value);
+            }
+        } else {
+            if (Array.isArray(model.value[field]) && model.value[field].includes(item.value)) {
+                model.value[field] = '';
+            } else {
+                model.value[field] = [item.value];
+            }
         }
-        // 再次点击删除筛选条件
-        model.value[field] = model.value[field].replace(item.value + ',', '');
-        return;
+    } else {
+        model.value[field] = model.value[field] === item.value ? '' : item.value;
     }
-    model.value[field] = model.value[field] === item.value ? '' : item.value;
+    /**
+     * // 多选筛选处理
+     *     if (isCtrlKeep.value && props.multipleFields?.includes(field)) {
+     *         // 点击添加筛选添加
+     *         if (!model.value[field]?.toString().includes(item.value)) {
+     *             model.value[field] = model.value[field] ? `${model.value[field]},${item.value}` : item.value;
+     *             return;
+     *         }
+     *         // 再次点击删除筛选条件
+     *         model.value[field] = model.value[field].replace(item.value + ',', '');
+     *         return;
+     *     }
+     *     model.value[field] = model.value[field] === item.value ? '' : item.value;
+     */
     emits('change');
 };
 
@@ -97,7 +117,7 @@ watch(isCtrlKeep, (newValue) => {
                         placement="top">
                         <el-icon
                             class="lm-tooltip">
-                            <Warning />
+                            <Warning/>
                         </el-icon>
                     </el-tooltip>
                 </FlexRow>
@@ -108,11 +128,16 @@ watch(isCtrlKeep, (newValue) => {
                 <TextHoverable
                     color="regular"
                     size="xs"
-                    ><FlexRow class="gap-1">
+                >
+                    <FlexRow class="gap-1">
                         <el-icon>
-                            <Brush /> </el-icon
-                        >清空过滤项</FlexRow
-                    ></TextHoverable
+                            <Brush/>
+                        </el-icon
+                        >
+                        清空过滤项
+                    </FlexRow
+                    >
+                </TextHoverable
                 >
             </FlexRow>
         </FlexRow>
@@ -128,7 +153,8 @@ watch(isCtrlKeep, (newValue) => {
                     <Text
                         color="regular"
                         size="sm"
-                        >{{ subMenu.label }}</Text
+                    >{{ subMenu.label }}
+                    </Text
                     >
                 </template>
                 <el-button
@@ -138,10 +164,12 @@ watch(isCtrlKeep, (newValue) => {
                     text
                     :type="getActiveOption(subMenu.field, menuItem)"
                     @click="handleMenuItemClick(menuItem, subMenu.field)"
-                    ><Text
+                >
+                    <Text
                         color="current"
                         size="xs"
-                        >{{ menuItem.name }}</Text
+                    >{{ menuItem.name }}
+                    </Text
                     >
                 </el-button>
             </el-collapse-item>
@@ -155,6 +183,7 @@ watch(isCtrlKeep, (newValue) => {
     height: 100%;
     display: flex;
     flex-direction: column;
+
     &-title {
         gap: $gap-line;
     }
@@ -171,13 +200,17 @@ watch(isCtrlKeep, (newValue) => {
     & .lm-clear {
         cursor: pointer;
     }
+
     & .lm-content {
         overflow-x: hidden;
-        flex: 1; overflow-y: auto; border-right-style: none !important;
+        flex: 1;
+        overflow-y: auto;
+        border-right-style: none !important;
     }
 
     & .lm-button {
-        width: 100%; justify-content: flex-start;
+        width: 100%;
+        justify-content: flex-start;
     }
 
     & .lm-tooltip {
@@ -190,12 +223,15 @@ watch(isCtrlKeep, (newValue) => {
         margin-top: $gap-md;
         margin-bottom: $gap-xs;
     }
+
     :deep(.el-button + .el-button) {
         margin-left: 0;
     }
+
     :deep(.el-button.el-button--primary) {
         background-color: $color-primary-light-9;
         color: $color-primary;
+
         &:focus {
             background-color: $color-primary-light-9;
             color: $color-primary;
@@ -217,20 +253,25 @@ watch(isCtrlKeep, (newValue) => {
             background-color: $color-primary-light-9;
             color: $color-primary;
         }
+
         &:focus {
             background-color: inherit;
         }
     }
+
     :deep(.el-collapse) {
         &::-webkit-scrollbar {
             width: 0;
         }
+
         border-top: none;
         border-bottom: none;
+
         .el-collapse-item__header {
             border-bottom: none;
             height: 30px;
         }
+
         .el-collapse-item__wrap {
             border-bottom: none;
         }

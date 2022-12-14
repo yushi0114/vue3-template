@@ -15,9 +15,12 @@
 import CategoryForm from './components/category-form.vue';
 import CategoryListContent from './components/category-list-content.vue';
 
-import { mode } from './components/category-list';
+import { currentCategoryId, mode } from './components/category-list';
 
-
+onMounted(async () => {
+    mode.value = 'list';
+    currentCategoryId.value = undefined;
+});
 </script>
 
 <style scoped lang="scss">

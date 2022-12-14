@@ -38,12 +38,10 @@
                 </el-upload>
             </el-form-item>
         </el-form>
-        <template #footer>
-          <span class="dialog-footer">
+        <FlexRow horizontal="center">
             <el-button @click="handleClose">取消</el-button>
             <el-button type="primary" @click="handleUploadToServer(ruleFormRef)">确定</el-button>
-          </span>
-        </template>
+        </FlexRow>
     </el-dialog>
 </template>
 

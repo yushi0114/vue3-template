@@ -22,7 +22,7 @@
             </el-tabs>
         </div>
         <div v-else class="noDataContainer">
-            <el-empty description="请在左侧选择机构~"/>
+            <el-empty :image="emptyImg" :image-size="483" description="请在左侧选择机构~"/>
         </div>
     </div>
     <div class="menu-container" style="overflow-y: auto" v-if="mode === 'form'">
@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import emptyImg from '@/assets/images/no-data.png';
 import InstitutionMenu from './institution-menu/index.vue';
 import InstitutionTree from '@/views/finance/institution/components/institution-tree.vue';
 import InstitutionDesc from '@/views/finance/institution/components/institution-desc.vue';
@@ -132,5 +133,34 @@ async function handleInstitutionTabClick(tab: TabsPaneContext) {
     }
 
 
+}
+
+.el-tabs {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    background: #ffffff;
+    overflow-y: auto;
+}
+
+.el-tabs ::v-deep .el-tabs__header {
+    height: 40px;
+    min-height: 40px;
+    width: 100%;
+}
+
+.el-tabs ::v-deep .el-tabs__content {
+    flex: 1;
+    width: 100%;
+}
+
+.el-tab-pane {
+    height: 100%;
 }
 </style>

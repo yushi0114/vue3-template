@@ -51,7 +51,7 @@ export const financeCodeFilterObject = reactive<{
 });
 
 
-export async function handleGoBack() {
+export async function goListView() {
     mode.value = 'list';
     currentCodeId.value = undefined;
     await setFinanceCodeList();

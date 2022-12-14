@@ -42,7 +42,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button @click="goBack()">
-                    返回
+                    取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
                     编辑

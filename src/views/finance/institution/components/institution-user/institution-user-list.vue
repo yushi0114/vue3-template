@@ -51,6 +51,7 @@
         </TableOperatorColumn>
     </CommonTable>
     <CommonPagination
+        v-if="listData.list.length"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="filterObject.currentPage"

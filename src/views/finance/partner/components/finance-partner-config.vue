@@ -5,7 +5,7 @@
 
 <script lang="ts" setup>
 
-import FinancePartnerForm from './finance-partner-form.vue';
+import FinancePartnerForm from './finance-partner-form-modal.vue';
 import FinancePartnerListContent from './finance-partner-list-content.vue';
 
 import { mode } from './finance-partner';

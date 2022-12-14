@@ -31,7 +31,6 @@ function updateSidebar(tab: MenuTabType) {
 }
 
 export function setParentId(value?: string) {
-    // parentId.value = value;
     if (value) {
         menuForm.value.parentId = value;
     } else {
@@ -65,9 +64,14 @@ export async function goTreeView() {
     resetMenuForm();
     loading.value = true;
     try {
-        await getTreeData({ tab: activeName.value });
-        currentMenuId.value = undefined;
-        formType.value = 'empty';
+        if (formType.value === 'create') {
+            await getTreeData({ tab: activeName.value });
+            currentMenuId.value = undefined;
+            formType.value = 'empty';
+        }
+        if (formType.value === 'edit') {
+            await getTreeData({ tab: activeName.value });
+        }
     } finally {
         loading.value = false;
     }

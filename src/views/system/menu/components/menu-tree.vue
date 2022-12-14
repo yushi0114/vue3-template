@@ -86,8 +86,7 @@ import {
     menuTreeData,
     removeMenus
 } from './menu-list';
-import type { ElTree } from 'element-plus';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, type ElTree } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
 
 
@@ -97,11 +96,14 @@ const filterText = ref('');
 watch(filterText, (val) => {
     treeRef.value!.filter(val);
 });
+defineExpose({
+    treeRef
+});
 
 function filterNode(value: string, data: any) {
     if (!value) return true;
     return (data as TreeItemType).label.includes(value);
-};
+}
 
 function handleAddNewMenu() {
     goCreateFormView();

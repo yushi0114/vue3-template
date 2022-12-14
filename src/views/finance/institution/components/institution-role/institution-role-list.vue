@@ -45,6 +45,7 @@
         </TableOperatorColumn>
     </CommonTable>
     <CommonPagination
+        v-if="roleList.list.length"
         class="margin-20-20"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"

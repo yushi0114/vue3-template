@@ -1,27 +1,34 @@
 <template>
     <div class="menu-container">
         <div class="menu-tree" v-if="formType !== 'create'">
-            <MenuTree></MenuTree>
+            <MenuTree ref="menuTreeRef"></MenuTree>
         </div>
-        <div :class="[{'menu-content': formType !== 'create', 'menu-create-content': formType === 'create'}, 'form-content']">
+        <div
+            :class="[{'menu-content': formType !== 'create', 'menu-create-content': formType === 'create'}, 'form-content']">
             <div class="empty-box" v-if="formType === 'empty'">
-                <el-empty description="请在左侧选择菜单~"/>
+                <el-empty :image="emptyImg" :image-size="483" description="请在左侧选择菜单~"/>
             </div>
             <menu-detail v-else-if="formType === 'detail'" :data-detail="menuDetailData"></menu-detail>
-            <MenuForm v-else></MenuForm>
+            <MenuForm @editToDetail="handleEditToDetail" v-else></MenuForm>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import emptyImg from '@/assets/images/no-data.png';
 import MenuTree from './menu-tree.vue';
 import MenuForm from './menu-form.vue';
-import {
-    formType,
-    menuDetailData
-} from './menu-list';
+import { currentMenuId, formType, goDetailFormView, menuDetailData } from './menu-list';
 import MenuDetail from '@/views/system/menu/components/menu-detail.vue';
 
+const menuTreeRef = ref();
+
+async function handleEditToDetail() {
+    menuDetailData.value = await goDetailFormView(currentMenuId.value);
+    await nextTick(() => {
+        menuTreeRef.value.treeRef.setCurrentKey(currentMenuId.value);
+    });
+}
 </script>
 
 <style scoped lang="scss">
@@ -55,7 +62,7 @@ import MenuDetail from '@/views/system/menu/components/menu-detail.vue';
 
     .menu-content {
         margin-left: 24px;
-        padding: 48px 24px 24px;
+        padding: 24px 24px 24px;
         border: 1px solid #ebeef5;
         border-radius: 4px;
         flex: 1;
@@ -63,9 +70,9 @@ import MenuDetail from '@/views/system/menu/components/menu-detail.vue';
 
     .menu-create-content {
         margin-left: 24px;
-        padding: 48px 24px 24px;
+        padding: 24px 24px 24px;
         flex: 1;
-        justify-content: center!important;
+        justify-content: center !important;
     }
 
     .empty-box {

@@ -143,7 +143,7 @@ onBeforeMount(() => {
                         field: 'searchInput',
                     }"
                     :filterOptionsConfigs="[
-                        { label: '机构名称', field: 'orgId', options: topOrgOptions },
+                        { label: '机构名称', field: 'orgId', searchable: true, options: topOrgOptions },
                         { label: '产品状态', field: 'status', options: onlineTypeOptions },
                     ]"
                     :sortConfigs="[{ label: '申请时间', field: 'createTime' }]">

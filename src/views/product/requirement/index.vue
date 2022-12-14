@@ -129,8 +129,8 @@ onMounted(() => {
                     field: 'searchInput'
                 }"
                 :filterOptionsConfigs="[
-                    { label: '产品名称', field: 'productId', options: productOptions },
-                    { label: '机构名称', field: 'orgId', options: topOrgOptions },
+                    { label: '产品名称', field: 'productId', searchable: true, options: productOptions },
+                    { label: '机构名称', field: 'orgId', searchable: true, options: topOrgOptions },
                     { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
                 ]"
                 :sortConfigs="[

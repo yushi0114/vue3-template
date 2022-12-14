@@ -138,8 +138,8 @@ watch(() => props.scoreResult, (val) => {
 }
 
 .table {
-    border-top: 1px solid #d8d5d5;
-    border-right: 1px solid #d8d5d5;
+    border-top: $border;
+    border-right: $border;
     font-size: 14px;
     border-collapse: collapse;
     table-layout: fixed;
@@ -147,21 +147,23 @@ watch(() => props.scoreResult, (val) => {
 }
 
 .header-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
-    background-color: #f5f7fa;
+    border-bottom: $border;
+    border-left: $border;
+    background-color: $bg-color;
     padding: 3px;
     font-weight: bold;
     line-height: 24px;
     text-align: center;
+    color: $text-color-regular;
 }
 
 .content-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
+    border-bottom: $border;
+    border-left: $border;
     padding: 3px;
     line-height: 24px;
     text-align: center;
+    color: $text-color-regular;
 }
 
 .line-content {
@@ -175,20 +177,22 @@ watch(() => props.scoreResult, (val) => {
 }
 
 .right-header-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
-    background-color: #f5f7fa;
+    border-bottom: $border;
+    border-left: $border;
+    background-color: $bg-color;
     padding: 10px 0;
     font-weight: bold;
     line-height: 24px;
     text-align: center;
+    color: $text-color-regular;
 }
 
 .right-content-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
+    border-bottom: $border;
+    border-left: $border;
     text-align: center;
     padding: 11px 0;
+    color: $text-color-regular;
 }
 
 </style>

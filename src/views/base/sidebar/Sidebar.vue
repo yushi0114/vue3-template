@@ -70,7 +70,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
                         <a class="sidebar-root-link"
                             :class="{ active: parentLink.active }"
                             href="#0"
-                            >
+                        >
                             <FlexRow horizontal="between"
                                 class="sidebar-root-label">
                                     <Text size="sm" color="current">{{ opt.title }}</Text>

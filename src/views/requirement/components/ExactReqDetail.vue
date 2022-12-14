@@ -5,6 +5,7 @@ import type { RequirementEntity } from '@/types';
 import ReqDetail from './ReqDetail.vue';
 import { useApi } from '@/composables';
 import { ScoreResult } from '@/components';
+import { ROOT_PATH } from '@/router';
 
 const route = useRoute();
 const router = useRouter();
@@ -56,7 +57,7 @@ function handleClosed() {
 
 const handleViewReport = (type: ReportType) => {
     const routerUrl = router.resolve({
-        path: ReportTypeUrlMap[type],
+        path: ROOT_PATH + ReportTypeUrlMap[type],
         query: {
             corpCode: props.content?.corpCode,
             corpName: props.content?.corpName,

@@ -243,15 +243,15 @@ watch(model, () => {
                     ]">
                 </TableOperatorColumn>
             </CommonTable>
-        </LoadingBoard>
 
-        <CommonPagination
-            v-model:current-page="page.currentPage"
-            v-model:page-size="page.pageSize"
-            :total="page.total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-        />
+            <CommonPagination
+                v-model:current-page="page.currentPage"
+                v-model:page-size="page.pageSize"
+                :total="page.total"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                />
+        </LoadingBoard>
 
         <LxtShopDetail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></LxtShopDetail>
     </div>

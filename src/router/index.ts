@@ -31,6 +31,10 @@ const routes: RouteRecordRaw[] = [
         name: 'leave',
         component: RiskTip,
     },
+    {
+        path: '/',
+        redirect: DEFAULT_REDIRECT_PATH,
+    },
 ];
 
 export const router = createRouter({

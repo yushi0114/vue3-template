@@ -167,40 +167,40 @@ watch(model, () => {
         </ListQueryControl>
         <div class="content">
             <LoadingBoard :loading="allToogle.loading" :empty="!reportRecordList.length">
-            <CommonTable
-                :data="reportRecordList"
-                :default-sort="{ prop: 'createTime', order: 'descending' }"
-                @sort-change="handleSortChange"
-                @selection-change="handleSelectionChange"
-            >
-                <el-table-column
-                    type="selection"
-                    width="55">
-                </el-table-column>
-                <el-table-column prop="inquiry" label="查询账号"></el-table-column>
-                <el-table-column prop="corpName" label="企业名称">
-                    <template #default="scope">
-                        <span class="text-ellipsis" :title="scope.row.corpName">{{ scope.row.corpName }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="corpCode" label="统一社会信用代码"/>
-                <el-table-column prop="createTime" label="查询时间" sortable />
-                <TableOperatorColumn
-                width="120"
-                    @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
-                    :operators="[
-                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
-                    ]">
-                </TableOperatorColumn>
-            </CommonTable>
+                <CommonTable
+                    :data="reportRecordList"
+                    :default-sort="{ prop: 'createTime', order: 'descending' }"
+                    @sort-change="handleSortChange"
+                    @selection-change="handleSelectionChange"
+                >
+                    <el-table-column
+                        type="selection"
+                        width="55">
+                    </el-table-column>
+                    <el-table-column prop="inquiry" label="查询账号"></el-table-column>
+                    <el-table-column prop="corpName" label="企业名称">
+                        <template #default="scope">
+                            <span class="text-ellipsis" :title="scope.row.corpName">{{ scope.row.corpName }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="corpCode" label="统一社会信用代码"/>
+                    <el-table-column prop="createTime" label="查询时间" sortable />
+                    <TableOperatorColumn
+                    width="120"
+                        @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
+                        :operators="[
+                            { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                        ]">
+                    </TableOperatorColumn>
+                </CommonTable>
 
-            <CommonPagination
-                v-model:current-page="page.currentPage"
-                v-model:page-size="page.pageSize"
-                :total="page.total"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-            />
+                <CommonPagination
+                    v-model:current-page="page.currentPage"
+                    v-model:page-size="page.pageSize"
+                    :total="page.total"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                />
             </LoadingBoard>
         </div>
     </div>

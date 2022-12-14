@@ -6,8 +6,8 @@ import { useTemplateRefsList, useVModel } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
-import type { ElDropdown } from 'element-plus';
 import { getNextMonth, isString } from '@/utils';
+import type { SearchDropdown } from '..';
 
 export type ControlConfig = {
     label: string,
@@ -197,7 +197,7 @@ function disableDate(d: Date) {
     return d >= getNextMonth();
 }
 
-const refs = useTemplateRefsList<typeof ElDropdown>();
+const refs = useTemplateRefsList<typeof SearchDropdown>();
 const handleDropdownChange = ({ option, fConf }: { option: PlainOption<any>;fConf: ControlOptionConfig<any> }) => {
     model[fConf.field] = option.value;
     dropdownLabelMap[fConf.field] = option.name;
@@ -205,6 +205,7 @@ const handleDropdownChange = ({ option, fConf }: { option: PlainOption<any>;fCon
 };
 
 const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => {
+    console.log('aaaaaa', refs.value[index]);
     if (refs.value[index]) {
         nextTick(() => {
             refs.value[index].handleClose();
@@ -277,7 +278,23 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                 ></el-checkbox
             >
             <div class="lqc-filter-item" v-for="(fConf, index) in filterOptionsConfigs" :key="fConf.field">
-                <el-dropdown
+                <SearchDropdown
+                    :ref="refs.set"
+                    :popper-class="{ 'lqc-filter-item-popper': fConf.searchable }"
+
+                    :options="fConf.options"
+                    :searchable="fConf.searchable"
+                    :search-placeholder="`请输入${fConf.label}进行查询`"
+                    @change="(opt) => handleDropdownChange({option: opt, fConf})">
+                    <UseMouseInElement v-slot="{ isOutside }">
+                        <FlexRow class="lqc-filter-dropname">
+                            <Text color="regular" size="sm" bold>{{ dropdownLabelMap[fConf.field] || fConf.label }}</Text>
+                            <Text color="regular" size="sm"><i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/></Text>
+                            <Text color="regular" size="sm"><i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/></Text>
+                        </FlexRow>
+                    </UseMouseInElement>
+                </SearchDropdown>
+                <!-- <el-dropdown
                     :ref="refs.set"
                     trigger="click"
                     :max-height="300"
@@ -299,7 +316,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
-                </el-dropdown>
+                </el-dropdown> -->
                 <!-- <el-select
                     clearable
                     :placeholder="fConf.label"
@@ -401,6 +418,10 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 }
 
 .lqc-filter-item {
+}
+
+.lqc-filter-item-popper {
+    min-width: 240px;
 }
 
 .lqc-filter-dropname {

@@ -43,12 +43,12 @@
                 ]">
             </TableOperatorColumn>
         </CommonTable>
+        <CommonPagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="userFilterObject.currentPage"
+            :total="userTableData.total"/>
     </LoadingBoard>
-    <CommonPagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="userFilterObject.currentPage"
-        :total="userTableData.total"/>
     <user-detail
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"

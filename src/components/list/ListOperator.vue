@@ -61,7 +61,9 @@ function handleClick(opt: ListOperatorOption) {
                         <el-dropdown-menu>
                             <el-dropdown-item v-for="(inner, i) in innerOperators" :key="i" @click="handleClick(inner)"
                                 :disabled="inner.disabled">
-                                <Icon :name="(inner.icon || 'ep-search')" /> {{ inner.name }}
+                                <FlexRow gap="xs">
+                                    <Icon :name="(inner.icon || 'ep-search')" /> {{ inner.name }}
+                                </FlexRow>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>

@@ -32,8 +32,6 @@
                 ]">
             </TableOperatorColumn>
         </CommonTable>
-    </LoadingBoard>
-    <div class="page-content">
         <CommonPagination
             v-model:current-page="filterObject.currentPage"
             v-model:page-size="filterObject.currentSize"
@@ -41,7 +39,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange">
         </CommonPagination>
-    </div>
+    </LoadingBoard>
     <finance-partner-form-modal
         v-if="isDialogShow"
         :dialog-visible="isDialogShow"
@@ -167,17 +165,4 @@ watch(() => filterObject.value.searchInput, handleSearchList);
 </script>
 
 <style scoped lang="scss">
-.search-box {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 20px;
-
-    .search-input {
-        width: 350px;
-    }
-}
-
-.header-options {
-    padding-left: 15px;
-}
 </style>

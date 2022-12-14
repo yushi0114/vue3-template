@@ -42,7 +42,12 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
             <div class="pdt-list-content" :disabled="isOnline">
                 <div class="pdt-list-info">
                     <div class="pdt-list-item">
-                        <ListField hoverable @click="emits(ItemOperate.detail, item)">{{ item.name }}</ListField>
+                        <ListField hoverable @click="emits(ItemOperate.detail, item)">
+                            <FlexRow gap="xs">
+                                <Text underline size="sm" color="current">{{ item.name }}</Text>
+                                <ElTag v-if="!isOnline" type="danger" size="small">已下架</ElTag>
+                            </FlexRow>
+                        </ListField>
                         <ListField label="贷款额度" type="desc">{{ item.loanDue }}</ListField>
                     </div>
                     <div class="pdt-list-item">
@@ -87,7 +92,6 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
 
 <style lang="scss">
 .pdt-list {
-    flex: 1;
 }
 
 .pdt-list-item {

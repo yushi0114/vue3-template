@@ -212,49 +212,49 @@ watch(model, () => {
         </ListQueryControl>
         <div class="content">
             <LoadingBoard :loading="allToogle.loading" :empty="!userList.length">
-            <CommonTable
-                :data="userList"
-                :default-sort="{ prop: 'createTime', order: 'descending' }"
-                @sort-change="handleSortChange"
-                @selection-change="handleSelectionChange"
-            >
-                <el-table-column
-                    type="selection"
-                    width="55"
-                    align="center">
-                </el-table-column>
-                <el-table-column prop="account" label="用户名">
-                    <template #default="scope">
-                        <TextHoverable size="sm" underline @click="handleToDetail(scope.row)">{{ scope.row.account }}</TextHoverable>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="createTime" label="创建时间" sortable />
-                <el-table-column prop="updateTime" label="更新时间" sortable />
-                <el-table-column label="状态">
-                    <template #default="scope">
-                        <el-switch
-                            v-model="scope.row.status"
-                            :active-value="1"
-                            :inactive-value="0"
-                            @change="changeUserStatus(scope.row, scope.$index)"
-                        ></el-switch>
-                    </template>
-                </el-table-column>
-                <TableOperatorColumn
-                    width="120"
-                    @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
-                    :operators="[
-                        { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
-                    ]">
-                </TableOperatorColumn>
-            </CommonTable>
+                <CommonTable
+                    :data="userList"
+                    :default-sort="{ prop: 'createTime', order: 'descending' }"
+                    @sort-change="handleSortChange"
+                    @selection-change="handleSelectionChange"
+                >
+                    <el-table-column
+                        type="selection"
+                        width="55"
+                        align="center">
+                    </el-table-column>
+                    <el-table-column prop="account" label="用户名">
+                        <template #default="scope">
+                            <TextHoverable size="sm" underline @click="handleToDetail(scope.row)">{{ scope.row.account }}</TextHoverable>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="创建时间" sortable />
+                    <el-table-column prop="updateTime" label="更新时间" sortable />
+                    <el-table-column label="状态">
+                        <template #default="scope">
+                            <el-switch
+                                v-model="scope.row.status"
+                                :active-value="1"
+                                :inactive-value="0"
+                                @change="changeUserStatus(scope.row, scope.$index)"
+                            ></el-switch>
+                        </template>
+                    </el-table-column>
+                    <TableOperatorColumn
+                        width="120"
+                        @[ItemOperate.delete]="(scope: any) => handleDelete(scope.row)"
+                        :operators="[
+                            { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                        ]">
+                    </TableOperatorColumn>
+                </CommonTable>
 
-            <CommonPagination
-                v-model:current-page="page.currentPage"
-                v-model:page-size="page.pageSize"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-            />
+                <CommonPagination
+                    v-model:current-page="page.currentPage"
+                    v-model:page-size="page.pageSize"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                />
             </LoadingBoard>
 
             <ZjfwShopDetail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></ZjfwShopDetail>

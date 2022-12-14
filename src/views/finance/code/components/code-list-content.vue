@@ -90,12 +90,12 @@
                 ]">
             </TableOperatorColumn>
         </CommonTable>
+        <CommonPagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="financeCodeFilterObject.currentPage"
+            :total="codeList.total"/>
     </LoadingBoard>
-    <CommonPagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="financeCodeFilterObject.currentPage"
-        :total="codeList.total"/>
     <code-detail
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"

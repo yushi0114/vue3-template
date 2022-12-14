@@ -189,14 +189,14 @@ watch(model, () => {
                 ]">
             </TableOperatorColumn>
         </CommonTable>
+        <CommonPagination
+            v-model:currentPage="page.currentPage"
+            v-model:page-size="page.pageSize"
+            :total="page.total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        />
     </LoadingBoard>
-    <CommonPagination
-        v-model:currentPage="page.currentPage"
-        v-model:page-size="page.pageSize"
-        :total="page.total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-    />
 
     <city-detail :drawerVisible="allToogle.drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
     <city-modal :dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>

@@ -44,12 +44,12 @@
                 ]">
             </TableOperatorColumn>
         </CommonTable>
+        <CommonPagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="financeFilterObject.currentPage"
+            :total="categoryList.total"/>
     </LoadingBoard>
-    <CommonPagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="financeFilterObject.currentPage"
-        :total="categoryList.total"/>
     <category-detail
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"

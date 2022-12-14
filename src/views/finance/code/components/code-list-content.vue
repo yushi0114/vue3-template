@@ -7,58 +7,39 @@
             field: 'searchInput',
         }">
         <template v-slot:search-rest>
-            <el-button @click="handleDownloadExcelTemplate">
-                <template #icon>
-                    <Icon :name="'ep:download'"></Icon>
-                </template>
-                下载Excel模板
-            </el-button>
-            <el-button type="primary" @click="handleCreateNewItem">
-                <template #icon>
-                    <Icon :name="'ep:plus'"></Icon>
-                </template>
-                新建
-            </el-button>
-            <el-dropdown placement="bottom-end">
-                <div class="dropdown-icon">
-                    <Icon style="transform: rotate(90deg)" :name="'ep:more'"></Icon>
-                </div>
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item>
-                            <el-upload
-                                action=""
-                                :show-file-list="false"
-                                :http-request="handleUpload"
-                                :before-upload="beforeUpload">
-                                <template #trigger>
-                                    <el-button
-                                        link
-                                        class="custom-btn"
-                                        size="small">
-                                        <template #icon>
-                                            <Icon :name="'ep:upload'"></Icon>
-                                        </template>
+            <FlexRow gap="sm">
+                <el-button @click="handleDownloadExcelTemplate">
+                    <FlexRow gap="xs">
+                        <Icon :name="'ep:download'"></Icon>
+                        下载Excel模板
+                    </FlexRow>
+                </el-button>
+                <el-dropdown split-button type="primary" placement="bottom-end" @click="handleCreateNewItem">
+                    <FlexRow gap="xs"><Icon :name="'ep:plus'"></Icon> 新建</FlexRow>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item>
+                                <ElUpload
+                                    action=""
+                                    :show-file-list="false"
+                                    :http-request="handleUpload"
+                                    :before-upload="beforeUpload">
+                                    <template #trigger>
+                                        <Icon :name="'ep:upload'"></Icon>
                                         上传
-                                    </el-button>
-                                </template>
-                            </el-upload>
-                        </el-dropdown-item>
-                        <el-dropdown-item>
-                            <el-button
-                                @click="handleDownloadList"
-                                link
-                                class="custom-btn"
-                                size="small">
-                                <template #icon>
+                                    </template>
+                                </ElUpload>
+                            </el-dropdown-item>
+                            <el-dropdown-item>
+                                <FlexRow @click="handleDownloadList">
                                     <Icon :name="'ep:download'"></Icon>
-                                </template>
-                                下载
-                            </el-button>
-                        </el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
+                                    下载
+                                </FlexRow>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </FlexRow>
         </template>
     </ListQueryControl>
     <LoadingBoard :loading="loading" :empty="!codeList.list.length">
@@ -119,6 +100,7 @@ import {
 import type { FinanceCodeListItemType } from '@/types/finance';
 import CodeDetail from '@/views/finance/code/components/code-detail.vue';
 import { ItemOperate } from '@/components';
+import { Plus } from '@element-plus/icons-vue';
 
 const dataDetail = ref<FinanceCodeListItemType>();
 const isDrawerShow = ref<boolean>(false);

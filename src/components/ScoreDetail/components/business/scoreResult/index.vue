@@ -202,9 +202,9 @@ onBeforeUnmount(() => {
 }
 
 .table {
-    color: #4d597a;
-    border-top: 1px solid #d8d5d5;
-    border-right: 1px solid #d8d5d5;
+    color: $text-color-primary;
+    border-top: $border;
+    border-right: $border;
     font-size: 14px;
     border-collapse: collapse;
     table-layout: fixed;
@@ -212,9 +212,9 @@ onBeforeUnmount(() => {
 }
 
 .header-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
-    background-color: #f7fbfd;
+    border-bottom: $border;
+    border-left: $border;
+    background-color: $bg-color;
     padding: 3px;
     font-weight: bold;
     line-height: 24px;
@@ -222,8 +222,8 @@ onBeforeUnmount(() => {
 }
 
 .content-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
+    border-bottom: $border;
+    border-left: $border;
     padding: 3px;
     line-height: 24px;
     text-align: center;
@@ -239,9 +239,9 @@ onBeforeUnmount(() => {
 }
 
 .right-header-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
-    background-color: #f7fbfd;
+    border-bottom: $border;
+    border-left: $border;
+    background-color: $bg-color;
     padding: 3px 0;
     font-weight: bold;
     line-height: 24px;
@@ -249,8 +249,8 @@ onBeforeUnmount(() => {
 }
 
 .right-content-item {
-    border-bottom: 1px solid #d8d5d5;
-    border-left: 1px solid #d8d5d5;
+    border-bottom: $border;
+    border-left: $border;
     padding: 7px 3px;
     line-height: 24px;
     text-align: center;

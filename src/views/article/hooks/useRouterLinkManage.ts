@@ -11,7 +11,8 @@ import { ARTICLE_MODULE, LINK_TYPE, ARTICLE_STATUS } from '@/enums';
 import type { NewsItem, PolicyItem, TAB_ITEM } from '@/types';
 
 export const useRouterLinkManage = (module: ARTICLE_MODULE) => {
-    const { path } = useRoute();
+    const [root, base, listUrl] = useRoute().path.split('/');
+    const path = `${root}/${base}/${listUrl}`;
     const LINK_MAP = {
         [ARTICLE_MODULE.NEWS_LXT]: {
             [LINK_TYPE.ADD]: path + LINK_TYPE.ADD,
@@ -43,6 +44,7 @@ export const useJumpLink = (params: { tab: TAB_ITEM; module: ARTICLE_MODULE }) =
     const { push } = useRouter();
 
     const handleToCreate = () => {
+        console.log(LINK_MAP[LINK_TYPE.ADD]);
         push(LINK_MAP[LINK_TYPE.ADD]);
     };
 

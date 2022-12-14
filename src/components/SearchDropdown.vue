@@ -4,7 +4,6 @@ import { Search } from '@element-plus/icons-vue';
 
 const dropdown = ref();
 const searchRef = ref<HTMLInputElement>();
-const menuRef = ref<HTMLDivElement>();
 const search = ref('');
 const width = ref(0);
 const props = withDefaults(
@@ -84,7 +83,7 @@ function clear() {
                 clearable
                 :placeholder="searchPlaceholder" />
         </div>
-        <el-dropdown-menu ref="menuRef" v-if="filterOptions.length > 0" class="isd-drop-container" :class="{ searchable }">
+        <el-dropdown-menu v-if="filterOptions.length > 0" class="isd-drop-container" :class="{ searchable }">
             <el-dropdown-item
                 v-for="(opt, i) in filterOptions"
                 :key="i"
@@ -111,6 +110,7 @@ function clear() {
 
 .isd-search {
     position: absolute;
+    z-index: 10;
     top: 0;
     right: 0;
     left: 0;

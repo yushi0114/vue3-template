@@ -280,7 +280,12 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
             <div class="lqc-filter-item" v-for="(fConf, index) in filterOptionsConfigs" :key="fConf.field">
                 <SearchDropdown
                     :ref="refs.set"
-                    :options="fConf.options" :searchable="fConf.searchable" @change="(opt) => handleDropdownChange({option: opt, fConf})">
+                    :popper-class="{ 'lqc-filter-item-popper': fConf.searchable }"
+
+                    :options="fConf.options"
+                    :searchable="fConf.searchable"
+                    :search-placeholder="`请输入${fConf.label}进行查询`"
+                    @change="(opt) => handleDropdownChange({option: opt, fConf})">
                     <UseMouseInElement v-slot="{ isOutside }">
                         <FlexRow class="lqc-filter-dropname">
                             <Text color="regular" size="sm" bold>{{ dropdownLabelMap[fConf.field] || fConf.label }}</Text>
@@ -413,6 +418,10 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 }
 
 .lqc-filter-item {
+}
+
+.lqc-filter-item-popper {
+    min-width: 240px;
 }
 
 .lqc-filter-dropname {

@@ -7,7 +7,7 @@
         :modal-append-to-body="true"
         append-to-body
         destroy-on-close
-        @close="handleClose">
+        @close="handleClose('cancel')">
         <el-form :model="formData" label-width="120px" :rules="rules" ref="ruleFormRef">
             <el-form-item label="机构名称" prop="orgId">
                 <el-select v-model="formData.orgId" placeholder="请选择" :disabled="type === 'edit'">
@@ -39,7 +39,7 @@
             </el-form-item>
         </el-form>
         <FlexRow horizontal="center">
-            <el-button @click="handleClose">取消</el-button>
+            <el-button @click="handleClose('cancel')">取消</el-button>
             <el-button type="primary" @click="handleUploadToServer(ruleFormRef)">确定</el-button>
         </FlexRow>
     </el-dialog>
@@ -100,8 +100,8 @@ const formData = ref({
     logoContent: props.currentLogo?.logoContent ?? ''
 });
 
-function handleClose() {
-    emits('close');
+function handleClose(type: 'refresh' | 'cancel') {
+    emits('close', { type });
 }
 
 // 文件预览
@@ -197,7 +197,7 @@ async function handleUploadToServer(formElement: FormInstance | undefined) {
                 });
             }
             isLoading.value = false;
-            emits('close');
+            handleClose('refresh');
         }
     });
 }

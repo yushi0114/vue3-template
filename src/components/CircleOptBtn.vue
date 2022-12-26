@@ -29,6 +29,10 @@ withDefaults(
         color: $color-white;
     }
 
+    &.disabled {
+        color: $text-color-placeholder;
+    }
+
     &.disabled:hover {
         background: $color-info-light-3;
         color: $color-white;

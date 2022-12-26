@@ -3,7 +3,7 @@
         v-model="financeCodeFilterObject"
         :filterRowVisible="false"
         :searchConfig="{
-            label: '请输入关键字进行查询',
+            label: '请输入机构名称、机构编码进行查询',
             field: 'searchInput',
         }">
         <template v-slot:search-rest>

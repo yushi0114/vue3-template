@@ -85,9 +85,11 @@ function showDialog() {
     currentLogo.value = undefined;
 }
 
-async function handleDialogClose() {
+async function handleDialogClose(update: boolean) {
     isDialogShow.value = false;
-    await handleClear();
+    if (update) {
+        await handleClear();
+    }
 }
 
 function handleEditItem(params: {

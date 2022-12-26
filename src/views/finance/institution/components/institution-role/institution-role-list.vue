@@ -1,6 +1,6 @@
 <template>
     <div class="search-box">
-        <el-input size="large" class="search-input" placeholder="请输入关键字进行搜索" @clear="handleClear" clearable
+        <el-input size="large" class="search-input" placeholder="请输入角色名称、角色描述进行搜索" @clear="handleClear" clearable
                   v-model="roleFilterObject.searchInput">
             <template #append>
                 <el-button @click="handleSearchRoleList">

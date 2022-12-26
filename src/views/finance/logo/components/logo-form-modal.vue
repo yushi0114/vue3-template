@@ -7,7 +7,7 @@
         :modal-append-to-body="true"
         append-to-body
         destroy-on-close
-        @close="handleClose('cancel')">
+        @close="handleClose">
         <el-form :model="formData" label-width="120px" :rules="rules" ref="ruleFormRef">
             <el-form-item label="机构名称" prop="orgId">
                 <el-select v-model="formData.orgId" placeholder="请选择" :disabled="type === 'edit'">
@@ -39,7 +39,7 @@
             </el-form-item>
         </el-form>
         <FlexRow horizontal="center">
-            <el-button @click="handleClose('cancel')">取消</el-button>
+            <el-button @click="handleClose">取消</el-button>
             <el-button type="primary" @click="handleUploadToServer(ruleFormRef)">确定</el-button>
         </FlexRow>
     </el-dialog>
@@ -100,8 +100,8 @@ const formData = ref({
     logoContent: props.currentLogo?.logoContent ?? ''
 });
 
-function handleClose(type: 'refresh' | 'cancel') {
-    emits('close', { type });
+function handleClose() {
+    emits('close');
 }
 
 // 文件预览
@@ -179,7 +179,7 @@ async function updateLogo(params: {
 
 async function handleUploadToServer(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async (valid) => {
+    await formElement.validate(async(valid) => {
         if (valid) {
             isLoading.value = true;
             if (props.currentLogo) {
@@ -197,13 +197,13 @@ async function handleUploadToServer(formElement: FormInstance | undefined) {
                 });
             }
             isLoading.value = false;
-            handleClose('refresh');
+            emits('close', true);
         }
     });
 }
 
 
-onMounted(async () => {
+onMounted(async() => {
     await setOrgList();
     if (props.currentLogo) {
         fileList.value = [{

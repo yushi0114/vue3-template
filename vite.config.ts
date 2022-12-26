@@ -15,6 +15,7 @@ import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 let proxyHost = '10.0.30.6';
+// proxyHost = '192.168.31.198';
 
 
 // start:local
@@ -111,19 +112,10 @@ export default ({ mode }: ConfigEnv): UserConfig => {
             },
         },
         server: {
-            // host: 'localhost',
             port: 8088,
             proxy: {
-                '/clib-service': {
-                    target: `http://${proxyHost}:10209`,
-                    changeOrigin: true,
-                },
-                // '/dms-service': {
-                //     target: `http://${proxyHost}:10208`,
-                //     changeOrigin: true,
-                // },
                 '/dms-service': {
-                    target: 'http://192.168.31.198:10215',
+                    target: `http://${proxyHost}:10215`,
                     changeOrigin: true,
                 },
                 '/lncredit': {

@@ -3,7 +3,7 @@
         v-model="userFilterObject"
         :filter-row-visible="false"
         :searchConfig="{
-            label: '请输入关键字进行查询',
+            label: '请输入姓名、手机号进行查询',
             field: 'searchInput',
         }">
 

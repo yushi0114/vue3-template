@@ -100,7 +100,7 @@ export async function getTreeData(): Promise<void> {
         getFinanceInstitutionMenuTreeApi({
             id: currentInstitutionId.value
         }).then((data: FinanceInstitutionMenuTreeItemType[]) => {
-            console.log(data, '----------------')
+            console.log(data, '----------------');
             roleMenuTreeData.value = data;
             resolve();
         }).catch(() => {

@@ -43,6 +43,11 @@ export const activeInstitutionName = ref<OrgDetailTabViewType>('menuList');
 export const activeName = ref();
 // 当前被选中的机构id
 export const currentInstitutionId = ref();
+export const loading = reactive({
+    treeLoading: false,
+    detailLoading: false,
+    listLoading: false
+});
 
 export function setCurrentInstitutionId(value?: string) {
     currentInstitutionId.value = value;
@@ -235,11 +240,15 @@ export async function changeOrgDetailTabView(view: OrgDetailTabViewType) {
     }
     if (view === 'roleList') {
         setInstitutionRoleMode('list');
+        loading.listLoading = true;
         await getRolePageList(currentInstitutionId.value);
+        loading.listLoading = false;
     }
     if (view === 'userList') {
+        loading.listLoading = true;
         setInstitutionUserMode('list');
         await getUserPageList(currentInstitutionId.value);
+        loading.listLoading = false;
     }
 }
 
@@ -289,9 +298,12 @@ export async function getOrgMenuCheckedIds(id: string): Promise<string[] | undef
 export async function getInstitutionTree(type?: string): Promise<void> {
     const id = type ? type : activeName.value;
     return new Promise((resolve) => {
+        loading.treeLoading = true;
         getFinanceInstitutionTreeApi({ typeCode: id }).then(data => {
             institutionTreeData.value = data;
             resolve();
+        }).finally(() => {
+            loading.treeLoading = false;
         });
     });
 }

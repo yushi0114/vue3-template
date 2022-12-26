@@ -1,71 +1,84 @@
 <template>
-    <div class="menu-tree-container">
-        <div class="menu-tree-header">
-            <el-input placeholder="请输入机构名称进行查询" v-model="filterText" clearable :prefix-icon="Search">
-            </el-input>
-            <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
-                <template #icon>
-                    <Icon :name="'ep:plus'"></Icon>
+    <div class="menu-tree" v-loading="loading.treeLoading">
+        <div class="menu-tree-container">
+            <div class="menu-tree-header">
+                <el-input placeholder="请输入搜索内容" v-model="filterText" clearable :prefix-icon="Search">
+                </el-input>
+                <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
+                    <template #icon>
+                        <Icon :name="'ep:plus'"></Icon>
+                    </template>
+                </el-button>
+            </div>
+            <el-tree
+                ref="treeRef"
+                class="left-tree"
+                :data="institutionTreeData"
+                node-key="id"
+                default-expand-all
+                @node-click="handleNodeClick"
+                :filter-node-method="filterNode"
+                :expand-on-click-node="false">
+                <template #default="{ node, data }">
+                    <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
+                        <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ data.orgName }} </span>
+                        <ListOperator
+                            tooltip-disabled
+                            v-if="node.id === activeId"
+                            :max-out-count="0"
+                            @operate="(opt) => handleOperateTreeItem(data, opt.value)"
+                            :operators="[
+                                { name: '新建', value: ItemOperate.create, icon: 'ep-plus' },
+                                { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen', },
+                                { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', },
+                            ]"
+                        />
+                        <!-- <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start"
+                                    trigger="hover"
+                                    :width="100">
+                            <div class="popover-list">
+                                <el-button
+                                    @click="handleOperateTreeItem(data, 'create')"
+                                    link
+                                    class="custom-btn"
+                                    size="small">
+                                    <template #icon>
+                                        <Icon :name="'ep:plus'"></Icon>
+                                    </template>
+                                    新建
+                                </el-button>
+                                <el-button
+                                    @click="handleOperateTreeItem(data, 'edit')"
+                                    link
+                                    size="small"
+                                    class="custom-btn">
+                                    <template #icon>
+                                        <Icon :name="'ep:edit'"></Icon>
+                                    </template>
+                                    编辑
+                                </el-button>
+                                <el-button
+                                    @click="handleOperateTreeItem(data, 'remove')"
+                                    link
+                                    class="custom-btn"
+                                    size="small">
+                                    <template #icon>
+                                        <Icon :name="'ep:delete'"></Icon>
+                                    </template>
+                                    删除
+                                </el-button>
+                            </div>
+                            <template #reference>
+                                <Icon style="transform: rotate(90deg)" :name="'ep:more'"></Icon>
+                            </template>
+                        </el-popover> -->
+                    </div>
                 </template>
-            </el-button>
+            </el-tree>
+            <institution-remove-dialog
+                v-if="isDeleteOrgModelShow"
+                :org-name="willDeleteOrgName"></institution-remove-dialog>
         </div>
-        <el-tree
-            ref="treeRef"
-            class="left-tree"
-            :data="institutionTreeData"
-            node-key="id"
-            default-expand-all
-            @node-click="handleNodeClick"
-            :filter-node-method="filterNode"
-            :expand-on-click-node="false">
-            <template #default="{ node, data }">
-                <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
-                    <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ data.orgName }} </span>
-                    <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start"
-                                trigger="hover"
-                                :width="100">
-                        <div class="popover-list">
-                            <el-button
-                                @click="handleOperateTreeItem(data, 'create')"
-                                link
-                                class="custom-btn"
-                                size="small">
-                                <template #icon>
-                                    <Icon :name="'ep:plus'"></Icon>
-                                </template>
-                                新建
-                            </el-button>
-                            <el-button
-                                @click="handleOperateTreeItem(data, 'edit')"
-                                link
-                                size="small"
-                                class="custom-btn">
-                                <template #icon>
-                                    <Icon :name="'ep:edit'"></Icon>
-                                </template>
-                                编辑
-                            </el-button>
-                            <el-button
-                                @click="handleOperateTreeItem(data, 'remove')"
-                                link
-                                class="custom-btn"
-                                size="small">
-                                <template #icon>
-                                    <Icon :name="'ep:delete'"></Icon>
-                                </template>
-                                删除
-                            </el-button>
-                        </div>
-                        <template #reference>
-                            <Icon style="transform: rotate(90deg)" :name="'ep:more'"></Icon>
-                        </template>
-                    </el-popover>
-                </div>
-            </template>
-        </el-tree>
-        <institution-remove-dialog
-            v-if="isDeleteOrgModelShow"
-            :org-name="willDeleteOrgName"></institution-remove-dialog>
     </div>
 </template>
 
@@ -81,12 +94,13 @@ import {
     openRemoveView,
     institutionTreeData,
     isDeleteOrgModelShow,
-    willDeleteOrgName
+    willDeleteOrgName,
+    loading,
 } from './finance-institution';
-import { LoadingService } from '@/views/system/loading-service';
 import InstitutionRemoveDialog from '@/views/finance/institution/components/institution-remove-dialog.vue';
 import type { FinanceInstitutionTreeItemType } from '@/types/finance';
 import type { ElTree } from 'element-plus';
+import { ItemOperate } from '@/components';
 
 const activeId = ref();
 const treeRef = ref<InstanceType<typeof ElTree>>();
@@ -102,31 +116,31 @@ const filterNode = (value: string, data: any) => {
 };
 
 async function handleAddNewMenu() {
-    LoadingService.getInstance().loading();
+    loading.detailLoading = true;
     await goCreateFirstLevelFormView();
-    LoadingService.getInstance().stop();
+    loading.detailLoading = false;
 }
 
-async function handleOperateTreeItem(item: FinanceInstitutionTreeItemType, type: 'edit' | 'remove' | 'create') {
-    if (type === 'remove') {
+async function handleOperateTreeItem(item: FinanceInstitutionTreeItemType, type: ItemOperate) {
+    if (type === ItemOperate.delete) {
         openRemoveView(item);
     }
-    if (type === 'edit') {
-        LoadingService.getInstance().loading();
+    if (type === ItemOperate.edit) {
+        loading.detailLoading = true;
         await goEditFormView(item.id);
-        LoadingService.getInstance().stop();
+        loading.detailLoading = false;
     }
-    if (type === 'create') {
-        LoadingService.getInstance().loading();
+    if (type === ItemOperate.create) {
+        loading.detailLoading = true;
         await goCreateChildLevelFormView(item.id);
-        LoadingService.getInstance().stop();
+        loading.detailLoading = false;
     }
 }
 
 async function handleNodeClick(data: FinanceInstitutionTreeItemType) {
-    LoadingService.getInstance().loading();
+    loading.detailLoading = true;
     await selectOrgItem(data.id);
-    LoadingService.getInstance().stop();
+    loading.detailLoading = false;
 }
 
 function handleMouseEnter(event: string) {
@@ -140,6 +154,25 @@ function handleMouseLeave(event: string) {
 </script>
 
 <style scoped lang="scss">
+.menu-tree {
+    width: 350px;
+    height: 100%;
+    overflow-y: auto;
+    min-width: 350px;
+    border: $border;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 15px;
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+
+    &:hover {
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+    }
+}
 .menu-tree-container {
     .menu-tree-header {
         display: flex;

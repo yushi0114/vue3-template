@@ -1,55 +1,49 @@
 <template>
-    <div class="search-box">
-        <el-input
-            size="large"
-            class="search-input"
-            placeholder="请输入关键字进行搜索"
-            @clear="handleClear"
-            clearable
-            @keyup.enter="handleSearchList"
-            v-model="filterObject.searchInput">
-            <template #append>
-                <el-button @click="handleSearchList">
-                    <template #icon>
-                        <Icon :name="'ep:search'"></Icon>
-                    </template>
-                </el-button>
-            </template>
-        </el-input>
-        <el-button type="primary" @click="handleCreateNewItem">
-            <template #icon>
-                <Icon :name="'ep:plus'"></Icon>
-            </template>
-            新建
-        </el-button>
-    </div>
-    <CommonTable :data="listData.list"
-              @sort-change="handleSortChange"
-              :default-sort="{ prop: 'updateTime', order: 'descending' }"
-    >
-        <el-table-column label="姓名">
-            <template #default="scope">
-                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
-                        scope.row.name
-                    }}
-                </TextHoverable>
-            </template>
-        </el-table-column>
-        <el-table-column prop="account" label="手机号"/>
-        <el-table-column prop="roleName" label="角色"></el-table-column>
-        <el-table-column prop="createTime" sortable label="创建时间"/>
-        <el-table-column prop="updateTime" sortable label="更新时间"/>
-        <el-table-column prop="createBy" label="创建人"/>
-        <TableOperatorColumn
-            width="120"
-            @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
-            @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
-            :operators="[
-                { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
-                { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
-            ]">
-        </TableOperatorColumn>
-    </CommonTable>
+    <ListQueryControl
+        v-model="filterObject"
+        :filterRowVisible="false"
+        :searchConfig="{
+            label: '请输入姓名、手机号进行查询',
+            field: 'searchInput',
+        }">
+        <template v-slot:search-rest>
+            <el-button type="primary" @click="handleCreateNewItem">
+                <template #icon>
+                    <Icon :name="'ep:plus'"></Icon>
+                </template>
+                新建
+            </el-button>
+        </template>
+    </ListQueryControl>
+    <LoadingBoard :empty="listData.list.length === 0" :loading="loading.listLoading">
+        <CommonTable :data="listData.list"
+            @sort-change="handleSortChange"
+            :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        >
+            <el-table-column label="姓名">
+                <template #default="scope">
+                    <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                            scope.row.name
+                        }}
+                    </TextHoverable>
+                </template>
+            </el-table-column>
+            <el-table-column prop="account" label="手机号"/>
+            <el-table-column prop="roleName" label="角色"></el-table-column>
+            <el-table-column prop="createTime" sortable label="创建时间"/>
+            <el-table-column prop="updateTime" sortable label="更新时间"/>
+            <el-table-column prop="createBy" label="创建人"/>
+            <TableOperatorColumn
+                width="120"
+                @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
+                @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
+                :operators="[
+                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]">
+            </TableOperatorColumn>
+        </CommonTable>
+    </LoadingBoard>
     <CommonPagination
         v-if="listData.list.length"
         @size-change="handleSizeChange"
@@ -75,11 +69,10 @@ import {
     getUserPageList,
     listData,
     mode,
-    resetFilterObject,
     resetUserForm
 } from './institution-user';
+import { loading } from '../finance-institution';
 import type { UserListItemType } from '@/types/system-manage/user-list.type';
-import { LoadingService } from '@/views/system/loading-service';
 import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
 import { ItemOperate } from '@/components';
 import InstitutionUserDetail from '@/views/finance/institution/components/institution-user/institution-user-detail.vue';
@@ -87,38 +80,30 @@ import InstitutionUserDetail from '@/views/finance/institution/components/instit
 const dataDetail = ref<UserListItemType>();
 const isDrawerShow = ref<boolean>(false);
 
-
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
 
 async function handleSortChange(params: { prop: 'update_time' | 'create_time', order: string }) {
-    LoadingService.getInstance().loading();
+    loading.listLoading = true;
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = params.prop;
     filterObject.value.sortType = formatSortType(params.order);
     await getUserPageList(currentInstitutionId.value);
-    LoadingService.getInstance().stop();
+    loading.listLoading = false;
 }
 
 async function handleSearchList() {
-    LoadingService.getInstance().loading();
+    loading.listLoading = true;
     filterObject.value.currentPage = 0;
     filterObject.value.currentSize = 10;
     await getUserPageList(currentInstitutionId.value);
-    LoadingService.getInstance().stop();
-}
-
-async function handleClear() {
-    LoadingService.getInstance().loading();
-    resetFilterObject();
-    await getUserPageList(currentInstitutionId.value);
-    LoadingService.getInstance().stop();
+    loading.listLoading = false;
 }
 
 async function handleEditItem(item: UserListItemType) {
-    LoadingService.getInstance().loading();
+    loading.listLoading = true;
     mode.value = 'form';
     formType.value = 'edit';
     form.value.roleId = item.roleId;
@@ -127,7 +112,7 @@ async function handleEditItem(item: UserListItemType) {
     form.value.status = item.status === 1;
     currentUserId.value = item.id;
     await getRoleListData();
-    LoadingService.getInstance().stop();
+    loading.listLoading = false;
 }
 
 async function handleCreateNewItem() {
@@ -135,23 +120,23 @@ async function handleCreateNewItem() {
     formType.value = 'create';
     currentUserId.value = '';
     resetUserForm();
-    LoadingService.getInstance().loading();
+    loading.listLoading = true;
     await getRoleListData();
-    LoadingService.getInstance().stop();
+    loading.listLoading = false;
 }
 
 async function handleCurrentChange(item: number) {
     filterObject.value.currentPage = item;
-    LoadingService.getInstance().loading();
+    loading.listLoading = true;
     await getUserPageList(currentInstitutionId.value);
-    LoadingService.getInstance().stop();
+    loading.listLoading = false;
 }
 
 async function handleSizeChange(item: number) {
     filterObject.value.currentSize = item;
-    LoadingService.getInstance().loading();
+    loading.listLoading = true;
     await getUserPageList(currentInstitutionId.value);
-    LoadingService.getInstance().stop();
+    loading.listLoading = false;
 }
 
 function handleRemoveItem(item: UserListItemType) {
@@ -188,23 +173,10 @@ function handleDrawerClose() {
     isDrawerShow.value = false;
 }
 
+watch(() => filterObject.value.searchInput, handleSearchList);
+
+onMounted(handleSearchList);
 </script>
 
 <style scoped lang="scss">
-.search-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-
-    .search-input {
-        max-width: 350px;
-    }
-}
-
-.page-content {
-    display: flex;
-    justify-content: right;
-    padding-top: 10px;
-}
 </style>

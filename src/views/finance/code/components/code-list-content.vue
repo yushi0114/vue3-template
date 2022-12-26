@@ -25,13 +25,15 @@
                                     :http-request="handleUpload"
                                     :before-upload="beforeUpload">
                                     <template #trigger>
-                                        <Icon :name="'ep:upload'"></Icon>
-                                        上传
+                                        <FlexRow gap="xs">
+                                            <Icon :name="'ep:upload'"></Icon>
+                                            上传
+                                        </FlexRow>
                                     </template>
                                 </ElUpload>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <FlexRow @click="handleDownloadList">
+                                <FlexRow @click="handleDownloadList" gap="xs">
                                     <Icon :name="'ep:download'"></Icon>
                                     下载
                                 </FlexRow>
@@ -100,7 +102,6 @@ import {
 import type { FinanceCodeListItemType } from '@/types/finance';
 import CodeDetail from '@/views/finance/code/components/code-detail.vue';
 import { ItemOperate } from '@/components';
-import { Plus } from '@element-plus/icons-vue';
 
 const dataDetail = ref<FinanceCodeListItemType>();
 const isDrawerShow = ref<boolean>(false);
@@ -191,7 +192,7 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteFinanceCode(item.id);
             await setFinanceCodeList();
         })

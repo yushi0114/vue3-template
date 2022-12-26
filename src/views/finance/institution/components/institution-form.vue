@@ -144,9 +144,7 @@ function resetInstitutionCode() {
 }
 
 async function goBack() {
-    LoadingService.getInstance().loading();
     await goBoardView();
-    LoadingService.getInstance().stop();
 }
 
 async function submitForm(formEl: FormInstance | undefined) {

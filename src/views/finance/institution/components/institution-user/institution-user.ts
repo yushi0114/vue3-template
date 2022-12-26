@@ -11,6 +11,7 @@ import type { RoleListItemType, UserFormType } from '@/types/system-manage';
 import { ElMessage } from 'element-plus';
 
 export const mode = ref<'form' | 'list'>('list');
+export const loading = ref(false);
 export const currentUserId = ref();
 export const form = ref<UserFormType>({
     name: '',
@@ -20,7 +21,7 @@ export const form = ref<UserFormType>({
 });
 
 export function setInstitutionUserMode(value: 'form' | 'list') {
-    mode.value = value
+    mode.value = value;
 }
 
 export const formType = ref<'create' | 'edit'>('edit');

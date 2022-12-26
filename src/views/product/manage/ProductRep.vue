@@ -129,7 +129,7 @@ onMounted(() => {
                     field: 'searchInput'
                 }"
                 :filterOptionsConfigs="[
-                    { label: '机构名称', field: 'orgId', options: topOrgOptions },
+                    { label: '机构名称', field: 'orgId', searchable: true, options: topOrgOptions },
                     { label: '产品状态', field: 'progress', options: acceptProgressTypeOptions },
                 ]"
                 :sortConfigs="[
@@ -150,18 +150,15 @@ onMounted(() => {
                     <DownloadButton type="primary" :api="downloadProductReqs" :download-options="downloadOptions"></DownloadButton>
                 </template>
             </ListQueryControl>
-            <Text>
-            </Text>
             <LoadingBoard :loading="loading" :empty="!list.length">
-            <ProductReqList :list="list" :is-select-all="tableSelectAll"  :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+                <ProductReqList :list="list" :is-select-all="tableSelectAll"  :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
+            </LoadingBoard>
             <CommonPagination
                 v-model:current-page="listControlModel.pageIndex"
                 v-model:page-size="listControlModel.pageSize"
                 :total="count"
             />
-        </LoadingBoard>
-    </Board>
-
+        </Board>
         <ProductReqDetail
             :modelValue="!!detail"
             @closed="detail = null"

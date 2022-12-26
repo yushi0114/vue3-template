@@ -80,7 +80,7 @@ onMounted(() => {
 .box .tip-box .logo .logo-content {
     width: 100%;
     height: 100%;
-    background: url('@/assets/images/jinrongzhan-logo-blue.svg') no-repeat center;
+    // background: url('@/assets/images/jinrongzhan-logo-blue.svg') no-repeat center;
     background-size: 100% 100%;
 }
 

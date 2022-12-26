@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :model-value="dialogVisible"
-        :title="type === 'create' ? '新建合作伙伴' : '编辑合作伙伴'"
+        :title="formType === 'create' ? '新建合作伙伴' : '编辑合作伙伴'"
         width="650px"
         :close-on-click-modal="false"
         :modal-append-to-body="true"
@@ -127,7 +127,7 @@ const rules = reactive<FormRules>({
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async (valid) => {
+    await formElement.validate(async(valid) => {
         if (valid) {
             isLoading.value = true;
             let status = false;
@@ -138,7 +138,7 @@ async function submitForm(formElement: FormInstance | undefined) {
             }
             isLoading.value = false;
             if (status) {
-                emits('close');
+                emits('close', true);
             }
         }
     });

@@ -75,11 +75,13 @@ function showDialog() {
     isDialogShow.value = true;
 }
 
-async function handleDialogClose() {
+async function handleDialogClose(update: boolean) {
     isDialogShow.value = false;
-    await getPageList({
-        tab: activeName.value
-    });
+    if (update) {
+        await getPageList({
+            tab: activeName.value
+        });
+    }
 }
 
 function formatSortType(value: string) {

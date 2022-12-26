@@ -14,7 +14,7 @@
 import { onMounted } from 'vue';
 import RoleConfig from '@/views/system/role/components/role-config.vue';
 import type { TabsPaneContext } from 'element-plus';
-import type { RoleTabType } from '@/types/system-manage';
+import { RoleTabType } from '@/types/system-manage';
 import {
     activeName,
     getRolePageList,
@@ -43,6 +43,7 @@ onMounted(async() => {
 
 onUnmounted(() => {
     mode.value = 'list';
+    activeName.value = RoleTabType.credit;
     resetRoleFilterObject();
 });
 </script>

@@ -79,6 +79,9 @@
             :current-page="financeCodeFilterObject.currentPage"
             :total="codeList.total"/>
     </LoadingBoard>
+    <CodeForm
+        v-model="isFormShow"
+        :data-detail="dataDetail"></CodeForm>
     <code-detail
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"
@@ -100,11 +103,13 @@ import {
     setFinanceCodeList,
 } from './code-list';
 import type { FinanceCodeListItemType } from '@/types/finance';
+import CodeForm from '@/views/finance/code/components/code-form.vue';
 import CodeDetail from '@/views/finance/code/components/code-detail.vue';
 import { ItemOperate } from '@/components';
 
 const dataDetail = ref<FinanceCodeListItemType>();
 const isDrawerShow = ref<boolean>(false);
+const isFormShow = ref<boolean>(false);
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
@@ -134,6 +139,7 @@ async function handleUpload(param: UploadRequestOptions) {
 }
 
 async function handleCreateNewItem() {
+    isFormShow.value = true;
     await goCreateFormView();
 }
 
@@ -147,6 +153,7 @@ function handleDrawerClose() {
 }
 
 async function handleEditItem(item: FinanceCodeListItemType) {
+    isFormShow.value = true;
     await goEditFormView(item);
 }
 

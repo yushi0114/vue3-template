@@ -38,7 +38,7 @@
                 </div>
             </el-form-item>
             <el-form-item>
-                <el-button @click="goBack()">取消</el-button>
+                <el-button @click="goBack">取消</el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">确定</el-button>
             </el-form-item>
         </el-form>
@@ -56,7 +56,8 @@ import {
     formType,
     goListView,
     orgTypeModuleList,
-    updateFinanceCategory
+    updateFinanceCategory,
+    resetCategoryForm
 } from './category-list';
 import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
@@ -163,6 +164,7 @@ const submitForm = async(formEl: FormInstance | undefined) => {
 };
 
 async function goBack() {
+    resetCategoryForm();
     LoadingService.getInstance().loading();
     await goListView();
     LoadingService.getInstance().stop();

@@ -45,7 +45,7 @@
                     取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
-                    编辑
+                    确定
                 </el-button>
             </el-form-item>
         </el-form>

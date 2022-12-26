@@ -233,7 +233,9 @@ const cancelHandle = ({ field } : { field: string }) => {
 
 <template>
     <div class="statistics-container" v-loading="isLoading">
-        <div class="header">首页统计数据</div>
+        <div class="header">
+            <Text size="xl" color="paragraph">首页统计数据</Text>
+        </div>
         <el-form ref="countFormRef" :model="countForm" :rules="countRules" label-width="120px">
             <div class="formItem">
                 <el-form-item label="注册企业" prop="registerEnterprise">
@@ -461,9 +463,7 @@ const cancelHandle = ({ field } : { field: string }) => {
     margin: 0 auto;
 
     .header {
-        font-size: 24px;
-        color: #262626;
-        margin: 30px 0 40px;
+        margin: $gap-md 0;
     }
 
     .el-form {

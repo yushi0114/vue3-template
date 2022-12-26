@@ -124,9 +124,9 @@ watch(listControlModel, () => {
                     <TableOperatorColumn
                         width="120"
                         @[ItemOperate.detail]="(scope: any) => handleView(scope.row)"
-                        :operators="[
-                            { name: '查看', value: ItemOperate.detail, icon: 'ep-view' },
-                        ]">
+                        :operators="(scope: any) => ([
+                            { name: '查看', value: ItemOperate.detail, icon: 'ep-view', disabled: !scope.row.corpCode },
+                        ])">
                     </TableOperatorColumn>
                 </CommonTable>
             </LoadingBoard>

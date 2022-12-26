@@ -1,7 +1,7 @@
 <template>
     <div class="menu-tree-container">
         <div class="menu-tree-header">
-            <el-input placeholder="请输入搜索内容" clearable v-model="filterText" :prefix-icon="Search">
+            <el-input placeholder="请输入菜单名称进行查询" clearable v-model="filterText" :prefix-icon="Search">
             </el-input>
             <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建路由">
                 <template #icon>

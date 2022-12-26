@@ -3,7 +3,7 @@
         v-model="filterObject"
         :filterRowVisible="false"
         :searchConfig="{
-            label: '请输入机构名称进行查询',
+            label: '请输入合作伙伴名称进行查询',
             field: 'searchInput',
         }">
         <template v-slot:search-rest>

@@ -19,7 +19,7 @@ import {
     getUserListData,
     userFilterObject
 } from '@/views/system/user/components/user-list';
-import { UserTabType } from '@/types/system-manage';
+import type { UserTabType } from '@/types/system-manage';
 import UserListContent from '@/views/system/user/components/user-list-content.vue';
 
 async function handleClick(tab: TabsPaneContext) {

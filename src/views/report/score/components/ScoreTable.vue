@@ -124,9 +124,11 @@ watch(listControlModel, () => {
                     <TableOperatorColumn
                         width="120"
                         @[ItemOperate.detail]="(scope: any) => handleView(scope.row)"
-                        :operators="(scope: any) => ([
-                            { name: '查看', value: ItemOperate.detail, icon: 'ep-view', disabled: !scope.row.corpCode },
-                        ])">
+                        :operators="(scope) => [
+                            scope.row.corpCode ?
+                            { name: '查看', value: ItemOperate.detail, icon: 'ep-view' }:
+                            { name: `暂不支持查看${scope.row.corpName}信用评分`, value: ItemOperate.detail, icon: 'ep-view', disabled: true}
+                        ]">
                     </TableOperatorColumn>
                 </CommonTable>
             </LoadingBoard>

@@ -25,6 +25,9 @@ if (argv[3] === '--env' && argv[4] === 'local') {
 // https://vitejs.dev/config/
 export default ({ mode }: ConfigEnv): UserConfig => {
     return {
+        build: {
+            outDir: 'dms-web'
+        },
         plugins: [
             vue(),
             vueJsx(),

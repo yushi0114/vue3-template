@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\editor\useEditor.ts
  * @Author: zys
  * @Date: 2022-11-17 15:19:05
- * @LastEditTime: 2022-11-25 17:03:05
+ * @LastEditTime: 2022-12-26 11:27:54
  * @LastEditors: zys
  * @Reference:
  */
@@ -315,7 +315,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 return false;
             }
             // TODO：此处可以将图片上传到自己的服务器上
-            const promise: Promise<any>[] = rtfImageData.map(async(rtfImage) => {
+            const promise: Promise<any>[] = rtfImageData.map(async (rtfImage) => {
                 const file = dataURLToFile(`data:${rtfImage.type};base64,${_convertHexToBase64(rtfImage.hex)}`);
                 const [, url = ''] = await to(editorConfig.MENU_CONF!.uploadImage.customUpload(file, () => {}));
                 return url || '';
@@ -346,7 +346,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
         const deleteImageList = uploadImgList.value.filter((item) => !imageSrcList.includes(item));
         const deleteVideoList = uploadVideoList.value.filter((item) => !videoSrcList.includes(item));
         const deleteAttachmentList = uploadAttachmentList.value.filter((item) => !attachmentSrcList.includes(item));
-        deleteImageList.forEach(async(item) => {
+        deleteImageList.forEach(async (item) => {
             const { data = false } = await API_MAP[ARTICLE_API.IS_THUMBNAIL]({ id: getFileIdByUrl(item) });
             if (data) {
                 return false;
@@ -361,7 +361,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 })
                 .catch(() => {});
         });
-        deleteVideoList.forEach(async(item) => {
+        deleteVideoList.forEach(async (item) => {
             const { data: isExist = false } = await API_MAP[ARTICLE_API.IS_EXIST_FILE]({ id: getFileIdByUrl(item) });
             if (!isExist) {
                 return false;
@@ -372,7 +372,7 @@ export const useEditorControl = (props: EditorProps, emit: EditorEmits) => {
                 })
                 .catch(() => {});
         });
-        deleteAttachmentList.forEach(async(item) => {
+        deleteAttachmentList.forEach(async (item) => {
             const { data: isExist = false } = await API_MAP[ARTICLE_API.IS_EXIST_FILE]({ id: getFileIdByUrl(item) });
             if (!isExist) {
                 return false;

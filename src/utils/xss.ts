@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\xss.ts
  * @Author: zys
  * @Date: 2022-11-17 16:37:06
- * @LastEditTime: 2022-11-17 16:41:47
+ * @LastEditTime: 2022-12-26 11:23:11
  * @LastEditors: zys
  * @Reference:
  */
@@ -28,6 +28,7 @@ const newWhiteList = Object.assign(whiteList, {
         'height',
         'width',
     ],
+    a: ['href', 'download', 'target'],
     source: ['src', 'type'],
     img: ['data-href', 'src', 'alt'],
     p: [],

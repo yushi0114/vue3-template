@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-12-05 17:09:35
+ * @LastEditTime: 2022-12-26 09:59:28
  * @LastEditors: zys
  * @Reference:
  */
@@ -49,7 +49,7 @@ export const useTable = (
         sortType: SORT_TYPE.NONE,
         sortField: 'sort',
         pageIndex: 1,
-        pageSize: 20,
+        pageSize: 10,
     };
     const params = reactive(cloneDeep(INITIAL_PARAMS));
 

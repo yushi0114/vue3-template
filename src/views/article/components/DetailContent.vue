@@ -23,7 +23,7 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
     <div class="detail">
         <template v-if="data.id">
             <Text
-                class="px-10"
+                style="padding: 0 2.5rem;"
                 size="xl"
                 :bold="true"
                 truncate
@@ -32,7 +32,7 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
                 {{ data.title }}
             </Text>
             <Text
-                class="px-30"
+                style="padding: 0 7.5rem;"
                 size="lg"
                 truncate
                 block
@@ -41,7 +41,7 @@ const { getArticleTypeLabel } = useArticleModule(props.module);
             </Text>
             <FlexRow
                 horizontal="between"
-                class="px-20">
+                style="padding: 0 5rem;">
                 <ListField
                     class="flex-1 min-w-0"
                     label="信息来源"

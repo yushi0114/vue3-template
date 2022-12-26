@@ -56,7 +56,7 @@ const handleMenuItemClick = (item: PlainOption<any>, field: string) => {
                 model.value[field].push(item.value);
             }
         } else {
-            if (Array.isArray(model.value[field]) && model.value[field].includes(item.value)) {
+            if (Array.isArray(model.value[field]) && model.value[field].length === 1 && model.value[field].includes(item.value)) {
                 model.value[field] = '';
             } else {
                 model.value[field] = [item.value];

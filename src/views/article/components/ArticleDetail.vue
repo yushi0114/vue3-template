@@ -23,7 +23,7 @@ const ARTICLE_API_MAP = useApiManage(props.module);
 // eslint-disable-next-line no-undef
 const state: { data: (ICommonResult & NewsItem) | Recordable; loadingPublish: boolean } = reactive({
     data: {},
-    loadingPublish: false
+    loadingPublish: false,
 });
 
 const { loading: loadingDetail, request: getArticleDetail } = useApi(
@@ -44,7 +44,7 @@ const { loading: loadingDetail, request: getArticleDetail } = useApi(
     }
 );
 
-const publish = async() => {
+const publish = async () => {
     state.loadingPublish = true;
     try {
         await detailListMap.value
@@ -74,63 +74,67 @@ onBeforeMount(() => {
 
 <template>
     <div class="article-detail">
-        <div class="h-full flex gap-2">
-            <div class="w-350px">
-                <el-card
+        <div class="article-detail-left">
+            <el-card
+                class="h-full"
+                shadow="never"
+                :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
+                <article-wrapper
                     class="h-full"
-                    shadow="never"
-                    :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
-                    <article-wrapper
-                        class="h-full"
-                        :module="module"
-                        :tab-value="tabItem?.value">
-                        <template #default="{ tab, module }">
-                            <detail-left-list
-                                class="h-full flex flex-col"
-                                :ref="(el) => bindDetailListRef(el, tab.value)"
-                                v-model:active-id="activeId"
-                                :tab="tab"
-                                :module="module"
-                                @refresh="getArticleDetail">
-                            </detail-left-list>
-                        </template>
-                    </article-wrapper>
-                </el-card>
-            </div>
+                    :module="module"
+                    :tab-value="tabItem?.value">
+                    <template #default="{ tab, module }">
+                        <detail-left-list
+                            class="h-full flex flex-col"
+                            :ref="(el) => bindDetailListRef(el, tab.value)"
+                            v-model:active-id="activeId"
+                            :tab="tab"
+                            :module="module"
+                            @refresh="getArticleDetail">
+                        </detail-left-list>
+                    </template>
+                </article-wrapper>
+            </el-card>
+        </div>
 
-            <div class="flex-1 min-w-0">
-                <el-card
-                    class="h-full overflow-y-auto"
-                    shadow="never"
-                    :body-style="{ height: '100%', 'box-sizing': 'border-box', 'overflow-y': 'auto' }">
-                    <div class="flex justify-between">
-                        <el-button
-                            class="mr-2"
-                            :icon="Back"
-                            @click="back">
-                            返回</el-button
-                        >
-                        <el-button
-                            v-if="state.data.id && state.data.status !== ARTICLE_STATUS.PUBLISHED"
-                            type="primary"
-                            :icon="Sell"
-                            :loading="state.loadingPublish"
-                            @click="publish"
-                            >发布</el-button
-                        >
-                    </div>
-                    <detail-content
-                        v-loading="loadingDetail"
-                        :data="state.data"
-                        :module="module"></detail-content>
-                </el-card>
-            </div>
+        <div class="flex-1 min-w-0">
+            <el-card
+                class="h-full overflow-y-auto"
+                shadow="never"
+                :body-style="{ height: '100%', 'box-sizing': 'border-box', 'overflow-y': 'auto' }">
+                <div class="flex justify-between gap-xs">
+                    <el-button
+                        :icon="Back"
+                        @click="back">
+                        返回</el-button
+                    >
+                    <el-button
+                        v-if="state.data.id && state.data.status !== ARTICLE_STATUS.PUBLISHED"
+                        type="primary"
+                        :icon="Sell"
+                        :loading="state.loadingPublish"
+                        @click="publish"
+                        >发布</el-button
+                    >
+                </div>
+                <detail-content
+                    v-loading="loadingDetail"
+                    :data="state.data"
+                    :module="module"></detail-content>
+            </el-card>
         </div>
     </div>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .article-detail {
-    @apply h-full p-8px box-border;
+    height: 100%;
+    padding: $gap-xs;
+    box-sizing: border-box;
+    display: flex;
+    gap: $gap-xs;
+    &-left {
+        width: 350px;
+    }
 }
 </style>

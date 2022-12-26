@@ -76,4 +76,4 @@ const handleSubmit = async(values: any) => {
     </div>
 </template>
 
-<style lang="postcss"></style>
+<style lang="scss"></style>

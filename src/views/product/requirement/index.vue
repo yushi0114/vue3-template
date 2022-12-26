@@ -125,7 +125,7 @@ onMounted(() => {
                 :is-indeterminate="isIndeterminate"
                 showSelection
                 :searchConfig="{
-                    label: '请输入产品名称',
+                    label: '请输入企业名称进行查询',
                     field: 'searchInput'
                 }"
                 :filterOptionsConfigs="[

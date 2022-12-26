@@ -6,7 +6,7 @@ import { useTemplateRefsList, useVModel } from '@vueuse/core';
 import type { PlainOption } from '@/types';
 import { SortType } from '@/enums';
 import { Search } from '@element-plus/icons-vue';
-import { getNextMonth, isString } from '@/utils';
+import { getNextMonth, isString, byteCount } from '@/utils';
 import type { SearchDropdown } from '..';
 
 export type ControlConfig = {
@@ -178,7 +178,7 @@ function handleSort(sField: string, sValue: SortType) {
 }
 
 function checkSearchInput(val: any) {
-    const vaild = isString(val) && (val.length >= 2 || val.length === 0);
+    const vaild = isString(val) && ((byteCount(val) >= 2 && byteCount(val) <= 255) || byteCount(val) === 0);
     searchTipVisible.value = !vaild;
     return vaild;
 }

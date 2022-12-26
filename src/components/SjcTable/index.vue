@@ -119,6 +119,7 @@ export default {
 <script lang="ts" setup>
 import MultistageColumn from './components/MultistageColumn.vue'; // 递归多级表头组件
 import Pagination from './components/Pagination.vue'; // 分页组件
+import { CommonTable } from '@/components/table/index';
 import type { ITableConfig, IColumn, ITableData, IPaginationConfig } from './types';
 import { INIT_PAGINATION_CONFIG, INIT_TABLE_CONFIG } from './constants';
 import { cloneDeep } from 'lodash';
@@ -171,7 +172,7 @@ function pageChange(page: IPaginationConfig) {
 function clearSelection() {
     state.selection = [];
     // @ts-ignore
-    commonTableRef.value.clearSelection();
+    commonTableRef.value.$refs.table.clearSelection();
 }
 // 多选赋值
 function selectionChange(selection: ITableData[]) {
@@ -188,42 +189,42 @@ function typeIndex(index: number) {
 // 用于多选表格，切换某一行的选中状态， 如果使用了第二个参数，则是设置这一行选中与否（selected 为 true 则选中）
 function toggleRowSelection(row: any, selected: boolean) {
     // @ts-ignore
-    commonTableRef.value.toggleRowSelection(row, selected);
+    commonTableRef.value.$refs.table.toggleRowSelection(row, selected);
 }
 // 用于多选表格，切换全选和全不选
 function toggleAllSelection() {
     // @ts-ignore
-    commonTableRef.value.toggleAllSelection();
+    commonTableRef.value.$refs.table.toggleAllSelection();
 }
 // 用于可扩展的表格或树表格，如果某行被扩展，则切换。 使用第二个参数，您可以直接设置该行应该被扩展或折叠。
 function toggleRowExpansion(row: ITableData, expanded: boolean) {
     // @ts-ignore
-    commonTableRef.value.toggleRowExpansion(row, expanded);
+    commonTableRef.value.$refs.table.toggleRowExpansion(row, expanded);
 }
 // 用于单选表格，设定某一行为选中行， 如果调用时不加参数，则会取消目前高亮行的选中状态。
 function setCurrentRow(row: ITableData) {
     // @ts-ignore
-    commonTableRef.value.setCurrentRow(row);
+    commonTableRef.value.$refs.table.setCurrentRow(row);
 }
 // 用于清空排序条件，数据会恢复成未排序的状态
 function clearSort() {
     // @ts-ignore
-    commonTableRef.value.clearSort();
+    commonTableRef.value.$refs.table.clearSort();
 }
 // 用于清空排序条件，数据会恢复成未排序的状态
 function clearFilter(columnKeys: Array<any>) {
     // @ts-ignore
-    commonTableRef.value.clearFilter(columnKeys);
+    commonTableRef.value.$refs.table.clearFilter(columnKeys);
 }
 // 对 Table 进行重新布局。 当 Table 或其祖先元素由隐藏切换为显示时，可能需要调用此方法
 function doLayout() {
     // @ts-ignore
-    commonTableRef.value.doLayout();
+    commonTableRef.value.$refs.table.doLayout();
 }
 // 手动对 Table 进行排序。 参数 prop 属性指定排序列，order 指定排序顺序
 function sort(prop: string, order: string) {
     // @ts-ignore
-    commonTableRef.value.sort(prop, order);
+    commonTableRef.value.$refs.table.sort(prop, order);
 }
 // 将table组件的全部方法暴露出去
 defineExpose({

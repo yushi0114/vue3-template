@@ -108,10 +108,9 @@ onMounted(() => {
 
 <template>
     <PagePanel>
-        <Board class="product-apply space-y-2">
-            <FlexRow>
+        <Board class="product-apply">
+            <FlexRow gap="xs">
                 <el-button
-                    class="mr-2"
                     @click="back"
                     ><i-ep-back></i-ep-back>返回</el-button
                 >
@@ -120,14 +119,13 @@ onMounted(() => {
                     >当前产品：{{ queryParams.productName }}</div
                 >
             </FlexRow>
-            <LoadingBoard :loading="loading" :empty="!list.length">
             <ListQueryControl
                 v-model="listControlModel"
                 v-model:check-all="isSelectAll"
                 :is-indeterminate="isIndeterminate"
                 :showSelection="!!list.length"
                 :searchConfig="{
-                    label: '请输入产品名称',
+                    label: '请输入企业名称进行查询',
                     field: 'searchInput'
                 }"
                 :filterOptionsConfigs="[
@@ -154,7 +152,7 @@ onMounted(() => {
             </ListQueryControl>
             <Text>
             </Text>
-
+            <LoadingBoard :loading="loading" :empty="!list.length">
             <ProductReqList :list="list" :is-select-all="tableSelectAll"  :loading="loading" @item-detail="goDetail" @item-delete="handleDelete" @multi-selection="handleSelectionChange" />
             <CommonPagination
                 v-model:current-page="listControlModel.pageIndex"

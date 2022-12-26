@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\validate.ts
  * @Author: zys
  * @Date: 2022-11-07 17:08:03
- * @LastEditTime: 2022-12-05 17:08:57
+ * @LastEditTime: 2022-12-26 15:10:51
  * @LastEditors: zys
  * @Reference:
  */
@@ -81,3 +81,9 @@ export const validatorLogo = (rule: any, value: string, callback: ValidateCallba
         callback();
     }
 };
+
+// 获取字符串字节数
+export function byteCount(str: string) {
+    // eslint-disable-next-line no-control-regex
+    return (str && str.replace(/[^\x00-\xff]/g, 'xx').length) || 0;
+}

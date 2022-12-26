@@ -46,8 +46,7 @@ const handleSubmit = (params: any) => {
     </PagePanel>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .product-manage-new {
-    @apply;
 }
 </style>

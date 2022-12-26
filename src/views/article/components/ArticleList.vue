@@ -60,7 +60,7 @@ watch(listControlModel, () => {
         <ListQueryControl
             v-model="listControlModel"
             :searchConfig="{
-                label: `请输入${getArticleTypeLabel}标题`,
+                label: `请输入${getArticleTypeLabel}标题进行查询`,
                 field: isNewsModule ? 'searchInput' : 'title',
             }"
             :filterOptionsConfigs="
@@ -96,28 +96,28 @@ watch(listControlModel, () => {
             @page-change="pageSizeChange">
             <template #thumbnail="{ scope }">
                 <div
-                    class="w-70px h-60px border border-$el-fill-color rounded-lg overflow-hidden"
+                    class="thumbnail-wrapper"
                     v-if="isNewsModule">
                     <img
-                        class="w-full h-full thumbnail"
+                        class="thumbnail"
                         v-real-img="{ img: scope.row.thumbnail, errImg }"
                         alt="" />
                 </div>
                 <FlexColumn
                     vertical="center"
                     v-else
-                    class="w-67px h-67px border border-$el-fill-color">
-                    <div class="w-full h-60% bg-$el-fill-color text-2xl text-center">
+                    class="date">
+                    <Text class="date-day" size="xl">
                         {{ getDate(scope.row.publishDate).day }}
-                    </div>
-                    <div class="flex-1">{{ getDate(scope.row.publishDate).yearAndMonth }}</div>
+                    </Text>
+                    <div style="flex:1;">{{ getDate(scope.row.publishDate).yearAndMonth }}</div>
                 </FlexColumn>
             </template>
             <template #append="{ props }">
                 <el-row>
                     <el-col
                         :span="24"
-                        class="flex items-center gap-2">
+                        class="title">
                         <list-field
                             truncate
                             hoverable
@@ -277,18 +277,36 @@ watch(listControlModel, () => {
 </template>
 
 <style lang="scss" scoped>
-:deep(.el-table__row) {
-    .el-button {
-        padding: 8px;
+.tr-item {
+    .thumbnail-wrapper {
+        width: 70px;
+        height: 60px;
+        border: $border-width $border-style $fill-color;
+        border-radius: $gap-xs;
+        overflow:hidden;
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            transition: all 0.5s ease-in-out;
+        }
+    }
+    .date {
+        width: 67px;
+        height: 67px;
+        border: $border-width $border-style $fill-color;
+        &-day {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            background-color: $fill-color;
+            text-align: center;
+        }
     }
 
-    .el-button + .el-button {
-        margin-left: 0;
-    }
-}
-.tr-item {
-    .thumbnail {
-        transition: all 0.5s ease-in-out;
+    .title {
+        display: flex;
+        align-items: center;
+        gap: $gap-xs;
     }
 }
 .tr-item:hover {

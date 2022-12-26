@@ -40,9 +40,9 @@ const activeName = ref(props.tabValue);
     </div>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 .article-wrapper {
-    @apply h-full;
+    height: 100%;
 }
 :deep(.el-tabs__content) {
     flex: 1;

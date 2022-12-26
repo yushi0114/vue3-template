@@ -153,7 +153,7 @@ onMounted(() => {
         class="article-publish"
         v-loading="loadingDetail">
         <FlexRow horizontal="between">
-            <FlexRow horizontal="center" class="gap-8">
+            <FlexRow horizontal="center" style="gap: 2rem;">
                 <el-button
                     :icon="Back"
                     @click="back"

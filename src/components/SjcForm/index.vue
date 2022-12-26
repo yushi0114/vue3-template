@@ -181,7 +181,8 @@
                                     :auto-upload="true"
                                     :list-type="item.uploadObj!.listType">
                                     <el-button
-                                        class="el-upload__btn mr-4"
+                                        class="el-upload__btn"
+                                        style="margin-right: 1rem;"
                                         type="primary"
                                         >点击上传
                                     </el-button>
@@ -230,7 +231,7 @@
 
                 <div
                     v-if="props.showBtn"
-                    class="pl-2">
+                    >
                     <el-space size="small">
                         <el-button
                             type="default"

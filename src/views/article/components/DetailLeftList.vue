@@ -49,8 +49,8 @@ defineExpose({
     <div
         class="article-list-wrapper"
         v-loading="state.loading && !state.loadingMore">
-        <FlexRow horizontal="between" class="space-x-2">
-            <div class="flex flex-1 space-x-2">
+        <FlexRow horizontal="between" gap="xs">
+            <div class="flex flex-1 gap-xs">
                 <el-input
                     :prefix-icon="Search"
                     :placeholder="`请输入${getArticleTypeLabel}标题`"
@@ -60,7 +60,7 @@ defineExpose({
                 </el-input>
                 <el-select
                     v-if="tab.value === ARTICLE_STATUS.ALL"
-                    class="w-160px"
+                    style="width: 160px;"
                     v-model="params.status"
                     clearable
                     @change="() => handleFilterChange()">
@@ -150,15 +150,21 @@ defineExpose({
                         </template>
                     </el-dropdown>
                 </li>
-                <p
-                    class="text-center text-sm text-$el-text-color-regular"
+                <Text
+                    size="sm"
+                    color="regular"
+                    align="center"
+                    block
                     v-if="state.loading"
-                    >加载中...</p
+                    >加载中...</Text
                 >
-                <p
-                    class="text-center text-sm text-$el-text-color-regular"
+                <Text
+                    size="sm"
+                    color="regular"
+                    align="center"
+                    block
                     v-if="state.noMore"
-                    >没有更多了</p
+                    >没有更多了</Text
                 >
             </ul>
         </template>

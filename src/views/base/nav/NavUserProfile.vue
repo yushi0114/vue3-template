@@ -46,6 +46,7 @@ function handleSignout() {
         '退出登录',
         {
             confirmButtonText: '退出登录',
+            type: 'warning'
         }
     )
         .then(signout)

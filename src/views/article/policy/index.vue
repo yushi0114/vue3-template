@@ -11,6 +11,6 @@ import { ARTICLE_MODULE } from '@/enums';
     </PagePanel>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 
 </style>

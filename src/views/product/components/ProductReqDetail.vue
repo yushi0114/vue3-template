@@ -105,8 +105,7 @@ const handleViewReport = (type: ReportType) => {
     </DetailDrawer>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .agile-req-detail {
-    @apply;
 }
 </style>

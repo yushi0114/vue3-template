@@ -6,11 +6,13 @@ const props = withDefaults(
         operators?: ListOperatorOption[],
         maxOutCount?: number,
         fixed?: boolean,
+        tooltipDisabled?: boolean,
     }>(),
     {
         maxOutCount: 99,
         operators: () => [],
         fixed: false,
+        tooltipDisabled: false
     }
 );
 
@@ -39,6 +41,7 @@ function handleClick(opt: ListOperatorOption) {
                 effect="dark"
                 :content="outer.name"
                 placement="top"
+                :disabled="tooltipDisabled"
             >
                 <CircleOptBtn size="lg" :disabled="outer.disabled"  @click="handleClick(outer)">
                     <Icon :name="(outer.icon || 'ep-search')" />
@@ -52,6 +55,7 @@ function handleClick(opt: ListOperatorOption) {
                 effect="dark"
                 content="更多"
                 placement="top"
+                :disabled="tooltipDisabled"
             >
                 <el-dropdown>
                     <CircleOptBtn size="lg">

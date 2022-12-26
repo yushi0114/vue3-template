@@ -11,6 +11,7 @@ import type { RoleListItemType, UserFormType } from '@/types/system-manage';
 import { ElMessage } from 'element-plus';
 
 export const mode = ref<'form' | 'list'>('list');
+export const loading = ref(false);
 export const currentUserId = ref();
 export const form = ref<UserFormType>({
     name: '',

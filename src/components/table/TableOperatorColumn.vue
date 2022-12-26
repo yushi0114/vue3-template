@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type ElTableColumn from 'element-plus/es/components/table/src/tableColumn';
 import type { ListOperatorOption, ItemOperate } from '@/components/list';
+import { isFunction } from 'lodash';
 
 withDefaults(
     defineProps<{
-        operators?: ListOperatorOption[],
+        operators?: ListOperatorOption[] | ((scope: any) => ListOperatorOption[]),
         maxOutCount?: number,
         label?: string
     }>(),
@@ -31,7 +32,7 @@ function handleOperate(opt: ListOperatorOption, scope: any) {
     </template>
     <template #default="scope">
         <ListOperator
-            :operators="operators"
+            :operators="isFunction(operators) ? operators(scope) : operators"
             :maxOutCount="maxOutCount"
             @operate="opt => handleOperate(opt, scope)"
         />

@@ -31,13 +31,13 @@ const handleClose = () => {
     >
         <el-form :model="dataDetail" label-width="135px">
             <el-form-item label="手机号码" prop="account">
-                <span>{{ dataDetail.account }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.account }}</Text>
             </el-form-item>
             <el-form-item label="姓名" prop="name">
-                <span>{{ dataDetail.name }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.name }}</Text>
             </el-form-item>
             <el-form-item label="角色" prop="roleName">
-                <span>{{ dataDetail.roleName }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.roleName }}</Text>
             </el-form-item>
             <el-form-item label="启用" prop="status">
                 <el-switch
@@ -48,16 +48,16 @@ const handleClose = () => {
                 ></el-switch>
             </el-form-item>
             <el-form-item label="创建者" prop="createBy">
-                <span>{{ dataDetail.createBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createBy }}</Text>
             </el-form-item>
             <el-form-item label="创建时间" prop="createdTime">
-                <span>{{ dataDetail.createTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createTime }}</Text>
             </el-form-item>
             <el-form-item label="更新者" prop="updateBy">
-                <span>{{ dataDetail.updateBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateBy }}</Text>
             </el-form-item>
             <el-form-item label="更新时间" prop="updatedTime">
-                <span>{{ dataDetail.updateTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateTime }}</Text>
             </el-form-item>
         </el-form>
     </el-drawer>

@@ -25,13 +25,15 @@
                                     :http-request="handleUpload"
                                     :before-upload="beforeUpload">
                                     <template #trigger>
-                                        <Icon :name="'ep:upload'"></Icon>
-                                        上传
+                                        <FlexRow gap="xs">
+                                            <Icon :name="'ep:upload'"></Icon>
+                                            上传
+                                        </FlexRow>
                                     </template>
                                 </ElUpload>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <FlexRow @click="handleDownloadList">
+                                <FlexRow @click="handleDownloadList" gap="xs">
                                     <Icon :name="'ep:download'"></Icon>
                                     下载
                                 </FlexRow>
@@ -197,7 +199,7 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteFinanceCode(item.id);
             await setFinanceCodeList();
         })

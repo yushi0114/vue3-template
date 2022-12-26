@@ -27,6 +27,8 @@ import { mode } from './institution-user';
         width: 100%;
         height: 100%;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
     }
     .form-content {
         display: flex;

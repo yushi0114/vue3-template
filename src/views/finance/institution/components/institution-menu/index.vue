@@ -38,7 +38,7 @@ import { ElMessage } from 'element-plus';
 const menuTreeTemplateRef = ref();
 const defaultCheckedKey = ref<string[]>([]);
 
-watchEffect(async () => {
+watchEffect(async() => {
     if (currentInstitutionId.value) {
         if (!currentCategoryId.value) {
             return;

@@ -157,7 +157,7 @@ watch(model, () => {
             v-model="model"
             :filter-row-visible="false"
             :searchConfig="{
-                label: '请输入关键字进行查询',
+                label: '请输入账号、企业名称、信用代码进行查询',
                 field: 'searchInput',
             }">
 

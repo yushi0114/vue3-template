@@ -16,7 +16,7 @@ import CodeForm from './components/code-form.vue';
 import CodeListContent from './components/code-list-content.vue';
 import { currentCodeId, mode } from './components/code-list';
 
-onMounted(async () => {
+onMounted(async() => {
     mode.value = 'list';
     currentCodeId.value = undefined;
 });

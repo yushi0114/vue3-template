@@ -1,9 +1,7 @@
 <template>
     <div class="menu-container" v-if="mode === 'board'">
-        <div class="menu-tree">
-            <institution-tree></institution-tree>
-        </div>
-        <div class="menu-content" v-if="institutionItemData">
+        <institution-tree></institution-tree>
+        <div class="menu-content" v-if="institutionItemData" v-loading="loading.detailLoading">
             <institution-desc style="margin-bottom: 24px;"></institution-desc>
             <el-tabs
                 v-model="activeInstitutionName"
@@ -37,16 +35,14 @@ import InstitutionTree from '@/views/finance/institution/components/institution-
 import InstitutionDesc from '@/views/finance/institution/components/institution-desc.vue';
 import InstitutionRole from '@/views/finance/institution/components/institution-role/index.vue';
 import InstitutionUser from '@/views/finance/institution/components/institution-user/index.vue';
-import { activeInstitutionName, changeOrgDetailTabView, institutionItemData, mode } from './finance-institution';
+import { activeInstitutionName, changeOrgDetailTabView, institutionItemData, mode, loading } from './finance-institution';
 import InstitutionForm from '@/views/finance/institution/components/institution-form.vue';
 import type { TabsPaneContext } from 'element-plus';
 import type { OrgDetailTabViewType } from '@/types/finance';
-import { LoadingService } from '@/views/system/loading-service';
+
 
 async function handleInstitutionTabClick(tab: TabsPaneContext) {
-    LoadingService.getInstance().loading();
     await changeOrgDetailTabView(tab.paneName as OrgDetailTabViewType);
-    LoadingService.getInstance().stop();
 }
 </script>
 
@@ -57,26 +53,6 @@ async function handleInstitutionTabClick(tab: TabsPaneContext) {
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
-
-    .menu-tree {
-        width: 350px;
-        height: 100%;
-        overflow-y: auto;
-        min-width: 350px;
-        border: 1px solid #ebeef5;
-        border-radius: 4px;
-        box-sizing: border-box;
-        padding: 15px;
-        &::-webkit-scrollbar {
-            width: 0;
-        }
-
-        &:hover {
-            &::-webkit-scrollbar {
-                width: 8px;
-            }
-        }
-    }
 
     .menu-content {
         padding-left: 24px;
@@ -106,7 +82,7 @@ async function handleInstitutionTabClick(tab: TabsPaneContext) {
         }
 
         .list-tab ::v-deep .el-tabs__content {
-            border: 1px solid #ebeef5;
+            border: $border;
             box-sizing: border-box;
             border-radius: 0 4px 4px 4px;
         }
@@ -145,7 +121,6 @@ async function handleInstitutionTabClick(tab: TabsPaneContext) {
     justify-content: space-between;
     align-items: center;
     flex: 1;
-    background: #ffffff;
     overflow-y: auto;
 }
 

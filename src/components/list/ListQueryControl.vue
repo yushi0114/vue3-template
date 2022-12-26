@@ -388,6 +388,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
 .lqc-search-tip {
     margin: 0 $gap-xs;
     width: 220px;
+    white-space: nowrap;
     & .el-alert__content {
         display: flex;
         align-items: center;

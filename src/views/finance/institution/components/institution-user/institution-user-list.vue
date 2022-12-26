@@ -16,12 +16,15 @@
                 </el-button>
             </template>
         </el-input>
-        <el-button type="primary" @click="handleCreateNewItem">
-            <template #icon>
-                <Icon :name="'ep:plus'"></Icon>
-            </template>
-            新建
-        </el-button>
+        <div>
+            <el-button type="primary" @click="handleCreateNewItem">
+                <template #icon>
+                    <Icon :name="'ep:plus'"></Icon>
+                </template>
+                新建
+            </el-button>
+            <DownloadButton :api="exportUserExcel" :download-options="downloadOptions"></DownloadButton>
+        </div>
     </div>
     <CommonTable :data="listData.list"
               @sort-change="handleSortChange"
@@ -63,6 +66,7 @@
 </template>
 
 <script lang="ts" setup>
+import { exportUserExcel } from '@/api/finance/finance-institution';
 import Icon from '@/components/Icon.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
@@ -76,7 +80,8 @@ import {
     listData,
     mode,
     resetFilterObject,
-    resetUserForm
+    resetUserForm,
+    downloadOptions
 } from './institution-user';
 import type { UserListItemType } from '@/types/system-manage/user-list.type';
 import { LoadingService } from '@/views/system/loading-service';
@@ -86,7 +91,6 @@ import InstitutionUserDetail from '@/views/finance/institution/components/instit
 
 const dataDetail = ref<UserListItemType>();
 const isDrawerShow = ref<boolean>(false);
-
 
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';

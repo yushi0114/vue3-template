@@ -19,7 +19,7 @@ import {
     getUserListData,
     userFilterObject
 } from '@/views/system/user/components/user-list';
-import type { UserTabType } from '@/types/system-manage';
+import { UserTabType } from '@/types/system-manage';
 import UserListContent from '@/views/system/user/components/user-list-content.vue';
 
 async function handleClick(tab: TabsPaneContext) {
@@ -42,6 +42,7 @@ onMounted(async() => {
 });
 
 onUnmounted(() => {
+    activeName.value = 'cre';
     userFilterObject.value.searchInput = '';
 });
 </script>

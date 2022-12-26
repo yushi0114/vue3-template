@@ -15,19 +15,21 @@ import type {
     OrgTypeMenuItem, UpdateFinanceCategoryType
 } from '@/types/finance';
 import { ElMessage } from 'element-plus';
+import { cloneDeep } from 'lodash';
 
 export const loading = ref(false);
 export const allSystemMenuTree = ref<AllSystemMenuTreeItem[]>();
 export const orgTypeModuleList = ref<(OrgTypeMenuItem & { label: string; value: string })[]>();
 export const mode = ref<'form' | 'list'>('list');
 export const currentCategoryId = ref<string>();
-export const categoryForm = ref<FinanceCategoryFormType>({
+const initCategoryForm = {
     sort: 1,
     typeModuleId: '',
     name: '',
     desc: '',
     menuIdArr: []
-});
+};
+export const categoryForm = ref<FinanceCategoryFormType>(cloneDeep(initCategoryForm));
 export const formType = ref<'create' | 'edit'>('edit');
 
 export const categoryList = reactive<{
@@ -185,3 +187,7 @@ export async function deleteFinanceCategory(id: string): Promise<boolean> {
         });
     });
 }
+
+export const resetCategoryForm = () => {
+    categoryForm.value = cloneDeep(initCategoryForm);
+};

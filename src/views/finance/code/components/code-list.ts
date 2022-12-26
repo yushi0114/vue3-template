@@ -28,6 +28,11 @@ export const codeForm = ref<FinanceCodeFormType>({
 });
 export const formType = ref<'create' | 'edit'>('edit');
 
+export const formTypeName = {
+    'create': '新建',
+    'edit': '编辑',
+};
+
 export const codeList = reactive<{
     total: number;
     list: FinanceCodeListItemType[];
@@ -59,14 +64,14 @@ export async function goListView() {
 
 
 export async function goCreateFormView() {
-    mode.value = 'form';
+    // mode.value = 'form';
     formType.value = 'create';
     await setOrgTypeCodeList();
     await setCityCodeList();
 }
 
 export async function goEditFormView(item: FinanceCodeListItemType) {
-    mode.value = 'form';
+    // mode.value = 'form';
     formType.value = 'edit';
     currentCodeId.value = item.id;
     await setOrgTypeCodeList();
@@ -101,7 +106,7 @@ export async function setOrgTypeCodeList(): Promise<void> {
             orgTypeCodeList.value = data.map(item => ({
                 ...item,
                 label: item.name,
-                value: item.id
+                value: item.code
             }));
         }).finally(() => {
             resolve();

@@ -2,11 +2,11 @@
     <div>
         <div class="form-header">用户管理</div>
         <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
-            <el-form-item label="姓名:" required prop="name">
-                <el-input v-model="form.name" placeholder="请输入姓名"/>
-            </el-form-item>
             <el-form-item label="手机号:" required prop="account">
                 <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'"/>
+            </el-form-item>
+            <el-form-item label="姓名:" prop="name">
+                <el-input v-model="form.name" placeholder="请输入姓名"/>
             </el-form-item>
             <el-form-item label="角色:" required prop="roleId">
                 <el-select v-model="form.roleId" placeholder="请选择角色">
@@ -25,7 +25,7 @@
                     取消
                 </el-button>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
-                    编辑
+                    确定
                 </el-button>
             </el-form-item>
         </el-form>
@@ -55,7 +55,6 @@ const rules = reactive<FormRules>({
         validateIllegalSymbol
     ],
     name: [
-        { required: true, message: '姓名不能为空！', trigger: ['blur', 'change'] },
         { min: 0, max: 50, message: '姓名长度不能超过50个字符', trigger: ['blur', 'change'] },
         validateIllegalSymbol
     ],

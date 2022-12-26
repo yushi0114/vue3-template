@@ -6,7 +6,7 @@ import {
     getFinanceOrgUserRoleList,
     updateFinanceOrgUserApi
 } from '@/api/finance/finance-institution';
-import { currentInstitutionId } from '@/views/finance/institution/components/finance-institution';
+import { currentInstitutionId, institutionItemData } from '@/views/finance/institution/components/finance-institution';
 import type { RoleListItemType, UserFormType } from '@/types/system-manage';
 import { ElMessage } from 'element-plus';
 
@@ -20,7 +20,7 @@ export const form = ref<UserFormType>({
 });
 
 export function setInstitutionUserMode(value: 'form' | 'list') {
-    mode.value = value
+    mode.value = value;
 }
 
 export const formType = ref<'create' | 'edit'>('edit');
@@ -179,4 +179,9 @@ export async function deleteUser(params: {
         });
     });
 }
+
+export const downloadOptions = computed(() => ({
+    fileName: `${institutionItemData.value?.orgName ?? ''}用户列表.xlsx`,
+    params: { ...filterObject.value, orgId: currentInstitutionId.value }
+}));
 

@@ -48,8 +48,10 @@ function handleOpened() {
         </div>
         <template v-slot:footer>
             <slot name="footer">
-                <el-button @click="emit('update:modelValue', false)">{{ cancelButtonText }}</el-button>
-                <el-button @click="emit('confirm')" type="primary">{{ confirmButtonText }}</el-button>
+                <FlexRow horizontal="center">
+                    <el-button @click="emit('update:modelValue', false)">{{ cancelButtonText }}</el-button>
+                    <el-button @click="emit('confirm')" type="primary">{{ confirmButtonText }}</el-button>
+                </FlexRow>
             </slot>
         </template>
     </el-dialog>

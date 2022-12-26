@@ -202,3 +202,13 @@ export async function getOrgRoleMenuIdsApi(params: {
     return api.get(`${DMS_DOMAIN}/v1/org/role/menu/ids`, { params });
 }
 
+// 导出用户列表
+export const exportUserExcel = (data: {
+    searchInput?: string;
+    sortField: 'create_time' | 'update_time';
+    sortType: 'desc' | 'asc';
+    orgId: string;
+    name?: string;
+}) => {
+    return api.post(DMS_DOMAIN + '/v1/export/org/user', data);
+};

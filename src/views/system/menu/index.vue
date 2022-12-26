@@ -21,7 +21,7 @@ import { onMounted } from 'vue';
 import type { TabsPaneContext } from 'element-plus';
 import MenuConfig from '@/views/system/menu/components/menu-config.vue';
 import { activeName, getTreeData, setFormType, loading } from './components/menu-list';
-import type { MenuTabType } from '@/types/system-manage';
+import { MenuTabType } from '@/types/system-manage';
 
 async function handleClick(tab: TabsPaneContext) {
     setFormType('empty');
@@ -32,6 +32,11 @@ onMounted(async() => {
     await getTreeData();
     setFormType('empty');
 });
+
+onUnmounted(() => {
+    activeName.value = MenuTabType.finance;
+});
+
 </script>
 
 <style scoped lang="scss">

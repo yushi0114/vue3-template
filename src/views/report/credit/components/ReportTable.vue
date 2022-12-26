@@ -101,7 +101,7 @@ watch(model, () => {
             v-model="model"
             :filter-row-visible="false"
             :searchConfig="{
-                label: '请输入关键字进行查询',
+                label: '请输入企业名称进行查询',
                 field: 'corpName',
             }">
         </ListQueryControl>

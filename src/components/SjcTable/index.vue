@@ -19,7 +19,7 @@
                 @click="clearSelection"></a>
         </el-row>
         <!-- 数据表格 -->
-        <el-table
+        <CommonTable
             v-show="tableData.length"
             ref="commonTableRef"
             :data="tableData"
@@ -98,7 +98,7 @@
             <template #empty>
                 <div></div>
             </template>
-        </el-table>
+        </CommonTable>
         <!-- 分页配置 -->
         <div
             v-if="showPagination && tableData.length">

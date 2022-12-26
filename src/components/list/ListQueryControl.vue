@@ -280,7 +280,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
             <div class="lqc-filter-item" v-for="(fConf, index) in filterOptionsConfigs" :key="fConf.field">
                 <SearchDropdown
                     :ref="refs.set"
-                    :popper-class="{ 'lqc-filter-item-popper': fConf.searchable }"
+                    :popper-class="fConf.searchable && 'lqc-filter-item-popper'"
 
                     :options="fConf.options"
                     :searchable="fConf.searchable"

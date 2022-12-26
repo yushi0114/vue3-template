@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\file\util.ts
  * @Author: zys
  * @Date: 2022-11-15 17:15:55
- * @LastEditTime: 2022-11-22 16:53:46
+ * @LastEditTime: 2022-12-26 10:06:11
  * @LastEditors: zys
  * @Reference:
  */
@@ -49,7 +49,7 @@ export const getUrlListFromText = (string = ''): string[] => {
 
 // 替换a标签的链接
 function replaceCallback(m: any, g1: string) {
-    return `<a href="/leave?target=${g1}">`;
+    return `<a href="/fstack/leave?target=${g1}">`;
 }
 /**
  * 替换富文本中的链接

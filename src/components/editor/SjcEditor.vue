@@ -54,8 +54,7 @@ defineExpose({
     <div
         class="wangeditor-wrapper w-full"
         v-loading="editorLoading"
-        element-loading-text="加载中"
-        element-loading-spinner="el-icon-loading">
+        element-loading-text="加载中">
         <div
             :class="['wangeditor', isFocus && 'is-focus']"
             :style="getFullScreenStyle"

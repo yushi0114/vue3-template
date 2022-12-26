@@ -23,49 +23,17 @@
                      @mouseenter="handleMouseEnter(node.id)"
                      @mouseleave="handleMouseLeave(node.id)">
                     <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ node.label }} </span>
-                    <el-popover
+                    <ListOperator
+                        tooltip-disabled
                         v-if="node.id === activeId"
-                        class="custom-popover"
-                        placement="right-start"
-                        trigger="hover"
-                        :width="100">
-                        <div class="popover-list">
-                            <el-button
-                                v-if="data.parentId === '0'"
-                                @click="handleOperateTreeItem(data, 'create')"
-                                text
-                                class="custom-btn"
-                                size="small">
-                                <template #icon>
-                                    <Icon :name="'ep:plus'"></Icon>
-                                </template>
-                                新建
-                            </el-button>
-                            <el-button
-                                @click="handleOperateTreeItem(data, 'edit')"
-                                text
-                                size="small"
-                                class="custom-btn">
-                                <template #icon>
-                                    <Icon :name="'ep:edit'"></Icon>
-                                </template>
-                                编辑
-                            </el-button>
-                            <el-button
-                                @click="handleOperateTreeItem(data, 'remove')"
-                                text
-                                class="custom-btn"
-                                size="small">
-                                <template #icon>
-                                    <Icon :name="'ep:delete'"></Icon>
-                                </template>
-                                删除
-                            </el-button>
-                        </div>
-                        <template #reference>
-                            <Icon :name="'ep:more'" style="transform: rotate(90deg)"></Icon>
-                        </template>
-                    </el-popover>
+                        :max-out-count="0"
+                        @operate="(opt) => handleOperateTreeItem(data, opt.value)"
+                        :operators="[
+                            { name: '新建', value: ItemOperate.create, icon: 'ep-plus' },
+                            { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen', },
+                            { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', },
+                        ]"
+                    />
                 </div>
             </template>
         </el-tree>
@@ -88,6 +56,7 @@ import {
 } from './menu-list';
 import { ElMessage, ElMessageBox, type ElTree } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
+import { ItemOperate } from '@/components';
 
 
 const activeId = ref();
@@ -117,18 +86,18 @@ function lookForAllId(data: TreeItemType[], arr: { id: string }[]) {
     return arr;
 }
 
-async function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove' | 'create') {
+async function handleOperateTreeItem(item: TreeItemType, type: ItemOperate) {
     let willDeleteList: { id: string }[] | undefined;
-    if (type === 'edit') {
+    if (type === ItemOperate.edit) {
         await goEditFormView(item.id);
         await nextTick(() => {
             treeRef.value?.setCurrentKey(item.id);
         });
     }
-    if (type === 'create') {
+    if (type === ItemOperate.create) {
         await goCreateFormView(item.id);
     }
-    if (type === 'remove') {
+    if (type === ItemOperate.delete) {
         willDeleteList = lookForAllId([item], []);
         ElMessageBox.confirm(
             '确定要删除当前菜单吗？',
@@ -139,7 +108,7 @@ async function handleOperateTreeItem(item: TreeItemType, type: 'edit' | 'remove'
                 type: 'warning',
             }
         )
-            .then(async () => {
+            .then(async() => {
                 if (!willDeleteList || !willDeleteList?.length) {
                     return;
                 }

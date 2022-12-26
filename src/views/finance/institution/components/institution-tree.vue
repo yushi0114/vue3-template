@@ -33,45 +33,6 @@
                                 { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', },
                             ]"
                         />
-                        <!-- <el-popover v-if="node.id === activeId" class="custom-popover" placement="right-start"
-                                    trigger="hover"
-                                    :width="100">
-                            <div class="popover-list">
-                                <el-button
-                                    @click="handleOperateTreeItem(data, 'create')"
-                                    link
-                                    class="custom-btn"
-                                    size="small">
-                                    <template #icon>
-                                        <Icon :name="'ep:plus'"></Icon>
-                                    </template>
-                                    新建
-                                </el-button>
-                                <el-button
-                                    @click="handleOperateTreeItem(data, 'edit')"
-                                    link
-                                    size="small"
-                                    class="custom-btn">
-                                    <template #icon>
-                                        <Icon :name="'ep:edit'"></Icon>
-                                    </template>
-                                    编辑
-                                </el-button>
-                                <el-button
-                                    @click="handleOperateTreeItem(data, 'remove')"
-                                    link
-                                    class="custom-btn"
-                                    size="small">
-                                    <template #icon>
-                                        <Icon :name="'ep:delete'"></Icon>
-                                    </template>
-                                    删除
-                                </el-button>
-                            </div>
-                            <template #reference>
-                                <Icon style="transform: rotate(90deg)" :name="'ep:more'"></Icon>
-                            </template>
-                        </el-popover> -->
                     </div>
                 </template>
             </el-tree>

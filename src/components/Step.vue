@@ -98,7 +98,7 @@ withDefaults(
 }
 
 .i-step-vertical .i-step-line {
-    left: 0.75rem; top: 0.25rem; height: 100%; width: 0.125rem; margin-left: -1px;
+    left: 0.75rem; top: 0.5rem; height: 100%; width: 0.125rem; margin-left: -1px;
     @apply self-start;
 }
 
@@ -107,7 +107,7 @@ withDefaults(
 }
 
 .i-step-vertical .i-step-circle {
-    left: 0; top: 0.25rem;
+    left: 0.125rem; top: 0.375rem;
 }
 
 .i-step-horizontal .i-step-circle {
@@ -116,8 +116,8 @@ withDefaults(
 
 
 .i-step-circle-uncheck {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     background-color: white;
     color: currentColor;
     border: 2px solid currentColor;
@@ -135,8 +135,8 @@ withDefaults(
 }
 
 .i-step-circle-check {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     fill: currentColor;
     color: white;
     display: flex;
@@ -147,8 +147,8 @@ withDefaults(
 }
 
 .i-step-check-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     color: currentColor;
     border: 2px solid currentColor;
     border-radius: 50%;

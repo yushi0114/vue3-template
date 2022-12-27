@@ -56,7 +56,7 @@
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
 import type { RoleListItemType } from '@/types/system-manage';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import {
     activeName,
     currentRoleId,
@@ -166,7 +166,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteRole({
                 roleId: item.id,
                 tab: activeName.value
@@ -175,12 +175,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
                 tab: activeName.value
             });
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 watch(() => roleFilterObject.value.searchInput, handleSearchRoleList);

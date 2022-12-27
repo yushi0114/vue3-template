@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import {
     categoryList,
     deleteFinanceCategory,
@@ -130,16 +130,11 @@ function handleRemoveRoleItem(item: FinanceCategoryListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteFinanceCategory(item.id);
             await setFinanceCategoryList();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 watch(() => financeFilterObject.searchInput, handleSearchList);

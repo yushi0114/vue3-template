@@ -122,11 +122,11 @@ $searchHeight: 50px;
     &.searchable {
 
         & .el-scrollbar__view.el-dropdown__list {
-            height: v-bind(calcMaxHeight);
+            height: calc(v-bind(calcMaxHeight) - 0);
         }
 
         & .el-scrollbar__thumb {
-            display: none;
+            // display: none;
         }
     }
 }

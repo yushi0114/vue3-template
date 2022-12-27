@@ -109,7 +109,7 @@ onMounted(() => {
 <template>
     <PagePanel>
         <Board class="product-apply">
-            <FlexRow gap="xs">
+            <FlexRow gap="xs" style="margin-bottom: 15px;">
                 <el-button
                     @click="back"
                     ><i-ep-back></i-ep-back>返回</el-button

@@ -47,7 +47,15 @@ export function getAgileReq(payload: GetAgileReqPayload): Promise<GetAgileReqRes
         : '/v1/zjfw/simple/req';
 
     delete payload.platform;
-    return api.get(`${DMS_DOMAIN}${url}`, { params: payload });
+    return api.get(`${DMS_DOMAIN}${url}`, { params: payload }).then((res: any) => {
+        res.dataFirst.sort((a: any, b: any) => {
+            return Math.abs(a.orgProgressStatus) > Math.abs(b.orgProgressStatus) ? 1 : -1;
+        });
+        res.dataSecond.sort((a: any, b: any) => {
+            return Math.abs(a.orgProgressStatus) > Math.abs(b.orgProgressStatus) ? 1 : -1;
+        });
+        return res;
+    });
 }
 // #endregion
 
@@ -104,6 +112,8 @@ export function getExactReq(payload: GetExactReqPayload): Promise<GetExactReqRes
                     orgProgressOpinion: p.progressOpinion,
                     orgProgressStatus: p.progressStatus,
                 };
+            }).sort((a: any, b: any) => {
+                return Math.abs(a.orgProgressStatus) > Math.abs(b.orgProgressStatus) ? 1 : -1;
             });
             entity.dataSecond = (entity.reqProgress[1].typeTwo || []).map((p: any) => {
                 return {
@@ -112,6 +122,8 @@ export function getExactReq(payload: GetExactReqPayload): Promise<GetExactReqRes
                     orgProgressOpinion: p.progressOpinion,
                     orgProgressStatus: p.progressStatus,
                 };
+            }).sort((a: any, b: any) => {
+                return Math.abs(a.orgProgressStatus) > Math.abs(b.orgProgressStatus) ? 1 : -1;
             });
             return entity;
         });

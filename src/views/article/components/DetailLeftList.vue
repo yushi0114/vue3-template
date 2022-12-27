@@ -9,9 +9,10 @@ import {
     ARTICLE_MODULE,
     ARTICLE_PAGE,
 } from '@/enums';
-import { useTable, useJumpLink, useArticleModule } from '../hooks';
+import { useTable, useJumpLink, useArticleModule, useArticleDetail } from '../hooks';
 import { ARTICLE_STATUS_TAG_MAP, ARTICLE_STATUS_SELECT_OPTIONS } from '../constants';
 import type { TAB_ITEM } from '@/types';
+import { hasScrollBar } from '@/utils';
 
 const props = defineProps<{
     tab: TAB_ITEM;
@@ -22,6 +23,9 @@ const emit = defineEmits<{
     (e: 'update:activeId', value: string): void;
     (e: 'refresh'): void;
 }>();
+const { bindDetailListRef, detailListMap } = useArticleDetail();
+
+const showNoMore = ref(false);
 
 const handleActiveIdChange = (id: string) => {
     emit('update:activeId', id);
@@ -40,6 +44,24 @@ const { handleToCreate } = useJumpLink({
     module: props.module,
 });
 
+onMounted(() => {
+    console.log('props.tab：', props.tab);
+    window.onresize = () => {
+        (() => {
+            showNoMore.value = hasScrollBar(detailListMap.value.get(props.tab.value));
+        })();
+    };
+});
+
+watch(
+    () => state.loading,
+    () => {
+        nextTick(() => {
+            showNoMore.value = hasScrollBar(detailListMap.value.get(props.tab.value));
+        });
+    }
+);
+
 defineExpose({
     _updateNewsStatus,
 });
@@ -49,7 +71,9 @@ defineExpose({
     <div
         class="article-list-wrapper"
         v-loading="state.loading && !state.loadingMore">
-        <FlexRow horizontal="between" gap="xs">
+        <FlexRow
+            horizontal="between"
+            gap="xs">
             <div class="flex flex-1 gap-xs">
                 <el-input
                     :prefix-icon="Search"
@@ -60,7 +84,7 @@ defineExpose({
                 </el-input>
                 <el-select
                     v-if="tab.value === ARTICLE_STATUS.ALL"
-                    style="width: 160px;"
+                    style="width: 160px"
                     v-model="params.status"
                     clearable
                     @change="() => handleFilterChange()">
@@ -86,6 +110,7 @@ defineExpose({
         <template v-if="state.data.length > 0">
             <ul
                 class="article-list"
+                :ref="(el) => bindDetailListRef(el, props.tab.value)"
                 v-infinite-scroll="loadMore"
                 :infinite-scroll-disabled="state.disabled">
                 <li
@@ -95,8 +120,7 @@ defineExpose({
                     :class="{ active: activeId === item.id }"
                     @click="handleActiveIdChange(item.id)">
                     <div class="article-title-wrap">
-                        <Icon name="ep-document">
-                        </Icon>
+                        <Icon name="ep-document"> </Icon>
                         <list-field
                             class="flex-1"
                             :class="{ 'text-$el-color-primary': activeId === item.id }"
@@ -116,7 +140,9 @@ defineExpose({
                     </div>
                     <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
                         <div>
-                            <Icon class="icon-more" name="ep-more-filled">
+                            <Icon
+                                class="icon-more"
+                                name="ep-more-filled">
                             </Icon>
                         </div>
                         <template #dropdown>
@@ -135,15 +161,18 @@ defineExpose({
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-else
-                                    :command="ARTICLE_OPERATE_MODE.PUBLISH" :icon="Sell">
+                                    :command="ARTICLE_OPERATE_MODE.PUBLISH"
+                                    :icon="Sell">
                                     {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.SORT"
+                                <el-dropdown-item
+                                    :command="ARTICLE_OPERATE_MODE.SORT"
                                     :icon="Sort"
                                     >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
                                 </el-dropdown-item>
-                                <el-dropdown-item :command="ARTICLE_OPERATE_MODE.DELETE"
-                                :icon="Delete"
+                                <el-dropdown-item
+                                    :command="ARTICLE_OPERATE_MODE.DELETE"
+                                    :icon="Delete"
                                     >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
@@ -163,7 +192,7 @@ defineExpose({
                     color="regular"
                     align="center"
                     block
-                    v-if="state.noMore"
+                    v-if="state.noMore && showNoMore"
                     >没有更多了</Text
                 >
             </ul>
@@ -174,12 +203,16 @@ defineExpose({
     </div>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 .article-list-wrapper {
-    @apply h-full;
+    height: 100%;
 }
 .article-list {
-    @apply flex-1 box-border mt-4 overflow-y-auto;
+    flex: 1;
+    box-sizing: border-box;
+    margin-top: $gap-md;
+    overflow-y: overlay;
+    padding-right: $gap-xs;
 
     &::-webkit-scrollbar {
         width: 0;
@@ -192,32 +225,49 @@ defineExpose({
     }
 }
 .article-list-item {
-    @apply h-30px leading-30px text-sm flex items-center justify-between flex-nowrap;
+    height: 30px;
+    line-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+
     &:hover {
-        @apply cursor-pointer text-$el-primary-color bg-$el-fill-color;
+        cursor: pointer;
+        color: $color-primary;
+        background-color: $fill-color;
     }
     &.active {
-        @apply cursor-pointer text-$el-primary-color bg-$el-fill-color;
+        cursor: pointer;
+        color: $color-primary;
+        background-color: $fill-color;
     }
     &.active .icon-more {
-        @apply display-block;
+        display: block;
     }
     &.active .article-title-wrap {
-        @apply mr-0;
+        margin-right: 0;
     }
 }
 .article-list-item:hover .icon-more {
-    @apply display-block;
+    display: block;
 }
 
 .article-list-item:hover .article-title-wrap {
-    @apply mr-0;
+    margin-right: 0;
 }
 .article-title-wrap {
-    @apply flex items-center flex-1 min-w-0 gap-2 mr-18px;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    gap: $gap-xs;
+    margin-right: 18px;
 }
 .text {
-    @apply cursor-pointer flex-1 mr-2;
+    cursor: pointer;
+    flex: 1;
+    margin-right: $gap-xs;
 }
 .icon-more {
     transform: rotate(90deg);

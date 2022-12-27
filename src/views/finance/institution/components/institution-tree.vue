@@ -4,11 +4,16 @@
             <div class="menu-tree-header">
                 <el-input placeholder="请输入搜索内容" v-model="filterText" clearable :prefix-icon="Search">
                 </el-input>
-                <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
+                <el-tooltip
+                    content="新建机构"
+                    placement="top">
+                    <Icon class="add-menu-btn outline-none" :name="'ep:plus'" @click="handleAddNewMenu"></Icon>
+                </el-tooltip>
+                <!-- <el-button class="add-menu-btn" @click="handleAddNewMenu" title="新建机构">
                     <template #icon>
                         <Icon :name="'ep:plus'"></Icon>
                     </template>
-                </el-button>
+                </el-button> -->
             </div>
             <el-tree
                 ref="treeRef"
@@ -118,7 +123,7 @@ function handleMouseLeave(event: string) {
 .menu-tree {
     width: 350px;
     height: 100%;
-    overflow-y: auto;
+    overflow-y: overlay;
     min-width: 350px;
     border: $border;
     border-radius: 4px;
@@ -139,19 +144,14 @@ function handleMouseLeave(event: string) {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        width: 100%;
         box-sizing: border-box;
 
         .add-menu-btn {
-            height: 32px;
-            line-height: 32px;
-            text-align: center;
-            display: flex;
-            align-items: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            cursor: pointer;
             margin-left: 5px;
-            justify-content: center;
             color: #606266;
-            box-sizing: border-box;
         }
     }
 

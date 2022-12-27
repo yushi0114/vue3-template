@@ -30,8 +30,10 @@ const activeName = ref(props.tabValue);
                 :key="tab.title">
                 <slot
                     :tab="tab"
+                    :active-name="activeName"
                     :module="module">
                     <article-list
+                        v-if="activeName === tab.value"
                         :tab="tab"
                         :module="module"></article-list>
                 </slot>

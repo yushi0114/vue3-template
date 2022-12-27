@@ -194,7 +194,7 @@ export function openRemoveView(item: FinanceInstitutionTreeItemType) {
 
 export async function selectOrgItem(id: string) {
     setCurrentInstitutionId(id);
-    activeInstitutionName.value = 'menuList';
+    // activeInstitutionName.value = 'menuList';
     await getInstitutionItem(id);
     await getRolePageList(id);
     await getUserPageList(id);

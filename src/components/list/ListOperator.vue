@@ -22,8 +22,8 @@ const emits = defineEmits<{
 
 }>();
 
-const outerOperators = computed(() => props.operators.slice(0, props.maxOutCount));
-const innerOperators = computed(() => props.operators.slice(props.maxOutCount));
+const outerOperators = computed(() => props.operators.slice(0, props.maxOutCount).filter((item) => !item.hidden));
+const innerOperators = computed(() => props.operators.slice(props.maxOutCount).filter((item) => !item.hidden));
 
 function handleClick(opt: ListOperatorOption) {
     if (opt.disabled) return;

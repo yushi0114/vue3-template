@@ -119,7 +119,7 @@ onBeforeMount(() => {
         <!-- -->
         <Board full class="recommand-create" v-loading="loading">
             <div class="form-header">
-                <Text size="xl">{{ editName }}{{ kindName }}</Text>
+                <Text size="xl" color="paragraph">{{ editName }}{{ kindName }}</Text>
             </div>
             <div class="recommand-edit-form">
                 <el-form

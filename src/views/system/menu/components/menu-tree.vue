@@ -3,11 +3,16 @@
         <div class="menu-tree-header">
             <el-input placeholder="请输入菜单名称进行查询" clearable v-model="filterText" :prefix-icon="Search">
             </el-input>
-            <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建路由">
+            <el-tooltip
+                    content="新建路由"
+                    placement="top">
+                    <Icon class="add-menu-btn outline-none" :name="'ep:plus'" @click="handleAddNewMenu"></Icon>
+                </el-tooltip>
+            <!-- <el-button text class="add-menu-btn" @click="handleAddNewMenu" title="新建路由">
                 <template #icon>
                     <Icon :name="'ep:plus'"></Icon>
                 </template>
-            </el-button>
+            </el-button> -->
         </div>
         <el-tree
             ref="treeRef"
@@ -19,17 +24,16 @@
             :filter-node-method="filterNode"
             :expand-on-click-node="false">
             <template #default="{ node, data }">
-                <div class="tree-wrap"
-                     @mouseenter="handleMouseEnter(node.id)"
-                     @mouseleave="handleMouseLeave(node.id)">
+                <div class="tree-wrap">
                     <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ node.label }} </span>
                     <ListOperator
+                        class="tree-operator"
+                        :class="[data.id === activeId && 'tree-operator--block']"
                         tooltip-disabled
-                        v-if="node.id === activeId"
                         :max-out-count="0"
                         @operate="(opt) => handleOperateTreeItem(data, opt.value)"
                         :operators="[
-                            { name: '新建', value: ItemOperate.create, icon: 'ep-plus' },
+                            { name: '新建', value: ItemOperate.create, icon: 'ep-plus', hidden: data.parentId !== '0' },
                             { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen', },
                             { name: '删除', value: ItemOperate.delete, icon: 'ep-delete', },
                         ]"
@@ -130,19 +134,21 @@ async function handleOperateTreeItem(item: TreeItemType, type: ItemOperate) {
 
 
 async function handleNodeClick(data: TreeItemType) {
+    console.log('data: ', data);
+    activeId.value = data.id;
     menuDetailData.value = await goDetailFormView(data.id);
     await nextTick(() => {
         treeRef.value?.setCurrentKey(data.id);
     });
 }
 
-function handleMouseEnter(event: string) {
-    activeId.value = event;
-}
+// function handleMouseEnter(event: string) {
+//     activeId.value = event;
+// }
 
-function handleMouseLeave(event: string) {
-    activeId.value = event;
-}
+// function handleMouseLeave(event: string) {
+//     activeId.value = event;
+// }
 
 </script>
 
@@ -156,15 +162,11 @@ function handleMouseLeave(event: string) {
         box-sizing: border-box;
 
         .add-menu-btn {
-            height: 32px;
-            line-height: 32px;
-            text-align: center;
-            display: flex;
-            align-items: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            cursor: pointer;
             margin-left: 5px;
-            justify-content: center;
             color: #606266;
-            box-sizing: border-box;
         }
     }
 
@@ -192,6 +194,16 @@ function handleMouseLeave(event: string) {
             font-size: 14px;
             padding-right: 4px;
             box-sizing: border-box;
+            &:hover .tree-operator {
+                display: block;
+            }
+            .tree-operator {
+                display: none;
+
+                &--block {
+                    display: block;
+                }
+            }
         }
     }
 }

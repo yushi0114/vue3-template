@@ -254,3 +254,14 @@ export const resolveArrayByKey = (beforeData: any[], key: string, ignoreList:str
     }
     return afterData;
 };
+
+export const hasScrollBar = (element: HTMLElement, direction: 'vertical' | 'horizontal' = 'vertical'): boolean => {
+    if (!element) return false;
+    if (direction === 'vertical') {
+        console.log('element：', element, element.scrollHeight, element.clientHeight);
+        return element.scrollHeight > element.clientHeight;
+    } else if (direction === 'horizontal') {
+        return element.scrollWidth > element.clientWidth;
+    }
+    return false;
+};

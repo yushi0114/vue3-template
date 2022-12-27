@@ -83,8 +83,9 @@ onBeforeMount(() => {
                     class="h-full"
                     :module="module"
                     :tab-value="tabItem?.value">
-                    <template #default="{ tab, module }">
+                    <template #default="{ tab, module, activeName }">
                         <detail-left-list
+                            v-if="tab.value === activeName"
                             class="h-full flex flex-col"
                             :ref="(el) => bindDetailListRef(el, tab.value)"
                             v-model:active-id="activeId"

@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import emptyImg from '@/assets/images/no-data.png';
+import emptyImg from '@/assets/images/institution-tree-empty.png';
 import InstitutionMenu from './institution-menu/index.vue';
 import InstitutionTree from '@/views/finance/institution/components/institution-tree.vue';
 import InstitutionDesc from '@/views/finance/institution/components/institution-desc.vue';

@@ -68,10 +68,15 @@ export async function goTreeView() {
             await getTreeData({ tab: activeName.value });
             currentMenuId.value = undefined;
             formType.value = 'empty';
+            return true;
         }
         if (formType.value === 'edit') {
             await getTreeData({ tab: activeName.value });
+            currentMenuId.value = undefined;
+            formType.value = 'empty';
+            return true;
         }
+        await getTreeData({ tab: activeName.value });
     } finally {
         loading.value = false;
     }

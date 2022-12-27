@@ -42,7 +42,7 @@ async function handleEditToDetail() {
     .menu-tree {
         width: 350px;
         height: 100%;
-        overflow-y: auto;
+        overflow-y: overlay;
         min-width: 350px;
         border: 1px solid #ebeef5;
         border-radius: 4px;

@@ -1,23 +1,30 @@
 <script lang="ts" setup>
 import type { PlainOption } from '@/types';
 import { Search } from '@element-plus/icons-vue';
+import { isNumber } from 'lodash';
+
+
+const props = withDefaults(
+    defineProps<{
+        searchPlaceholder?: string,
+        searchable?: boolean,
+        options?: PlainOption[],
+        maxHeight?: string | number
+    }>(),
+    {
+        searchPlaceholder: '',
+        searchable: false,
+        options: () => ([]),
+        maxHeight: 300
+    },
+);
+
 
 const dropdown = ref();
 const searchRef = ref<HTMLInputElement>();
 const search = ref('');
 const width = ref(0);
-const props = withDefaults(
-    defineProps<{
-        searchPlaceholder?: string,
-        searchable?: boolean,
-        options?: PlainOption[]
-    }>(),
-    {
-        searchPlaceholder: '',
-        searchable: false,
-        options: () => ([])
-    },
-);
+const calcMaxHeight = computed(() => isNumber(props.maxHeight) ? props.maxHeight + 'px' : props.maxHeight);
 
 const emits = defineEmits<{
     (e: 'change', opt: PlainOption): void
@@ -30,9 +37,10 @@ defineExpose({
 
 const filterOptions = computed<PlainOption[]>(() => props.options.filter(opt => opt.name.indexOf(search.value) >= 0));
 
-function handleCommand({ opt }: { opt: PlainOption }) {
+function handleCommand(opt: PlainOption) {
     emits('change', opt);
     clear();
+    dropdown.value?.handleClose();
 }
 
 function visibleAutoFocus(visible: boolean) {
@@ -62,7 +70,8 @@ function clear() {
   <el-dropdown
     ref="dropdown"
     class="i-search-dropdown"
-    :max-height="300"
+    :class="{ searchable }"
+    :max-height="calcMaxHeight"
     trigger="click"
     v-bind="$attrs"
     :teleported="false"
@@ -83,13 +92,15 @@ function clear() {
                 clearable
                 :placeholder="searchPlaceholder" />
         </div>
-        <el-dropdown-menu v-if="filterOptions.length > 0" class="isd-drop-container" :class="{ searchable }">
-            <el-dropdown-item
+        <div v-if="filterOptions.length > 0" class="isd-list">
+            <div
                 v-for="(opt, i) in filterOptions"
+                @click="() => handleCommand(opt)"
                 :key="i"
-                :command="{ opt }"
-            >{{ opt.name }}</el-dropdown-item>
-        </el-dropdown-menu>
+                class="isd-list-item">
+                <Text color="current" size="sm">{{ opt.name }}</Text>
+            </div>
+        </div>
         <FlexRow
             v-else
             horizontal="center"
@@ -101,10 +112,22 @@ function clear() {
 </template>
 
 <style lang="scss">
+$searchHeight: 50px;
 .i-search-dropdown {
 
     & .el-dropdown__popper {
         position: relative;
+    }
+
+    &.searchable {
+
+        & .el-scrollbar__view.el-dropdown__list {
+            height: v-bind(calcMaxHeight);
+        }
+
+        & .el-scrollbar__thumb {
+            display: none;
+        }
     }
 }
 
@@ -118,18 +141,34 @@ function clear() {
     background: $bg-color;
 }
 
-.isd-drop-container {
-    position: static;
-    height: 100%;
-    overflow-y: auto;
+.isd-empty {
+    min-width: 200px;
+    box-sizing: border-box;
+    padding-top: $searchHeight;
+    height: v-bind(calcMaxHeight);
 
-    &.searchable {
-        padding-top: calc($gap-xs * 2 + 30px);
+    & .el-empty {
+        padding: 0;
     }
 }
 
-.isd-empty {
-    min-width: 200px;
-    min-height: 300px;
+.isd-list {
+    overflow-y: auto;
+    .searchable & {
+        margin-top: $searchHeight;
+        height: calc(v-bind(calcMaxHeight) - $searchHeight);
+    }
+}
+
+.isd-list-item {
+    padding: $gap-xs $gap-md;
+    cursor: pointer;
+    transition: .2s ease all;
+    white-space: nowrap;
+
+    &:hover {
+        background-color: $color-primary-light-9;
+        color: $color-primary;
+    }
 }
 </style>

@@ -64,7 +64,7 @@ export function toRawType(value: any): string {
     return _toString.call(value).slice(8, -1);
 }
 
-export function isDefind(o: any): boolean {
+export function isDefined(o: any): boolean {
     return o !== undefined && o !== null;
 }
 
@@ -73,7 +73,7 @@ export function isObject(o: any): boolean {
 }
 
 export function isPlainObject(o: any): boolean {
-    return isDefind(o) && !isPrimitive(o);
+    return isDefined(o) && !isPrimitive(o);
 }
 
 export const isString = (o: any) => typeof o === 'string';
@@ -94,7 +94,7 @@ export function isPrimitive(o: any): boolean {
 }
 
 export function isPromise(o: any): boolean {
-    return isDefind(o) && isFunction(o.then) && isFunction(o.catch);
+    return isDefined(o) && isFunction(o.then) && isFunction(o.catch);
 }
 
 export function isIE(): boolean {
@@ -102,7 +102,7 @@ export function isIE(): boolean {
 }
 
 export function isFalsy(o: any): boolean {
-    return !isDefind(o) || ['', 0, false, NaN].includes(o);
+    return !isDefined(o) || ['', 0, false, NaN].includes(o);
 }
 
 export function isTruthy(o: any): boolean {

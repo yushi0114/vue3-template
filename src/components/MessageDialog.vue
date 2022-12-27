@@ -1,13 +1,14 @@
 <script lang="ts" setup>
+import { isDefined } from '@/utils';
+
 const props = withDefaults(
     defineProps<{
-        modelValue: boolean,
+        modelValue?: boolean,
         confirmButtonText?: string,
         cancelButtonText?: string,
         autoFocus?: boolean,
     }>(),
     {
-        modelValue: false,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         autoFocus: true
@@ -20,6 +21,7 @@ const emit = defineEmits<{
 }>();
 
 const bodyRef = ref<HTMLDivElement>();
+const innerModel = ref(!!props.modelValue);
 
 function handleOpened() {
     if (bodyRef.value && props.autoFocus) {
@@ -31,11 +33,34 @@ function handleOpened() {
         }
     }
 }
+
+function handleCancel() {
+    if (isDefined(props.modelValue)) {
+        emit('update:modelValue', false);
+    }
+    else {
+        innerModel.value = false;
+    }
+}
+
+function handleConfirm() {
+    emit('confirm');
+    if (isDefined(props.modelValue)) {
+        //
+    }
+    else {
+        innerModel.value = false;
+    }
+}
+
+watch(() => props.modelValue, () => {
+    innerModel.value = !!props.modelValue;
+});
 </script>
 
 <template>
     <el-dialog
-        v-model="modelValue"
+        v-model="innerModel"
         class="message-dialog"
         align-center
         @opened="handleOpened"
@@ -49,8 +74,8 @@ function handleOpened() {
         <template v-slot:footer>
             <slot name="footer">
                 <FlexRow horizontal="center">
-                    <el-button @click="emit('update:modelValue', false)">{{ cancelButtonText }}</el-button>
-                    <el-button @click="emit('confirm')" type="primary">{{ confirmButtonText }}</el-button>
+                    <el-button @click="handleCancel">{{ cancelButtonText }}</el-button>
+                    <el-button @click="handleConfirm" type="primary">{{ confirmButtonText }}</el-button>
                 </FlexRow>
             </slot>
         </template>

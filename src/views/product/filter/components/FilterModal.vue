@@ -5,7 +5,7 @@ import SjcForm from '@/components/SjcForm/index.vue';
 import { useModal } from '@/composables';
 import { toRefs } from '@vueuse/core';
 import type { ProductFilterEntity } from '@/types';
-import { isDefind } from '@/utils';
+import { isDefined } from '@/utils';
 
 const props = withDefaults(
     defineProps<{
@@ -42,7 +42,7 @@ const openCallback = (data?: any) => {
     type.value = OPERATE_TYPE.EDIT;
     initialData.value = data;
     propsRefs.form.value.forEach((formItem) => {
-        if (isDefind(data[formItem.keyName])) {
+        if (isDefined(data[formItem.keyName])) {
             formItem.defaultValue = data[formItem.keyName];
         }
     });

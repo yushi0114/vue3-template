@@ -1,1 +1,1 @@
-export { default as ScoreResult } from './ScoreResult.vue';
+export { default as ScoreResult } from './index.vue';

@@ -75,13 +75,13 @@ async function handleInstitutionTabClick(tab: TabsPaneContext) {
             flex-flow: column nowrap;
         }
 
-        .list-tab ::v-deep .el-tabs__header {
+        .list-tab :deep(.el-tabs__header) {
             margin: 0;
             border-bottom: none;
             box-sizing: border-box;
         }
 
-        .list-tab ::v-deep .el-tabs__content {
+        .list-tab :deep(.el-tabs__content) {
             border: $border;
             box-sizing: border-box;
             border-radius: 0 4px 4px 4px;
@@ -124,13 +124,13 @@ async function handleInstitutionTabClick(tab: TabsPaneContext) {
     overflow-y: auto;
 }
 
-.el-tabs ::v-deep .el-tabs__header {
+.el-tabs :deep(.el-tabs__header) {
     height: 40px;
     min-height: 40px;
     width: 100%;
 }
 
-.el-tabs ::v-deep .el-tabs__content {
+.el-tabs :deep(.el-tabs__content) {
     flex: 1;
     width: 100%;
 }

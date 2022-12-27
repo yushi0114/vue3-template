@@ -55,14 +55,12 @@
                 </template>
             </el-table-column>
             <!-- 递归渲染多级表头 -->
-            <template v-for="column in columns">
+            <template v-for="column in columns" :key="column.prop">
                 <multistage-column
                     v-if="column.children && column.children.length"
-                    :key="column.prop"
                     :column="column"></multistage-column>
                 <el-table-column
                     v-else
-                    :key="column.id"
                     v-bind="column"
                     show-overflow-tooltip>
                     <template

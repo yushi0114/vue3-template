@@ -93,7 +93,7 @@ function handleRefreshSecretKey() {
 
 <style scoped lang="scss">
 .el-descriptions {
-    &::v-deep(.el-descriptions-item__label) {
+    :deep(.el-descriptions-item__label) {
         width: 100px;
         min-width: 100px;
     }

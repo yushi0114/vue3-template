@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
 import { deleteItems, filterObject, getPageList, listData, loading } from './finance-report';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import type { FinanceReportListItemType } from '@/types/finance';
 import { ItemOperate } from '@/components';
 
@@ -110,12 +110,7 @@ async function handleDeleteItems() {
             await deleteItems(willDeleteList.value);
             await getPageList();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 async function handleDeleteItem(item: FinanceReportListItemType) {
@@ -132,12 +127,7 @@ async function handleDeleteItem(item: FinanceReportListItemType) {
             await deleteItems([item.id]);
             await getPageList();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 watch(() => filterObject.value.searchInput, handleSearchList);

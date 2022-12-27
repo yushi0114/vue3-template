@@ -63,7 +63,7 @@
 import Icon from '@/components/Icon.vue';
 import { deleteItems, filterObject, getPageList, listData, loading } from './finance-org-user';
 import type { FinanceOrgUserListItemType } from '@/types/finance';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import { ItemOperate } from '@/components';
 
 const isDeleteEnabled = ref<boolean>(true);
@@ -126,12 +126,7 @@ async function handleDeleteItems() {
             await deleteItems(willDeleteList.value);
             await getPageList();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 async function handleDeleteItem(item: FinanceOrgUserListItemType) {
@@ -148,12 +143,7 @@ async function handleDeleteItem(item: FinanceOrgUserListItemType) {
             await deleteItems([{id: item.id , account: item.account}]);
             await getPageList();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 watch(() => filterObject.value.searchInput, handleSearchList);

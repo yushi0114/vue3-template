@@ -60,7 +60,7 @@
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
 import type { RoleListItemType } from '@/types/system-manage/role-list.type';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import {
     deleteRole,
     getOrgRoleMenuIds,
@@ -144,12 +144,7 @@ function handleRemoveRoleItem(item: RoleListItemType) {
             await getRolePageList(currentInstitutionId.value);
             loading.listLoading = false;
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 

@@ -203,12 +203,7 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
             await deleteFinanceCode(item.id);
             await setFinanceCodeList();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 watch(() => financeCodeFilterObject.searchInput, handleSearchList);

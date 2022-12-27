@@ -60,7 +60,7 @@
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import {
     activeName,
     currentUserId,
@@ -151,7 +151,7 @@ function handleRemoveItem(item: UserListItemType) {
             type: 'warning',
         }
     )
-        .then(async () => {
+        .then(async() => {
             await deleteUser({
                 account: item.account,
                 id: item.id
@@ -160,12 +160,7 @@ function handleRemoveItem(item: UserListItemType) {
                 tab: activeName.value
             });
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 function handleToDetail(item: UserListItemType) {

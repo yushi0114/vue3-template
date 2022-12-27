@@ -54,7 +54,7 @@ import {
     menuTreeData,
     removeMenus
 } from './menu-list';
-import { ElMessage, ElMessageBox, type ElTree } from 'element-plus';
+import { ElMessageBox, type ElTree } from 'element-plus';
 import { LoadingService } from '@/views/system/loading-service';
 import { ItemOperate } from '@/components';
 
@@ -119,12 +119,7 @@ async function handleOperateTreeItem(item: TreeItemType, type: ItemOperate) {
                 }
                 LoadingService.getInstance().stop();
             })
-            .catch(() => {
-                ElMessage({
-                    type: 'info',
-                    message: '取消删除',
-                });
-            });
+            .catch(() => {});
     }
 }
 

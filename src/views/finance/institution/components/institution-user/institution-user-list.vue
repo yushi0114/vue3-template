@@ -68,7 +68,7 @@
 <script lang="ts" setup>
 import { exportUserExcel } from '@/api/finance/finance-institution';
 import Icon from '@/components/Icon.vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import {
     currentUserId,
     deleteUser,
@@ -175,12 +175,7 @@ function handleRemoveItem(item: UserListItemType) {
             });
             await getUserPageList(currentInstitutionId.value);
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 function handleToDetail(item: UserListItemType) {

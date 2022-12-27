@@ -51,7 +51,7 @@
 import Icon from '@/components/Icon.vue';
 import { LoadingService } from '@/views/system/loading-service';
 import { deleteItems, filterObject, getPageList, listData, loading } from './finance-score';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import type { FinanceScoreListItemType } from '@/types/finance';
 import { ItemOperate } from '@/components';
 
@@ -110,12 +110,7 @@ async function handleDeleteItems() {
             await deleteItems(willDeleteList.value);
             await getPageList();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 async function handleDeleteItem(item: FinanceScoreListItemType) {
@@ -134,12 +129,7 @@ async function handleDeleteItem(item: FinanceScoreListItemType) {
             await getPageList();
             LoadingService.getInstance().stop();
         })
-        .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '取消删除',
-            });
-        });
+        .catch(() => {});
 }
 
 watch(() => filterObject.value.searchInput, handleSearchList);

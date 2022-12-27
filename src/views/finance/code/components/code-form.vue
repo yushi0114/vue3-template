@@ -2,7 +2,7 @@
     <MessageDialog
         :title="`${formTypeName[formType]}机构编码`"
         class="nav-user-update-name"
-        v-model="modelValue"
+        v-model="innerModel"
         @close="cancel"
         @closed="clear"
         @confirm="submitForm">
@@ -91,7 +91,7 @@ import {
 } from './code-list';
 import { LoadingService } from '@/views/system/loading-service';
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         modelValue: boolean,
     }>(),
@@ -99,6 +99,11 @@ withDefaults(
         modelValue: false
     }
 );
+
+const innerModel = computed({
+    get: () => props.modelValue,
+    set: (val) => emit('update:modelValue', val)
+});
 
 const emit = defineEmits<{
     (e: 'update:modelValue', visible: boolean): void

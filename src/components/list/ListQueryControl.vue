@@ -290,7 +290,7 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
                         <FlexRow class="lqc-filter-dropname">
                             <Text color="regular" size="sm" bold>{{ dropdownLabelMap[fConf.field] || fConf.label }}</Text>
                             <Text color="regular" size="sm"><i-ep-arrow-down v-show="isOutside || !dropdownLabelMap[fConf.field]"/></Text>
-                            <Text color="regular" size="sm"><i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click="handleDropdownClear(fConf, index)"/></Text>
+                            <Text color="regular" size="sm"><i-ep-circle-close v-show="!isOutside && dropdownLabelMap[fConf.field]"  @click.stop="handleDropdownClear(fConf, index)"/></Text>
                         </FlexRow>
                     </UseMouseInElement>
                 </SearchDropdown>

@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores';
 import { checkPassword, encrypt, type ValidateCallback } from '@/utils';
 import { ElMessageBox, type FormInstance } from 'element-plus';
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         modelValue: boolean,
     }>(),
@@ -17,6 +17,11 @@ withDefaults(
 const emit = defineEmits<{
     (e: 'update:modelValue', visible: boolean): void
 }>();
+
+const innerModel = computed({
+    get: () => props.modelValue,
+    set: (val) => emit('update:modelValue', val)
+});
 
 const { signout } = useUserStore();
 const router = useRouter();
@@ -97,7 +102,7 @@ function clear() {
 <MessageDialog
     title="修改密码"
     class="nav-user-update-pwd"
-    v-model="modelValue"
+    v-model="innerModel"
     @close="cancel"
     @closed="clear"
     @confirm="submit">

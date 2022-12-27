@@ -3,7 +3,7 @@
         <div class="form-header">用户管理</div>
         <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
             <el-form-item label="手机号:" required prop="account">
-                <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'"/>
+                <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'" ref="userAccountRef"/>
             </el-form-item>
             <el-form-item label="姓名:" prop="name">
                 <el-input v-model="form.name" placeholder="请输入姓名"/>
@@ -47,6 +47,7 @@ const validatePhoneId = (rule: any, value: any, callback: ValidateCallback) => {
     }
 };
 
+const userAccountRef = ref();
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
     account: [
@@ -66,7 +67,7 @@ const rules = reactive<FormRules>({
 
 async function submitForm(formElement: FormInstance | undefined) {
     if (!formElement) return;
-    await formElement.validate(async (valid) => {
+    await formElement.validate(async(valid) => {
         if (valid) {
             LoadingService.getInstance().loading();
             let status: boolean;
@@ -88,6 +89,10 @@ async function goBack() {
     await handleGoBack();
     LoadingService.getInstance().stop();
 }
+
+onMounted(() => {
+    userAccountRef.value.focus();
+});
 
 </script>
 

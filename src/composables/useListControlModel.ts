@@ -17,7 +17,7 @@ export function useListControlModel(opt?: { initialModel?: any; numberFields?: s
             return newModel[k] !== oldModel[k] && k !== 'pageIndex';
         });
         // Object.assign(params, model);
-        console.log(newModel, schemaChanged);
+        // console.log(newModel, schemaChanged);
         if (schemaChanged) {
             newModel.pageIndex = 1;
             // params.pageIndex = 1;

@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores';
 import { genCheckEmpty } from '@/utils';
 import type { FormInstance } from 'element-plus';
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         modelValue: boolean,
     }>(),
@@ -24,6 +24,11 @@ const { state, getUserInfo } = useUserStore();
 const formRef = ref<FormInstance>();
 const formModel = reactive({
     username: state.user?.name!,
+});
+
+const innerModel = computed({
+    get: () => props.modelValue,
+    set: (val) => emit('update:modelValue', val)
 });
 
 const rules: any = reactive({
@@ -64,7 +69,7 @@ function clear() {
 <MessageDialog
     title="修改姓名"
     class="nav-user-update-name"
-    v-model="modelValue"
+    v-model="innerModel"
     @open="handleOpen"
     @close="cancel"
     @closed="clear"

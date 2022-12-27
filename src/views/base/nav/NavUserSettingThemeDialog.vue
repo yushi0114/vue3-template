@@ -3,7 +3,7 @@ import { useDark } from '@vueuse/core';
 import { Moon, Sunny } from '@element-plus/icons-vue';
 
 const isDark = useDark();
-withDefaults(
+const props = withDefaults(
     defineProps<{
         modelValue: boolean,
     }>(),
@@ -11,6 +11,11 @@ withDefaults(
         modelValue: false
     }
 );
+
+const innerModel = computed({
+    get: () => props.modelValue,
+    set: (val) => emit('update:modelValue', val)
+});
 
 const emit = defineEmits<{
     (e: 'update:modelValue', visible: boolean): void
@@ -25,7 +30,7 @@ function cancel() {
 <MessageDialog
     title="修改主题"
     class="nav-user-update-name"
-    v-model="modelValue"
+    v-model="innerModel"
     @close="cancel">
     <!-- -->
     <el-switch

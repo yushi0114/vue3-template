@@ -4,7 +4,7 @@ import type { DefItem } from '@/components/SjcForm/types';
 import SjcForm from '@/components/SjcForm/index.vue';
 import { useModal } from '@/composables';
 import type { ProductFilterEntity } from '@/types';
-import { isDefind } from '@/utils';
+import { isDefined } from '@/utils';
 import { pick, cloneDeep } from 'lodash';
 import { FILTER_UNIT_MAP } from '../../constants';
 
@@ -44,7 +44,7 @@ const openCallback = (data?: { type: OPERATE_TYPE; data?: any }) => {
     initialData.value = data?.data;
     filterForm();
     form.value.forEach((formItem) => {
-        if (isDefind(data?.data[formItem.keyName])) {
+        if (isDefined(data?.data[formItem.keyName])) {
             formItem.defaultValue = data?.data[formItem.keyName];
         }
 

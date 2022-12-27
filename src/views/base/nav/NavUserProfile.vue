@@ -43,7 +43,7 @@ function displayChangeUserName() {
 function handleSignout() {
     ElMessageBox.confirm(
         '您确定退出登录吗?',
-        '退出登录',
+        '提示',
         {
             confirmButtonText: '退出登录',
             type: 'warning'

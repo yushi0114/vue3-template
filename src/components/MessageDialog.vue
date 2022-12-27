@@ -19,6 +19,11 @@ const emit = defineEmits<{
     (e: 'confirm'): void,
 }>();
 
+const innerModel = computed({
+    get: () => props.modelValue,
+    set: (val) => emit('update:modelValue', val)
+});
+
 const bodyRef = ref<HTMLDivElement>();
 
 function handleOpened() {
@@ -31,11 +36,15 @@ function handleOpened() {
         }
     }
 }
+
+function handleCancel() {
+    emit('update:modelValue', false);
+}
 </script>
 
 <template>
     <el-dialog
-        v-model="modelValue"
+        v-model="innerModel"
         class="message-dialog"
         align-center
         @opened="handleOpened"
@@ -49,7 +58,7 @@ function handleOpened() {
         <template v-slot:footer>
             <slot name="footer">
                 <FlexRow horizontal="center">
-                    <el-button @click="emit('update:modelValue', false)">{{ cancelButtonText }}</el-button>
+                    <el-button @click="handleCancel">{{ cancelButtonText }}</el-button>
                     <el-button @click="emit('confirm')" type="primary">{{ confirmButtonText }}</el-button>
                 </FlexRow>
             </slot>

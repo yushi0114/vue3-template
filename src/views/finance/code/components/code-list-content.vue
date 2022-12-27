@@ -49,7 +49,8 @@
             :data="codeList.list"
             @sort-change="handleSortChange"
             :default-sort="{ prop: 'updateTime', order: 'descending' }"
-        >
+            @filter-change="handleFilterChange"
+            >
             <el-table-column label="机构名称">
                 <template #default="scope">
                     <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
@@ -59,7 +60,8 @@
                 </template>
             </el-table-column>
             <el-table-column prop="orgCode" label="机构编码" width="180"/>
-            <el-table-column prop="orgTypeName" label="机构分类" width="180"/>
+            <el-table-column prop="orgTypeName" column-key="orgTypeCodeArr" label="机构分类" :filters="orgTypeCodeList" :filter-method="filterHandler" width="180"/>
+            <el-table-column prop="cityName" column-key="cityCodeArr" label="所属城市" :filters="cityCodeList" :filter-method="filterHandler" width="180"/>
             <el-table-column prop="createBy" label="创建者" width="180"/>
             <el-table-column prop="createTime" sortable label="创建时间"/>
             <el-table-column prop="updateTime" sortable label="更新时间"/>
@@ -92,6 +94,8 @@
 import type { UploadRequestOptions } from 'element-plus';
 import {
     codeList,
+    cityCodeList,
+    orgTypeCodeList,
     deleteFinanceCode,
     downloadExcelTemplate,
     exportFinanceCodeList,
@@ -101,11 +105,14 @@ import {
     importFinanceCodeList,
     loading,
     setFinanceCodeList,
+    setOrgTypeCodeList,
+    setCityCodeList
 } from './code-list';
 import type { FinanceCodeListItemType } from '@/types/finance';
 import CodeForm from '@/views/finance/code/components/code-form.vue';
 import CodeDetail from '@/views/finance/code/components/code-detail.vue';
 import { ItemOperate } from '@/components';
+import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
 
 const dataDetail = ref<FinanceCodeListItemType>();
 const isDrawerShow = ref<boolean>(false);
@@ -114,6 +121,10 @@ const isFormShow = ref<boolean>(false);
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
+
+const filterHandler = (value: string, row: FinanceCodeListItemType, column: TableColumnCtx<FinanceCodeListItemType>) => {
+    return row[column.property as keyof FinanceCodeListItemType] === value;
+};
 
 function beforeUpload(file: File) {
     if (!/\.(xlsx|xls)$/.test(file.name)) {
@@ -173,6 +184,15 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
     await setFinanceCodeList();
 }
 
+const handleFilterChange = (filters: { [K in 'orgTypeCodeArr' | 'cityCodeArr']: string[]}) => {
+    financeCodeFilterObject.currentPage = 1;
+    financeCodeFilterObject.currentSize = 10;
+    (Object.keys(filters) as ('orgTypeCodeArr' | 'cityCodeArr')[]).forEach((key) => {
+        financeCodeFilterObject[key] = filters[key];
+    });
+    setFinanceCodeList();
+};
+
 async function handleSearchList() {
     financeCodeFilterObject.currentPage = 1;
     financeCodeFilterObject.currentSize = 10;
@@ -208,7 +228,11 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
 
 watch(() => financeCodeFilterObject.searchInput, handleSearchList);
 
-onMounted(setFinanceCodeList);
+onMounted(() => {
+    setFinanceCodeList();
+    setOrgTypeCodeList();
+    setCityCodeList();
+});
 </script>
 
 <style scoped lang="scss">

@@ -44,7 +44,7 @@ async function handleEditToDetail() {
         height: 100%;
         overflow-y: overlay;
         min-width: 350px;
-        border: 1px solid #ebeef5;
+        border: $border;
         border-radius: 4px;
         box-sizing: border-box;
         padding: 15px;
@@ -63,7 +63,7 @@ async function handleEditToDetail() {
     .menu-content {
         margin-left: 24px;
         padding: 24px 24px 24px;
-        border: 1px solid #ebeef5;
+        border: $border;
         border-radius: 4px;
         flex: 1;
     }

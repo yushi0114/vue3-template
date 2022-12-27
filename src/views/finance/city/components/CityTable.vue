@@ -199,7 +199,7 @@ watch(model, () => {
     </LoadingBoard>
 
     <city-detail :drawerVisible="allToogle.drawerFlag" :dataDetail="dataDetail.data" @close="handleDrawerClose"></city-detail>
-    <city-modal :dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
+    <city-modal v-model:dialogVisible="allToogle.dialogFlag" :dataEdit="dataEdit" @close="handleDialogClose" @refresh="refreshTable"></city-modal>
 </template>
 
 <style lang="scss" scoped>

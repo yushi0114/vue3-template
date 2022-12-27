@@ -49,7 +49,7 @@
     </Board>
     <logo-form-modal
         v-if="isDialogShow"
-        :dialog-visible="isDialogShow"
+        v-model="isDialogShow"
         :currentLogo="currentLogo"
         :type="dialogType"
         @close="handleDialogClose"

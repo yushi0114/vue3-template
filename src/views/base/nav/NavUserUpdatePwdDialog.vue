@@ -101,6 +101,7 @@ function clear() {
 <template>
 <MessageDialog
     title="修改密码"
+    width="480px"
     class="nav-user-update-pwd"
     v-model="innerModel"
     @close="cancel"

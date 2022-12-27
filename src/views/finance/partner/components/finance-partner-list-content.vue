@@ -42,7 +42,7 @@
     </LoadingBoard>
     <finance-partner-form-modal
         v-if="isDialogShow"
-        :dialog-visible="isDialogShow"
+        v-model:dialog-visible="isDialogShow"
         @close="handleDialogClose"></finance-partner-form-modal>
 </template>
 

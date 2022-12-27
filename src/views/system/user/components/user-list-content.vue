@@ -54,7 +54,7 @@
         :data-detail="dataDetail"
         @close="handleDrawerClose"></user-detail>
     <user-form-dialog
-        :dialog-visible="isDialogShow"
+        v-model:dialog-visible="isDialogShow"
         @close="handleCloseDialog"></user-form-dialog>
 </template>
 

@@ -2,7 +2,7 @@
 import type { PropType } from 'vue';
 import type { FinanceCodeListItemType } from '@/types/finance';
 
-defineProps({
+const props = defineProps({
     drawerVisible: {
         type: Boolean,
         default: false,
@@ -15,7 +15,13 @@ defineProps({
 
 const emit = defineEmits<{
     (e: 'close', flag: boolean): void
+    (e: 'update:drawerVisible', visible: boolean): void
 }>();
+
+const innerModel = computed({
+    get: () => props.drawerVisible,
+    set: (val) => emit('update:drawerVisible', val)
+});
 
 const handleClose = () => {
     emit('close', false);
@@ -24,38 +30,38 @@ const handleClose = () => {
 </script>
 <template>
     <el-drawer
-        v-model="drawerVisible"
+        v-model="innerModel"
         title="机构编码详情"
         size="50%"
         :before-close="handleClose"
     >
         <el-form :model="dataDetail" label-width="135px">
             <el-form-item label="机构分类" prop="orgTypeName">
-                <span>{{ dataDetail.orgTypeName }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.orgTypeName }}</Text>
             </el-form-item>
             <el-form-item label="所属城市" prop="cityName">
-                <span>{{ dataDetail.cityName }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.cityName }}</Text>
             </el-form-item>
             <el-form-item label="机构名称" prop="orgName">
-                <span>{{ dataDetail.orgName }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.orgName }}</Text>
             </el-form-item>
             <el-form-item label="机构编码" prop="orgCode">
-                <span>{{ dataDetail.orgCode }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.orgCode }}</Text>
             </el-form-item>
             <el-form-item label="机构地址" prop="address">
-                <span>{{ dataDetail.address }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.address }}</Text>
             </el-form-item>
             <el-form-item label="创建者" prop="createBy">
-                <span>{{ dataDetail.createBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createBy }}</Text>
             </el-form-item>
             <el-form-item label="创建时间" prop="createdTime">
-                <span>{{ dataDetail.createTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createTime }}</Text>
             </el-form-item>
             <el-form-item label="更新者" prop="updateBy">
-                <span>{{ dataDetail.updateBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateBy }}</Text>
             </el-form-item>
             <el-form-item label="更新时间" prop="updatedTime">
-                <span>{{ dataDetail.updateTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateTime }}</Text>
             </el-form-item>
         </el-form>
     </el-drawer>

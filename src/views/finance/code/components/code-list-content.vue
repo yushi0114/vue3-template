@@ -44,43 +44,39 @@
             </FlexRow>
         </template>
     </ListQueryControl>
-    <LoadingBoard :loading="loading" :empty="!codeList.list.length">
-        <CommonTable
-            :data="codeList.list"
-            @sort-change="handleSortChange"
-            :default-sort="{ prop: 'updateTime', order: 'descending' }"
-            @filter-change="handleFilterChange"
-            >
-            <el-table-column label="机构名称">
-                <template #default="scope">
-                    <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
-                            scope.row.orgName
-                        }}
-                    </TextHoverable>
-                </template>
-            </el-table-column>
-            <el-table-column prop="orgCode" label="机构编码" width="180"/>
-            <el-table-column prop="orgTypeName" column-key="orgTypeCodeArr" label="机构分类" :filters="orgTypeCodeList" :filter-method="filterHandler" width="180"/>
-            <el-table-column prop="cityName" column-key="cityCodeArr" label="所属城市" :filters="cityCodeList" :filter-method="filterHandler" width="180"/>
-            <el-table-column prop="createBy" label="创建者" width="180"/>
-            <el-table-column prop="createTime" sortable label="创建时间"/>
-            <el-table-column prop="updateTime" sortable label="更新时间"/>
-            <TableOperatorColumn
-                width="120"
-                @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
-                @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
+    <sjc-table
+        ref="sjcTableRef"
+        :loading="loading"
+        :table-data="codeList.list"
+        :columns="CODE_TABLE_COLUMNS"
+        :table-config="CODE_TABLE_CONFIG"
+        :showPagination="false"
+        @sort-change="handleSortChange"
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        @filter-change="handleFilterChange"
+        >
+        <template #orgName="{ scope }">
+            <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                    scope.row.orgName
+                }}
+            </TextHoverable>
+        </template>
+        <template #handler="{ scope }">
+            <ListOperator
+                @[ItemOperate.edit]="handleEditItem(scope.row)"
+                @[ItemOperate.delete]="handleRemoveItem(scope.row)"
                 :operators="[
                     { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                 ]">
-            </TableOperatorColumn>
-        </CommonTable>
-        <CommonPagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="financeCodeFilterObject.currentPage"
-            :total="codeList.total"/>
-    </LoadingBoard>
+            </ListOperator>
+        </template>
+    </sjc-table>
+    <CommonPagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="financeCodeFilterObject.currentPage"
+        :total="codeList.total"/>
     <CodeForm
         v-model="isFormShow"
         :data-detail="dataDetail"></CodeForm>
@@ -92,10 +88,9 @@
 
 <script lang="ts" setup>
 import type { UploadRequestOptions } from 'element-plus';
+import { CODE_TABLE_COLUMNS, CODE_TABLE_CONFIG } from '../constants';
 import {
     codeList,
-    cityCodeList,
-    orgTypeCodeList,
     deleteFinanceCode,
     downloadExcelTemplate,
     exportFinanceCodeList,
@@ -112,7 +107,6 @@ import type { FinanceCodeListItemType } from '@/types/finance';
 import CodeForm from '@/views/finance/code/components/code-form.vue';
 import CodeDetail from '@/views/finance/code/components/code-detail.vue';
 import { ItemOperate } from '@/components';
-import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
 
 const dataDetail = ref<FinanceCodeListItemType>();
 const isDrawerShow = ref<boolean>(false);
@@ -121,10 +115,6 @@ const isFormShow = ref<boolean>(false);
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
-
-const filterHandler = (value: string, row: FinanceCodeListItemType, column: TableColumnCtx<FinanceCodeListItemType>) => {
-    return row[column.property as keyof FinanceCodeListItemType] === value;
-};
 
 function beforeUpload(file: File) {
     if (!/\.(xlsx|xls)$/.test(file.name)) {

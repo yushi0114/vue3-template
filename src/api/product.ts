@@ -114,6 +114,8 @@ export function getProductReq(payload: GetProductReqPayload): Promise<GetProduct
                 orgProgressOpinion: p.progressOpinion,
                 orgProgressStatus: p.progressStatus,
             };
+        }).sort((a: any, b: any) => {
+            return Math.abs(a.orgProgressStatus) > Math.abs(b.orgProgressStatus) ? 1 : -1;
         });
         return entity;
     });

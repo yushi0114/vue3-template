@@ -2,7 +2,6 @@
 import { updateUsername } from '@/api';
 import { MENU_TAB } from '@/enums';
 import { useUserStore } from '@/stores';
-import { genCheckEmpty } from '@/utils';
 import type { FormInstance } from 'element-plus';
 
 const props = withDefaults(
@@ -32,7 +31,7 @@ const innerModel = computed({
 });
 
 const rules: any = reactive({
-    username: [{ validator: genCheckEmpty('姓名不能为空'), trigger: ['blur', 'change'] }],
+    username: [{ min: 0, max: 50, message: '姓名长度不能超过50个字符', trigger: 'change' }],
 });
 
 async function submit() {
@@ -81,7 +80,7 @@ function clear() {
         size="large"
         :rules="rules"
         :model="formModel">
-        <el-form-item label="姓名" prop="username" required>
+        <el-form-item label="姓名" prop="username">
             <el-input v-model="formModel.username" placeholder="请输入姓名" />
         </el-form-item>
     </el-form>

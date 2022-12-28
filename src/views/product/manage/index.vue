@@ -96,7 +96,7 @@ const handleUpdateStatus = async(req: ProductEntity) => {
         status: req.status === SwitchType.off ? SwitchType.on : SwitchType.off,
     };
     try {
-        await ElMessageBox.confirm(`确定${onlineTypeMap[params.status]}标题为“${req.name}”的产品吗？`, {
+        await ElMessageBox.confirm(`确定${onlineTypeMap[params.status]}标题为“${req.name}”的产品吗？`, '提示', {
             type: 'warning',
         });
         requestProductStatus(params);

@@ -30,23 +30,24 @@ const state = reactive({
 });
 
 const { loading: loadingCreate, request: createArticle } = useApi(ARTICLE_API_MAP[ARTICLE_API.ADD_ARTICLE], {
-    onSuccess() {
+    onSuccess(data, params) {
         ElMessage({
             type: 'success',
             message: '操作成功',
         });
-        back();
+        params[0].status === ARTICLE_STATUS.PUBLISHED && back();
     },
     onError() {},
 });
 
 const { loading: loadingUpdate, request: updateArticle } = useApi(ARTICLE_API_MAP[ARTICLE_API.UPDATE_ARTICLE], {
-    onSuccess(data) {
+    onSuccess(data, params) {
         ElMessage({
             type: 'success',
             message: '操作成功',
         });
         state.laseUpdateTime = data.updateTime;
+        params[0].status === ARTICLE_STATUS.PUBLISHED && back();
     },
     onError() {},
 });

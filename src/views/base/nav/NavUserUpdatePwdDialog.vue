@@ -68,14 +68,16 @@ const rules: any = reactive({
 async function submit() {
     try {
         await formRef.value?.validate();
-        await ElMessageBox.confirm('您确认修改登录密码？您将需要重新登录系统', '修改密码');
+        await ElMessageBox.confirm('您确认修改登录密码？您将需要重新登录系统！', '修改密码', {
+            type: 'warning'
+        });
         await updatePassword({
             newPassword: encrypt(formModel.newPassword),
             oldPassword: encrypt(formModel.oldPassword),
             tab: MENU_TAB.MENU_TAB_DMS,
         });
         cancel();
-        await ElMessageBox.alert('修改密码成功，请退出重新登录');
+        await ElMessageBox.alert('修改密码成功，请退出重新登录！');
         try {
             await signout();
         }

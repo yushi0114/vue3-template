@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ArticleSortDialog from './ArticleSortDialog.vue';
 import { Plus } from '@element-plus/icons-vue';
 import { ListField, ItemOperate } from '@/components';
 import { NEWS_TYPE, ARTICLE_STATUS, ARTICLE_OPERATE_MODE_LABEL, ARTICLE_OPERATE_MODE, ARTICLE_MODULE } from '@/enums';
@@ -36,7 +37,7 @@ const getDate = computed(() => {
 });
 
 const sjcTableRef = ref<HTMLElement | null>(null); // 表格ref
-const { params, tableConfig, state, pageConfig, pageSizeChange, handleMoreOperate, fetchTableData } = useTable(
+const { params, tableConfig, currentArticle, showArticleSortDialog, state, pageConfig, pageSizeChange, handleMoreOperate, fetchTableData, updateSort } = useTable(
     props.tab,
     props.module
 );
@@ -273,6 +274,7 @@ watch(listControlModel, () => {
             </template>
         </sjc-table>
         </LoadingBoard>
+        <ArticleSortDialog v-model="showArticleSortDialog" :data="currentArticle" @confirm="(row) => updateSort({ id: row.id, sort: Number(row.sort) })"></ArticleSortDialog>
     </div>
 </template>
 

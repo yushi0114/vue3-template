@@ -194,6 +194,8 @@ export function openRemoveView(item: FinanceInstitutionTreeItemType) {
 
 export async function selectOrgItem(id: string) {
     setCurrentInstitutionId(id);
+    setInstitutionUserMode('list');
+    setInstitutionRoleMode('list');
     // activeInstitutionName.value = 'menuList';
     await getInstitutionItem(id);
     await getRolePageList(id);
@@ -230,6 +232,9 @@ export async function initInstitutionPage() {
         id: currentCategoryId.value
     });
     activeName.value = categoryList.value[0].code;
+    currentInstitutionId.value = undefined;
+    institutionItemData.value = undefined;
+    mode.value = 'board';
     await getInstitutionTree();
 }
 

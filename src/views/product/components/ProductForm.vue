@@ -60,6 +60,7 @@ const handleSubmit = async(values: any) => {
     <div>
         <sjc-form
             :def="PRODUCT_FORM_ALL"
+            :auto-focus="false"
             :update-submit="updateSubmit"
             @change="formValueChange"
             @search="handleSubmit"></sjc-form>

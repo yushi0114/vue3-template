@@ -51,7 +51,7 @@ const handleSubmitBaseInfo = (values: any) => {
     }
     goToNext();
 };
-const handleSubmit = async(values: any) => {
+const handleSubmit = async (values: any) => {
     let sortIdArr: any[] = [];
     dynamicForm.value.forEach((item) => {
         if (values[item.keyName] && isArray(values[item.keyName])) {
@@ -78,6 +78,7 @@ defineExpose({
             align-center
             :space="200"
             :active="index"
+            :process-status="current.processStatus"
             finish-status="success">
             <el-step
                 v-for="step in steps"

@@ -99,7 +99,7 @@ export async function setOrgTypeModuleList(): Promise<void> {
         getOrgTypeModuleList().then(data => {
             orgTypeModuleList.value = data.map(item => ({
                 ...item,
-                label: item.name,
+                label: item.title,
                 value: item.id
             }));
         }).finally(() => {

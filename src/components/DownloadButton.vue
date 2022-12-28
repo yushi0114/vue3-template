@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Download } from '@element-plus/icons-vue';
 import { useApi } from '@/composables';
-import { downloadByData } from '@/utils';
+import { downloadByData, noop } from '@/utils';
 import { omit } from 'lodash';
 // TODO
 // 1.loading(prevent click)
@@ -28,9 +28,7 @@ const { request: download, loading } = useApi(() => props.api(omit(props.downloa
             message: '下载成功',
         });
     },
-    onError(error) {
-        console.log('error: ', error);
-    },
+    onError: noop,
 });
 
 const handleDownload = () => {

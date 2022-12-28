@@ -1,5 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router';
-import ReportDetail from '@/components/ReportDetail/index.vue';
+import ReportDetail from './ReportDetail/index.vue';
 export const routes: RouteRecordRaw[] = [
     {
         component: ReportDetail,

@@ -43,6 +43,7 @@ function handleDelete(rd: ProductRecommandEntity) {
         `删除${kindName.value}`,
         {
             confirmButtonText: '删除',
+            type: 'warning'
         }
     )
         .then(() => deleteProductRecommends({ id: rd.id }))

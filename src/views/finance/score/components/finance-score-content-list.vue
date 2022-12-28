@@ -64,7 +64,6 @@ function formatSortType(value: string) {
 }
 
 async function handleSortChange(params: { prop: 'createTime', order: string }) {
-    // console.log(params);
     filterObject.value.currentPage = 1;
     filterObject.value.currentSize = 10;
     filterObject.value.sortField = 'create_time';

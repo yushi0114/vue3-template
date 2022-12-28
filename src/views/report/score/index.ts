@@ -1,5 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router';
-import ScoreDetail from '@/components/ScoreDetail/index.vue';
+import ScoreDetail from './ScoreDetail/index.vue';
 export const routes: RouteRecordRaw[] = [
     {
         component: ScoreDetail,

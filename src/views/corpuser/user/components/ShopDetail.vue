@@ -1,92 +1,3 @@
-<script lang="ts" setup>
-import { Search } from '@element-plus/icons-vue';
-import { ElMessage } from 'element-plus';
-import { getShopCartInfo } from '@/api/corpUser';
-import type { ShopCartTable } from '@/types/corpUser';
-
-const props = defineProps({
-    drawerVisible: {
-        type: Boolean,
-        default: false,
-    },
-    userId: {
-        type: String,
-        default: ''
-    }
-});
-
-const loading = ref(true);
-const shopCarInfoList = ref<ShopCartTable[]>([]);
-const searchInput = ref('');
-
-// 分页配置项
-const page = reactive({
-    currentPage: 1,
-    pageSize: 10,
-    total: 0
-});
-
-// 获取详情列表
-const getInfoList = () => {
-    const params = {
-        searchInput: searchInput.value,
-        pageIndex: page.currentPage,
-        pageSize: page.pageSize,
-        id: props.userId
-    };
-
-    loading.value = true;
-    return getShopCartInfo(params)
-        .then((res) => {
-            shopCarInfoList.value = res.data;
-            page.total = res.total;
-        })
-        .catch(() => {})
-        .finally(() => {
-            loading.value = false;
-        });
-};
-
-// 搜索
-const searchInfoList = (isClear: boolean) => {
-    if (isClear) {
-        page.currentPage = 1;
-        getInfoList();
-    } else {
-        if (searchInput.value.length >= 2) {
-            page.currentPage = 1;
-            getInfoList();
-        } else {
-            ElMessage({
-                type: 'error',
-                message: '输入内容不能少于2个字符',
-            });
-        }
-    }
-};
-
-const handleSizeChange = (val: number) => {
-    page.currentPage = 1;
-    page.pageSize = val;
-    getInfoList();
-};
-
-const handleCurrentChange = (val: number) => {
-    page.currentPage = val;
-    getInfoList();
-};
-
-const emit = defineEmits<{
-  (e: 'close', flag: boolean): void
-}>();
-
-const handleClose = () => {
-    searchInput.value = '';
-    emit('close', false);
-};
-
-</script>
-
 <template>
     <div class="shop-cart-container">
         <el-drawer
@@ -99,7 +10,7 @@ const handleClose = () => {
             <div class="header">
                 <el-input
                     class="searchInput"
-                    placeholder="请输入关键字进行查询"
+                    placeholder="请输入产品名称进行查询"
                     v-model.trim="searchInput"
                     size="large"
                     clearable
@@ -112,7 +23,7 @@ const handleClose = () => {
                 </el-input>
             </div>
             <div class="content">
-            <LoadingBoard :loading="loading" :empty="!shopCarInfoList.length">
+            <LoadingBoard :loading="shopInfoloading" :empty="!shopCarInfoList.length">
                 <CommonTable
                     :data="shopCarInfoList"
                 >
@@ -170,6 +81,82 @@ const handleClose = () => {
         </el-drawer>
     </div>
 </template>
+
+<script lang="ts" setup>
+import { Search } from '@element-plus/icons-vue';
+import { ElMessage } from 'element-plus';
+import {
+    shopInfoloading,
+    activeName,
+    page,
+    shopCarInfoList,
+    getShopCartInfo,
+} from '@/views/corpuser/user/components/userTable';
+
+const props = defineProps({
+    drawerVisible: {
+        type: Boolean,
+        default: false,
+    },
+    userId: {
+        type: String,
+        default: ''
+    }
+});
+const searchInput = ref('');
+
+// 获取详情列表
+const getInfoList = async() => {
+    const params = {
+        tab: activeName.value,
+        searchInput: searchInput.value,
+        pageIndex: page.currentPage,
+        pageSize: page.pageSize,
+        id: props.userId
+    };
+    await getShopCartInfo(params);
+};
+
+// 搜索
+const searchInfoList = (isClear: boolean) => {
+    if (isClear) {
+        page.currentPage = 1;
+        getInfoList();
+    } else {
+        if (searchInput.value.length >= 2) {
+            page.currentPage = 1;
+            getInfoList();
+        } else {
+            ElMessage({
+                type: 'error',
+                message: '输入内容不能少于2个字符',
+            });
+        }
+    }
+};
+
+const handleSizeChange = (val: number) => {
+    page.currentPage = 1;
+    page.pageSize = val;
+    getInfoList();
+};
+
+const handleCurrentChange = (val: number) => {
+    page.currentPage = val;
+    getInfoList();
+};
+
+const emit = defineEmits<{
+  (e: 'close', flag: boolean): void
+}>();
+
+const handleClose = () => {
+    searchInput.value = '';
+    shopCarInfoList.value = [];
+    emit('close', false);
+};
+
+</script>
 
 <style lang="scss" scoped>
 .shop-cart-container {

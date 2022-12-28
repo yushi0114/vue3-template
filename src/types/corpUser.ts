@@ -16,3 +16,22 @@ export interface ShopCartTable {
     referenceRate: string,
     status: number
 }
+
+export enum CorpUserTabType {
+    lxt = 'lxt',
+    zjfw = 'zjfw'
+}
+
+export interface CorpUserListItemType {
+    tab: string,
+    id: string,
+    account: string,
+    createTime: string,
+    updateTime: string,
+    status: number
+}
+
+export interface ListResponse<T = any> {
+    total: number,
+    data: T[]
+}

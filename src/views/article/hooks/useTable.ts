@@ -102,9 +102,7 @@ export const useTable = (
             }
             fetchTableData();
         },
-        onError(error) {
-            console.log('error: ', error);
-        },
+        onError: noop,
     });
 
     const { request: updateSort } = useApi(ARTICLE_API_MAP[ARTICLE_API.UPDATE_ARTICLE_SORT], {
@@ -116,9 +114,7 @@ export const useTable = (
             showArticleSortDialog.value = false;
             fetchTableData();
         },
-        onError(error) {
-            console.log('error: ', error);
-        },
+        onError: noop,
     });
 
     const { request: deleteArticle } = useApi(ARTICLE_API_MAP[ARTICLE_API.DELETE_ARTICLE], {
@@ -131,9 +127,7 @@ export const useTable = (
             fetchTableData();
             return Promise.resolve(data);
         },
-        onError(error) {
-            console.log('error: ', error);
-        },
+        onError: noop,
     });
 
     const { request: deleteFile } = useApi(ARTICLE_API_MAP[ARTICLE_API.DELETE_FILE], {

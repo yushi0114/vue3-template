@@ -90,7 +90,6 @@ export async function goEditFormView(item: FinanceCodeListItemType) {
 }
 
 export async function setCityCodeList(): Promise<void> {
-    console.log('21212：', 21212);
     return new Promise((resolve) => {
         getAllCityListApi().then(data => {
             cityCodeList.value = data.data.map(item => ({

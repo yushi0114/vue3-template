@@ -84,7 +84,6 @@ function formatSortType(value: string) {
 }
 
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
-    console.log(params);
     roleFilterObject.value.currentPage = 1;
     roleFilterObject.value.currentSize = 10;
     roleFilterObject.value.sortField = params.prop;

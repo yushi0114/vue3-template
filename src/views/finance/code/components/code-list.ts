@@ -45,14 +45,18 @@ export const financeCodeFilterObject = reactive<{
     currentSize: number;
     currentPage: number;
     searchInput: string;
-    sortField: 'update_time' | 'create_time',
+    sortField: 'update_time' | 'create_time'
     sortType: 'asc' | 'desc'
+    cityCodeArr: string[]
+    orgTypeCodeArr: string[]
 }>({
     searchInput: '',
     currentSize: 10,
     currentPage: 1,
     sortField: 'update_time',
     sortType: 'desc',
+    cityCodeArr: [],
+    orgTypeCodeArr: []
 });
 
 
@@ -91,6 +95,7 @@ export async function setCityCodeList(): Promise<void> {
             cityCodeList.value = data.data.map(item => ({
                 ...item,
                 label: item.name,
+                text: item.name,
                 value: item.code
             }));
         }).finally(() => {
@@ -106,6 +111,7 @@ export async function setOrgTypeCodeList(): Promise<void> {
             orgTypeCodeList.value = data.map(item => ({
                 ...item,
                 label: item.name,
+                text: item.name,
                 value: item.code
             }));
         }).finally(() => {
@@ -192,8 +198,8 @@ export async function setFinanceCodeList(): Promise<void> {
         getFinanceCodeListApi({
             pageIndex: financeCodeFilterObject.currentPage,
             pageSize: financeCodeFilterObject.currentSize,
-            cityCodeArr: [],
-            orgTypeCodeArr: [],
+            cityCodeArr: financeCodeFilterObject.cityCodeArr,
+            orgTypeCodeArr: financeCodeFilterObject.orgTypeCodeArr,
             searchInput: financeCodeFilterObject.searchInput,
             sortField: financeCodeFilterObject.sortField,
             sortType: financeCodeFilterObject.sortType,

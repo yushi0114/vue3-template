@@ -123,10 +123,6 @@ export async function addUser(): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '创建失败',
-            });
             resolve(false);
         });
     });

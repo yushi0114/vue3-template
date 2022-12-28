@@ -1,6 +1,7 @@
 <template>
     <div
         v-loading="loading"
+        element-loading-text="加载中"
         class="common-table">
         <!--批量操作栏，勾选行时显示-->
         <el-row
@@ -20,7 +21,6 @@
         </el-row>
         <!-- 数据表格 -->
         <CommonTable
-            v-show="tableData.length"
             ref="commonTableRef"
             :data="tableData"
             v-bind="$attrs"
@@ -55,16 +55,23 @@
                 </template>
             </el-table-column>
             <!-- 递归渲染多级表头 -->
-            <template v-for="column in columns">
+            <template v-for="column in columns" :key="column.prop">
                 <multistage-column
                     v-if="column.children && column.children.length"
-                    :key="column.prop"
                     :column="column"></multistage-column>
                 <el-table-column
                     v-else
-                    :key="column.id"
                     v-bind="column"
+                    :filters="undefined"
+                    :filter-method="undefined"
                     show-overflow-tooltip>
+                    <template #header v-if="column.filters">
+                        <table-filter
+                            :column="column"
+                            :filterCondition="column.filters"
+                            @filter-change="handleFilterChange"
+                        ></table-filter>
+                    </template>
                     <template
                         v-if="column.slotName"
                         #default="scope">
@@ -96,7 +103,7 @@
                 </template>
             </el-table-column>
             <template #empty>
-                <div></div>
+                <LoadingBoard :loading="false" :empty="!tableData.length" />
             </template>
         </CommonTable>
         <!-- 分页配置 -->
@@ -141,7 +148,7 @@ const prop = withDefaults(defineProps<IProps>(), {
     showPagination: true,
     paginationConfig: () => reactive({}),
 });
-const emit = defineEmits(['page-change', 'multi-selection']); // 声明emit
+const emit = defineEmits(['page-change', 'multi-selection', 'filter-change']); // 声明emit
 
 const state: { selection: ITableData } = reactive({
     selection: [],
@@ -180,6 +187,11 @@ function selectionChange(selection: ITableData[]) {
     // 暴露选中事件
     emit('multi-selection', selection);
 }
+
+// eslint-disable-next-line no-undef
+const handleFilterChange = (filters: Recordable<string[]>) => {
+    emit('filter-change', filters);
+};
 // 自定义排序
 function typeIndex(index: number) {
     const tabIndex =

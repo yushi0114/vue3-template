@@ -48,7 +48,6 @@ export function addDynamicRoutes(router: Router, navs: DynamicNavEntity[]) {
         // demo-permission/:id => demo-permission/0
         nav.path = ROOT_PATH + nav.path;
         nav.defaultPath = nav.path.replace(/\/:\w+/g, '/0');
-        // console.log('fffffff', nav.defaultPath);
 
         // 添加接口返回的动态路由
         router.addRoute(ROOT_NAME, {

@@ -1,18 +1,8 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-
 withDefaults(
     defineProps<{ title?: string; full?: boolean }>(),
     {full: false}
 );
-
-const route = useRoute();
-
-onMounted(() => {
-    route;
-    // console.log('page permission', route.meta.permission);
-});
 </script>
 
 <template>

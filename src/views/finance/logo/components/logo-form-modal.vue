@@ -1,12 +1,13 @@
 <template>
-    <el-dialog
-        :model-value="dialogVisible"
+    <MessageDialog
+        v-model="innerModel"
         :title="type === 'create' ? '新建机构LOGO' : '编辑机构LOGO'"
         width="30%"
         :close-on-click-modal="false"
         :modal-append-to-body="true"
         append-to-body
         destroy-on-close
+        :show-footer="false"
         @close="handleClose">
         <el-form :model="formData" label-width="120px" :rules="rules" ref="ruleFormRef">
             <el-form-item label="机构名称" prop="orgId">
@@ -42,7 +43,7 @@
             <el-button @click="handleClose">取消</el-button>
             <el-button type="primary" @click="handleUploadToServer(ruleFormRef)">确定</el-button>
         </FlexRow>
-    </el-dialog>
+    </MessageDialog>
 </template>
 
 <script lang="ts" setup>
@@ -80,6 +81,15 @@ const props = defineProps({
         type: String as PropType<'create' | 'edit'>
     }
 });
+const emits = defineEmits<{
+    (e: 'update:modelValue', visible: boolean): void,
+    (e: 'close', value: boolean): void,
+}>();
+
+const innerModel = computed({
+    get: () => props.dialogVisible,
+    set: (val) => emits('update:modelValue', val)
+});
 
 const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
@@ -93,15 +103,13 @@ const rules = reactive<FormRules>({
 
 const fileList = ref<UploadUserFile[]>([]);
 
-const emits = defineEmits(['close']);
-
 const formData = ref({
     orgId: props.currentLogo?.orgId ?? '',
     logoContent: props.currentLogo?.logoContent ?? ''
 });
 
 function handleClose() {
-    emits('close');
+    emits('close', false);
 }
 
 // 文件预览

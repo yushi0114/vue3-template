@@ -39,7 +39,6 @@ function handleOpen() {
         platform: platform.value
     })
         .then((res: any) => {
-            console.log(res);
             score.result = res.result;
         });
     request({ id: props.content.id, platform: platform.value })

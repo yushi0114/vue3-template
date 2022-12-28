@@ -1,12 +1,13 @@
 <template>
-    <el-dialog
-        :model-value="dialogVisible"
+    <MessageDialog
+        v-model="innerModel"
         :title="formType === 'create' ? '新建合作伙伴' : '编辑合作伙伴'"
         width="650px"
         :close-on-click-modal="false"
         :modal-append-to-body="true"
         append-to-body
         destroy-on-close
+        :show-footer="false"
         @close="handleClose">
         <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
             <el-form-item label="合作伙伴名称" required prop="name">
@@ -45,7 +46,7 @@
                 <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">确定</el-button>
             </FlexRow>
         </el-form>
-    </el-dialog>
+    </MessageDialog>
 </template>
 
 <script lang="ts" setup>
@@ -55,7 +56,7 @@ import { blobToDataURL, validateIllegalSymbol } from '@/utils';
 import type { PropType } from 'vue';
 
 const isLoading = ref<boolean>(false);
-defineProps({
+const props = defineProps({
     dialogVisible: {
         type: Boolean as PropType<boolean>,
         default: false
@@ -65,10 +66,18 @@ defineProps({
     }
 });
 
-const emits = defineEmits(['close']);
+const emits = defineEmits<{
+    (e: 'close', flag: boolean): void,
+    (e: 'update:dialogVisible', flag: boolean): void,
+}>();
+
+const innerModel = computed({
+    get: () => props.dialogVisible,
+    set: (val) => emits('update:dialogVisible', val)
+});
 
 function handleClose() {
-    emits('close');
+    emits('close', false);
 }
 
 
@@ -145,7 +154,7 @@ async function submitForm(formElement: FormInstance | undefined) {
 }
 
 async function goBack() {
-    emits('close');
+    emits('close', false);
 }
 
 </script>

@@ -1,11 +1,10 @@
 <template>
-    <el-table-column :label="props.column.label" :prop="props.column.label" v-bind="bindColumn">
-        <template v-for="item in props.column.children">
+    <el-table-column :label="props.column.label" :prop="props.column.prop" v-bind="bindColumn">
+        <template v-for="item in props.column.children" :key="item.prop">
             <multistage-column
                 v-if="item.children && item.children.length"
-                :key="item.prop"
                 :column="item"></multistage-column>
-            <el-table-column v-else :key="item.id" v-bind="item" show-overflow-tooltip>
+            <el-table-column v-else v-bind="item" show-overflow-tooltip>
                 <template v-if="item.slotName" #default="scope">
                     <slot :name="item.slotName" :data="scope"></slot>
                 </template>

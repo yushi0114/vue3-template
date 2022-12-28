@@ -238,7 +238,7 @@ watch(isCtrlKeep, (newValue) => {
         }
     }
 
-    &:deep(.el-collapse-item__arrow) {
+    :deep(.el-collapse-item__arrow) {
         margin-right: 0;
         transform: rotateZ(90deg);
         color: $color-primary-light-5;

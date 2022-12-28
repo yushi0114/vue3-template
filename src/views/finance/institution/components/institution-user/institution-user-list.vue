@@ -21,15 +21,16 @@
               @sort-change="handleSortChange"
               :default-sort="{ prop: 'updateTime', order: 'descending' }"
         >
-            <el-table-column label="姓名">
+            <el-table-column label="手机号">
                 <template #default="scope">
                     <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
-                            scope.row.name
+                            scope.row.account
                         }}
                     </TextHoverable>
                 </template>
             </el-table-column>
-            <el-table-column prop="account" label="手机号"/>
+            <el-table-column  prop="name" label="姓名">
+            </el-table-column>
             <el-table-column prop="roleName" label="角色"></el-table-column>
             <el-table-column prop="createTime" sortable label="创建时间"/>
             <el-table-column prop="updateTime" sortable label="更新时间"/>

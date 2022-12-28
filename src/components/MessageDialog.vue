@@ -5,12 +5,14 @@ const props = withDefaults(
         confirmButtonText?: string,
         cancelButtonText?: string,
         autoFocus?: boolean,
+        showFooter?: boolean,
     }>(),
     {
         modelValue: false,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        autoFocus: true
+        autoFocus: true,
+        showFooter: true
     }
 );
 
@@ -44,6 +46,7 @@ function handleCancel() {
 
 <template>
     <el-dialog
+        v-bind="$attrs"
         v-model="innerModel"
         class="message-dialog"
         align-center
@@ -55,7 +58,7 @@ function handleCancel() {
         <div class="dialog-body" ref="bodyRef">
             <slot />
         </div>
-        <template v-slot:footer>
+        <template v-slot:footer v-if="showFooter">
             <slot name="footer">
                 <FlexRow horizontal="center">
                     <el-button @click="handleCancel">{{ cancelButtonText }}</el-button>
@@ -68,7 +71,10 @@ function handleCancel() {
 
 <style lang="scss">
 .message-dialog {
-    max-width: 480px;
+    max-width: 650px;
     border-radius: 4px !important;
+    .el-dialog__body {
+        padding-top: $gap-sm;
+    }
 }
 </style>

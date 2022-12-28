@@ -42,7 +42,7 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
             });
             PRODUCT_FORM_ALL.value.forEach((formItem) => {
                 if (
-                    data[formItem.keyName as keyof ProductEntity] ||
+                    data[formItem.keyName as keyof ProductEntity] || data[formItem.keyName as keyof ProductEntity] === 0 ||
                     (formItem.formatter && isFunction(formItem.formatter))
                 ) {
                     if (formItem.formatter && isFunction(formItem.formatter)) {

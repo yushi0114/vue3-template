@@ -27,7 +27,6 @@ function handleOpen() {
     if (!props.content) return;
     request({ id: props.content.id, platform: platform.value })
         .then(res => {
-            console.log(res);
             detail.value = res;
         });
     emits('open');

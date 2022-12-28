@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\constants.ts
  * @Author: zys
  * @Date: 2022-11-14 11:26:22
- * @LastEditTime: 2022-11-25 16:40:19
+ * @LastEditTime: 2022-12-27 16:48:16
  * @LastEditors: zys
  * @Reference:
  */
@@ -119,7 +119,7 @@ export const TABLE_COLUMNS = [
     // 自定义索引
     {
         label: '缩略图',
-        keyName: 'thumbnail',
+        prop: 'thumbnail',
         slotName: 'thumbnail',
         width: 100,
     },

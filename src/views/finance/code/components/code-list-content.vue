@@ -44,41 +44,39 @@
             </FlexRow>
         </template>
     </ListQueryControl>
-    <LoadingBoard :loading="loading" :empty="!codeList.list.length">
-        <CommonTable
-            :data="codeList.list"
-            @sort-change="handleSortChange"
-            :default-sort="{ prop: 'updateTime', order: 'descending' }"
+    <sjc-table
+        ref="sjcTableRef"
+        :loading="loading"
+        :table-data="codeList.list"
+        :columns="CODE_TABLE_COLUMNS"
+        :table-config="CODE_TABLE_CONFIG"
+        :showPagination="false"
+        @sort-change="handleSortChange"
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        @filter-change="handleFilterChange"
         >
-            <el-table-column label="机构名称">
-                <template #default="scope">
-                    <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
-                            scope.row.orgName
-                        }}
-                    </TextHoverable>
-                </template>
-            </el-table-column>
-            <el-table-column prop="orgCode" label="机构编码" width="180"/>
-            <el-table-column prop="orgTypeName" label="机构分类" width="180"/>
-            <el-table-column prop="createBy" label="创建者" width="180"/>
-            <el-table-column prop="createTime" sortable label="创建时间"/>
-            <el-table-column prop="updateTime" sortable label="更新时间"/>
-            <TableOperatorColumn
-                width="120"
-                @[ItemOperate.edit]="(scope: any) => handleEditItem(scope.row)"
-                @[ItemOperate.delete]="(scope: any) => handleRemoveItem(scope.row)"
+        <template #orgName="{ scope }">
+            <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">{{
+                    scope.row.orgName
+                }}
+            </TextHoverable>
+        </template>
+        <template #handler="{ scope }">
+            <ListOperator
+                @[ItemOperate.edit]="handleEditItem(scope.row)"
+                @[ItemOperate.delete]="handleRemoveItem(scope.row)"
                 :operators="[
                     { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
                     { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
                 ]">
-            </TableOperatorColumn>
-        </CommonTable>
-        <CommonPagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="financeCodeFilterObject.currentPage"
-            :total="codeList.total"/>
-    </LoadingBoard>
+            </ListOperator>
+        </template>
+    </sjc-table>
+    <CommonPagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="financeCodeFilterObject.currentPage"
+        :total="codeList.total"/>
     <CodeForm
         v-model="isFormShow"
         :data-detail="dataDetail"></CodeForm>
@@ -90,6 +88,7 @@
 
 <script lang="ts" setup>
 import type { UploadRequestOptions } from 'element-plus';
+import { CODE_TABLE_COLUMNS, CODE_TABLE_CONFIG } from '../constants';
 import {
     codeList,
     deleteFinanceCode,
@@ -101,6 +100,8 @@ import {
     importFinanceCodeList,
     loading,
     setFinanceCodeList,
+    setOrgTypeCodeList,
+    setCityCodeList
 } from './code-list';
 import type { FinanceCodeListItemType } from '@/types/finance';
 import CodeForm from '@/views/finance/code/components/code-form.vue';
@@ -173,6 +174,15 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
     await setFinanceCodeList();
 }
 
+const handleFilterChange = (filters: { [K in 'orgTypeCodeArr' | 'cityCodeArr']: string[]}) => {
+    financeCodeFilterObject.currentPage = 1;
+    financeCodeFilterObject.currentSize = 10;
+    (Object.keys(filters) as ('orgTypeCodeArr' | 'cityCodeArr')[]).forEach((key) => {
+        financeCodeFilterObject[key] = filters[key];
+    });
+    setFinanceCodeList();
+};
+
 async function handleSearchList() {
     financeCodeFilterObject.currentPage = 1;
     financeCodeFilterObject.currentSize = 10;
@@ -208,7 +218,11 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
 
 watch(() => financeCodeFilterObject.searchInput, handleSearchList);
 
-onMounted(setFinanceCodeList);
+onMounted(() => {
+    setFinanceCodeList();
+    setOrgTypeCodeList();
+    setCityCodeList();
+});
 </script>
 
 <style scoped lang="scss">

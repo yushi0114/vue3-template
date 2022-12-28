@@ -35,8 +35,14 @@ watch(props.dataEdit, (val) => {
 
 const emit = defineEmits<{
   (e: 'close', flag: boolean): void,
-  (e: 'refresh'): void
+    (e: 'refresh'): void
+    (e: 'update:dialogVisible', flag: boolean): void,
 }>();
+
+const innerModel = computed({
+    get: () => props.dialogVisible,
+    set: (val) => emit('update:dialogVisible', val)
+});
 
 const cancel = (form: FormInstance | undefined) => {
     if (!form) return;
@@ -167,10 +173,9 @@ const cityRules = reactive<FormRules>({
 </script>
 <template>
     <div class="city-container">
-        <el-dialog
-            v-model="dialogVisible"
+        <MessageDialog
+            v-model="innerModel"
             :title="dataEdit.title"
-            width='500px'
             @open="refFocus"
             @close="cancel(cityFormRef)"
         >
@@ -221,7 +226,7 @@ const cityRules = reactive<FormRules>({
                 </el-button>
               </span>
             </template>
-        </el-dialog>
+        </MessageDialog>
     </div>
 </template>
 

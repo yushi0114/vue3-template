@@ -80,7 +80,6 @@ service.interceptors.response.use(res => {
         token.remove();
         router.replace('/login');
     } else if (code === HttpStatus.internalServerError) {
-        console.error(msg);
         ElMessage({
             message: msg,
             type: 'error'
@@ -96,7 +95,6 @@ service.interceptors.response.use(res => {
         return isString(res.data.code) ? res.data : res.data.data;
     }
 }, error => {
-    console.log('err' + error);
     let { message } = error;
     if (message == 'Network Error') {
         message = '后端接口连接异常';

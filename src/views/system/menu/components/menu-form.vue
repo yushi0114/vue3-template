@@ -50,7 +50,7 @@
                           type="textarea"
                           placeholder="请输入菜单描述"/>
             </el-form-item>
-            <el-form-item label="菜单图标" prop="icon">
+            <el-form-item label="菜单图标" prop="icon" v-if="activeName === MenuTabType.dms">
                 <el-input v-model="menuForm.icon"
                           :maxlength="255"
                           show-word-limit
@@ -85,8 +85,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import { createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, menuTreeData, } from './menu-list';
-import type { MenuFormType } from '@/types/system-manage';
+import { activeName, createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, menuTreeData, } from './menu-list';
+import { type MenuFormType, MenuTabType } from '@/types/system-manage';
 import { type ValidateCallback, validateIllegalSymbol } from '@/utils';
 
 const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
@@ -224,7 +224,7 @@ async function goBack() {
 }
 
 .custom-create-form {
-    &::v-deep(.el-form-item__label) {
+    :deep(.el-form-item__label) {
         font-weight: bold;
     }
 }

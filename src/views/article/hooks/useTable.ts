@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-12-26 09:59:28
+ * @LastEditTime: 2022-12-28 15:44:34
  * @LastEditors: zys
  * @Reference:
  */
@@ -41,12 +41,22 @@ export const useTable = (
     emit?: any,
     activeId?: ComputedRef<string>
 ) => {
-    const { tabItem, articleStatus } = useArticleDetail();
+    const tabItem = ref(tab);
+    const articleStatus = ref<ARTICLE_STATUS>(ARTICLE_STATUS.ALL);
+    if (page === ARTICLE_PAGE.DETAIL) {
+        const { tabItem: _tabItem, articleStatus: _articleStatus } = useArticleDetail();
+        tabItem.value = _tabItem!;
+        articleStatus.value = _articleStatus.value;
+    }
+    // eslint-disable-next-line no-undef
+    const currentArticle = ref<Recordable>({});
+    const showArticleSortDialog = ref(false);
+
     const INITIAL_PARAMS = {
         status: ARTICLE_STATUS.ALL,
         ...tab.queryParams,
         searchInput: ref(''),
-        sortType: SORT_TYPE.NONE,
+        sortType: SORT_TYPE.ASC,
         sortField: 'sort',
         pageIndex: 1,
         pageSize: 10,
@@ -92,9 +102,7 @@ export const useTable = (
             }
             fetchTableData();
         },
-        onError(error) {
-            console.log('error: ', error);
-        },
+        onError: noop,
     });
 
     const { request: updateSort } = useApi(ARTICLE_API_MAP[ARTICLE_API.UPDATE_ARTICLE_SORT], {
@@ -103,11 +111,10 @@ export const useTable = (
                 type: 'success',
                 message: '操作成功',
             });
+            showArticleSortDialog.value = false;
             fetchTableData();
         },
-        onError(error) {
-            console.log('error: ', error);
-        },
+        onError: noop,
     });
 
     const { request: deleteArticle } = useApi(ARTICLE_API_MAP[ARTICLE_API.DELETE_ARTICLE], {
@@ -120,9 +127,7 @@ export const useTable = (
             fetchTableData();
             return Promise.resolve(data);
         },
-        onError(error) {
-            console.log('error: ', error);
-        },
+        onError: noop,
     });
 
     const { request: deleteFile } = useApi(ARTICLE_API_MAP[ARTICLE_API.DELETE_FILE], {
@@ -278,7 +283,7 @@ export const useTable = (
 
     const updateArticleStatus = async ({ row, status, operateLabel }: any) => {
         try {
-            await ElMessageBox.confirm(`确定${operateLabel}标题为“${row.title}”的${ARTICLE_TYPE_LABEL}吗？`, {
+            await ElMessageBox.confirm(`确定${operateLabel}标题为“${row.title}”的${ARTICLE_TYPE_LABEL}吗？`, '提示', {
                 type: 'warning',
             });
             _updateNewsStatus({ id: row.id, status });
@@ -288,28 +293,29 @@ export const useTable = (
     };
 
     const updateArticleSort = async ({ row }: any) => {
-        try {
-            const { value } = await ElMessageBox.prompt('请输入新的序号', '修改排序', {
-                showInput: true,
-                inputValue: row.sort || '',
-                inputValidator: (val) => {
-                    if (val.length === 0) {
-                        return '序号不能为空';
-                    } else if (!/^[1-9]\d*$/.test(val)) {
-                        return '序号只能为1-999的整数';
-                    } else {
-                        return true;
-                    }
-                },
-                confirmButtonText: '修改',
-            });
-            updateSort({ id: row.id, sort: Number(value) });
-        } catch {
-            return;
-        }
+        currentArticle.value = row;
+        showArticleSortDialog.value = true;
+        // try {
+        //     const { value } = await ElMessageBox.prompt('请输入新的序号', '修改排序', {
+        //         showInput: true,
+        //         inputValue: row.sort || '',
+        //         inputValidator: (val) => {
+        //             if (val.length === 0) {
+        //                 return '序号不能为空';
+        //             } else if (!/^[1-9]\d*$/.test(val)) {
+        //                 return '序号只能为1-999的整数';
+        //             } else {
+        //                 return true;
+        //             }
+        //         },
+        //     });
+        //     updateSort({ id: row.id, sort: Number(value) });
+        // } catch {
+        //     return;
+        // }
     };
     onMounted(() => {
-        if (page === ARTICLE_PAGE.DETAIL && tabItem!.value === tab.value) {
+        if (page === ARTICLE_PAGE.DETAIL && tabItem!.value.value === tab.value) {
             params.status = articleStatus.value ? Number(articleStatus.value) : articleStatus.value;
         }
         fetchTableData();
@@ -320,6 +326,8 @@ export const useTable = (
         tableConfig,
         state,
         pageConfig,
+        currentArticle,
+        showArticleSortDialog,
         handleSearch,
         handleDebounceSearch,
         handleFilterChange,
@@ -330,5 +338,6 @@ export const useTable = (
         loadMore,
         handleMoreOperate,
         _updateNewsStatus,
+        updateSort,
     };
 };

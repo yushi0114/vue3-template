@@ -147,10 +147,10 @@ function handleMouseLeave(event: string) {
         box-sizing: border-box;
 
         .add-menu-btn {
-            width: 1.5rem;
-            height: 1.5rem;
+            width: 1.25rem;
+            height: 1.25rem;
             cursor: pointer;
-            margin-left: 5px;
+            margin-left: 15px;
             color: #606266;
         }
     }
@@ -161,12 +161,12 @@ function handleMouseLeave(event: string) {
         flex: 1;
         box-sizing: border-box;
 
-        &::v-deep( .el-tree-node.is-current > .el-tree-node__content) {
+        :deep(.el-tree-node.is-current > .el-tree-node__content) {
             background-color: transparent !important;
             color: $color-primary-light-3;
         }
 
-        &::v-deep(.el-tree-node__label) {
+        :deep(.el-tree-node__label) {
             display: block;
             width: 100%;
         }

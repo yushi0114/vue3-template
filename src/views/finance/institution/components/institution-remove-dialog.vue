@@ -1,33 +1,32 @@
 <template>
-    <el-dialog
+    <MessageDialog
         title="删除机构"
-        :width="'550px'"
-        :model-value="isDeleteOrgModelShow"
+        v-model="isDeleteOrgModelShow"
         :close-on-click-modal="false"
+        :show-footer="false"
         @close="cancel">
         <div class="confirmText">
             删除此机构将立即删除所有信息，包含机构录入的产品信息等。<br/>机构删除后，数据将无法恢复！
         </div>
         <div class="confirmOrg">
-            请输入机构名称“{{ orgName }}”进行确认：
+            请输入机构名称“{{ props.orgName }}”进行确认：
         </div>
         <el-form ref="deleteFormRef" :model="deleteForm" :rules="deleteFormRules">
             <el-form-item label="" prop="orgName">
-                <el-input v-model="deleteForm.orgName" ref="orgName" placeholder="请输入机构名称"></el-input>
+                <el-input v-model="deleteForm.orgName" placeholder="请输入机构名称"></el-input>
             </el-form-item>
         </el-form>
         <div class="user-footer">
-            <el-button size="small" @click="cancel">取 消</el-button>
-            <el-button type="primary" size="small" :loading="isLoading" @click="handleDeleteOrg(deleteFormRef)">确 定</el-button>
+            <el-button @click="cancel">取 消</el-button>
+            <el-button type="primary" :loading="isLoading" @click="handleDeleteOrg(deleteFormRef)">确 定</el-button>
         </div>
-    </el-dialog>
+    </MessageDialog>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { deleteOrg, isDeleteOrgModelShow, willDeleteOrgIdList } from './finance-institution';
-import type { ValidateCallback } from '@/utils';
-import { validateIllegalSymbol } from '@/utils';
+import { validateIllegalSymbol, type ValidateCallback } from '@/utils';
 import type { FormInstance } from 'element-plus';
 
 const isLoading = ref(false);

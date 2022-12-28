@@ -1,12 +1,13 @@
 <template>
-    <el-dialog
-        :model-value="dialogVisible"
+    <MessageDialog
+        v-model="innerModel"
         :title=" formType === 'create' ? '新建用户' : '编辑用户'"
         :width="'650px'"
         :close-on-click-modal="false"
         :modal-append-to-body="true"
         append-to-body
         destroy-on-close
+        :show-footer="false"
         @close="handleClose">
         <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
             <el-form-item label="手机号" required prop="account">
@@ -43,7 +44,7 @@
                 </el-button>
             </FlexRow>
         </el-form>
-    </el-dialog>
+    </MessageDialog>
 </template>
 
 <script lang="ts" setup>
@@ -58,17 +59,25 @@ import {
 } from '@/views/system/user/components/user-list';
 import { type ValidateCallback, isPhoneNumber, validateIllegalSymbol } from '@/utils';
 
-defineProps({
+const props = defineProps({
     dialogVisible: {
         type: Boolean as PropType<boolean>,
         default: false
     }
 });
 
-const emits = defineEmits(['close']);
+const emits = defineEmits<{
+    (e: 'close', flag?: boolean): void,
+    (e: 'update:dialogVisible', flag: boolean): void,
+}>();
+
+const innerModel = computed({
+    get: () => props.dialogVisible,
+    set: (val) => emits('update:dialogVisible', val)
+});
 
 function handleClose() {
-    emits('close');
+    emits('close', false);
 }
 
 const validatePhoneId = (rule: any, value: any, callback: ValidateCallback) => {
@@ -104,7 +113,7 @@ async function submitForm(formElement: FormInstance | undefined) {
                 status = await updateUser();
             }
             if (status) {
-                emits('close');
+                emits('close', false);
             }
         }
     });

@@ -3,7 +3,7 @@ import type { PropType } from 'vue';
 import type { RoleListItemType, TreeItemType } from '@/types/system-manage';
 import { roleMenuTreeData } from './institution-role';
 
-defineProps({
+const props = defineProps({
     drawerVisible: {
         type: Boolean,
         default: false,
@@ -12,6 +12,16 @@ defineProps({
         type: Object as PropType<RoleListItemType & { menuIdArr: string[] }>,
         default: () => ({})
     }
+});
+
+const emit = defineEmits<{
+    (e: 'close', flag: boolean): void
+    (e: 'update:drawerVisible', visible: boolean): void
+}>();
+
+const innerModel = computed({
+    get: () => props.drawerVisible,
+    set: (val) => emit('update:drawerVisible', val)
 });
 
 function setData(list: TreeItemType[]) {
@@ -34,9 +44,7 @@ function setData(list: TreeItemType[]) {
 }
 
 const disabledUITree = computed(() => setData(roleMenuTreeData.value ?? []));
-const emit = defineEmits<{
-    (e: 'close', flag: boolean): void
-}>();
+
 
 const handleClose = () => {
     emit('close', false);
@@ -45,7 +53,7 @@ const handleClose = () => {
 </script>
 <template>
     <el-drawer
-        v-model="drawerVisible"
+        v-model="innerModel"
         title="角色详情"
         size="50%"
         :before-close="handleClose"

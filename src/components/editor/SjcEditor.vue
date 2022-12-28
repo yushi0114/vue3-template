@@ -20,6 +20,11 @@ const props = withDefaults(defineProps<EditorProps>(), {
     fileServer: FILE_SERVER.LXT,
 });
 
+const innerModel = computed({
+    get: () => props.modelValue,
+    set: (val) => emit('update:modelValue', val)
+});
+
 const emit = defineEmits<EditorEmits>();
 const {
     isFocus,
@@ -72,7 +77,7 @@ defineExpose({
                 :class="{ 'wangeditor__editor--full': isFullScreen }"
                 :defaultConfig="editorConfig"
                 mode="default"
-                :model-value="modelValue"
+                :model-value="innerModel"
                 @onChange="handleChange"
                 @onCreated="handleCreated"
                 @customAlert="customAlert"
@@ -105,7 +110,7 @@ defineExpose({
             <Editor
                 class="wangeditor__editor wangeditor__editor--readonly"
                 :defaultConfig="editorConfig"
-                v-model="modelValue"
+                v-model="innerModel"
                 @onCreated="handleCreated" />
         </div>
     </div>

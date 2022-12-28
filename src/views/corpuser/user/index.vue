@@ -1,36 +1,36 @@
 <script lang="ts" setup>
-import LxtUserTable from './components/LxtCorpUserTable.vue';
-import ZjfwUserTable from './components/ZjfwCorpUserTable.vue';
+import { CorpUserTabType } from '@/types/corpUser';
+import { activeName, loading, getPageList, resetFilterObject } from '@/views/corpuser/user/components/userTable';
+import type { TabsPaneContext } from 'element-plus';
+import UserTable from './components/CorpUserTable.vue';
 
-const route = useRoute();
-const isLxtstatistics = ref(true);
+const handleClick = async(tab: TabsPaneContext) => {
+    resetFilterObject();
+    getPageList({
+        tab: tab.paneName as CorpUserTabType
+    });
+};
 
-onMounted(() => {
-    route.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
+onMounted(async() => {
+    await getPageList({
+        tab: activeName.value
+    });
 });
 
-watch(route, (val) => {
-    val.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
+onUnmounted(() => {
+    activeName.value = CorpUserTabType.lxt;
 });
-
 </script>
 
 <template>
     <PagePanel>
-        <Board class="user">
-            <PlatformTab />
-            <template v-if="isLxtstatistics">
-                <LxtUserTable></LxtUserTable>
-            </template>
-            <template v-else>
-                <ZjfwUserTable></ZjfwUserTable>
-            </template>
+        <Board full v-loading="loading">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
+                <el-tab-pane label="市综服" name="zjfw"></el-tab-pane>
+            </el-tabs>
+            <UserTable v-if="activeName==='lxt'"></UserTable>
+            <UserTable v-if="activeName==='zjfw'"></UserTable>
         </Board>
     </PagePanel>
 </template>
-
-<style lang="postcss" scoped>
-.user {
-    @apply  h-full;
-}
-</style>

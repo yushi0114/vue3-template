@@ -45,7 +45,6 @@ const { handleToCreate } = useJumpLink({
 });
 
 onMounted(() => {
-    console.log('props.tab：', props.tab);
     window.onresize = () => {
         (() => {
             showNoMore.value = hasScrollBar(detailListMap.value.get(props.tab.value));

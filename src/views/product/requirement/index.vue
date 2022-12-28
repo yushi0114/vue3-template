@@ -15,9 +15,7 @@ const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: stri
         });
         getList();
     },
-    onError(error) {
-        console.log('error: ', error);
-    },
+    onError: noop,
 });
 
 const route = useRoute();

@@ -13,10 +13,6 @@ onBeforeMount(() => {
     getUserInfo();
 });
 
-// watch(sidebarOptions, () => {
-//     console.log(sidebarOptions.value);
-// });
-
 </script>
 
 <template>
@@ -49,14 +45,9 @@ onBeforeMount(() => {
 
 .page-container {
     background: $fill-color-light;
-    // overflow-y: auto;
-    /* @apply bg-gray-200 p-5 box-border; */
 }
 
 .app-logo {
     height: 32px;
-    // & .st0 {
-    //     fill: red;
-    // }
 }
 </style>

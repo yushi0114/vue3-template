@@ -62,7 +62,6 @@ export async function deleteItems(ids: string[]): Promise<void> {
     loading.value = true;
 
     return new Promise((resolve) => {
-        console.log(ids);
         deleteFinanceReportApi({ idArr: ids }).then(() => {
             ElMessage({
                 type: 'success',

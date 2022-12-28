@@ -57,17 +57,14 @@ export const useUserStore = defineStore('user', () => {
 
         return getUserInfoApi(queryParams)
             .then((user) => {
-                // console.log('user: ', user);
                 state.user = user;
                 return dynamicNavs(user.roleId);
             })
             .then((navs) => {
                 const validNavs = navs.filter((nav) => isFunction(genDynamicComponent(nav.component!)));
                 return addDynamicRoutes(router, validNavs).then((formatNavs) => {
-                    // console.log('navs: ', formatNavs);
                     state.navs = formatNavs;
                     state.navTree = toTree({}, formatNavs);
-                    // console.log('state.navTree: ', state.navTree);
                     return state.user as UserEntity;
                 });
             })

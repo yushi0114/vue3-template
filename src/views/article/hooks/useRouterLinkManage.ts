@@ -44,7 +44,6 @@ export const useJumpLink = (params: { tab: TAB_ITEM; module: ARTICLE_MODULE }) =
     const { push } = useRouter();
 
     const handleToCreate = () => {
-        console.log(LINK_MAP[LINK_TYPE.ADD]);
         push(LINK_MAP[LINK_TYPE.ADD]);
     };
 

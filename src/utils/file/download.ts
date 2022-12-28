@@ -84,7 +84,7 @@ export function downloadByUrl({
     const isSafari = window.navigator.userAgent.toLowerCase().indexOf('safari') > -1;
 
     if (/(iP)/g.test(window.navigator.userAgent)) {
-        console.error('Your browser does not support download!');
+        // console.error('Your browser does not support download!');
         return false;
     }
     if (isChrome || isSafari) {

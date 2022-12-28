@@ -129,7 +129,6 @@ async function handleOperateTreeItem(item: TreeItemType, type: ItemOperate) {
 
 
 async function handleNodeClick(data: TreeItemType) {
-    console.log('data: ', data);
     activeId.value = data.id;
     menuDetailData.value = await goDetailFormView(data.id);
     await nextTick(() => {

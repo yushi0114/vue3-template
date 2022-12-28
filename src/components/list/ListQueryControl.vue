@@ -205,7 +205,6 @@ const handleDropdownChange = ({ option, fConf }: { option: PlainOption<any>;fCon
 };
 
 const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => {
-    console.log('aaaaaa', refs.value[index]);
     if (refs.value[index]) {
         nextTick(() => {
             refs.value[index].handleClose();

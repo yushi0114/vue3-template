@@ -1,6 +1,6 @@
 <template>
     <div style="height: max-content">
-        <div v-if="formType === 'create'" class="form-header">新建菜单</div>
+        <Text v-if="formType === 'create'" class="form-header" size="xl" block color="paragraph">新建菜单</Text>
         <el-form
             :class="[{ 'custom-create-form': formType !== 'create'}]"
             :label-position="formType === 'create' ? 'right' : 'top'"
@@ -209,7 +209,6 @@ async function goBack() {
 
 <style scoped lang="scss">
 .form-header {
-    font-size: 24px;
     margin: 20px 0 30px;
 }
 

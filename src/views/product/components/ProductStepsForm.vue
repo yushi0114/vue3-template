@@ -155,4 +155,7 @@ defineExpose({
 :deep(.el-step) {
     flex-basis: 33% !important;
 }
+:deep(.el-step__head.is-success .el-step__line) {
+    background-color: $color-success;
+}
 </style>

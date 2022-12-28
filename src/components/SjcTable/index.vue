@@ -65,7 +65,7 @@
                     :filters="undefined"
                     :filter-method="undefined"
                     show-overflow-tooltip>
-                    <template #header v-if="column.filters">
+                    <template #header v-if="column.filters?.length">
                         <table-filter
                             :column="column"
                             :filterCondition="column.filters"

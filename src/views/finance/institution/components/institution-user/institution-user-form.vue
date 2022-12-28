@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="form-header">用户管理</div>
+        <Text class="form-header" size="xl" block color="paragraph">用户管理</Text>
         <el-form class="custom-form" :model="form" :rules="rules" label-width="120px" ref="ruleFormRef">
             <el-form-item label="手机号:" required prop="account">
                 <el-input v-model="form.account" placeholder="请输入手机号" :disabled="formType === 'edit'" ref="userAccountRef"/>
@@ -102,7 +102,6 @@ onMounted(() => {
 }
 
 .form-header {
-    font-size: 24px;
     margin: 20px 0 30px;
 }
 </style>

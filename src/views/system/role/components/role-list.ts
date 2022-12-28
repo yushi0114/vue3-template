@@ -66,6 +66,7 @@ export function resetRoleFilterObject() {
 }
 
 export async function handleGoBack() {
+    resetRoleForm();
     mode.value = 'list';
     currentRoleId.value = undefined;
     await getRolePageList({

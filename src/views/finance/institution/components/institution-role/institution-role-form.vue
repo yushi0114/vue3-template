@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="form-header">角色管理</div>
+        <Text class="form-header" size="xl" block color="paragraph">角色管理</Text>
         <el-form
             class="custom-form"
             :model="roleForm"
@@ -55,7 +55,6 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { ElTree, FormInstance, FormRules } from 'element-plus';
-import { ElMessage } from 'element-plus';
 import { addRole, formType, goBackListView, roleForm, roleMenuTreeData, updateRole } from './institution-role';
 import { LoadingService } from '@/views/system/loading-service';
 import type { TreeNodeData } from 'element-plus/lib/components/tree/src/tree.type';
@@ -131,7 +130,6 @@ onMounted(() => {
 }
 
 .form-header {
-    font-size: 24px;
     margin: 20px 0 30px;
 }
 </style>

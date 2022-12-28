@@ -67,6 +67,7 @@ export function resetRoleFilterObject() {
 }
 
 export async function goBackListView() {
+    resetRoleForm();
     mode.value = 'list';
     currentRoleId.value = undefined;
     await getRolePageList(currentInstitutionId.value);

@@ -61,7 +61,7 @@ function handleSignout() {
     <el-dropdown class="nav-user-profile" @command="handleCommand">
         <el-space size="small">
             <el-avatar shape="square" size="small" :icon="UserFilled" />
-            {{ state.user?.name ?? state.user?.account ?? ''}}
+            {{ state.user?.name || state.user?.account || ''}}
         </el-space>
         <template v-slot:dropdown>
             <el-dropdown-menu>

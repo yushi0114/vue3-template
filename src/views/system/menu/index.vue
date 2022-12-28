@@ -52,13 +52,13 @@ onUnmounted(() => {
     flex: 1;
     overflow-y: auto;
 
-    &::v-deep(.el-tabs__header) {
+    :deep(.el-tabs__header) {
         height: 40px;
         min-height: 40px;
         width: 100%;
     }
 
-    &::v-deep(.el-tabs__content) {
+    :deep(.el-tabs__content) {
         flex: 1;
         width: 100%;
     }

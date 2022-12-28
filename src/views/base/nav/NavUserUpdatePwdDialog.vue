@@ -68,7 +68,7 @@ const rules: any = reactive({
 async function submit() {
     try {
         await formRef.value?.validate();
-        await ElMessageBox.confirm('您确认修改登录密码？您将需要重新登录系统', '修改密码');
+        await ElMessageBox.confirm('您确认修改登录密码？您将需要重新登录系统', '修改密码', { type: 'warning' });
         await updatePassword({
             newPassword: encrypt(formModel.newPassword),
             oldPassword: encrypt(formModel.oldPassword),
@@ -101,6 +101,7 @@ function clear() {
 <template>
 <MessageDialog
     title="修改密码"
+    width="480px"
     class="nav-user-update-pwd"
     v-model="innerModel"
     @close="cancel"

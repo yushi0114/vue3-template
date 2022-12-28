@@ -72,12 +72,13 @@ defineExpose({
 </script>
 
 <template>
-    <el-dialog
+    <MessageDialog
         :title="title"
         :width="'650px'"
         v-model="visible"
         :close-on-click-modal="false"
         destroy-on-close
+        :show-footer="false"
         @close="handleCancel">
         <sjc-form
             ref="publicFormRef"
@@ -92,7 +93,7 @@ defineExpose({
                 >确 定</el-button
             >
         </FlexRow>
-    </el-dialog>
+    </MessageDialog>
 </template>
 
 <style lang="scss" scoped></style>

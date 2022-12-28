@@ -129,7 +129,6 @@ async function handleOperateTreeItem(item: TreeItemType, type: ItemOperate) {
 
 
 async function handleNodeClick(data: TreeItemType) {
-    console.log('data: ', data);
     activeId.value = data.id;
     menuDetailData.value = await goDetailFormView(data.id);
     await nextTick(() => {
@@ -171,12 +170,12 @@ async function handleNodeClick(data: TreeItemType) {
         flex: 1;
         box-sizing: border-box;
 
-        &::v-deep( .el-tree-node.is-current > .el-tree-node__content) {
+        :deep(.el-tree-node.is-current > .el-tree-node__content) {
             background-color: transparent !important;
             color: $color-primary-light-3;
         }
 
-        &::v-deep(.el-tree-node__label) {
+        :deep(.el-tree-node__label) {
             display: block;
             width: 100%;
         }

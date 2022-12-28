@@ -236,7 +236,7 @@ export async function initInstitutionPage() {
 
 export async function changeOrgDetailTabView(view: OrgDetailTabViewType) {
     if (view === 'menuList') {
-        console.log('do first');
+        // console.log('do first');
     }
     if (view === 'roleList') {
         setInstitutionRoleMode('list');

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
     drawerVisible: {
         type: Boolean,
         default: false,
@@ -12,7 +12,13 @@ defineProps({
 
 const emit = defineEmits<{
   (e: 'close', flag: boolean): void
+  (e: 'update:drawerVisible', visible: boolean): void
 }>();
+
+const innerModel = computed({
+    get: () => props.drawerVisible,
+    set: (val) => emit('update:drawerVisible', val)
+});
 
 const handleClose = () => {
     emit('close', false);
@@ -21,32 +27,32 @@ const handleClose = () => {
 </script>
 <template>
     <el-drawer
-        v-model="drawerVisible"
+        v-model="innerModel"
         title="城市详情"
         size="50%"
         :before-close="handleClose"
     >
         <el-form :model="dataDetail" label-width="135px">
             <el-form-item label="城市名称" prop="name">
-                <span>{{ dataDetail.name }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.name }}</Text>
             </el-form-item>
             <el-form-item label="行政区划代码" prop="code">
-                <span>{{ dataDetail.code }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.code }}</Text>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
-                <span>{{ dataDetail.sort }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.sort }}</Text>
             </el-form-item>
             <el-form-item label="创建者" prop="createBy">
-                <span>{{ dataDetail.createBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createBy }}</Text>
             </el-form-item>
             <el-form-item label="创建时间" prop="createdTime">
-                <span>{{ dataDetail.createTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createTime }}</Text>
             </el-form-item>
             <el-form-item label="更新者" prop="updateBy">
-                <span>{{ dataDetail.updateBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateBy }}</Text>
             </el-form-item>
             <el-form-item label="更新时间" prop="updatedTime">
-                <span>{{ dataDetail.updateTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateTime }}</Text>
             </el-form-item>
         </el-form>
     </el-drawer>

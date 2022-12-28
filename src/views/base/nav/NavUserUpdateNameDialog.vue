@@ -68,6 +68,7 @@ function clear() {
 <template>
 <MessageDialog
     title="修改姓名"
+    width="480px"
     class="nav-user-update-name"
     v-model="innerModel"
     @open="handleOpen"

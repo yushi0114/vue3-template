@@ -224,7 +224,7 @@ async function goBack() {
 }
 
 .custom-create-form {
-    &::v-deep(.el-form-item__label) {
+    :deep(.el-form-item__label) {
         font-weight: bold;
     }
 }

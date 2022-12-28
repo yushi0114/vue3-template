@@ -14,7 +14,6 @@ const props = withDefaults(
 const scoreLineRef = ref();
 
 function initScoreTrendsLine() {
-    console.log('????', props.scoreResult, scoreLineRef.value);
     if (scoreLineRef.value) {
         const chartScoreLine = echarts.init(scoreLineRef.value);
         let xData: any = [];

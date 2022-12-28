@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\requirement\constants.ts
  * @Author: zys
  * @Date: 2022-11-30 09:29:36
- * @LastEditTime: 2022-11-30 09:56:02
+ * @LastEditTime: 2022-12-27 16:48:39
  * @LastEditors: zys
  * @Reference:
  */
@@ -13,7 +13,7 @@ export const TABLE_COLUMNS = [
     // 自定义索引
     {
         label: '',
-        keyName: 'reqLogo',
+        prop: 'reqLogo',
         slotName: 'reqLogo',
         width: 90,
     },
@@ -27,7 +27,7 @@ export const TABLE_CONFIG: ITableConfig = reactive({
     appendLabel: '',
     handlerConfig: {
         width: 120,
-        label: ''
+        label: '',
     },
 });
 

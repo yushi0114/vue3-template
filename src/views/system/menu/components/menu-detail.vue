@@ -76,11 +76,11 @@ defineProps({
     .form-detail {
         width: 50%;
     }
-    &::v-deep(.el-form-item__label) {
+    :deep(.el-form-item__label) {
         font-weight: bold;
     }
 
-    &::v-deep(.el-form-item) {
+    :deep(.el-form-item) {
         margin-bottom: 10px;
     }
 }

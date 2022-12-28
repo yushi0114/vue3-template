@@ -184,7 +184,7 @@ export const deepFreeze = <T extends Record<string, any>>(obj: T, ignoreKeyList:
 
 export function cloneDeep<T extends Array<any> | Record<string | number, any>>(obj: T): T {
     if (!isObject(obj)) {
-        console.error('[TypeError] param obj is not a object');
+        // console.error('[TypeError] param obj is not a object');
         return obj;
     }
     const result: T | any = Array.isArray(obj) ? [] : {};
@@ -258,7 +258,6 @@ export const resolveArrayByKey = (beforeData: any[], key: string, ignoreList:str
 export const hasScrollBar = (element: HTMLElement, direction: 'vertical' | 'horizontal' = 'vertical'): boolean => {
     if (!element) return false;
     if (direction === 'vertical') {
-        console.log('element：', element, element.scrollHeight, element.clientHeight);
         return element.scrollHeight > element.clientHeight;
     } else if (direction === 'horizontal') {
         return element.scrollWidth > element.clientWidth;

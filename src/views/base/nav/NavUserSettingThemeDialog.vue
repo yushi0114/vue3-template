@@ -29,6 +29,7 @@ function cancel() {
 <template>
 <MessageDialog
     title="修改主题"
+    width="480px"
     class="nav-user-update-name"
     v-model="innerModel"
     @close="cancel">

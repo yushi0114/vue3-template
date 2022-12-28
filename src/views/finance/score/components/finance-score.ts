@@ -59,7 +59,6 @@ export async function getPageList(): Promise<void> {
 
 export async function deleteItems(ids: string[]): Promise<void> {
     return new Promise((resolve) => {
-        // console.log(ids);
         loading.value = true;
         deleteFinanceScoreApi({ idArr: ids }).then(() => {
             ElMessage({

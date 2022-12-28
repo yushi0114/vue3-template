@@ -20,11 +20,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useDark } from '@vueuse/core';
 import { openWindow } from '@/utils/index';
 const target = ref('');
-const isDark = useDark();
-console.log('isDark: ', isDark);
 
 // 获取 url
 const getTargetURL = () => {

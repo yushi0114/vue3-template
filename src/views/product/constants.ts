@@ -969,7 +969,7 @@ export const REQ_TABLE_COLUMNS = [
     // 自定义索引
     {
         label: '',
-        keyName: 'reqLogo',
+        prop: 'reqLogo',
         slotName: 'reqLogo',
         width: 90,
     },

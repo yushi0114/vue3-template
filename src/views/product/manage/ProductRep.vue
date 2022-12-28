@@ -15,9 +15,7 @@ const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: stri
         });
         getList();
     },
-    onError(error) {
-        console.log('error: ', error);
-    },
+    onError: noop,
 });
 
 const { back } = useRouter();
@@ -68,26 +66,20 @@ function goDetail(req: ProductRequirementEntity) {
 
 const handleBatchDelete = async() => {
     const idArr = ids.value.map(item => `"${item}"`).join(',');
-    try {
-        await ElMessageBox.confirm(`确认删除已选中的${ids.value.length}条需求吗？`, '删除', {
-            type: 'warning',
-        });
-        deleteReps(idArr);
-    } catch {
-        noop;
-    }
+    ElMessageBox.confirm(`确认删除已选中的${ids.value.length}条需求吗？`, '删除', {
+        type: 'warning',
+    })
+        .then(() => deleteReps(idArr))
+        .catch(noop);
 };
 
 const handleDelete = async(req: ProductRequirementEntity) => {
     const idArr = `"${req.id}"`;
-    try {
-        await ElMessageBox.confirm('确认删除此需求吗？', '删除', {
-            type: 'warning',
-        });
-        deleteReps(idArr);
-    } catch {
-        noop;
-    }
+    ElMessageBox.confirm('确认删除此需求吗？', '删除', {
+        type: 'warning',
+    })
+        .then(() => deleteReps(idArr))
+        .catch(noop);
 };
 
 onBeforeMount(() => {

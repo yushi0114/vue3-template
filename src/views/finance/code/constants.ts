@@ -3,17 +3,17 @@
  * @FilePath: \dms-web\src\views\finance\code\constants.ts
  * @Author: zys
  * @Date: 2022-12-28 10:12:06
- * @LastEditTime: 2022-12-28 11:28:06
+ * @LastEditTime: 2022-12-29 10:46:07
  * @LastEditors: zys
  * @Reference:
  */
-import type { ITableConfig } from '@/components/SjcTable/types';
+import type { ITableConfig, IColumn } from '@/components/SjcTable/types';
 import type { FinanceCodeListItemType } from '@/types/finance';
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
 import { cityCodeList, orgTypeCodeList } from './components/code-list';
 
 // 表格列配置
-export const CODE_TABLE_COLUMNS = computed<any[]>(() => ([
+export const CODE_TABLE_COLUMNS: IColumn<FinanceCodeListItemType>[] = [
     {
         label: '机构名称',
         prop: 'orgName',
@@ -63,7 +63,7 @@ export const CODE_TABLE_COLUMNS = computed<any[]>(() => ([
         prop: 'updateTime',
         sortable: true,
     },
-]));
+];
 
 // 表格配置项
 export const CODE_TABLE_CONFIG: ITableConfig = reactive({
@@ -73,4 +73,15 @@ export const CODE_TABLE_CONFIG: ITableConfig = reactive({
         width: 120,
         label: '操作',
     },
+});
+
+watchEffect(() => {
+    CODE_TABLE_COLUMNS.forEach((column) => {
+        if (column.prop == 'orgTypeName') {
+            column.filters = orgTypeCodeList.value;
+        }
+        if (column.prop == 'cityName') {
+            column.filters = cityCodeList.value;
+        }
+    });
 });

@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\components\SjcTable\types.ts
  * @Author: zys
  * @Date: 2022-11-03 14:59:33
- * @LastEditTime: 2022-11-30 10:08:45
+ * @LastEditTime: 2022-12-29 10:44:11
  * @LastEditors: zys
  * @Reference:
  */
@@ -34,7 +34,7 @@ export type ITableColumnCtx<T> = Partial<
     }
 >;
 // eslint-disable-next-line no-undef
-export type IColumn<ColumnTypes = Recordable> = Omit<ITableColumnCtx<ColumnTypes>, 'children'> & {
+export type IColumn<ColumnTypes extends Recordable = any> = Omit<ITableColumnCtx<ColumnTypes>, 'children'> & {
     slotName?: string;
     children?: IColumn<ColumnTypes>[];
 };

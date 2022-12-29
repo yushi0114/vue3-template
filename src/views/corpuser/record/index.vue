@@ -1,36 +1,37 @@
 <script lang="ts" setup>
-import LxtReportRecordTable from './components/LxtReportRecordTable.vue';
-import ZjfwReportRecordTable from './components/ZjfwReportRecordTable.vue';
+import { CorpReportRecordTabType } from '@/types/corpReportRecord';
+import { activeName, loading, getPageList, resetFilterObject } from '@/views/corpuser/record/components/reportRecord';
+import ReportRecordTable from '@/views/corpuser/record/components/ReportRecordTable.vue';
+import type { TabsPaneContext } from 'element-plus';
 
-const route = useRoute();
-const isLxtstatistics = ref(true);
+const handleClick = async(tab: TabsPaneContext) => {
+    resetFilterObject();
+    await getPageList({
+        tab: tab.paneName as CorpReportRecordTabType
+    });
+};
 
-onMounted(() => {
-    route.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
+onMounted(async() => {
+    resetFilterObject();
+    await getPageList({
+        tab: activeName.value
+    });
 });
 
-watch(route, (val) => {
-    val.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
+onUnmounted(() => {
+    activeName.value = CorpReportRecordTabType.lxt;
 });
-
 </script>
 
 <template>
     <PagePanel>
-        <Board class="record">
-            <PlatformTab />
-            <template v-if="isLxtstatistics">
-                <LxtReportRecordTable></LxtReportRecordTable>
-            </template>
-            <template v-else>
-                <ZjfwReportRecordTable></ZjfwReportRecordTable>
-            </template>
+        <Board full v-loading="loading">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
+                <el-tab-pane label="市综服" name="zjfw"></el-tab-pane>
+            </el-tabs>
+            <ReportRecordTable v-if="activeName==='lxt'"></ReportRecordTable>
+            <ReportRecordTable v-if="activeName==='zjfw'"></ReportRecordTable>
         </Board>
     </PagePanel>
 </template>
-
-<style lang="postcss" scoped>
-.record {
-    @apply  h-full;
-}
-</style>

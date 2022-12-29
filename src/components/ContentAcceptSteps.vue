@@ -31,7 +31,7 @@ withDefaults(
                         "
                 :key="i" v-for="(stepName, i) in stepNames">
                 <div class="cas-title">
-                    <Text size="sm">{{ stepName }}</Text>
+                    <Text size="sm" color="regular">{{ stepName }}</Text>
                 </div>
                 <div class="cas-row">
                     <Text size="xs" color="regular">银行意见: {{ steps[i]?.orgProgressOpinion }}</Text>

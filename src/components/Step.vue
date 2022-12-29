@@ -26,7 +26,6 @@ withDefaults(
         `i-step-${type}`,
         alignEnd ? 'i-step-align-end' : '',
     ]" v-bind="$attrs">
-        <div class="i-step-line" ariaidden="true"></div>
         <div class="i-step-circle">
             <div v-if="type === 'success'">
                 <div v-if="step" class="i-step-circle-check">{{ step }}</div>
@@ -40,6 +39,7 @@ withDefaults(
                 <span>{{ step }}</span>
             </div>
         </div>
+        <div class="i-step-line" ariaidden="true"></div>
         <div class="i-step-content">
             <slot />
         </div>
@@ -53,7 +53,7 @@ withDefaults(
 }
 
 .i-step-default {
-    @apply text-gray-400;
+    color: var(--el-border-color);
 }
 
 .i-step-danger {
@@ -64,7 +64,7 @@ withDefaults(
 }
 
 .i-step-align-end.i-step {
-    @apply flex-none;
+    flex: none;
 }
 
 .i-step-align-end.i-step-horizontal {
@@ -75,20 +75,12 @@ withDefaults(
     height: 1.5rem;
 }
 
-.i-step:last-of-type .i-step-line {
+.i-step:first-of-type .i-step-line {
     display: none;
 }
 
-
-.i-step-success {
-    & .i-step-line {
-        color: currentColor;
-    }
-}
-
 .i-step-line {
-    position: absolute;
-    @apply bg-gray-200;
+    position: absolute; background-color: currentColor;
 }
 
 
@@ -98,12 +90,12 @@ withDefaults(
 }
 
 .i-step-vertical .i-step-line {
-    left: 0.75rem; top: 0.5rem; height: 100%; width: 0.125rem; margin-left: -1px;
-    @apply self-start;
+    left: 0.75rem; bottom: calc(100% - 1rem); height: 100%; width: 0.125rem; margin-left: -1px;
+    align-self: flex-start;
 }
 
 .i-step-circle {
-    position: absolute; border-radius: 9999px; overflow: hidden; cursor: default;
+    position: absolute; border-radius: 9999px; z-index: 10; overflow: hidden; cursor: default;
 }
 
 .i-step-vertical .i-step-circle {
@@ -118,7 +110,6 @@ withDefaults(
 .i-step-circle-uncheck {
     width: 1rem;
     height: 1rem;
-    background-color: white;
     color: currentColor;
     border: 2px solid currentColor;
     border-radius: 50%;
@@ -126,13 +117,9 @@ withDefaults(
     display: flex;
     justify-content: center;
     align-items: center;
-
-    @apply text-xs font-semibold;
+    background-color: var(--deep-bg-color);
 }
 
-.dark .i-step-circle-uncheck {
-    @apply bg-gray-600 border-gray-400 text-gray-200;
-}
 
 .i-step-circle-check {
     width: 1rem;
@@ -142,8 +129,6 @@ withDefaults(
     display: flex;
     justify-content: center;
     align-items: center;
-
-    @apply bg-indigo-500 text-xs font-semibold;
 }
 
 .i-step-check-icon {

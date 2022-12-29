@@ -13,7 +13,8 @@ import type {
     UpdateRoleType,
     UpdateUserType,
     UserListItemType,
-    UserTabType
+    UserTabType,
+    RoleListItemType
 } from '@/types/system-manage';
 
 
@@ -77,7 +78,7 @@ export function getRoleListApi(params: {
     pageSize: number
     sortField: 'updateTime' | 'createTime',
     sortType: 'asc' | 'desc'
-}) {
+}): Promise<{ data: RoleListItemType[]; pageTotal: number}> {
     return api.get(`${DMS_DOMAIN}/v1/role/list`, {
         params
     });

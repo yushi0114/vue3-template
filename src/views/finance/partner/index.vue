@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { activeName, getPageList, filterObject, mode } from '@/views/finance/partner/components/finance-partner';
+import { activeName, getPageList, filterObject, mode, resetFilterObject } from '@/views/finance/partner/components/finance-partner';
 import type { TabsPaneContext } from 'element-plus';
 import { onMounted } from 'vue';
 import type { FinancePartnerTabType } from '@/types/finance/finance-parnter.type';
@@ -31,6 +31,7 @@ async function handleClick(tab: TabsPaneContext) {
 onBeforeMount(() => {
     mode.value = 'list';
     activeName.value = 'sjzx';
+    resetFilterObject();
 });
 
 onMounted(async() => {

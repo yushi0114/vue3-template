@@ -21,11 +21,13 @@ import {
 import { ElMessage } from 'element-plus';
 import {
     getRolePageList,
-    setInstitutionRoleMode
+    setInstitutionRoleMode,
+    resetRoleFilterObject
 } from '@/views/finance/institution/components/institution-role/institution-role';
 import {
     getUserPageList,
-    setInstitutionUserMode
+    setInstitutionUserMode,
+    resetFilterObject
 } from '@/views/finance/institution/components/institution-user/institution-user';
 
 // 机构分类列表
@@ -193,6 +195,8 @@ export function openRemoveView(item: FinanceInstitutionTreeItemType) {
 }
 
 export async function selectOrgItem(id: string) {
+    resetRoleFilterObject();
+    resetFilterObject();
     setCurrentInstitutionId(id);
     setInstitutionUserMode('list');
     setInstitutionRoleMode('list');
@@ -223,6 +227,8 @@ export async function changeOrgTypeView(currentTab: string) {
 }
 
 export async function initInstitutionPage() {
+    resetRoleFilterObject();
+    resetFilterObject();
     await getCategoryList();
     if (!categoryList.value) {
         return;
@@ -234,6 +240,7 @@ export async function initInstitutionPage() {
     activeName.value = categoryList.value[0].code;
     currentInstitutionId.value = undefined;
     institutionItemData.value = undefined;
+    activeInstitutionName.value = 'menuList';
     mode.value = 'board';
     await getInstitutionTree();
 }

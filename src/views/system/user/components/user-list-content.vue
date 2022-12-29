@@ -94,7 +94,7 @@ function formatSortType(value: string) {
 }
 
 async function handleSortChange(params: { prop: 'updateTime' | 'createTime', order: string }) {
-    userFilterObject.value.currentPage = 0;
+    userFilterObject.value.currentPage = 1;
     userFilterObject.value.currentSize = 10;
     userFilterObject.value.sortField = params.prop;
     userFilterObject.value.sortType = formatSortType(params.order);
@@ -104,7 +104,7 @@ async function handleSortChange(params: { prop: 'updateTime' | 'createTime', ord
 }
 
 async function handleSearchList() {
-    userFilterObject.value.currentPage = 0;
+    userFilterObject.value.currentPage = 1;
     userFilterObject.value.currentSize = 10;
     await getUserListData({
         tab: activeName.value

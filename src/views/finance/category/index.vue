@@ -15,11 +15,15 @@
 import CategoryForm from './components/category-form.vue';
 import CategoryListContent from './components/category-list-content.vue';
 
-import { currentCategoryId, mode } from './components/category-list';
+import { currentCategoryId, mode, resetFinanceFilterObject } from './components/category-list';
 
 onMounted(async () => {
     mode.value = 'list';
     currentCategoryId.value = undefined;
+});
+
+onUnmounted(() => {
+    resetFinanceFilterObject();
 });
 </script>
 

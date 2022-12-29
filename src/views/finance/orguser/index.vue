@@ -11,9 +11,10 @@
 import FinanceReportContentList from './components/finance-org-user-content-list.vue';
 import { onMounted } from 'vue';
 import { LoadingService } from '@/views/system/loading-service';
-import { getPageList } from './components/finance-org-user';
+import { getPageList, resetFilterObject } from './components/finance-org-user';
 
-onMounted(async() => {
+onMounted(async () => {
+    resetFilterObject();
     LoadingService.getInstance().loading();
     await getPageList();
     LoadingService.getInstance().stop();

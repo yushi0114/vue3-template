@@ -85,7 +85,7 @@ function formatSortType(value: string) {
 
 async function handleSortChange(params: { prop: 'update_time' | 'create_time', order: string }) {
     loading.listLoading = true;
-    roleFilterObject.value.currentPage = 0;
+    roleFilterObject.value.currentPage = 1;
     roleFilterObject.value.currentSize = 10;
     roleFilterObject.value.sortField = params.prop;
     roleFilterObject.value.sortType = formatSortType(params.order);
@@ -95,7 +95,7 @@ async function handleSortChange(params: { prop: 'update_time' | 'create_time', o
 
 async function handleSearchRoleList() {
     loading.listLoading = true;
-    roleFilterObject.value.currentPage = 0;
+    roleFilterObject.value.currentPage = 1;
     roleFilterObject.value.currentSize = 10;
     await getRolePageList(currentInstitutionId.value);
     loading.listLoading = false;

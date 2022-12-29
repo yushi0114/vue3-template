@@ -102,7 +102,7 @@ export async function getRolePageList(params: {
             sortType: roleFilterObject.value.sortType
         }).then(data => {
             roleList.value.list = data.data as unknown as RoleListItemType[];
-            roleList.value.total = 1;
+            roleList.value.total = data.pageTotal;
             resolve();
         }).catch(() => {
             resolve();

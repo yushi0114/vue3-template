@@ -40,20 +40,26 @@ export const categoryList = reactive<{
     total: 0,
     list: []
 });
-
-export const financeFilterObject = reactive<{
+type FinanceFilterObject = {
     currentSize: number;
     currentPage: number;
     searchInput: string;
     sortField: 'update_time' | 'create_time',
     sortType: 'asc' | 'desc'
-}>({
+};
+const initFinanceFilterObject: FinanceFilterObject = {
     searchInput: '',
     currentSize: 10,
     currentPage: 1,
     sortField: 'update_time',
     sortType: 'desc',
-});
+};
+
+export const financeFilterObject = reactive<FinanceFilterObject>(cloneDeep(initFinanceFilterObject));
+
+export const resetFinanceFilterObject = () => {
+    Object.assign(financeFilterObject, cloneDeep(initFinanceFilterObject));
+};
 
 export async function goListView() {
     mode.value = 'list';

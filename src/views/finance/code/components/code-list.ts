@@ -13,6 +13,7 @@ import { getAllCityListApi } from '@/api/finance/finance-city';
 import { getOrgTypeDicApi } from '@/api/finance/finance-category';
 import { ElMessage } from 'element-plus';
 import { downloadByBase64, downloadByData } from '@/utils';
+import { cloneDeep } from 'lodash';
 
 export const loading = ref(false);
 export const mode = ref<'form' | 'list'>('list');
@@ -41,6 +42,16 @@ export const codeList = reactive<{
     list: []
 });
 
+const initFinanceCodeFilterObject: any = {
+    searchInput: '',
+    currentSize: 10,
+    currentPage: 1,
+    sortField: 'update_time',
+    sortType: 'desc',
+    cityCodeArr: [],
+    orgTypeCodeArr: []
+};
+
 export const financeCodeFilterObject = reactive<{
     currentSize: number;
     currentPage: number;
@@ -59,6 +70,9 @@ export const financeCodeFilterObject = reactive<{
     orgTypeCodeArr: []
 });
 
+export const resetFinanceCodeFilterObject = () => {
+    Object.assign(financeCodeFilterObject, cloneDeep(initFinanceCodeFilterObject));
+};
 
 export async function goListView() {
     mode.value = 'list';

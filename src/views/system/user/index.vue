@@ -17,7 +17,8 @@ import {
     activeName,
     getRoleListData,
     getUserListData,
-    userFilterObject
+    userFilterObject,
+    resetUserFilterObject
 } from '@/views/system/user/components/user-list';
 import type { UserTabType } from '@/types/system-manage';
 import UserListContent from '@/views/system/user/components/user-list-content.vue';
@@ -44,5 +45,6 @@ onMounted(async() => {
 onUnmounted(() => {
     activeName.value = 'cre';
     userFilterObject.value.searchInput = '';
+    resetUserFilterObject();
 });
 </script>

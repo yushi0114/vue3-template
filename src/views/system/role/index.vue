@@ -35,7 +35,7 @@ const handleClick = async(tab: TabsPaneContext) => {
 onMounted(async() => {
     mode.value = 'list';
     roleFilterObject.value.currentSize = 10;
-    roleFilterObject.value.currentPage = 0;
+    roleFilterObject.value.currentPage = 1;
     await getRolePageList({
         tab: activeName.value
     });

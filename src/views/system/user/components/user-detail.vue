@@ -3,31 +3,17 @@ import type { PropType } from 'vue';
 import type { UserListItemType } from '@/types/system-manage';
 
 defineProps({
-    drawerVisible: {
-        type: Boolean,
-        default: false,
-    },
     dataDetail: {
         type: Object as PropType<UserListItemType>,
         default: () => ({})
     }
 });
 
-const emit = defineEmits<{
-    (e: 'close', flag: boolean): void
-}>();
-
-const handleClose = () => {
-    emit('close', false);
-};
-
 </script>
 <template>
     <el-drawer
-        v-model="drawerVisible"
         title="用户信息"
         size="50%"
-        :before-close="handleClose"
     >
         <el-form :model="dataDetail" label-width="135px">
             <el-form-item label="手机号码" prop="account">

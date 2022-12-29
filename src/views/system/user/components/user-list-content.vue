@@ -51,9 +51,9 @@
             :total="userTableData.total"/>
     </LoadingBoard>
     <user-detail
-        :drawer-visible="isDrawerShow"
+        v-model="isDrawerShow"
         :data-detail="dataDetail"
-        @close="handleDrawerClose"></user-detail>
+        :before-close="handleDrawerClose"></user-detail>
     <user-form-dialog
         v-model:dialog-visible="isDialogShow"
         @close="handleCloseDialog"></user-form-dialog>

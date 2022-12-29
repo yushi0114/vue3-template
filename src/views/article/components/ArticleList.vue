@@ -204,7 +204,7 @@ watch(listControlModel, () => {
                         @[ItemOperate.edit]="handleToEdit(scope)"
                         @operate="(opt) => handleMoreOperate(opt.value, scope.row)"
                         :operators="[
-                            { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                            { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen', disabled: scope.row.status !== ARTICLE_STATUS.PUBLISHED },
                             scope.row.status === ARTICLE_STATUS.PUBLISHED ? {
                                 name: ARTICLE_OPERATE_MODE_LABEL.OFFLINE,
                                 value: ARTICLE_OPERATE_MODE.OFFLINE,

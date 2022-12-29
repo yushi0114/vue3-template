@@ -206,10 +206,10 @@ export async function removeMenus(willDeleteIds: string[]): Promise<boolean> {
             updateSidebar(activeName.value);
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '删除失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '删除失败',
+            // });
             resolve(false);
         }).finally(() => {
             loading.value = false;

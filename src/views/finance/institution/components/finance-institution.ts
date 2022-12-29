@@ -379,10 +379,10 @@ export async function createOrg(params: {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '创建机构失败！',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '创建机构失败！',
+            // });
             resolve(false);
         });
     });
@@ -409,10 +409,10 @@ export async function updateOrg(params: {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '更新机构失败！',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '更新机构失败！',
+            // });
             resolve(false);
         });
     });
@@ -432,10 +432,10 @@ export async function deleteOrg(params: {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '机构删除失败！',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '机构删除失败！',
+            // });
             resolve(false);
         });
     });
@@ -452,10 +452,10 @@ export async function refreshSecretKey(params: {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '机构密钥更新失败！',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '机构密钥更新失败！',
+            // });
             resolve(false);
         });
     });

@@ -120,7 +120,7 @@ export async function getRolePageList(orgId: string): Promise<void> {
             sortType: roleFilterObject.value.sortType
         }).then(data => {
             roleList.value.list = data.data as unknown as RoleListItemType[];
-            roleList.value.total = 1;
+            roleList.value.total = data.pageTotal;
             resolve();
         }).catch(() => {
             resolve();
@@ -141,10 +141,6 @@ export async function addRole(checkedNodeIds: string[]): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '创建失败',
-            });
             resolve(false);
         });
     });
@@ -164,10 +160,10 @@ export async function updateRole(checkedNodeIds: string[]): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '更新失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '更新失败',
+            // });
             resolve(false);
         });
     });
@@ -185,10 +181,10 @@ export async function deleteRole(id: string): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '删除失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '删除失败',
+            // });
             resolve(false);
         });
     });

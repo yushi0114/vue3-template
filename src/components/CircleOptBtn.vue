@@ -31,6 +31,7 @@ withDefaults(
 
     &.disabled {
         color: $text-color-placeholder;
+        cursor: not-allowed;
     }
 
     &.disabled:hover {

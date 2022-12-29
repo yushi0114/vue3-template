@@ -126,10 +126,6 @@ export async function addUser(): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '创建失败',
-            });
             resolve(false);
         });
     });
@@ -148,10 +144,10 @@ export async function updateUser(): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '更新用户失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '更新用户失败',
+            // });
             resolve(false);
         });
     });
@@ -172,10 +168,10 @@ export async function deleteUser(params: {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '删除用户失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '删除用户失败',
+            // });
             resolve(false);
         });
     });

@@ -127,6 +127,9 @@ export const fetchPolicyDetail = (params: NewsDetailParams): Promise<PolicyDetai
         url: DMS_DOMAIN + '/v1/policy',
         method: 'get',
         params,
+    }).then((res: any) => {
+        res.publishDate = res.publishDate.split(' ')?.[0];
+        return res;
     });
 };
 
@@ -320,6 +323,9 @@ export const fetchPolicyDetailZjfw = (params: NewsDetailParams): Promise<PolicyD
         url: DMS_DOMAIN + '/v1/zjfw/policy',
         method: 'get',
         params,
+    }).then((res: any) => {
+        res.publishDate = res.publishDate.split(' ')?.[0];
+        return res;
     });
 };
 

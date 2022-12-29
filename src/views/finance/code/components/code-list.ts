@@ -134,10 +134,6 @@ export async function addFinanceCode(): Promise<boolean> {
             loading.value = false;
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '创建失败',
-            });
             loading.value = false;
             resolve(false);
         });
@@ -160,10 +156,10 @@ export async function updateFinanceCode(): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '更新失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '更新失败',
+            // });
             loading.value = false;
             resolve(false);
         });
@@ -182,10 +178,10 @@ export async function deleteFinanceCode(id: string): Promise<boolean> {
             loading.value = false;
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '删除失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '删除失败',
+            // });
             loading.value = false;
             resolve(false);
         });
@@ -237,10 +233,6 @@ export async function importFinanceCodeList(params: File): Promise<void> {
                 message: '上传成功',
             });
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '上传失败',
-            });
         }).finally(() => {
             resolve();
         });

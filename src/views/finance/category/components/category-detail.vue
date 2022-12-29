@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { FinanceCategoryListItemType } from '@/types/finance';
+import { allSystemMenuTreeDisabled } from './category-list';
 
 const props = defineProps({
     drawerVisible: {
@@ -8,7 +9,7 @@ const props = defineProps({
         default: false,
     },
     dataDetail: {
-        type: Object as PropType<FinanceCategoryListItemType>,
+        type: Object as PropType<FinanceCategoryListItemType & { typeModuleName: string; menuIdArr: string[] }>,
         default: () => ({})
     }
 });
@@ -48,6 +49,21 @@ const handleClose = () => {
             </el-form-item>
             <el-form-item label="排序" prop="sort">
                 <Text size="sm" color="regular">{{ dataDetail.sort }}</Text>
+            </el-form-item>
+            <el-form-item label="展现形式:" prop="typeModuleId">
+                <Text size="sm" color="regular">{{ dataDetail.typeModuleName }}</Text>
+            </el-form-item>
+            <el-form-item label="配置菜单">
+                <div style="margin-top: 10px">
+                    <el-tree
+                        ref="menuTree"
+                        :data="allSystemMenuTreeDisabled"
+                        show-checkbox
+                        node-key="id"
+                        :default-checked-keys="dataDetail.menuIdArr"
+                        :default-expand-all="true">
+                    </el-tree>
+                </div>
             </el-form-item>
             <el-form-item label="创建者" prop="createBy">
                 <Text size="sm" color="regular">{{ dataDetail.createBy }}</Text>

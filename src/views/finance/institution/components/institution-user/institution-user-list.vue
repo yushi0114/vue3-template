@@ -45,13 +45,13 @@
                 ]">
             </TableOperatorColumn>
         </CommonTable>
-    </LoadingBoard>
-    <CommonPagination
+        <CommonPagination
         v-if="listData.list.length"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="filterObject.currentPage"
         :total="listData.total" />
+    </LoadingBoard>
     <institution-user-detail
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"

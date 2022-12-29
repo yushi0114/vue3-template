@@ -64,6 +64,7 @@ import {
     financeFilterObject,
     goCreateFormView,
     goEditFormView,
+    goDetailFormView,
     loading,
     setFinanceCategoryList
 } from './category-list';
@@ -71,7 +72,7 @@ import type { FinanceCategoryListItemType } from '@/types/finance';
 import CategoryDetail from '@/views/finance/category/components/category-detail.vue';
 import { ItemOperate } from '@/components';
 
-const dataDetail = ref<FinanceCategoryListItemType>();
+const dataDetail = ref<FinanceCategoryListItemType & { typeModuleName: string; menuIdArr: string[] }>();
 const isDrawerShow = ref<boolean>(false);
 
 
@@ -111,8 +112,8 @@ async function handleCreateNewItem() {
     await goCreateFormView();
 }
 
-function handleToDetail(item: FinanceCategoryListItemType) {
-    dataDetail.value = item;
+async function handleToDetail(item: FinanceCategoryListItemType) {
+    dataDetail.value = await goDetailFormView(item);
     isDrawerShow.value = true;
 }
 

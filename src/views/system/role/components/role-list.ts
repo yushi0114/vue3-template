@@ -171,10 +171,10 @@ export async function deleteRole(params: {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '删除失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '删除失败',
+            // });
             resolve(false);
         }).finally(() => {
             loading.value = false;

@@ -143,10 +143,10 @@ export async function updateUser(): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '更新用户失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '更新用户失败',
+            // });
             resolve(false);
         });
     });

@@ -18,7 +18,8 @@ import { ElMessage } from 'element-plus';
 import { cloneDeep } from 'lodash';
 
 export const loading = ref(false);
-export const allSystemMenuTree = ref<AllSystemMenuTreeItem[]>();
+export const allSystemMenuTree = ref<AllSystemMenuTreeItem[]>([]);
+export const allSystemMenuTreeDisabled = ref<AllSystemMenuTreeItem[]>([]);
 export const orgTypeModuleList = ref<(OrgTypeMenuItem & { label: string; value: string })[]>();
 export const mode = ref<'form' | 'list'>('list');
 export const currentCategoryId = ref<string>();
@@ -83,6 +84,31 @@ export async function goEditFormView(item: FinanceCategoryListItemType) {
     };
 }
 
+export async function goDetailFormView(item: FinanceCategoryListItemType) {
+    await setOrgTypeModuleList();
+    await setAllSystemMenuTree();
+    allSystemMenuTreeDisabled.value = allSystemMenuTree.value;
+    allSystemMenuTreeDisabled.value.map((item) => {
+        item.disabled = true;
+        item.children &&
+            item.children.forEach((items) => {
+                items.disabled = true;
+            });
+        return item;
+    });
+    const result = await getOrgTypeById({ id: item.id });
+    const typeModuleName = orgTypeModuleList.value?.find((orgTypeItem) => orgTypeItem.value === item.typeModuleId)?.label ?? '';
+    return {
+        ...item,
+        typeModuleId: item.typeModuleId,
+        name: item.name,
+        sort: item.sort,
+        desc: item.desc ?? '',
+        typeModuleName,
+        menuIdArr: result[0].menuIdArr
+    };
+}
+
 export async function setAllSystemMenuTree(): Promise<void> {
     return new Promise((resolve) => {
         getAllSystemMenuTree().then(data => {
@@ -138,10 +164,6 @@ export async function addFinanceCategory(params: AddFinanceCategoryType): Promis
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '创建失败',
-            });
             loading.value = false;
             resolve(false);
         });
@@ -158,10 +180,6 @@ export async function updateFinanceCategory(params: UpdateFinanceCategoryType): 
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '更新失败',
-            });
             loading.value = false;
             resolve(false);
         });
@@ -178,10 +196,10 @@ export async function deleteFinanceCategory(id: string): Promise<boolean> {
             });
             resolve(true);
         }).catch(() => {
-            ElMessage({
-                type: 'error',
-                message: '删除失败',
-            });
+            // ElMessage({
+            //     type: 'error',
+            //     message: '删除失败',
+            // });
             loading.value = false;
             resolve(false);
         });

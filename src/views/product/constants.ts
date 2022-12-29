@@ -305,6 +305,7 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
             disabled: false, // 是否禁用
             activeValue: 1,
             inactiveValue: 0,
+            defaultValue: 0,
             rules: [
                 {
                     required: true,
@@ -940,6 +941,7 @@ export const FILTERS_OPTIONS_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
             disabled: false, // 是否禁用
             activeValue: 1,
             inactiveValue: 0,
+            defaultValue: 0,
             rules: [
                 {
                     required: true,

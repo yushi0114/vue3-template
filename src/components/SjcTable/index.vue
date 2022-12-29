@@ -1,9 +1,9 @@
 <template>
-    <LoadingBoard
+    <div
         class="sjc-table"
-        :class="[loading && 'sjc-table--loading']"
-        :loading="loading"
-        :empty="false">
+        v-loading="loading"
+        element-loading-text="加载中"
+        >
         <!--批量操作栏，勾选行时显示-->
         <el-row
             v-if="$tableConfig.showSelection && $tableConfig.showSelectionOpt && state.selection.length"
@@ -122,7 +122,7 @@
                 :page-config="$paginationConfig"
                 @page-change="pageChange"></pagination>
         </div>
-    </LoadingBoard>
+    </div>
 </template>
 
 <script lang="ts">
@@ -261,13 +261,6 @@ defineExpose({
 });
 </script>
 <style lang="scss" scoped>
-.sjc-table {
-    flex: initial;
-
-    &--loading {
-        flex: 1;
-    }
-}
 .close {
     position: relative;
     width: 16px;

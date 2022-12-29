@@ -43,14 +43,14 @@
                 ]">
             </TableOperatorColumn>
         </CommonTable>
+        <CommonPagination
+            v-if="roleList.list.length"
+            class="margin-20-20"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="roleFilterObject.currentPage"
+            :total="roleList.total"/>
     </LoadingBoard>
-    <CommonPagination
-        v-if="roleList.list.length"
-        class="margin-20-20"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="roleFilterObject.currentPage"
-        :total="roleList.total"/>
     <institution-role-detail
         :drawer-visible="isDrawerShow"
         :data-detail="dataDetail"

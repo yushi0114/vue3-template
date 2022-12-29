@@ -6,7 +6,7 @@ import { useToken } from './useToken';
 import { useNProgress } from './useNProgress';
 
 function hasNecessaryRoute(router: Router, to: RouteLocationNormalized) {
-    return router.getRoutes().some(r => {
+    return router.getRoutes().some((r) => {
         if (r.path === '/' && to.path !== '/') return false;
         return r.path !== ROOT_PATH && to.path.indexOf(r.path.replace(/\/:\w+$/, '')) > -1;
     });
@@ -28,8 +28,7 @@ export function useRouteGuard() {
             if (!hasNecessaryRoute(router, to)) {
                 if (necessaryCheckedRoutePathSet.has(to.fullPath)) {
                     next(ERROR_404_PATH);
-                }
-                else {
+                } else {
                     necessaryCheckedRoutePathSet.add(to.fullPath);
                     getUserInfo()
                         .then(() => {
@@ -39,27 +38,25 @@ export function useRouteGuard() {
                             next(ERROR_404_PATH);
                         });
                 }
-            }
-            else {
+            } else {
                 if (to.path === SIGNIN_PATH) {
                     next(DEFAULT_REDIRECT_PATH);
-                }
-                else {
+                } else {
                     if (to.matched.length === 0) {
                         next(ERROR_404_PATH);
-                    }
-                    else {
+                    } else {
                         next();
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (to.path === SIGNIN_PATH) {
                 next();
-            }
-            else {
-                next(SIGNIN_PATH);
+            } else {
+                next({
+                    path: SIGNIN_PATH, query: {
+                        redirect: to.path
+                    }});
             }
         }
     });

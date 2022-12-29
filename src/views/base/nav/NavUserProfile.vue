@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores';
 import { noop } from '@/utils';
+import { SIGNIN_PATH } from '@/router';
 import { Key, SwitchButton, User, UserFilled } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
 import NavUserUpdatePwdDialog from './NavUserUpdatePwdDialog.vue';
@@ -51,7 +52,7 @@ function handleSignout() {
     )
         .then(signout)
         .then(() => {
-            router.replace('/login');
+            router.replace(SIGNIN_PATH);
         })
         .catch(noop);
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { encrypt, encryptHexMd5, isString } from '@/utils';
 import { genUUID, jsonReplacer, resolveParams } from './utils';
 import { useToken } from '@/composables';
-import { router } from '@/router';
+import { router, SIGNIN_PATH } from '@/router';
 import { HttpContentType, HttpStatus } from './types';
 
 const service = axios.create({
@@ -74,11 +74,17 @@ service.interceptors.response.use(res => {
             type: 'error'
         });
         token.remove();
-        router.replace('/login');
+        router.replace({
+            path: SIGNIN_PATH, query: {
+                redirect: router.currentRoute.value.path
+            }});
         return Promise.reject('error');
     } else if (code === HttpStatus.unauthorized) {
         token.remove();
-        router.replace('/login');
+        router.replace({
+            path: SIGNIN_PATH, query: {
+                redirect: router.currentRoute.value.path
+            }});
     } else if (code === HttpStatus.internalServerError) {
         ElMessage({
             message: msg,

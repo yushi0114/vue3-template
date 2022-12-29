@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { updatePassword } from '@/api';
 import { MENU_TAB } from '@/enums';
+import { SIGNIN_PATH } from '@/router';
 import { useUserStore } from '@/stores';
 import { checkPassword, encrypt, type ValidateCallback } from '@/utils';
 import { ElMessageBox, type FormInstance } from 'element-plus';
@@ -63,7 +64,7 @@ async function submit() {
             await signout();
         }
         finally {
-            router.replace('/login');
+            router.replace(SIGNIN_PATH);
         }
     }
     catch {

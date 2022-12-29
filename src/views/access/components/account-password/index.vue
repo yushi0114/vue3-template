@@ -109,12 +109,13 @@ import { COUNT_PASSWORD_FORM_RULES } from '../../constants';
 import { MENU_TAB } from '@/enums';
 import { ROOT_PATH } from '@/router';
 const { replace } = useRouter();
+const { query } = useRoute();
 const { signin } = useUserStore();
 
 const { loading, request: login } = useApi(signin, {
     onSuccess() {
         // 路由跳转
-        replace(ROOT_PATH);
+        replace(query.redirect ? query.redirect as string : ROOT_PATH);
     },
     onError() {
         getVerifyCode();

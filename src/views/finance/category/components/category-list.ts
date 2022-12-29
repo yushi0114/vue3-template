@@ -118,8 +118,8 @@ export async function setFinanceCategoryList(): Promise<void> {
             sortField: financeFilterObject.sortField,
             sortType: financeFilterObject.sortType
         }).then(data => {
-            categoryList.list = data.data as unknown as FinanceCategoryListItemType[];
-            categoryList.total = 1;
+            categoryList.list = data.data;
+            categoryList.total = data.pageTotal;
         }).finally(() => {
             loading.value = false;
             resolve();

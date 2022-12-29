@@ -23,7 +23,10 @@ export function deleteFinanceCategoryApi(params: DeleteFinanceCategoryType) {
     return api.post(`${DMS_DOMAIN}/v1/del/org/type`, params);
 }
 
-export function getFinanceCategoryListApi(params: GetFinanceCategoryListType) {
+export function getFinanceCategoryListApi(params: GetFinanceCategoryListType): Promise<{
+    pageTotal: number;
+    data: FinanceCategoryListItemType[]
+}> {
     return api.get(`${DMS_DOMAIN}/v1/org/type/list`, {
         params
     });

@@ -65,12 +65,16 @@
                     :filters="undefined"
                     :filter-method="undefined"
                     show-overflow-tooltip>
-                    <template #header v-if="column.filters?.length">
+                    <template #header>
                         <table-filter
+                            v-if="column.filters?.length"
                             :column="column"
                             :filterCondition="column.filters"
                             @filter-change="handleFilterChange"
                         ></table-filter>
+                        <Text size="sm" v-else>
+                            {{ column.label }}
+                        </Text>
                     </template>
                     <template
                         v-if="column.slotName"

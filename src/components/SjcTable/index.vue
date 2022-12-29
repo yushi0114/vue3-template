@@ -67,7 +67,7 @@
                     show-overflow-tooltip>
                     <template #header>
                         <table-filter
-                            v-if="column.filters?.length"
+                            v-if="column.filters"
                             :column="column"
                             :filterCondition="column.filters"
                             @filter-change="handleFilterChange"

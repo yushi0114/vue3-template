@@ -42,7 +42,6 @@
                 </template>
             </el-tree>
             <institution-remove-dialog
-                v-if="isDeleteOrgModelShow"
                 :org-name="willDeleteOrgName"></institution-remove-dialog>
         </div>
     </div>
@@ -59,7 +58,6 @@ import {
     goEditFormView,
     openRemoveView,
     institutionTreeData,
-    isDeleteOrgModelShow,
     willDeleteOrgName,
     loading,
 } from './finance-institution';

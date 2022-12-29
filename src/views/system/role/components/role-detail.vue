@@ -4,10 +4,6 @@ import type { RoleListItemType, TreeItemType } from '@/types/system-manage';
 import { roleMenuTreeData } from '@/views/system/role/components/role-list';
 
 defineProps({
-    drawerVisible: {
-        type: Boolean,
-        default: false,
-    },
     dataDetail: {
         type: Object as PropType<RoleListItemType & { menuIdArr: string[] }>,
         default: () => ({})
@@ -45,7 +41,6 @@ const handleClose = () => {
 </script>
 <template>
     <el-drawer
-        v-model="drawerVisible"
         title="角色信息"
         size="50%"
         :before-close="handleClose"

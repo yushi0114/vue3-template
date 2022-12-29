@@ -70,25 +70,4 @@ withDefaults(
     text-align: center;
     line-height: 24px;
 }
-
-.tip {
-    font-size: 13px;
-    margin-top: 5px;
-    display: inline-block;
-    color: #bb3434;
-}
-
-.mt10 {
-    margin-top: 10px;
-}
-
-.mb60 {
-    margin-bottom: 60px;
-}
-
-.report-no-data {
-    font-size: 14px;
-    margin: 10px 0 20px 20px;
-    font-weight: bold;
-}
 </style>

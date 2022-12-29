@@ -16,7 +16,7 @@ withDefaults(
 
 <template>
     <div class="mb60">
-        <span class="title">董事、监事、高管信息</span>
+        <span>董事、监事、高管信息</span>
         <div class="mt10 table" v-if="leaders.length > 0">
             <div class="header">
                 <div class="header-item" style="width: 50%;">职务</div>
@@ -36,9 +36,6 @@ withDefaults(
 </template>
 
 <style lang="scss" scoped>
-.title {
-    display: inline-block;
-}
 
 .table {
     width: 100%;
@@ -68,23 +65,5 @@ withDefaults(
     height: 35px;
     float: left;
     line-height: 35px;
-}
-
-.mt10 {
-    margin-top: 10px;
-}
-
-.mb60 {
-    margin-bottom: 60px;
-}
-
-.clear-both {
-    clear: both;
-}
-
-.report-no-data {
-    font-size: 14px;
-    margin: 10px 0 20px 20px;
-    font-weight: bold;
 }
 </style>

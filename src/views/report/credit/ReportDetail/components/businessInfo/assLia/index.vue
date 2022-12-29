@@ -119,49 +119,4 @@ const widthData = computed(() => {
     float: left;
     line-height: 35px;
 }
-
-.tip {
-    font-size: 13px;
-    margin-top: 5px;
-    display: inline-block;
-    color: #bb3434;
-}
-
-.mt10 {
-    margin-top: 10px;
-}
-
-.mb60 {
-    margin-bottom: 60px;
-}
-
-.pl5 {
-    padding-left: 5px;
-}
-
-.pr5 {
-    padding-right: 5px;
-}
-
-.font-weight {
-    font-weight: bold;
-}
-
-.text-right {
-    text-align: right;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.clear-both {
-    clear: both;
-}
-
-.report-no-data {
-    font-size: 14px;
-    margin: 10px 0 20px 20px;
-    font-weight: bold;
-}
 </style>

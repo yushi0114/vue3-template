@@ -90,8 +90,4 @@ defineProps({
     width: 180px;
     line-height: 1.5;
 }
-
-.mt10 {
-    margin-top: 10px;
-}
 </style>

@@ -1,8 +1,9 @@
 <template>
-    <div
-        v-loading="loading"
-        element-loading-text="加载中"
-        class="common-table">
+    <LoadingBoard
+        class="sjc-table"
+        :class="[loading && 'sjc-table--loading']"
+        :loading="loading"
+        :empty="false">
         <!--批量操作栏，勾选行时显示-->
         <el-row
             v-if="$tableConfig.showSelection && $tableConfig.showSelectionOpt && state.selection.length"
@@ -55,7 +56,9 @@
                 </template>
             </el-table-column>
             <!-- 递归渲染多级表头 -->
-            <template v-for="column in columns" :key="column.prop">
+            <template
+                v-for="column in columns"
+                :key="column.prop">
                 <multistage-column
                     v-if="column.children && column.children.length"
                     :column="column"></multistage-column>
@@ -70,9 +73,10 @@
                             v-if="column.filters"
                             :column="column"
                             :filterCondition="column.filters"
-                            @filter-change="handleFilterChange"
-                        ></table-filter>
-                        <Text size="sm" v-else>
+                            @filter-change="handleFilterChange"></table-filter>
+                        <Text
+                            size="sm"
+                            v-else>
                             {{ column.label }}
                         </Text>
                     </template>
@@ -107,17 +111,18 @@
                 </template>
             </el-table-column>
             <template #empty>
-                <LoadingBoard :loading="false" :empty="!tableData.length" />
+                <LoadingBoard
+                    :loading="false"
+                    :empty="true" />
             </template>
         </CommonTable>
         <!-- 分页配置 -->
-        <div
-            v-if="showPagination && tableData.length">
+        <div v-if="showPagination && tableData.length">
             <pagination
                 :page-config="$paginationConfig"
                 @page-change="pageChange"></pagination>
         </div>
-    </div>
+    </LoadingBoard>
 </template>
 
 <script lang="ts">
@@ -256,6 +261,13 @@ defineExpose({
 });
 </script>
 <style lang="scss" scoped>
+.sjc-table {
+    flex: initial;
+
+    &--loading {
+        flex: 1;
+    }
+}
 .close {
     position: relative;
     width: 16px;

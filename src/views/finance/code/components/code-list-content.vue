@@ -44,9 +44,10 @@
             </FlexRow>
         </template>
     </ListQueryControl>
+    <LoadingBoard :loading="loading" :empty="false">
     <sjc-table
+        v-if="componentsIsReady"
         ref="sjcTableRef"
-        :loading="loading"
         :table-data="codeList.list"
         :columns="CODE_TABLE_COLUMNS"
         :table-config="CODE_TABLE_CONFIG"
@@ -77,6 +78,7 @@
         @current-change="handleCurrentChange"
         :current-page="financeCodeFilterObject.currentPage"
         :total="codeList.total"/>
+    </LoadingBoard>
     <CodeForm
         v-model="isFormShow"
         :data-detail="dataDetail"></CodeForm>
@@ -108,10 +110,24 @@ import CodeForm from '@/views/finance/code/components/code-form.vue';
 import CodeDetail from '@/views/finance/code/components/code-detail.vue';
 import { ItemOperate } from '@/components';
 
+const componentsIsReady = ref(false);
 const dataDetail = ref<FinanceCodeListItemType>();
 const isDrawerShow = ref<boolean>(false);
 const isFormShow = ref<boolean>(false);
 
+const initial = async () => {
+    componentsIsReady.value = false;
+    loading.value = true;
+    try {
+        await setOrgTypeCodeList();
+        await setCityCodeList();
+        await setFinanceCodeList();
+        componentsIsReady.value = true;
+    } catch {
+        componentsIsReady.value = true;
+    }
+
+};
 function formatSortType(value: string) {
     return value === 'ascending' ? 'asc' : 'desc';
 }
@@ -219,9 +235,7 @@ function handleRemoveItem(item: FinanceCodeListItemType) {
 watch(() => financeCodeFilterObject.searchInput, handleSearchList);
 
 onMounted(() => {
-    setFinanceCodeList();
-    setOrgTypeCodeList();
-    setCityCodeList();
+    initial();
 });
 </script>
 

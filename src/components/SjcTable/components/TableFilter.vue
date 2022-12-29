@@ -21,7 +21,7 @@
             <button @click="handleFilterReset">重置</button>
         </div>
         <template #reference>
-            <FlexRow>
+            <FlexRow class="w-min" style="white-space: nowrap;">
                 <Text
                     class="cursor-pointer"
                     size="sm"

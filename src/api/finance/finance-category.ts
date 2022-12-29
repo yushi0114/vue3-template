@@ -1,5 +1,5 @@
-import {api} from '@/api';
-import {DMS_DOMAIN} from '@/api/const';
+import { api } from '@/api';
+import { DMS_DOMAIN } from '@/api/const';
 import type {
     AddFinanceCategoryType,
     AllSystemMenuTreeItem,
@@ -8,7 +8,7 @@ import type {
     FinanceCategoryListItemType,
     GetFinanceCategoryListType,
     OrgTypeMenuItem,
-    UpdateFinanceCategoryType
+    UpdateFinanceCategoryType,
 } from '@/types/finance';
 
 export function addFinanceCategoryApi(params: AddFinanceCategoryType) {
@@ -23,9 +23,9 @@ export function deleteFinanceCategoryApi(params: DeleteFinanceCategoryType) {
     return api.post(`${DMS_DOMAIN}/v1/del/org/type`, params);
 }
 
-export function getFinanceCategoryListApi(params: GetFinanceCategoryListType) {
+export function getFinanceCategoryListApi(params: GetFinanceCategoryListType): Promise<{ data: FinanceCategoryListItemType[]; pageTotal: number}> {
     return api.get(`${DMS_DOMAIN}/v1/org/type/list`, {
-        params
+        params,
     });
 }
 
@@ -37,9 +37,9 @@ export function getOrgTypeDicApi(): Promise<FinanceCategoryListItemType[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/type/dic`);
 }
 
-export function getOrgTypeById(params: {id: string}): Promise<FinanceCategoryItemType[]> {
+export function getOrgTypeById(params: { id: string }): Promise<FinanceCategoryItemType[]> {
     return api.get(`${DMS_DOMAIN}/v1/org/type/by/id`, {
-        params
+        params,
     });
 }
 

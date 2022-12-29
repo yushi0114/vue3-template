@@ -4,7 +4,7 @@ import emptyImg from '@/assets/images/no-data.png';
 withDefaults(
     defineProps<{
         loading: boolean;
-        empty: boolean;
+        empty?: boolean;
         description?: string;
         imageSize?: number;
         image?: string;

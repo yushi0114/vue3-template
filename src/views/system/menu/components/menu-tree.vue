@@ -156,10 +156,10 @@ async function handleNodeClick(data: TreeItemType) {
         box-sizing: border-box;
 
         .add-menu-btn {
-            width: 1.5rem;
-            height: 1.5rem;
+            width: 1.25rem;
+            height: 1.25rem;
             cursor: pointer;
-            margin-left: 5px;
+            margin-left: 15px;
             color: #606266;
         }
     }

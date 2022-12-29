@@ -2,7 +2,7 @@
 import type { PropType } from 'vue';
 import type { UserListItemType } from '@/types/system-manage';
 
-defineProps({
+const props = defineProps({
     drawerVisible: {
         type: Boolean,
         default: false,
@@ -15,7 +15,13 @@ defineProps({
 
 const emit = defineEmits<{
     (e: 'close', flag: boolean): void
+    (e: 'update:drawerVisible', visible: boolean): void
 }>();
+
+const innerModel = computed({
+    get: () => props.drawerVisible,
+    set: (val) => emit('update:drawerVisible', val)
+});
 
 const handleClose = () => {
     emit('close', false);
@@ -24,7 +30,7 @@ const handleClose = () => {
 </script>
 <template>
     <el-drawer
-        v-model="drawerVisible"
+        v-model="innerModel"
         title="机构用户详情"
         size="50%"
         :before-close="handleClose"

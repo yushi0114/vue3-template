@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\utils\validate.ts
  * @Author: zys
  * @Date: 2022-11-07 17:08:03
- * @LastEditTime: 2022-12-26 15:10:51
+ * @LastEditTime: 2022-12-28 14:52:02
  * @LastEditors: zys
  * @Reference:
  */
@@ -87,3 +87,16 @@ export function byteCount(str: string) {
     // eslint-disable-next-line no-control-regex
     return (str && str.replace(/[^\x00-\xff]/g, 'xx').length) || 0;
 }
+
+export const checkSort = (rule: any, value: string, callback: ValidateCallback) => {
+    {
+        if (value.length === 0) {
+            callback(new Error('序号不能为空'));
+        } else if (!/^[1-9]\d*$/.test(value)) {
+            callback(new Error('序号只能为1-999的整数'));
+        } else {
+            callback();
+        }
+        callback();
+    }
+};

@@ -1,7 +1,7 @@
 <template>
     <div class="shop-cart-container">
         <el-drawer
-            v-model="drawerVisible"
+            v-model="innerModel"
             title="购物车详情"
             size="60%"
             :before-close="handleClose"
@@ -103,6 +103,16 @@ const props = defineProps({
         default: ''
     }
 });
+
+const emit = defineEmits<{
+  (e: 'close', flag: boolean): void
+  (e: 'update:drawerVisible', visible: boolean): void
+}>();
+
+const innerModel = computed({
+    get: () => props.drawerVisible,
+    set: (val) => emit('update:drawerVisible', val)
+});
 const searchInput = ref('');
 
 // 获取详情列表
@@ -146,9 +156,6 @@ const handleCurrentChange = (val: number) => {
     getInfoList();
 };
 
-const emit = defineEmits<{
-  (e: 'close', flag: boolean): void
-}>();
 
 const handleClose = () => {
     searchInput.value = '';

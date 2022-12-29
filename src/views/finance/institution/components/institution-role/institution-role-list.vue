@@ -151,12 +151,12 @@ function handleRemoveRoleItem(item: RoleListItemType) {
 async function handleToDetail(item: RoleListItemType) {
     await getTreeData();
     const menuList = await getOrgRoleMenuIds(item.id);
-    if (!menuList?.length) {
-        return;
-    }
+    // if (!menuList?.length) {
+    //     return;
+    // }
     dataDetail.value = {
         ...item,
-        menuIdArr: menuList
+        menuIdArr: menuList!
     };
     isDrawerShow.value = true;
 }

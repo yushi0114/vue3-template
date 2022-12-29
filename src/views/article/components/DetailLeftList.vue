@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ArticleSortDialog from './ArticleSortDialog.vue';
 import { Edit, SoldOut, Sell, Sort, Delete, Search } from '@element-plus/icons-vue';
 import emptyImg from '@/assets/images/no-data.png';
 import {
@@ -36,8 +37,18 @@ const getActiveId = computed(() => {
 });
 const { isNewsModule, getArticleTypeLabel } = useArticleModule(props.module);
 
-const { params, state, _updateNewsStatus, handleDebounceSearch, handleMoreOperate, handleFilterChange, loadMore } =
-    useTable(props.tab, props.module, ARTICLE_PAGE.DETAIL, emit, getActiveId);
+const {
+    params,
+    state,
+    _updateNewsStatus,
+    handleDebounceSearch,
+    handleMoreOperate,
+    handleFilterChange,
+    loadMore,
+    showArticleSortDialog,
+    currentArticle,
+    updateSort
+} = useTable(props.tab, props.module, ARTICLE_PAGE.DETAIL, emit, getActiveId);
 
 const { handleToCreate } = useJumpLink({
     tab: props.tab,
@@ -101,7 +112,7 @@ defineExpose({
                 placement="top">
                 <div>
                     <i-ep-plus
-                        class="cursor-pointer"
+                        class="cursor-pointer plus-button"
                         @click="handleToCreate" />
                 </div>
             </el-tooltip>
@@ -183,7 +194,7 @@ defineExpose({
                     color="regular"
                     align="center"
                     block
-                    v-if="state.loading"
+                    v-if="state.loadingMore"
                     >加载中...</Text
                 >
                 <Text
@@ -199,12 +210,22 @@ defineExpose({
         <el-empty
             v-else-if="!state.loading && state.data.length === 0"
             :image="emptyImg"></el-empty>
+        <ArticleSortDialog
+            v-model="showArticleSortDialog"
+            :data="currentArticle"
+            @confirm="(row) => updateSort({ id: row.id, sort: Number(row.sort) })"></ArticleSortDialog>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .article-list-wrapper {
     height: 100%;
+    .plus-button {
+        width: 1.25rem;
+        height: 1.25rem;
+        cursor: pointer;
+        color: #606266;
+    }
 }
 .article-list {
     flex: 1;

@@ -1,4 +1,5 @@
 import { validatorLogo } from '@/utils';
+import type { ProductStepsMap } from '@/types';
 import { PlatformType, FormType, PRODUCT_STEPS } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
 import type { ITableConfig } from '@/components/SjcTable/types';
@@ -987,23 +988,26 @@ export const REQ_TABLE_CONFIG: ITableConfig = reactive({
     },
 });
 
-export const PRODUCT_STEPS_MAP = {
+export const PRODUCT_STEPS_MAP: ProductStepsMap = {
     [PRODUCT_STEPS.BASE_INFO]: {
         title: PRODUCT_STEPS.BASE_INFO,
         leftBtnText: '取消',
         rightBtnText: '下一步',
         updateSubmit: new Date().getTime(),
+        processStatus: 'process'
     },
     [PRODUCT_STEPS.FILTERS]: {
         title: PRODUCT_STEPS.FILTERS,
         leftBtnText: '上一步',
         rightBtnText: '发布产品',
         updateSubmit: new Date().getTime(),
+        processStatus: 'process'
     },
     [PRODUCT_STEPS.SUCCESS]: {
         title: PRODUCT_STEPS.SUCCESS,
         leftBtnText: '',
         rightBtnText: '返回产品列表',
         updateSubmit: new Date().getTime(),
+        processStatus: 'success'
     },
 };

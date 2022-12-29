@@ -11,7 +11,7 @@
         </el-tree>
         <div v-else class="empty-tree">暂无数据</div>
         <div class="menu-footer">
-            <el-button>
+            <el-button @click="handleReset">
                 重置
             </el-button>
             <el-button type="primary" @click="handleUpdate">
@@ -84,6 +84,10 @@ async function handleUpdate() {
     });
     LoadingService.getInstance().stop();
 }
+
+const handleReset = () => {
+    menuTreeTemplateRef.value?.setCheckedKeys(defaultCheckedKey.value);
+};
 </script>
 
 <style scoped lang="scss">

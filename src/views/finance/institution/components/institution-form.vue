@@ -1,7 +1,7 @@
 <template>
     <div class="bank-container">
         <div class="institution-create-content">
-            <div class="header">新建机构</div>
+            <Text class="header" size="xl" block color="paragraph">新建机构</Text>
             <el-form
                 ref="institutionFormRef"
                 :model="institutionForm"
@@ -222,7 +222,6 @@ async function createOrEditInstitution() {
 }
 
 .header {
-    font-size: 24px;
     margin: 20px 0 30px;
 }
 

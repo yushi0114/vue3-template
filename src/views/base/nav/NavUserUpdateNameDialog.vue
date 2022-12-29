@@ -2,37 +2,19 @@
 import { updateUsername } from '@/api';
 import { MENU_TAB } from '@/enums';
 import { useUserStore } from '@/stores';
-import { genCheckEmpty } from '@/utils';
 import type { FormInstance } from 'element-plus';
-
-const props = withDefaults(
-    defineProps<{
-        modelValue: boolean,
-    }>(),
-    {
-        modelValue: false
-    }
-);
-
-const emit = defineEmits<{
-    (e: 'update:modelValue', visible: boolean): void
-}>();
-
 
 const { state, getUserInfo } = useUserStore();
 
 const formRef = ref<FormInstance>();
+const dialogRef = ref();
+
 const formModel = reactive({
     username: state.user?.name!,
 });
 
-const innerModel = computed({
-    get: () => props.modelValue,
-    set: (val) => emit('update:modelValue', val)
-});
-
 const rules: any = reactive({
-    username: [{ validator: genCheckEmpty('姓名不能为空'), trigger: ['blur', 'change'] }],
+    username: [{ min: 0, max: 50, message: '姓名长度不能超过50个字符', trigger: 'change' }],
 });
 
 async function submit() {
@@ -43,7 +25,7 @@ async function submit() {
             name: formModel.username,
             tab: MENU_TAB.MENU_TAB_DMS
         });
-        cancel();
+        dialogRef.value.cancel();
         ElMessage({ message: '修改姓名成功', type: 'success' });
         await getUserInfo();
     }
@@ -56,10 +38,6 @@ function handleOpen() {
     formModel.username = state.user?.name!;
 }
 
-function cancel() {
-    emit('update:modelValue', false);
-}
-
 function clear() {
     formRef.value?.resetFields();
 }
@@ -67,12 +45,11 @@ function clear() {
 
 <template>
 <MessageDialog
+    ref="dialogRef"
     title="修改姓名"
     width="480px"
     class="nav-user-update-name"
-    v-model="innerModel"
     @open="handleOpen"
-    @close="cancel"
     @closed="clear"
     @confirm="submit">
     <!-- -->
@@ -81,7 +58,7 @@ function clear() {
         size="large"
         :rules="rules"
         :model="formModel">
-        <el-form-item label="姓名" prop="username" required>
+        <el-form-item label="姓名" prop="username">
             <el-input v-model="formModel.username" placeholder="请输入姓名" />
         </el-form-item>
     </el-form>

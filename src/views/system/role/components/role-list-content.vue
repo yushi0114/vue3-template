@@ -48,7 +48,7 @@
         :current-page="roleFilterObject.currentPage"
         :total="roleList.total"/>
     <role-detail
-        :drawer-visible="isDrawerShow"
+        :model-value="isDrawerShow"
         :data-detail="dataDetail"
         @close="handleDrawerClose"></role-detail>
 </template>

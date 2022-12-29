@@ -16,6 +16,10 @@ const props = withDefaults(
     }
 );
 
+defineExpose({
+    cancel: handleCancel
+});
+
 const emit = defineEmits<{
     (e: 'update:modelValue', visible: boolean): void,
     (e: 'confirm'): void,

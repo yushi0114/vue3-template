@@ -5,27 +5,10 @@ import { useUserStore } from '@/stores';
 import { checkPassword, encrypt, type ValidateCallback } from '@/utils';
 import { ElMessageBox, type FormInstance } from 'element-plus';
 
-const props = withDefaults(
-    defineProps<{
-        modelValue: boolean,
-    }>(),
-    {
-        modelValue: false
-    }
-);
-
-const emit = defineEmits<{
-    (e: 'update:modelValue', visible: boolean): void
-}>();
-
-const innerModel = computed({
-    get: () => props.modelValue,
-    set: (val) => emit('update:modelValue', val)
-});
-
 const { signout } = useUserStore();
 const router = useRouter();
 const formRef = ref<FormInstance>();
+const dialogRef = ref();
 const formModel = reactive({
     oldPassword: '',
     newPassword: '',
@@ -74,7 +57,7 @@ async function submit() {
             oldPassword: encrypt(formModel.oldPassword),
             tab: MENU_TAB.MENU_TAB_DMS,
         });
-        cancel();
+        dialogRef.value.cancel();
         await ElMessageBox.alert('修改密码成功，请退出重新登录');
         try {
             await signout();
@@ -88,11 +71,6 @@ async function submit() {
     }
 }
 
-function cancel() {
-    // emit('update:modelValue', false);
-    emit('update:modelValue', false);
-}
-
 function clear() {
     formRef.value?.resetFields();
 }
@@ -100,11 +78,10 @@ function clear() {
 
 <template>
 <MessageDialog
+    ref="dialogRef"
     title="修改密码"
     width="480px"
     class="nav-user-update-pwd"
-    v-model="innerModel"
-    @close="cancel"
     @closed="clear"
     @confirm="submit">
     <!-- -->
@@ -142,8 +119,7 @@ function clear() {
 </MessageDialog>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .nav-user-update-pwd {
-  @apply;
 }
 </style>

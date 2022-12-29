@@ -1,6 +1,6 @@
 <template>
     <div class="form-content">
-        <div class="form-header">角色管理</div>
+        <Text class="form-header" size="xl" block color="paragraph">角色管理</Text>
         <el-form class="custom-form" :model="roleForm" :rules="rules" label-width="120px" ref="ruleFormRef">
             <el-form-item label="角色名称" required prop="name">
                 <el-input v-model="roleForm.name"
@@ -108,7 +108,6 @@ async function submitForm(formElement: FormInstance | undefined) {
 }
 
 .form-header {
-    font-size: 24px;
     margin: 20px 0 30px;
 }
 

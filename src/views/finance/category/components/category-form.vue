@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="form-header">机构分类</div>
+        <Text class="form-header" size="xl" block color="paragraph">机构分类</Text>
         <el-form :model="categoryForm" :rules="rules" label-width="120px" ref="ruleFormRef" style="width: 700px;">
             <el-form-item label="机构分类:" required prop="name">
                 <el-input v-model="categoryForm.name" placeholder="请输入分类名称" show-word-limit maxlength="255"/>
@@ -156,6 +156,7 @@ const submitForm = async(formEl: FormInstance | undefined) => {
                 });
             }
             if (status) {
+                resetCategoryForm();
                 await goListView();
             }
             LoadingService.getInstance().stop();
@@ -175,7 +176,6 @@ async function goBack() {
 
 <style scoped lang="scss">
 .form-header {
-    font-size: 24px;
     margin: 20px 0 30px;
 }
 

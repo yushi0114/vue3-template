@@ -1,6 +1,6 @@
 <template>
     <div style="height: max-content">
-        <div v-if="formType === 'create'" class="form-header">新建菜单</div>
+        <Text v-if="formType === 'create'" class="form-header" size="xl" block color="paragraph">新建菜单</Text>
         <el-form
             :class="[{ 'custom-create-form': formType !== 'create'}]"
             :label-position="formType === 'create' ? 'right' : 'top'"
@@ -50,7 +50,7 @@
                           type="textarea"
                           placeholder="请输入菜单描述"/>
             </el-form-item>
-            <el-form-item label="菜单图标" prop="icon">
+            <el-form-item label="菜单图标" prop="icon" v-if="activeName === MenuTabType.dms">
                 <el-input v-model="menuForm.icon"
                           :maxlength="255"
                           show-word-limit
@@ -85,8 +85,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import { createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, menuTreeData, } from './menu-list';
-import type { MenuFormType } from '@/types/system-manage';
+import { activeName, createMenu, currentMenuId, editMenu, formType, goTreeView, menuForm, menuTreeData, } from './menu-list';
+import { type MenuFormType, MenuTabType } from '@/types/system-manage';
 import { type ValidateCallback, validateIllegalSymbol } from '@/utils';
 
 const validateSort = (rule: any, value: any, callback: ValidateCallback) => {
@@ -209,7 +209,6 @@ async function goBack() {
 
 <style scoped lang="scss">
 .form-header {
-    font-size: 24px;
     margin: 20px 0 30px;
 }
 

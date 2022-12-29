@@ -16,8 +16,8 @@ import { downloadByBase64, downloadByData } from '@/utils';
 
 export const loading = ref(false);
 export const mode = ref<'form' | 'list'>('list');
-export const cityCodeList = ref();
-export const orgTypeCodeList = ref();
+export const cityCodeList = ref<any[]>([]);
+export const orgTypeCodeList = ref<any[]>([]);
 export const currentCodeId = ref<string>();
 export const codeForm = ref<FinanceCodeFormType>({
     address: '',

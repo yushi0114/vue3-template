@@ -6,12 +6,13 @@ import UserTable from './components/CorpUserTable.vue';
 
 const handleClick = async(tab: TabsPaneContext) => {
     resetFilterObject();
-    getPageList({
+    await getPageList({
         tab: tab.paneName as CorpUserTabType
     });
 };
 
 onMounted(async() => {
+    resetFilterObject();
     await getPageList({
         tab: activeName.value
     });

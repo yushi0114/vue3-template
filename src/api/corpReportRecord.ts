@@ -1,17 +1,15 @@
+import type {
+    CorpReportRecordListItemType
+} from '@/types/corpReportRecord';
 import { DMS_DOMAIN } from './const';
 import { api } from './http';
 
-export type GetRecordListPayload = {
+export type GetReportRecordListType = {
     pageIndex: number
     pageSize: number
     sortField: string
     sortType: string
     searchInput: string
-}
-
-export interface ListResponse<T = any> {
-    total: number,
-    data: T[]
 }
 
 export interface ReportRecordEntity {
@@ -22,32 +20,55 @@ export interface ReportRecordEntity {
     inquiry: string
 }
 
-export type GetRecordListResponse = ListResponse<ReportRecordEntity>
-
-export type DeleteBatchRecordPayload = {
+export type DeleteReportRecordType = {
     idArr: Array<string>
 };
 
-// 查询征信报告查询记录列表页(辽信通)
-export function getRecordList(params: GetRecordListPayload): Promise<GetRecordListResponse>{
-    return api.get(`${DMS_DOMAIN}/v1/corp/log/list`, {
-        params
-    });
+abstract class BaseReportRecord {
+    abstract delete(params: DeleteReportRecordType): Promise<void>;
+    abstract getList(params: GetReportRecordListType): Promise<{
+        data: CorpReportRecordListItemType[],
+        total: number
+    }>;
 }
 
-// 查询征信报告查询记录列表页(市综服)
-export function getZfRecordList(params: GetRecordListPayload): Promise<GetRecordListResponse>{
-    return api.get(`${DMS_DOMAIN}/v1/zjfw/corp/log/list`, {
-        params
-    });
+class ReportRecord extends BaseReportRecord {
+    delete(params: DeleteReportRecordType): Promise<void> {
+        return api.post(`${DMS_DOMAIN}/v1/del/corp/report/log`, params);
+    }
+
+    getList(params: GetReportRecordListType): Promise<{
+        data: CorpReportRecordListItemType[],
+        total: number
+    }> {
+        return api.get(`${DMS_DOMAIN}/v1/corp/log/list`, { params });
+    }
 }
 
-// 批量删除征信报告查询记录(辽信通)
-export function deleteBatchRecord(data: DeleteBatchRecordPayload) {
-    return api.post(`${DMS_DOMAIN}/v1/del/corp/report/log`, data);
+class ReportRecordZjfw extends BaseReportRecord {
+    delete(params: DeleteReportRecordType): Promise<void> {
+        return api.post(`${DMS_DOMAIN}/v1/zjfw/del/corp/report/log`, params);
+    }
+
+    getList(params: GetReportRecordListType): Promise<{
+        data: CorpReportRecordListItemType[],
+        total: number
+    }> {
+        return api.get(`${DMS_DOMAIN}/v1/zjfw/corp/log/list`, { params });
+    }
 }
 
-// 批量删除征信报告查询记录(市综服)
-export function deleteBatchZfRecord(data: DeleteBatchRecordPayload) {
-    return api.post(`${DMS_DOMAIN}/v1/zjfw/del/corp/report/log`, data);
+export class ReportRecordService {
+    private readonly strategy: BaseReportRecord;
+
+    constructor(type: 'lxt' | 'zjfw') {
+        if (type === 'lxt'){
+            this.strategy = new ReportRecord();
+        } else {
+            this.strategy = new ReportRecordZjfw();
+        }
+    }
+    getInstance() {
+        return this.strategy;
+    }
 }

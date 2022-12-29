@@ -1,34 +1,23 @@
 <script lang="ts" setup>
+import { StatisticsTabType } from '@/types/statistics';
 import statisticsTable from './components/StatisticsTable.vue';
 import ZjftStatisticsTable from './components/ZjfwStatistics.vue';
 
-const route = useRoute();
-const isLxtstatistics = ref(true);
-
-onMounted(() => {
-    route.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
+const activeName = ref<StatisticsTabType>(StatisticsTabType.lxt);
+onUnmounted(() => {
+    activeName.value = StatisticsTabType.lxt;
 });
-
-watch(route, (val) => {
-    val.params.type === '0' ? isLxtstatistics.value = true : isLxtstatistics.value = false;
-});
-
 </script>
 
 <template>
     <PagePanel>
         <Board full>
-            <PlatformTab />
-            <template v-if="isLxtstatistics">
-                <statistics-table></statistics-table>
-            </template>
-            <template v-else>
-                <ZjftStatisticsTable></ZjftStatisticsTable>
-            </template>
+            <el-tabs v-model="activeName">
+                <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
+                <el-tab-pane label="市综服" name="zjfw"></el-tab-pane>
+            </el-tabs>
+            <statistics-table v-if="activeName==='lxt'"></statistics-table>
+            <ZjftStatisticsTable v-if="activeName==='zjfw'"></ZjftStatisticsTable>
         </Board>
     </PagePanel>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

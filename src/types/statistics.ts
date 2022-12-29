@@ -13,3 +13,8 @@ export interface zjfwStatistics {
     financeResolve: number,
     propertyFinanceResolve: number
 }
+
+export enum StatisticsTabType {
+    lxt = 'lxt',
+    zjfw = 'zjfw'
+}

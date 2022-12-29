@@ -3,6 +3,7 @@ import { getFirstPageData, updateHomePageStatic } from '@/api/firstPageCount';
 import type { statistics } from '@/types/statistics';
 import { EditPen, Check, Close } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus';
+import { validateIllegalSymbol } from '@/utils';
 
 const countForm = reactive<statistics>({
     registerCorp: 0,
@@ -46,15 +47,18 @@ const isZero = (rule: any, value: string, callback: (message?: Error) => {}) => 
 const countRules:any = reactive({
     registerCorp: [
         { required: true, message: '请输入注册企业数', trigger: 'change' },
-        { validator: isZero, trigger: 'change' }
+        { validator: isZero, trigger: 'change' },
+        validateIllegalSymbol
     ],
     financeProduct: [
         { required: true, message: '请输入金融产品数', trigger: 'change' },
-        { validator: isZero, trigger: 'change' }
+        { validator: isZero, trigger: 'change' },
+        validateIllegalSymbol
     ],
     successFinance: [
         { required: true, message: '请输入成功融资数', trigger: 'change' },
-        { validator: isZero, trigger: 'change' }
+        { validator: isZero, trigger: 'change' },
+        validateIllegalSymbol
     ],
     solveFinance: [
         { required: true, message: '请输入解决融资数', trigger: 'change' },
@@ -77,7 +81,8 @@ const countRules:any = reactive({
                 }
             },
             trigger: 'change'
-        }
+        },
+        validateIllegalSymbol
     ]
 });
 

@@ -3,6 +3,7 @@ import { getZfFirstPageData, updateZfHomePageStatic } from '@/api/firstPageCount
 import type { zjfwStatistics } from '@/types/statistics';
 import { EditPen, Check, Close } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus';
+import { validateIllegalSymbol } from '@/utils';
 
 const countForm = reactive<zjfwStatistics>({
     registerEnterprise: 0,
@@ -52,19 +53,23 @@ const isZero = (rule: any, value: string, callback: (message?: Error) => {}) => 
 const countRules:any = reactive({
     registerEnterprise: [
         { required: true, message: '请输入注册企业数', trigger: 'change' },
-        { validator: isZero, trigger: 'change' }
+        { validator: isZero, trigger: 'change' },
+        validateIllegalSymbol
     ],
     registerOrg: [
         { required: true, message: '请输入平台机构数', trigger: 'change' },
-        { validator: isZero, trigger: 'change' }
+        { validator: isZero, trigger: 'change' },
+        validateIllegalSymbol
     ],
     financialProduct: [
         { required: true, message: '请输入金融产品数', trigger: 'change' },
-        { validator: isZero, trigger: 'change' }
+        { validator: isZero, trigger: 'change' },
+        validateIllegalSymbol
     ],
     releaseRequirement: [
         { required: true, message: '请输入平台发布需求数', trigger: 'change' },
-        { validator: isZero, trigger: 'change' }
+        { validator: isZero, trigger: 'change' },
+        validateIllegalSymbol
     ],
     financeResolve: [
         { required: true, message: '请输入解决融资数', trigger: 'change' },
@@ -87,7 +92,8 @@ const countRules:any = reactive({
                 }
             },
             trigger: 'change'
-        }
+        },
+        validateIllegalSymbol
     ],
     propertyFinanceResolve: [
         { required: true, message: '请输入产权交易金额', trigger: 'change' },
@@ -110,7 +116,8 @@ const countRules:any = reactive({
                 }
             },
             trigger: 'change'
-        }
+        },
+        validateIllegalSymbol
     ]
 });
 

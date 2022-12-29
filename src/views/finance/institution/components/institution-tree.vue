@@ -91,11 +91,13 @@ async function handleOperateTreeItem(item: FinanceInstitutionTreeItemType, type:
     }
     if (type === ItemOperate.edit) {
         loading.detailLoading = true;
+        await selectOrgItem(item.id);
         await goEditFormView(item.id);
         loading.detailLoading = false;
     }
     if (type === ItemOperate.create) {
         loading.detailLoading = true;
+        await selectOrgItem(item.id);
         await goCreateChildLevelFormView(item.id);
         loading.detailLoading = false;
     }

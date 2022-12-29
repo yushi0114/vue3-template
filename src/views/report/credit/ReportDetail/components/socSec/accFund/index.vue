@@ -88,22 +88,4 @@ withDefaults(
     float: left;
     line-height: 35px;
 }
-
-.mt10 {
-    margin-top: 10px;
-}
-
-.mb60 {
-    margin-bottom: 60px;
-}
-
-.clear-both {
-    clear: both;
-}
-
-.report-no-data {
-    font-size: 14px;
-    margin: 10px 0 20px 20px;
-    font-weight: bold;
-}
 </style>

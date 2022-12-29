@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { deleteOrg, isDeleteOrgModelShow, willDeleteOrgIdList } from './finance-institution';
+import { deleteOrg, isDeleteOrgModelShow, willDeleteOrgIdList, goBoardView } from './finance-institution';
 import { validateIllegalSymbol, type ValidateCallback } from '@/utils';
 import type { FormInstance } from 'element-plus';
 
@@ -58,6 +58,7 @@ const deleteFormRules = {
 };
 
 function cancel() {
+    deleteForm.value.orgName = '';
     isDeleteOrgModelShow.value = false;
 }
 
@@ -70,7 +71,9 @@ async function handleDeleteOrg(formEl: FormInstance | undefined) {
                 await deleteOrg({
                     orgIdArr: willDeleteOrgIdList.value
                 });
+                await goBoardView();
                 isLoading.value = false;
+                cancel();
             }
         }
     });

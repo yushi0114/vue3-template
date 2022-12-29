@@ -386,6 +386,34 @@ const print = () => {
     .mb60 {
         margin-bottom: 60px;
     }
+    .clear-both {
+        clear: both;
+    }
+    .tip {
+        font-size: 13px;
+        margin-top: 5px;
+        display: inline-block;
+        color: #bb3434;
+    }
+    .pl5 {
+        padding-left: 5px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .font-weight {
+        font-weight: bold;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
 }
 </style>
 

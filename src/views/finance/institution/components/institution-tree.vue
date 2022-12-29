@@ -42,7 +42,6 @@
                 </template>
             </el-tree>
             <institution-remove-dialog
-                v-if="isDeleteOrgModelShow"
                 :org-name="willDeleteOrgName"></institution-remove-dialog>
         </div>
     </div>
@@ -59,7 +58,6 @@ import {
     goEditFormView,
     openRemoveView,
     institutionTreeData,
-    isDeleteOrgModelShow,
     willDeleteOrgName,
     loading,
 } from './finance-institution';
@@ -93,11 +91,13 @@ async function handleOperateTreeItem(item: FinanceInstitutionTreeItemType, type:
     }
     if (type === ItemOperate.edit) {
         loading.detailLoading = true;
+        await selectOrgItem(item.id);
         await goEditFormView(item.id);
         loading.detailLoading = false;
     }
     if (type === ItemOperate.create) {
         loading.detailLoading = true;
+        await selectOrgItem(item.id);
         await goCreateChildLevelFormView(item.id);
         loading.detailLoading = false;
     }

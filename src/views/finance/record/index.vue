@@ -11,7 +11,7 @@
 import FinanceReportContentList from '@/views/finance/record/components/finance-report-content-list.vue';
 import { resetFilterObject } from './components/finance-report';
 
-onMounted(() => {
+onUnmounted(() => {
     resetFilterObject();
 });
 </script>

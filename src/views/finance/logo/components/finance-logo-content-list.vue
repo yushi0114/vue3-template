@@ -6,7 +6,8 @@
             :searchConfig="{
                 label: '请输入机构名称进行查询',
                 field: 'searchInput',
-            }">
+            }"
+            >
             <template v-slot:search-rest>
                 <el-button type="primary" :icon="Plus" @click="showDialog">新建</el-button>
             </template>
@@ -166,10 +167,14 @@ async function handleSizeChange(item: number) {
     await getPageList();
 }
 
+
 watch(() => filterObject.value.searchInput, handleSearchList);
 
 onMounted(() => {
     getPageList();
+});
+
+onUnmounted(() => {
     resetFilterObject();
 });
 </script>

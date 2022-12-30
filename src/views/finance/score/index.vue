@@ -13,6 +13,8 @@ import { getPageList, resetFilterObject } from './components/finance-score';
 
 onMounted(() => {
     getPageList();
+});
+onUnmounted(() => {
     resetFilterObject();
 });
 </script>

@@ -14,10 +14,13 @@ import { LoadingService } from '@/views/system/loading-service';
 import { getPageList, resetFilterObject } from './components/finance-org-user';
 
 onMounted(async () => {
-    resetFilterObject();
     LoadingService.getInstance().loading();
     await getPageList();
     LoadingService.getInstance().stop();
+});
+
+onUnmounted(() => {
+    resetFilterObject();
 });
 </script>
 

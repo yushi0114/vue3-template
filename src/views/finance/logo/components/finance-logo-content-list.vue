@@ -168,7 +168,10 @@ async function handleSizeChange(item: number) {
 
 watch(() => filterObject.value.searchInput, handleSearchList);
 
-onMounted(getPageList);
+onMounted(() => {
+    getPageList();
+    resetFilterObject();
+});
 </script>
 
 <style scoped lang="scss">

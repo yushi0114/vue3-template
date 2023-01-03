@@ -87,7 +87,7 @@ watch(() => route.params, () => {
     </ReqDetail>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .agile-req-detail {
     @apply;
 }

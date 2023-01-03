@@ -45,7 +45,7 @@ watch(() => props.parentExpanded, () => {
         <slot :handleClick="handleClick" :expanded="expanded" :active="activeCondition" />
     </div>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .sidebar-link-group {
     &.active {
         background: var(--el-color-primary-light-9);

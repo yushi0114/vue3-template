@@ -48,7 +48,7 @@ const handleSortChange = (item: ArticleSortItem) => {
 </script>
 
 <template>
-    <div class="article-filter">
+    <FlexRow horizontal="between" class="article-filter">
         <el-dropdown
             v-show="($attrs.tab as any).value === ARTICLE_STATUS.ALL"
             trigger="click"
@@ -84,20 +84,18 @@ const handleSortChange = (item: ArticleSortItem) => {
                 <i-ep-sort-up v-show="item.sortType === SORT_TYPE.ASC"></i-ep-sort-up>
             </div>
         </el-space>
-    </div>
+    </FlexRow>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 .article-filter {
-    @apply bg-$el-color-info-light-8 flex justify-between items-center h-50px;
+    height: 50px;
+    background-color: $color-info-light-8;
 }
 .article-sort-item {
-    @apply cursor-pointer;
-    &:hover {
-        color: var(--el-color-primary);
-    }
-    &.active {
-        color: var(--el-color-primary);
+    cursor: pointer;
+    &:hover, &.active {
+        color: $color-primary
     }
 }
 </style>

@@ -168,8 +168,7 @@ onMounted(() => {
             :content="detail" />
     </PagePanel>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .product-apply {
-    @apply;
 }
 </style>

@@ -11,20 +11,20 @@
   </Text>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .i-texthoverable {
-  @apply cursor-pointer;
+  cursor: pointer;
 
   &:hover {
-    color: var(--el-color-primary);
+    color: $color-primary;
   }
 }
 
 .i-texthoverable--disabled {
-  @apply pointer-events-none;
+  pointer-events: none;
 
   &:hover {
-    @apply text-$el-text-color-disabled;
+    color: $text-color-disabled;
   }
 }
 </style>

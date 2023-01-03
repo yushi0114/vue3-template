@@ -19,12 +19,6 @@ withDefaults(
     }
 );
 
-// const emits = defineEmits<{
-//     (e: 'expand', expand: boolean): void
-//     (e: 'close'): void,
-//     (e: 'change', opt: DynamicNavEntity, parent: DynamicNavEntity): void,
-// }>();
-
 const { expand, toggleExpand } = useSidebar();
 const sidebar = ref<HTMLDivElement>();
 const router = useRouter();
@@ -37,14 +31,10 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
     }
     parentBlock.handleClick();
 }
-// function handleChange(opt: DynamicNavEntity, parent: DynamicNavEntity) {
-//     emits('change', opt, parent);
-// }
+
 </script>
 
 <template>
-    <!-- Sidebar backdrop (mobile only) -->
-    <div class="sidebar-mobile-shadow" :class="{ expand }" aria-hidden="true"></div>
     <div
         class="sidebar"
         ref="sidebar"
@@ -137,33 +127,49 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
     </div>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 
 .sidebar {
-    @apply
-        flex flex-col shrink-0 border-box select-none
-        transform transition-all duration-200 ease-in-out // -translate-x-64 lg: translate-x-0
-        w-18
-        overflow-y-hidden
-        ;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    user-select: none;
+    transition: .2s ease-in-out all;
+    overflow-y: hidden;
 
-        background-color: var(--deep-bg-color);
+    width: 4.5rem;
+    background-color: var(--deep-bg-color);
+
     &.expand {
-        @apply w-64;
-        /* @apply translate-x-0; */
+        width: 16rem;
     }
 
     & li {
-        @apply pl-2;
+        padding-left: 0.5rem;
     }
 }
 
 .sidebar-content {
-    @apply flex-1 flex flex-col flex-nowrap overflow-y-auto px-4 pt-2;
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-y: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
 }
 
 .sidebar-root-block {
-    @apply flex items-center px-3 h-10 rounded-sm mb-0.5;
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    height: 2.5rem;
+    border-radius: 0.125rem;
+    margin-bottom: 0.125rem;
+
     color: var(--el-text-color-regular);
     &.active {
         color: var(--el-color-primary);
@@ -176,7 +182,7 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 
 
 .sidebar-root-icon {
-    @apply mt-0.5;
+    margin-top: 0.125rem;
     width: 1rem;
     height: 1rem;
     font-weight: bold;
@@ -184,7 +190,9 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 }
 
 .sidebar-sub-icon {
-    @apply h-4 w-4 mt-1;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.125rem;
 }
 
 .sidebar-root-link {
@@ -198,35 +206,46 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
 }
 
 .sidebar-root-label {
-    @apply
-        flex-1
-        text-sm font-medium ml-2
-        truncate
-        lg:sidebar-expanded:opacity-100
-        2xl:opacity-100 duration-200
-    ;
+    flex: 1 1 0%;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .sidebar-drop-arrow {
-    @apply text-md transform transition-all duration-200 ease-in-out;
+    transition: .2s ease-in-out all;
 
     &.expanded {
-        @apply rotate-180;
+        transform: rotateZ(180deg);
     }
 }
 
 .sidebar-sub-list {
-    @apply pb-2;
+    padding-bottom: 0.5rem;
 }
 
 
 .sidebar-sub-block {
-    @apply h-8 text-sm pl-9;
+    height: 2rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding-left: 2.25rem;
     cursor: pointer;
 }
 
 .sidebar-sub-link {
-    @apply flex transition duration-150 truncate items-center gap-1;
+    display: flex;
+    align-items: center;
+    transition: .15s ease-in-out all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    grid-gap: 0.25rem;
+    gap: 0.25rem;
 
     color: var(--el-text-color-regular);
 
@@ -235,16 +254,10 @@ function handleParentBlockClick(parentBlock: LinkGroupSlotProperty) {
     }
 }
 
-.sidebar-mobile-shadow {
-    @apply fixed inset-0 bg-gray-900 bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 opacity-0 pointer-events-none;
-
-    &.open {
-        @apply opacity-100;
-    }
-}
-
 .sidebar-footer {
-    @apply py-2 text-2xl px-4;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
     color: var(--el-text-color-secondary);
 
     & svg {

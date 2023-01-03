@@ -6,8 +6,5 @@ import Error404 from './system/Error404.vue';
   <Error404 />
 </template>
 
-<style lang="postcss">
-.empty {
-  @apply;
-}
+<style lang="scss">
 </style>

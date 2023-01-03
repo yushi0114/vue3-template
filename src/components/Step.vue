@@ -46,7 +46,7 @@ withDefaults(
     </div>
 
 </template>
-<style lang="postcss">
+<style lang="scss">
 .i-step {
     position: relative;
     flex: 1;

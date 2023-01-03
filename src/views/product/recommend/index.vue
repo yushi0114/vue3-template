@@ -78,10 +78,10 @@ function handleDelete(rd: ProductRecommandEntity) {
                         :key="i">
                         <template #label-rest>
                             <FlexRow gap="xs">
-                                <CircleOptBtn @click="handleEdit(recommand)" :disabled="(recommand.status === SwitchType.off)">
+                                <CircleOptBtn @click="handleEdit(recommand)">
                                     <i-ep-edit-pen />
                                 </CircleOptBtn>
-                                <CircleOptBtn @click="handleDelete(recommand)" :disabled="(recommand.status === SwitchType.off)">
+                                <CircleOptBtn @click="handleDelete(recommand)">
                                     <i-ep-close />
                                 </CircleOptBtn>
                             </FlexRow>

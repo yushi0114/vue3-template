@@ -93,49 +93,52 @@ const onMouseEnter = () => {
         <slot />
     </span>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .sjc-tooltip {
-    @apply max-w-50%;
+    max-width: 50%;
 }
 .i-text {
-    @apply inline text-current;
+    display: inline;
+    color: currentColor;
 }
 
 .i-text-underline {
-    @apply underline;
+    text-decoration-line: underline;
 }
 
 .i-text.i-text-block {
-    @apply block;
+    display: block;
 }
 
 .i-text.i-text-bold {
-    @apply font-bold;
+    font-weight: 700;
 }
 
 .i-text-italic {
-    @apply italic;
+    font-style: italic;
 }
 
 .i-text-center {
-    @apply text-center;
+    text-align: center;
 }
 
 .i-text-right {
-    @apply text-right;
+    text-align: right;
 }
 
 .i-text-justify {
-    @apply text-justify;
+    text-align: justify;
 }
 
 
 .i-text-truncate {
-    @apply truncate;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .i-text-uppercase {
-    @apply uppercase;
+    text-transform: uppercase;
 }
 
 .i-text-xs {

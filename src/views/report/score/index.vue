@@ -4,14 +4,12 @@ import ScoreTableTable from './components/ScoreTable.vue';
 
 <template>
     <PagePanel full>
-        <Board class="score">
+        <Board focus-full>
             <ScoreTableTable></ScoreTableTable>
         </Board>
     </PagePanel>
 </template>
 
-<style lang="postcss" scoped>
-.score {
-    @apply  h-full;
-}
+<style lang="scss" scoped>
+
 </style>

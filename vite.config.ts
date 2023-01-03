@@ -3,11 +3,7 @@ import { argv } from 'node:process';
 import type { ConfigEnv, UserConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import unocss from 'unocss/vite';
-import { presetUno, presetAttributify } from 'unocss';
-import transformerDirectives from '@unocss/transformer-directives';
 import autoprefixer from 'autoprefixer';
-import postcssNesting from 'postcss-nesting';
 import autoImport from 'unplugin-auto-import/vite';
 import icons from 'unplugin-icons/vite';
 import iconsResolver from 'unplugin-icons/resolver';
@@ -32,13 +28,6 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         plugins: [
             vue(),
             vueJsx(),
-            unocss({
-                presets: [
-                    presetUno(),
-                    presetAttributify(),
-                ],
-                transformers: [transformerDirectives()],
-            }),
             autoImport({
                 include: [
                     /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
@@ -100,7 +89,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         },
         css: {
             postcss: {
-                plugins: [autoprefixer, postcssNesting],
+                plugins: [autoprefixer],
             },
             preprocessorOptions: {
                 scss: {

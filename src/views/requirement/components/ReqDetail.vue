@@ -66,8 +66,7 @@ withDefaults(
     </DetailDrawer>
 </template>
 
-<style lang="postcss">
+<style lang="scss">
 .req-detail {
-    @apply;
 }
 </style>

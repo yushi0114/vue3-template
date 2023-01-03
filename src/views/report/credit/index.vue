@@ -4,14 +4,12 @@ import ReportTable from './components/ReportTable.vue';
 
 <template>
     <PagePanel full>
-        <Board class="report">
+        <Board focus-full>
             <ReportTable></ReportTable>
         </Board>
     </PagePanel>
 </template>
 
-<style lang="postcss" scoped>
-.report {
-    @apply  h-full;
-}
+<style lang="scss" scoped>
+
 </style>

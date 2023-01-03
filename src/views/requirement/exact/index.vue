@@ -161,7 +161,7 @@ onMounted(() => {
     </Board>
   </PagePanel>
 </template>
-<style lang="postcss">
+<style lang="scss">
 .req-exact {
 }
 </style>

@@ -9,7 +9,6 @@ withDefaults(
     <Layout class="page-panel" v-bind="$attrs">
         <!-- -->
         <header class="page-panel-header" v-if="title">
-            <Title>{{ title }}</Title>
             <div class="page-panel-header__rest">
                 <button>delete</button>
                 <button>edit</button>

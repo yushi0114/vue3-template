@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\types\article.ts
  * @Author: zys
  * @Date: 2022-11-14 15:13:12
- * @LastEditTime: 2022-11-23 11:34:55
+ * @LastEditTime: 2023-01-03 16:07:27
  * @LastEditors: zys
  * @Reference:
  */
@@ -69,7 +69,8 @@ export type UpdateNewsStatusParams = Pick<NewsItem, 'id' | 'status'>;
 export type UpdateNewsHotParams = Pick<NewsItem, 'id' | 'hotNews'>;
 
 export type PolicyListParams = IListQueryParams<{
-    searchInput?: string;
+    title?: string;
+    status?: ARTICLE_STATUS;
     updateBy?: string;
 }>;
 

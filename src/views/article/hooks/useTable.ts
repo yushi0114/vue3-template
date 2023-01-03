@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2022-12-28 15:44:34
+ * @LastEditTime: 2023-01-03 16:25:35
  * @LastEditors: zys
  * @Reference:
  */
@@ -20,11 +20,11 @@ import {
     ARTICLE_PAGE,
 } from '@/enums';
 import { getFileIdByUrl } from './../../../utils/file/util';
-import type { NewsItem, PolicyItem, NewsListParams, ArticleSortItem, TAB_ITEM } from '@/types';
+import type { NewsItem, PolicyItem, NewsListParams, ArticleSortItem, TAB_ITEM, PolicyListParams } from '@/types';
 import { useApi } from '@/composables';
 import { useApiManage } from './useApiManage';
 import { useJumpLink } from './useRouterLinkManage';
-import { useArticleDetail } from './useDetail';
+import { useArticleDetail, useArticleModule } from './useDetail';
 import { noop, getUrlListFromText } from '@/utils';
 import { ARTICLE_TYPE } from '../constants';
 import { useUserStore } from '@/stores';
@@ -51,11 +51,11 @@ export const useTable = (
     // eslint-disable-next-line no-undef
     const currentArticle = ref<Recordable>({});
     const showArticleSortDialog = ref(false);
-
+    const { isNewsModule } = useArticleModule(module);
     const INITIAL_PARAMS = {
         status: ARTICLE_STATUS.ALL,
         ...tab.queryParams,
-        searchInput: ref(''),
+        searchInput: '',
         sortType: SORT_TYPE.ASC,
         sortField: 'sort',
         pageIndex: 1,
@@ -244,10 +244,13 @@ export const useTable = (
     // 加载数据
     function fetchTableData(isLoadingMore: boolean = false) {
         state.loadingMore = isLoadingMore;
-        const queryParams: NewsListParams = {};
+        const queryParams: NewsListParams | PolicyListParams = {};
         if (params.status === ARTICLE_STATUS.MY_PUBLISHED) {
             queryParams.status = ARTICLE_STATUS.PUBLISHED;
             queryParams.updateBy = user?.id ?? '';
+        }
+        if (!isNewsModule.value) {
+            (queryParams as PolicyListParams).title = (params as PolicyListParams).title || params.searchInput;
         }
         const _params = { ...params, ...queryParams };
         loadNewsList(_params);

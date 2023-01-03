@@ -53,18 +53,6 @@ const handleClose = () => {
             <el-form-item label="展现形式:" prop="typeModuleId">
                 <Text size="sm" color="regular">{{ dataDetail.typeModuleName }}</Text>
             </el-form-item>
-            <el-form-item label="配置菜单">
-                <div style="margin-top: 10px">
-                    <el-tree
-                        ref="menuTree"
-                        :data="allSystemMenuTreeDisabled"
-                        show-checkbox
-                        node-key="id"
-                        :default-checked-keys="dataDetail.menuIdArr"
-                        :default-expand-all="true">
-                    </el-tree>
-                </div>
-            </el-form-item>
             <el-form-item label="创建者" prop="createBy">
                 <Text size="sm" color="regular">{{ dataDetail.createBy }}</Text>
             </el-form-item>
@@ -76,6 +64,18 @@ const handleClose = () => {
             </el-form-item>
             <el-form-item label="更新时间" prop="updatedTime">
                 <Text size="sm" color="regular">{{ dataDetail.updateTime }}</Text>
+            </el-form-item>
+            <el-form-item label="配置菜单">
+                <div style="margin-top: 10px">
+                    <el-tree
+                        ref="menuTree"
+                        :data="allSystemMenuTreeDisabled"
+                        show-checkbox
+                        node-key="id"
+                        :default-checked-keys="dataDetail.menuIdArr"
+                        :default-expand-all="true">
+                    </el-tree>
+                </div>
             </el-form-item>
         </el-form>
     </el-drawer>

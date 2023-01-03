@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-import ArticleWrapper from '../components/ArticleWrapper.vue';
-import { ARTICLE_MODULE } from '@/enums';
+
 </script>
 
 <template>
-    <PagePanel>
-        <Board full>
-            <article-wrapper :module="ARTICLE_MODULE.NEWS_LXT"></article-wrapper>
-        </Board>
-    </PagePanel>
+  <div class="article-news">
+    <!-- -->
+    news
+  </div>
 </template>
 
 <style lang="scss">
-
+.article-news {
+}
 </style>

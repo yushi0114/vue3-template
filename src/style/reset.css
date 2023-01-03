@@ -1,6 +1,8 @@
 
 ul, li {
-    @apply m-0 p-0 list-none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 a, a:visited, a:active, a:hover {

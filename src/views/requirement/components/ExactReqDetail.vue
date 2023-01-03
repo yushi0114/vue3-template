@@ -89,6 +89,5 @@ watch(() => route.params, () => {
 
 <style lang="scss">
 .agile-req-detail {
-    @apply;
 }
 </style>

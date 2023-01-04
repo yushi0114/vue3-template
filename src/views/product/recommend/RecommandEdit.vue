@@ -41,7 +41,7 @@ const submitLoading = ref(false);
 const { request: requestProductRecommend, loading } = useApi(getProductOptions);
 
 function getProducts() {
-    requestProductRecommend({ platform: PlatformType.LiaoXinTong, menuName: 'recommend' })
+    requestProductRecommend({ platform: PlatformType.LiaoXinTong })
         .then((res) => {
             products.value = res;
         });

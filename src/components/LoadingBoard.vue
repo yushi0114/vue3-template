@@ -26,17 +26,38 @@ withDefaults(
         <Layout v-show="loading" v-loading="loading" element-loading-text="加载中"></Layout>
         <Layout v-show="!loading && empty">
             <el-empty
-                :image="image"
-                :image-size="imageSize"
-                :description="description" />
+            :image="image"
+            :image-size="imageSize"
+            :description="description" />
         </Layout>
-        <Layout v-show="(!loading && !empty)">
-            <slot></slot>
-        </Layout>
+        <transition name="loading">
+            <Layout v-show="(!loading && !empty)">
+                <slot></slot>
+            </Layout>
+        </transition>
     </Layout>
 </template>
 
 <style lang="scss">
 .loading-board {
+}
+
+.loading-enter-active {
+  animation: loading-visible 0.5s;
+}
+.loading-leave-active {
+  opacity: 0;
+}
+@keyframes loading-visible {
+  0% {
+    opacity: 0;
+    transform: translate(-10px);
+  }
+  50% {
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px);
+  }
 }
 </style>

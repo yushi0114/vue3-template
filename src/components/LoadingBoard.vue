@@ -25,10 +25,12 @@ withDefaults(
         <!-- -->
         <Layout v-show="loading" v-loading="loading" element-loading-text="加载中"></Layout>
         <Layout v-show="!loading && empty">
+          <FlexRow horizontal="center" full>
             <el-empty
             :image="image"
             :image-size="imageSize"
             :description="description" />
+          </FlexRow>
         </Layout>
         <transition name="loading">
             <Layout v-show="(!loading && !empty)">

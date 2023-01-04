@@ -94,9 +94,7 @@ defineExpose({
 
 <template>
     <div
-        class="article-list-wrapper"
-        v-loading="state.loading && !state.loadingMore"
-        element-loading-text="加载中">
+        class="article-list-wrapper">
         <FlexRow
             horizontal="between"
             gap="xs">
@@ -132,99 +130,98 @@ defineExpose({
                 </div>
             </el-tooltip>
         </FlexRow>
-        <template v-if="state.data.length > 0">
-            <ul
-                class="article-list"
-                :ref="(el) => bindDetailListRef(el, props.tab.value)"
-                v-infinite-scroll="loadMore"
-                :infinite-scroll-disabled="state.disabled">
-                <li
-                    v-for="(item, index) in state.data"
-                    :key="item.id + index"
-                    class="article-list-item"
-                    :class="{ active: activeId === item.id }"
-                    @click="handleActiveIdChange(item.id)">
-                    <div class="article-title-wrap">
-                        <Icon name="ep-document"> </Icon>
-                        <TextHoverable
-                            class="flex-1"
-                            size="sm"
-                            hoverable
-                            truncate>
-                            {{ item.title }}
-                        </TextHoverable>
-                        <el-tag
-                            :type="ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
-                            {{ ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].label }}
-                        </el-tag>
-                        <el-tag
-                            v-if="isNewsModule && item.hotNews === NEWS_TYPE.HOT"
-                            type="danger">
-                            热点新闻
-                        </el-tag>
-                    </div>
-                    <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
-                        <div>
-                            <Icon
-                                class="icon-more"
-                                name="ep-more-filled">
-                            </Icon>
+        <LoadingBoard :loading="state.loading && !state.loadingMore" :empty="state.data.length === 0" :image-size="160">
+            <template v-if="state.data.length > 0">
+                <ul
+                    class="article-list"
+                    :ref="(el) => bindDetailListRef(el, props.tab.value)"
+                    v-infinite-scroll="loadMore"
+                    :infinite-scroll-disabled="state.disabled">
+                    <li
+                        v-for="(item, index) in state.data"
+                        :key="item.id + index"
+                        class="article-list-item"
+                        :class="{ active: activeId === item.id }"
+                        @click="handleActiveIdChange(item.id)">
+                        <div class="article-title-wrap">
+                            <Icon name="ep-document"> </Icon>
+                            <TextHoverable
+                                class="flex-1"
+                                size="sm"
+                                hoverable
+                                truncate>
+                                {{ item.title }}
+                            </TextHoverable>
+                            <el-tag
+                                :type="ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
+                                {{ ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].label }}
+                            </el-tag>
+                            <el-tag
+                                v-if="isNewsModule && item.hotNews === NEWS_TYPE.HOT"
+                                type="danger">
+                                热点新闻
+                            </el-tag>
                         </div>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item
-                                    :disabled="item.status === ARTICLE_STATUS.PUBLISHED"
-                                    :command="ARTICLE_OPERATE_MODE.EDIT"
-                                    :icon="Edit"
-                                    >{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
-                                </el-dropdown-item>
-                                <el-dropdown-item
-                                    v-if="item.status === ARTICLE_STATUS.PUBLISHED"
-                                    :command="ARTICLE_OPERATE_MODE.OFFLINE"
-                                    :icon="SoldOut"
-                                    >{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
-                                </el-dropdown-item>
-                                <el-dropdown-item
-                                    v-else
-                                    :command="ARTICLE_OPERATE_MODE.PUBLISH"
-                                    :icon="Sell">
-                                    {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
-                                </el-dropdown-item>
-                                <el-dropdown-item
-                                    :command="ARTICLE_OPERATE_MODE.SORT"
-                                    :icon="Sort"
-                                    >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
-                                </el-dropdown-item>
-                                <el-dropdown-item
-                                    :command="ARTICLE_OPERATE_MODE.DELETE"
-                                    :icon="Delete"
-                                    >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
-                </li>
-                <Text
-                    size="sm"
-                    color="regular"
-                    align="center"
-                    block
-                    v-if="state.loadingMore"
-                    >加载中...</Text
-                >
-                <Text
-                    size="sm"
-                    color="regular"
-                    align="center"
-                    block
-                    v-if="state.noMore && showNoMore"
-                    >没有更多了</Text
-                >
-            </ul>
-        </template>
-        <el-empty
-            v-else-if="!state.loading && state.data.length === 0"
-            :image="emptyImg"></el-empty>
+                        <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
+                            <div>
+                                <Icon
+                                    class="icon-more"
+                                    name="ep-more-filled">
+                                </Icon>
+                            </div>
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item
+                                        :disabled="item.status === ARTICLE_STATUS.PUBLISHED"
+                                        :command="ARTICLE_OPERATE_MODE.EDIT"
+                                        :icon="Edit"
+                                        >{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
+                                    </el-dropdown-item>
+                                    <el-dropdown-item
+                                        v-if="item.status === ARTICLE_STATUS.PUBLISHED"
+                                        :command="ARTICLE_OPERATE_MODE.OFFLINE"
+                                        :icon="SoldOut"
+                                        >{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
+                                    </el-dropdown-item>
+                                    <el-dropdown-item
+                                        v-else
+                                        :command="ARTICLE_OPERATE_MODE.PUBLISH"
+                                        :icon="Sell">
+                                        {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
+                                    </el-dropdown-item>
+                                    <el-dropdown-item
+                                        :command="ARTICLE_OPERATE_MODE.SORT"
+                                        :icon="Sort"
+                                        >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
+                                    </el-dropdown-item>
+                                    <el-dropdown-item
+                                        :command="ARTICLE_OPERATE_MODE.DELETE"
+                                        :icon="Delete"
+                                        >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
+                    </li>
+                    <Text
+                        size="sm"
+                        color="regular"
+                        align="center"
+                        block
+                        v-if="state.loadingMore"
+                        >加载中...</Text
+                    >
+                    <Text
+                        size="sm"
+                        color="regular"
+                        align="center"
+                        block
+                        v-if="state.noMore && showNoMore"
+                        >没有更多了</Text
+                    >
+                </ul>
+            </template>
+        </LoadingBoard>
         <ArticleSortDialog
             v-model="showArticleSortDialog"
             :data="currentArticle"

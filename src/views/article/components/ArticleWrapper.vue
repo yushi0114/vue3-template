@@ -95,6 +95,10 @@ const activeName = ref(props.tabValue ?? ARTICLE_STATUS.ALL);
         }
     }
 
+    :deep(.el-tabs__content) {
+        flex: 1;
+    }
+
     .tab-label {
         justify-content: flex-start;
     }

@@ -16,37 +16,39 @@
             </el-button>
         </template>
     </ListQueryControl>
-    <CommonTable
-        :data="roleList.list"
-        @sort-change="handleSortChange"
-        :default-sort="{ prop: 'updateTime', order: 'descending' }"
-    >
-        <el-table-column label="名称">
-            <template #default="scope">
-                <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">
-                    {{ scope.row.name }}
-                </TextHoverable>
-            </template>
-        </el-table-column>
-        <el-table-column prop="desc" label="描述" width="180"/>
-        <el-table-column prop="createTime" sortable label="创建时间"/>
-        <el-table-column prop="updateTime" sortable label="更新时间"/>
-        <el-table-column prop="createBy" label="创建人"/>
-        <TableOperatorColumn
-            width="180"
-            @[ItemOperate.delete]="(scope: any) => handleRemoveRoleItem(scope.row)"
-            @[ItemOperate.edit]="(scope: any) => handleEditRoleItem(scope.row)"
-            :operators="[
-                { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
-                { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
-            ]">
-        </TableOperatorColumn>
-    </CommonTable>
-    <CommonPagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="roleFilterObject.currentPage"
-        :total="roleList.total"/>
+    <LoadingBoard :loading="loading" :empty="roleList.list.length === 0">
+        <CommonTable
+            :data="roleList.list"
+            @sort-change="handleSortChange"
+            :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        >
+            <el-table-column label="名称">
+                <template #default="scope">
+                    <TextHoverable underline size="sm" @click="handleToDetail(scope.row)">
+                        {{ scope.row.name }}
+                    </TextHoverable>
+                </template>
+            </el-table-column>
+            <el-table-column prop="desc" label="描述" width="180"/>
+            <el-table-column prop="createTime" sortable label="创建时间"/>
+            <el-table-column prop="updateTime" sortable label="更新时间"/>
+            <el-table-column prop="createBy" label="创建人"/>
+            <TableOperatorColumn
+                width="180"
+                @[ItemOperate.delete]="(scope: any) => handleRemoveRoleItem(scope.row)"
+                @[ItemOperate.edit]="(scope: any) => handleEditRoleItem(scope.row)"
+                :operators="[
+                    { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen' },
+                    { name: '删除', value: ItemOperate.delete, icon: 'ep-delete' },
+                ]">
+            </TableOperatorColumn>
+        </CommonTable>
+        <CommonPagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="roleFilterObject.currentPage"
+            :total="roleList.total"/>
+    </LoadingBoard>
     <role-detail
         :model-value="isDrawerShow"
         :data-detail="dataDetail"
@@ -68,7 +70,8 @@ import {
     resetRoleForm,
     roleFilterObject,
     roleForm,
-    roleList
+    roleList,
+    loading,
 } from './role-list';
 import { getRoleMenuIdsApi } from '@/api/system-manage';
 import type { FinanceCategoryListItemType } from '@/types/finance';

@@ -64,16 +64,12 @@ export function getProductReqs(payload: GetProductReqsPayload): Promise<GetProdu
 // #region 获取产品筛选项列表
 export type GetProductOptionsPayload = {
     platform?: PlatformType;
-    menuName?: string;
 };
 
 export type GetProductOptionsResponse = ProductEntity[];
 
 export function getProductOptions(payload: GetProductOptionsPayload): Promise<GetProductOptionsResponse> {
     const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/all' : '/v1/zjfw/product/all';
-
-    payload.menuName = payload.menuName || (payload.platform === PlatformType.LiaoXinTong ? 'requirement' : 'zjfwapply');
-
     delete payload.platform;
 
     return api.get(`${DMS_DOMAIN}${url}`, {
@@ -86,13 +82,16 @@ export function getProductOptions(payload: GetProductOptionsPayload): Promise<Ge
 
 export type GetProductReqScorePayload = {
     corpName: string;
+    platform?: PlatformType;
     corpCode: string;
 };
 
 export type GetProductReqScoreResponse = {};
 
 export function getProductReqScore(payload: GetProductReqScorePayload): Promise<GetProductReqScoreResponse> {
-    return api.post(`${DMS_DOMAIN}/v1/product/req/score`, payload);
+    const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/req/score' : '/v1/zjfw/product/req/score';
+    delete payload.platform;
+    return api.post(`${DMS_DOMAIN}${url}`, payload);
 }
 
 // #endregion
@@ -100,12 +99,15 @@ export function getProductReqScore(payload: GetProductReqScorePayload): Promise<
 // #region 获取产品需求详情
 export type GetProductReqPayload = {
     id: ProductRequirementEntity['id'];
+    platform?: PlatformType;
 };
 
 export type GetProductReqResponse = ProductRequirementEntity;
 
 export function getProductReq(payload: GetProductReqPayload): Promise<GetProductReqResponse> {
-    return api.get(`${DMS_DOMAIN}/v1/product/corp`, { params: payload }).then((res: any) => {
+    const url = payload.platform === PlatformType.LiaoXinTong ? '/v1/product/corp' : '/v1/zjfw/product/corp';
+    delete payload.platform;
+    return api.get(`${DMS_DOMAIN}${url}`, { params: payload }).then((res: any) => {
         const entity = res;
         entity.dataFirst = (entity.progressArr || []).map((p: any) => {
             return {

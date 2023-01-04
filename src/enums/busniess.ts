@@ -294,7 +294,7 @@ export const orgProgressStatusTypeMap: Record<OrgProgressStatusType, string> = O
     [OrgProgressStatusType.successVerify]: '授信审批成功',
     [OrgProgressStatusType.successInvest]: '尽职调查成功',
     [OrgProgressStatusType.successAccept]: '银行受理成功',
-    [OrgProgressStatusType.undo]: '银行48小时内未受理',
+    [OrgProgressStatusType.undo]: '银行未受理',
     [OrgProgressStatusType.failOver48h]: '银行超过48小时内未受理',
     [OrgProgressStatusType.failAccept]: '受理对接失败',
     [OrgProgressStatusType.failInvest]: '尽职调查失败',

@@ -7,6 +7,9 @@ import { AcceptProgressType, expectRateTypeMap, expectTimeTypeMap, loanTermTypeM
 import { ROOT_PATH } from '@/router';
 
 const router = useRouter();
+const route = useRoute();
+const platform = computed(() => Number(route.params.type));
+
 const props = withDefaults(
     defineProps<{
         content?: RequirementEntity | null
@@ -30,13 +33,14 @@ const score = reactive<any>({
 function handleOpen() {
     if (!props.content) return;
     getProductReqScore({
+        platform: platform.value,
         corpCode: props.content.corpCode,
         corpName: props.content.corpName,
     })
         .then((res: any) => {
             score.result = res.result;
         });
-    request({ id: props.content.id })
+    request({ id: props.content.id, platform: platform.value, })
         .then(res => {
             detail.value = res;
         });

@@ -19,6 +19,9 @@ withDefaults(
         <Text color="primary" size="sm" v-if="steps[0]?.orgProgress === OrgProgressStatusType.failOver48h">
             {{ orgProgressStatusTypeMap[OrgProgressStatusType.failOver48h] }}
         </Text>
+        <Text color="primary" size="sm" v-else-if="steps[0]?.orgProgress === OrgProgressStatusType.undo">
+            {{ orgProgressStatusTypeMap[OrgProgressStatusType.undo] }}
+        </Text>
         <template v-else>
             <Step
                 direction="vertical"

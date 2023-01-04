@@ -5,12 +5,11 @@ import { ARTICLE_FORM_MAP } from '../constants';
 import { useApi } from '@/composables';
 import { isArray, cloneDeep } from 'lodash';
 import type { CreateNewsParams, UpdateNewsParams, NewsItem } from '@/types';
-import { useApiManage, useArticleModule } from '../hooks';
+import { useApiManage, useArticleModule, useJumpLink } from '../hooks';
 import type { UploadFile } from 'element-plus';
 import { getFileIdByUrl, to } from '@/utils';
 
-const { back } = useRouter();
-const {
+let {
     query: { id = '' },
 } = useRoute();
 
@@ -19,6 +18,8 @@ const props = defineProps<{
 }>();
 
 const ARTICLE_API_MAP = useApiManage(props.module);
+
+const { handleToList } = useJumpLink({ module: props.module });
 
 const params = reactive({
     status: ARTICLE_STATUS.ALL,
@@ -35,7 +36,9 @@ const { loading: loadingCreate, request: createArticle } = useApi(ARTICLE_API_MA
             type: 'success',
             message: '操作成功',
         });
-        params[0].status === ARTICLE_STATUS.PUBLISHED && back();
+        state.laseUpdateTime = data.updateTime;
+        id = data.id;
+        params[0].status === ARTICLE_STATUS.PUBLISHED && handleToList();
     },
     onError() {},
 });
@@ -47,7 +50,7 @@ const { loading: loadingUpdate, request: updateArticle } = useApi(ARTICLE_API_MA
             message: '操作成功',
         });
         state.laseUpdateTime = data.updateTime;
-        params[0].status === ARTICLE_STATUS.PUBLISHED && back();
+        params[0].status === ARTICLE_STATUS.PUBLISHED && handleToList();
     },
     onError() {},
 });
@@ -128,6 +131,7 @@ const uploadOrDeleteThumbnail = async(thumbnail: UploadFile[] = []) => {
     }
     const [file] = thumbnail;
     const fileUrl = file.url!;
+    console.log('fileUrl: ', fileUrl);
     if (!fileUrl.includes('blob')) {
         return state.thumbnailUrl;
     }
@@ -157,7 +161,7 @@ onMounted(() => {
             <FlexRow horizontal="center" style="gap: 2rem;">
                 <el-button
                     :icon="Back"
-                    @click="back"
+                    @click="handleToList"
                     >返回</el-button
                 >
                 <Text

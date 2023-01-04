@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\enums\article.ts
  * @Author: zys
  * @Date: 2022-11-14 10:10:25
- * @LastEditTime: 2022-11-18 10:21:40
+ * @LastEditTime: 2023-01-04 10:36:47
  * @LastEditors: zys
  * @Reference:
  */
@@ -15,15 +15,19 @@ export enum ARTICLE_STATUS {
     DRAFT = 1,
     OFFLINE = 0,
     MY_PUBLISHED = 3,
+    MY_OFFLINE = 4,
+    MY_DRAFT = 5
 }
 
 // 文章状态label枚举
 export enum ARTICLE_STATUS_LABEL {
     ALL = '全部',
     PUBLISHED = '已发布',
-    DRAFT = '我的草稿箱',
+    DRAFT = '草稿箱',
     OFFLINE = '已下线',
     MY_PUBLISHED = '我发布的',
+    MY_OFFLINE = '我下线的',
+    MY_DRAFT = '我的草稿箱',
 }
 
 // 文章状态tag枚举
@@ -97,6 +101,7 @@ export enum LINK_TYPE {
     ADD = '/create',
     EDIT = '/edit',
     DETAIL = '/detail',
+    LIST = 'list'
 }
 
 // 文章类型label

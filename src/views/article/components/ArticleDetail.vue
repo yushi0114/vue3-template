@@ -4,19 +4,30 @@ import ArticleWrapper from '../components/ArticleWrapper.vue';
 import DetailContent from './DetailContent.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DetailLeftList from './DetailLeftList.vue';
-import { ARTICLE_MODULE, ARTICLE_STATUS, ARTICLE_API } from '@/enums';
+import { ARTICLE_MODULE, ARTICLE_STATUS, ARTICLE_API, PlatformType } from '@/enums';
 import { useApi } from '@/composables';
 import type { ICommonResult } from '@/api/types';
 import type { NewsItem } from '@/types';
-import { useApiManage, useArticleDetail } from '../hooks';
+import { useApiManage, useArticleDetail, useJumpLink } from '../hooks';
 import { isArray } from 'lodash';
 import { xss, replaceHTMLHref } from '@/utils';
-const { back } = useRouter();
+import { TAB_LIST } from '../constants';
+const { params } = useRoute();
 
-const { activeId, tabItem, bindDetailListRef, detailListMap } = useArticleDetail();
 const props = defineProps<{
     module: ARTICLE_MODULE;
+    platform: PlatformType;
 }>();
+
+let { activeId, tabItem, bindDetailListRef, detailListMap } = useArticleDetail();
+
+if (props.platform !== Number((params.type as unknown as PlatformType))) {
+    activeId.value = '';
+    tabItem = TAB_LIST.find(
+        (tabItem) => tabItem.value === ARTICLE_STATUS.ALL
+    );
+}
+const { handleToList } = useJumpLink({ module: props.module, tab: tabItem });
 
 const ARTICLE_API_MAP = useApiManage(props.module);
 
@@ -80,8 +91,9 @@ onBeforeMount(() => {
                 shadow="never"
                 :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
                 <article-wrapper
-                    class="h-full"
+                    class="wrapper"
                     :module="module"
+                    tab-position="top"
                     :tab-value="tabItem?.value">
                     <template #default="{ tab, module, activeName }">
                         <detail-left-list
@@ -106,7 +118,7 @@ onBeforeMount(() => {
                 <div class="flex justify-between gap-xs">
                     <el-button
                         :icon="Back"
-                        @click="back">
+                        @click="handleToList">
                         返回</el-button
                     >
                     <el-button
@@ -120,6 +132,7 @@ onBeforeMount(() => {
                 </div>
                 <detail-content
                     v-loading="loadingDetail"
+                    element-loading-text="加载中"
                     :data="state.data"
                     :module="module"></detail-content>
             </el-card>
@@ -127,7 +140,7 @@ onBeforeMount(() => {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .article-detail {
     height: 100%;
     padding: $gap-xs;

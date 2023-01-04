@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2023-01-03 16:25:35
+ * @LastEditTime: 2023-01-04 14:09:43
  * @LastEditors: zys
  * @Reference:
  */
@@ -43,11 +43,7 @@ export const useTable = (
 ) => {
     const tabItem = ref(tab);
     const articleStatus = ref<ARTICLE_STATUS>(ARTICLE_STATUS.ALL);
-    if (page === ARTICLE_PAGE.DETAIL) {
-        const { tabItem: _tabItem, articleStatus: _articleStatus } = useArticleDetail();
-        tabItem.value = _tabItem!;
-        articleStatus.value = _articleStatus.value;
-    }
+
     // eslint-disable-next-line no-undef
     const currentArticle = ref<Recordable>({});
     const showArticleSortDialog = ref(false);
@@ -63,6 +59,12 @@ export const useTable = (
     };
     const params = reactive(cloneDeep(INITIAL_PARAMS));
 
+    if (page === ARTICLE_PAGE.DETAIL) {
+        const { tabItem: _tabItem, articleStatus: _articleStatus } = useArticleDetail();
+        tabItem.value = _tabItem!;
+        articleStatus.value = _articleStatus.value;
+        params.pageSize = 20;
+    }
     const ARTICLE_API_MAP = useApiManage(module);
     const { handleToEdit } = useJumpLink({
         tab: tab,
@@ -81,6 +83,7 @@ export const useTable = (
                 if (state.data.length >= data.pageTotal) {
                     state.disabled = true;
                     state.noMore = true;
+                    state.loadingMore = false;
                 }
                 pageConfig.total = data.pageTotal;
             } else {
@@ -88,7 +91,9 @@ export const useTable = (
                 pageConfig.total = data.pageTotal;
             }
         },
-        onError() {},
+        onError() {
+            state.loadingMore = false;
+        },
     });
 
     const { request: _updateNewsStatus } = useApi(ARTICLE_API_MAP[ARTICLE_API.UPDATE_ARTICLE_STATUS], {
@@ -217,7 +222,11 @@ export const useTable = (
     function pageSizeChange({ currentPage, pageSize }: IPaginationConfig) {
         pageConfig.currentPage = currentPage ?? 1;
         pageConfig.pageSize = pageSize ?? 10;
-        params.pageIndex = pageConfig.currentPage;
+        if (params.pageSize !== pageSize) {
+            params.pageIndex = 1;
+        } else {
+            params.pageIndex = pageConfig.currentPage;
+        }
         params.pageSize = pageConfig.pageSize;
         fetchTableData();
     }
@@ -247,6 +256,14 @@ export const useTable = (
         const queryParams: NewsListParams | PolicyListParams = {};
         if (params.status === ARTICLE_STATUS.MY_PUBLISHED) {
             queryParams.status = ARTICLE_STATUS.PUBLISHED;
+            queryParams.updateBy = user?.id ?? '';
+        }
+        if (params.status === ARTICLE_STATUS.MY_OFFLINE) {
+            queryParams.status = ARTICLE_STATUS.OFFLINE;
+            queryParams.updateBy = user?.id ?? '';
+        }
+        if (params.status === ARTICLE_STATUS.MY_DRAFT) {
+            queryParams.status = ARTICLE_STATUS.DRAFT;
             queryParams.updateBy = user?.id ?? '';
         }
         if (!isNewsModule.value) {

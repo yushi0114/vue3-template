@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\types\article.ts
  * @Author: zys
  * @Date: 2022-11-14 15:13:12
- * @LastEditTime: 2023-01-03 16:07:27
+ * @LastEditTime: 2023-01-04 11:04:28
  * @LastEditors: zys
  * @Reference:
  */
@@ -19,6 +19,7 @@ export type TAB_ITEM = {
     title: ARTICLE_STATUS_LABEL;
     value: ARTICLE_STATUS;
     queryParams: NewsListParams;
+    filterOption: {name: ARTICLE_STATUS_LABEL, value: ARTICLE_STATUS}[]
 };
 export type NewsListParams = IListQueryParams<{
     searchInput?: string;
@@ -50,7 +51,7 @@ export type NewsDetailResponse = (ICommonResult & NewsItem)[];
 
 export type CreateNewsParams = Omit<NewsItem, 'id'>;
 
-export type CreateNewsResponse = { updateTime: string };
+export type CreateNewsResponse = { updateTime: string, id: string };
 
 export type UpdateNewsParams = NewsItem;
 
@@ -80,6 +81,6 @@ export type PolicyDetailResponse = ICommonResult & PolicyItem;
 
 export type CreatePolicyParams = Omit<PolicyItem, 'id'>;
 
-export type CreatePolicyResponse = { updateTime: string };
+export type CreatePolicyResponse = CreateNewsResponse;
 
 export type UpdatePolicyParams = PolicyItem;

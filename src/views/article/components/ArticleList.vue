@@ -8,7 +8,6 @@ import { useTable, useJumpLink, useArticleModule } from '../hooks';
 import {
     TABLE_COLUMNS,
     ARTICLE_STATUS_TAG_MAP,
-    ARTICLE_STATUS_SELECT_OPTIONS,
     ARTICLE_SORT_CONFIG,
 } from '../constants';
 import errImg from '@/assets/images/empty-image.png';
@@ -65,15 +64,14 @@ watch(listControlModel, () => {
                 field: isNewsModule ? 'searchInput' : 'title',
             }"
             :filterOptionsConfigs="
-                tab.value === ARTICLE_STATUS.ALL
-                    ? [
+                    [
                           {
                               label: `${getArticleTypeLabel}状态`,
                               field: 'status',
-                              options: ARTICLE_STATUS_SELECT_OPTIONS,
+                            options: tab.filterOption,
+                            defaultValue: tab.filterOption[0].value as string
                           },
                       ]
-                    : []
             "
             :sortConfigs="ARTICLE_SORT_CONFIG">
             <template v-slot:search-rest>
@@ -204,7 +202,7 @@ watch(listControlModel, () => {
                         @[ItemOperate.edit]="handleToEdit(scope)"
                         @operate="(opt) => handleMoreOperate(opt.value, scope.row)"
                         :operators="[
-                            { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen', disabled: scope.row.status !== ARTICLE_STATUS.PUBLISHED },
+                            { name: '编辑', value: ItemOperate.edit, icon: 'ep-edit-pen', disabled: scope.row.status === ARTICLE_STATUS.PUBLISHED },
                             scope.row.status === ARTICLE_STATUS.PUBLISHED ? {
                                 name: ARTICLE_OPERATE_MODE_LABEL.OFFLINE,
                                 value: ARTICLE_OPERATE_MODE.OFFLINE,
@@ -279,6 +277,11 @@ watch(listControlModel, () => {
 </template>
 
 <style lang="scss" scoped>
+.article-list {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 .tr-item {
     .thumbnail-wrapper {
         width: 70px;

@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\constants.ts
  * @Author: zys
  * @Date: 2022-11-14 11:26:22
- * @LastEditTime: 2022-12-27 16:48:16
+ * @LastEditTime: 2023-01-04 14:39:58
  * @LastEditors: zys
  * @Reference:
  */
@@ -20,25 +20,87 @@ import {
     ELEMENT_TAG_TYPE,
 } from '@/enums';
 import type { DefItem } from '@/components/SjcForm/types';
-import { useUserStore } from '@/stores';
-const {
-    state: { user },
-} = useUserStore();
+
 export const TAB_LIST = [
     {
         title: ARTICLE_STATUS_LABEL.ALL,
         value: ARTICLE_STATUS.ALL,
+        icon: 'ep:house',
         queryParams: {
             status: ARTICLE_STATUS.ALL,
         },
+        filterOption: [
+            {
+                name: ARTICLE_STATUS_LABEL.ALL,
+                value: ARTICLE_STATUS.ALL,
+            },
+            {
+                name: ARTICLE_STATUS_LABEL.PUBLISHED,
+                value: ARTICLE_STATUS.PUBLISHED,
+            },
+            {
+                name: ARTICLE_STATUS_LABEL.OFFLINE,
+                value: ARTICLE_STATUS.OFFLINE,
+            },
+            {
+                name: ARTICLE_STATUS_LABEL.MY_PUBLISHED,
+                value: ARTICLE_STATUS.MY_PUBLISHED,
+            },
+        ]
+    },
+    {
+        title: ARTICLE_STATUS_LABEL.PUBLISHED,
+        value: ARTICLE_STATUS.PUBLISHED,
+        icon: 'ep:finished',
+        queryParams: {
+            status: ARTICLE_STATUS.PUBLISHED,
+        },
+        filterOption: [
+            {
+                name: ARTICLE_STATUS_LABEL.ALL,
+                value: ARTICLE_STATUS.PUBLISHED,
+            },
+            {
+                name: ARTICLE_STATUS_LABEL.MY_PUBLISHED,
+                value: ARTICLE_STATUS.MY_PUBLISHED,
+            },
+        ]
+    },
+    {
+        title: ARTICLE_STATUS_LABEL.OFFLINE,
+        value: ARTICLE_STATUS.OFFLINE,
+        icon: 'ep:sold-out',
+        queryParams: {
+            status: ARTICLE_STATUS.OFFLINE,
+        },
+        filterOption: [
+            {
+                name: ARTICLE_STATUS_LABEL.ALL,
+                value: ARTICLE_STATUS.OFFLINE,
+            },
+            {
+                name: ARTICLE_STATUS_LABEL.MY_OFFLINE,
+                value: ARTICLE_STATUS.MY_OFFLINE,
+            },
+        ]
     },
     {
         title: ARTICLE_STATUS_LABEL.DRAFT,
         value: ARTICLE_STATUS.DRAFT,
+        icon: 'ep:box',
         queryParams: {
             status: ARTICLE_STATUS.DRAFT,
-            updateBy: user?.id ?? '',
         },
+        filterOption: [
+            {
+                name: ARTICLE_STATUS_LABEL.ALL,
+                value: ARTICLE_STATUS.DRAFT,
+            },
+            {
+                name: ARTICLE_STATUS_LABEL.MY_DRAFT,
+                value: ARTICLE_STATUS.MY_DRAFT,
+            },
+        ]
     },
 ];
 

@@ -10,24 +10,41 @@ const props = withDefaults(
     }>(),
     {
         module: ARTICLE_MODULE.NEWS_LXT,
-        tabValue: ARTICLE_STATUS.ALL,
     }
 );
 
-const activeName = ref(props.tabValue);
+const activeName = ref(props.tabValue ?? ARTICLE_STATUS.ALL);
 </script>
 
 <template>
     <div class="article-wrapper">
         <el-tabs
             class="h-full flex flex-col"
+            :class="{ tabs: $attrs['tab-position'] === 'left' }"
+            v-bind="$attrs"
             v-model="activeName">
             <el-tab-pane
                 class="h-full"
                 v-for="tab in TAB_LIST"
-                :label="tab.title"
                 :name="tab.value"
                 :key="tab.title">
+                <template #label>
+                    <el-button
+                        v-if="$attrs['tab-position'] === 'left'"
+                        class="w-full tab-label"
+                        :class="[tab.value === activeName && 'active']"
+                        text>
+                        <FlexRow gap="xs">
+                            <Icon :name="tab.icon"></Icon>
+                            <Text size="sm">{{ tab.title }}</Text>
+                        </FlexRow>
+                    </el-button>
+                    <Text
+                        size="sm"
+                        v-else
+                        >{{ tab.title }}</Text
+                    >
+                </template>
                 <slot
                     :tab="tab"
                     :active-name="activeName"
@@ -45,8 +62,51 @@ const activeName = ref(props.tabValue);
 <style lang="scss" scoped>
 .article-wrapper {
     height: 100%;
-}
-:deep(.el-tabs__content) {
-    flex: 1;
+    & .tabs {
+        display: flex;
+        flex-direction: row;
+
+        :deep(.el-tabs__item.is-top) {
+            padding-left: $gap-xs;
+            padding-right: 0;
+        }
+        :deep(.el-tabs--left) {
+            align-items: flex-start;
+        }
+
+        :deep(.el-tabs__active-bar) {
+            display: none;
+        }
+
+        :deep(.el-tabs__content) {
+            flex: 1;
+            height: 100%;
+        }
+
+        :deep(.el-button) {
+            &:hover {
+                background-color: $color-primary-light-9;
+                color: $color-primary;
+            }
+
+            &:focus {
+                background-color: inherit;
+            }
+        }
+    }
+
+    .tab-label {
+        justify-content: flex-start;
+    }
+
+    .tab-label.active {
+        background-color: $color-primary-light-9;
+        color: $color-primary;
+
+        &:focus {
+            background-color: $color-primary-light-9;
+            color: $color-primary;
+        }
+    }
 }
 </style>

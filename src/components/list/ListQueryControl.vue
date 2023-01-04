@@ -210,8 +210,8 @@ const handleDropdownClear = (fConf: ControlOptionConfig<any>, index: number) => 
             refs.value[index].handleClose();
         });
     }
-    model[fConf.field] = undefined;
-    dropdownLabelMap[fConf.field] = undefined;
+    model[fConf.field] = fConf.defaultValue ?? undefined;
+    dropdownLabelMap[fConf.field] = fConf.options.find((item) => item.value === fConf.defaultValue)?.name ?? undefined;
     wrapGo();
 };
 

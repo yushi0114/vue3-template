@@ -12,13 +12,16 @@ function handleTabChange(plat: PlatformType) {
 <template>
     <PagePanel full>
         <Board class="article-detail">
-            <article-detail v-show="platform === PlatformType.LiaoXinTong" :platform="PlatformType.LiaoXinTong" :module="ARTICLE_MODULE.NEWS_LXT" @tab-change="handleTabChange"></article-detail>
-            <article-detail v-show="platform === PlatformType.ShiZongFu"  :platform="PlatformType.ShiZongFu" :module="ARTICLE_MODULE.NEWS_ZJFW" @tab-change="handleTabChange"></article-detail>
+            <PlatformTab @tab-change="handleTabChange"></PlatformTab>
+            <Layout>
+                <article-detail v-show="platform === PlatformType.LiaoXinTong" :platform="PlatformType.LiaoXinTong" :module="ARTICLE_MODULE.NEWS_LXT"></article-detail>
+            <article-detail v-show="platform === PlatformType.ShiZongFu"  :platform="PlatformType.ShiZongFu" :module="ARTICLE_MODULE.NEWS_ZJFW"></article-detail>
+            </Layout>
         </Board>
     </PagePanel>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .article-detail {
     height: 100%;
 }

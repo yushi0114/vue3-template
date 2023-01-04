@@ -11,10 +11,11 @@ import {
     ARTICLE_PAGE,
 } from '@/enums';
 import { useTable, useJumpLink, useArticleModule, useArticleDetail } from '../hooks';
-import { ARTICLE_STATUS_TAG_MAP, ARTICLE_STATUS_SELECT_OPTIONS } from '../constants';
+import { ARTICLE_STATUS_TAG_MAP } from '../constants';
 import type { TAB_ITEM } from '@/types';
 import { hasScrollBar } from '@/utils';
 
+const { query } = useRoute();
 const props = defineProps<{
     tab: TAB_ITEM;
     module: ARTICLE_MODULE;
@@ -47,7 +48,7 @@ const {
     loadMore,
     showArticleSortDialog,
     currentArticle,
-    updateSort
+    updateSort,
 } = useTable(props.tab, props.module, ARTICLE_PAGE.DETAIL, emit, getActiveId);
 
 const { handleToCreate } = useJumpLink({
@@ -55,7 +56,21 @@ const { handleToCreate } = useJumpLink({
     module: props.module,
 });
 
+const filterStatus = ref(props.tab.filterOption[0].value);
+
+const init = () => {
+    if (props.tab.value === Number(query.tab)) {
+        filterStatus.value = Number(query.status) as ARTICLE_STATUS;
+    }
+};
+const handleSelectChange = () => {
+    filterStatus.value === ARTICLE_STATUS.ALL && (filterStatus.value = props.tab.filterOption[0].value);
+    handleFilterChange({ status: filterStatus.value });
+    console.log('filterStatus: ', filterStatus);
+};
+
 onMounted(() => {
+    init();
     window.onresize = () => {
         (() => {
             showNoMore.value = hasScrollBar(detailListMap.value.get(props.tab.value));
@@ -80,7 +95,8 @@ defineExpose({
 <template>
     <div
         class="article-list-wrapper"
-        v-loading="state.loading && !state.loadingMore">
+        v-loading="state.loading && !state.loadingMore"
+        element-loading-text="加载中">
         <FlexRow
             horizontal="between"
             gap="xs">
@@ -93,13 +109,12 @@ defineExpose({
                     @input="handleDebounceSearch">
                 </el-input>
                 <el-select
-                    v-if="tab.value === ARTICLE_STATUS.ALL"
                     style="width: 160px"
-                    v-model="params.status"
+                    v-model="filterStatus"
                     clearable
-                    @change="() => handleFilterChange()">
+                    @change="handleSelectChange">
                     <el-option
-                        v-for="item in ARTICLE_STATUS_SELECT_OPTIONS"
+                        v-for="item in tab.filterOption"
                         :key="item.value"
                         :label="item.name"
                         :value="item.value">
@@ -131,13 +146,13 @@ defineExpose({
                     @click="handleActiveIdChange(item.id)">
                     <div class="article-title-wrap">
                         <Icon name="ep-document"> </Icon>
-                        <list-field
+                        <TextHoverable
                             class="flex-1"
-                            :class="{ 'text-$el-color-primary': activeId === item.id }"
+                            size="sm"
                             hoverable
                             truncate>
                             {{ item.title }}
-                        </list-field>
+                        </TextHoverable>
                         <el-tag
                             :type="ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].status">
                             {{ ARTICLE_STATUS_TAG_MAP[item.status as keyof typeof ARTICLE_STATUS_TAG_MAP].label }}

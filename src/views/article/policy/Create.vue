@@ -12,8 +12,8 @@ function handleTabChange(plat: PlatformType) {
     <PagePanel>
         <Board class="article-create">
             <PlatformTab @tab-change="handleTabChange"></PlatformTab>
-            <article-publish v-if="platform === PlatformType.LiaoXinTong" :module="ARTICLE_MODULE.NEWS_LXT"></article-publish>
-            <article-publish v-if="platform === PlatformType.ShiZongFu" :module="ARTICLE_MODULE.NEWS_ZJFW"></article-publish>
+            <article-publish v-if="platform === PlatformType.LiaoXinTong" :module="ARTICLE_MODULE.POLICY_LXT"></article-publish>
+            <article-publish v-if="platform === PlatformType.ShiZongFu" :module="ARTICLE_MODULE.POLICY_ZJFW"></article-publish>
         </Board>
     </PagePanel>
 </template>

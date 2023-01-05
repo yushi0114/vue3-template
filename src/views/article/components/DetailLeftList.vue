@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import ArticleSortDialog from './ArticleSortDialog.vue';
-import { Edit, SoldOut, Sell, Sort, Delete, Search } from '@element-plus/icons-vue';
-import emptyImg from '@/assets/images/no-data.png';
+import { Search } from '@element-plus/icons-vue';
+
 import {
     NEWS_TYPE,
     ARTICLE_STATUS,
@@ -21,6 +21,8 @@ const props = defineProps<{
     module: ARTICLE_MODULE;
     activeId: string;
 }>();
+
+const hoverId = ref('');
 const emit = defineEmits<{
     (e: 'update:activeId', value: string): void;
     (e: 'refresh'): void;
@@ -138,6 +140,7 @@ defineExpose({
                     :infinite-scroll-disabled="state.disabled">
                     <li
                         v-for="(item, index) in state.data"
+                        @mouseenter="hoverId = item.id"
                         :key="item.id + index"
                         class="article-list-item"
                         :class="{ active: activeId === item.id }"
@@ -161,46 +164,30 @@ defineExpose({
                                 热点新闻
                             </el-tag>
                         </div>
-                        <el-dropdown @command="(command:ARTICLE_OPERATE_MODE) => handleMoreOperate(command, item)">
-                            <div>
-                                <Icon
-                                    class="icon-more"
-                                    name="ep-more-filled">
-                                </Icon>
-                            </div>
-                            <template #dropdown>
-                                <el-dropdown-menu>
-                                    <el-dropdown-item
-                                        :disabled="item.status === ARTICLE_STATUS.PUBLISHED"
-                                        :command="ARTICLE_OPERATE_MODE.EDIT"
-                                        :icon="Edit"
-                                        >{{ ARTICLE_OPERATE_MODE_LABEL.EDIT }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item
-                                        v-if="item.status === ARTICLE_STATUS.PUBLISHED"
-                                        :command="ARTICLE_OPERATE_MODE.OFFLINE"
-                                        :icon="SoldOut"
-                                        >{{ ARTICLE_OPERATE_MODE_LABEL.OFFLINE }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item
-                                        v-else
-                                        :command="ARTICLE_OPERATE_MODE.PUBLISH"
-                                        :icon="Sell">
-                                        {{ ARTICLE_OPERATE_MODE_LABEL.PUBLISH }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item
-                                        :command="ARTICLE_OPERATE_MODE.SORT"
-                                        :icon="Sort"
-                                        >{{ ARTICLE_OPERATE_MODE_LABEL.SORT }}
-                                    </el-dropdown-item>
-                                    <el-dropdown-item
-                                        :command="ARTICLE_OPERATE_MODE.DELETE"
-                                        :icon="Delete"
-                                        >{{ ARTICLE_OPERATE_MODE_LABEL.DELETE }}
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </template>
-                        </el-dropdown>
+
+                        <ListOperator
+                            v-if="hoverId === item.id"
+                            tooltipDisabled
+                            placement="right"
+                            :max-out-count="0"
+                            class="icon-more"
+                            @operate="(opt) => handleMoreOperate(opt.value, item)"
+                            :operators="[
+                                { name: ARTICLE_OPERATE_MODE_LABEL.EDIT, value: ARTICLE_OPERATE_MODE.EDIT, icon: 'ep-edit-pen', disabled: item.status === ARTICLE_STATUS.PUBLISHED },
+                                item.status === ARTICLE_STATUS.PUBLISHED ? {
+                                    name: ARTICLE_OPERATE_MODE_LABEL.OFFLINE,
+                                    value: ARTICLE_OPERATE_MODE.OFFLINE,
+                                    icon: 'ep-sold-out'
+                                } : {
+                                    name: ARTICLE_OPERATE_MODE_LABEL.PUBLISH,
+                                    value: ARTICLE_OPERATE_MODE.PUBLISH,
+                                    icon: 'ep-sell'
+                                },
+                                { name: ARTICLE_OPERATE_MODE_LABEL.SORT, value: ARTICLE_OPERATE_MODE.SORT, icon: 'ep-sort' },
+                                { name: ARTICLE_OPERATE_MODE_LABEL.DELETE, value: ARTICLE_OPERATE_MODE.DELETE, icon: 'ep-delete' },
+                            ]"
+                        />
+                        <div class="icon-more-placeholder" v-else></div>
                     </li>
                     <Text
                         size="sm"
@@ -236,14 +223,14 @@ defineExpose({
         height: 1.25rem;
         cursor: pointer;
         color: #606266;
+        margin-right: calc($gap-line * 2);
     }
 }
 .article-list {
     flex: 1;
     box-sizing: border-box;
-    margin-top: $gap-md;
+    margin: $gap-sm 0;
     overflow-y: overlay;
-    padding-right: $gap-xs;
 
     &::-webkit-scrollbar {
         width: 0;
@@ -256,12 +243,14 @@ defineExpose({
     }
 }
 .article-list-item {
-    height: 30px;
-    line-height: 30px;
+    padding: calc($gap-line * 2) $gap-xs;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
+    border-radius: 4px;
+    transition: .2s ease all;
+    margin-bottom: $gap-line;
 
     &:hover {
         cursor: pointer;
@@ -273,27 +262,15 @@ defineExpose({
         color: $color-primary;
         background-color: $fill-color;
     }
-    &.active .icon-more {
-        display: block;
-    }
-    &.active .article-title-wrap {
-        margin-right: 0;
-    }
-}
-.article-list-item:hover .icon-more {
-    display: block;
+
 }
 
-.article-list-item:hover .article-title-wrap {
-    margin-right: 0;
-}
 .article-title-wrap {
     display: flex;
     align-items: center;
     flex: 1;
     min-width: 0;
     gap: $gap-xs;
-    margin-right: 18px;
 }
 .text {
     cursor: pointer;
@@ -301,9 +278,11 @@ defineExpose({
     margin-right: $gap-xs;
 }
 .icon-more {
-    transform: rotate(90deg);
-    color: #c0c4cc;
-    display: none;
-    padding-right: 4px;
+    margin-left: calc($gap-line * 2);
+    margin-right: calc($gap-line * -2);
+}
+
+.icon-more-placeholder {
+    width: $gap-xl;
 }
 </style>

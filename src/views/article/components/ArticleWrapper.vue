@@ -69,10 +69,27 @@ defineExpose({
         display: flex;
         flex-direction: row;
 
-        :deep(.el-tabs__item.is-top) {
-            padding-left: $gap-xs;
-            padding-right: 0;
+        :deep(.el-tabs__header) {
+            margin-right: $gap-md;
         }
+
+        :deep(.el-tabs__item) {
+            padding-left: 0;
+            padding-right: $gap-md;
+            margin-bottom: $gap-xs;
+            width: 13.75rem;
+            height: 2.5rem;
+
+            .tab-label {
+                height: 100%;
+            }
+        }
+
+
+        :deep(.el-tabs__nav-wrap::after) {
+            width: $border-width;
+        }
+
         :deep(.el-tabs--left) {
             align-items: flex-start;
         }
@@ -87,8 +104,9 @@ defineExpose({
         }
 
         :deep(.el-button) {
+            transition: .2s ease all;
             &:hover {
-                background-color: $color-primary-light-9;
+                background-color: $color-info-light-9;
                 color: $color-primary;
             }
 
@@ -107,11 +125,11 @@ defineExpose({
     }
 
     .tab-label.active {
-        background-color: $color-primary-light-9;
+        background-color: $color-info-light-9;
         color: $color-primary;
 
         &:focus {
-            background-color: $color-primary-light-9;
+            background-color: $color-info-light-9;
             color: $color-primary;
         }
     }

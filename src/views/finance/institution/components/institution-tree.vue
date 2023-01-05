@@ -25,9 +25,10 @@
                 :filter-node-method="filterNode"
                 :expand-on-click-node="false">
                 <template #default="{ node, data }">
-                    <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)" @mouseleave="handleMouseLeave(node.id)">
+                    <div class="tree-wrap" @mouseenter="handleMouseEnter(node.id)">
                         <span style="font-size:14px;" :class="{'line-through':  node.status }">{{ data.orgName }} </span>
                         <ListOperator
+                            placement="right"
                             tooltip-disabled
                             v-if="node.id === activeId"
                             :max-out-count="0"
@@ -113,10 +114,6 @@ function handleMouseEnter(event: string) {
     activeId.value = event;
 }
 
-function handleMouseLeave(event: string) {
-    activeId.value = event;
-}
-
 </script>
 
 <style scoped lang="scss">
@@ -150,7 +147,8 @@ function handleMouseLeave(event: string) {
             width: 1.25rem;
             height: 1.25rem;
             cursor: pointer;
-            margin-left: 15px;
+            margin-left: $gap-xs;
+            margin-right: $gap-xs;
             color: #606266;
         }
     }

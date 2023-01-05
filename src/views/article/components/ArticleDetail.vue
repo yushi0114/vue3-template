@@ -90,7 +90,7 @@ onBeforeMount(() => {
             <el-card
                 class="h-full"
                 shadow="never"
-                :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
+                :body-style="{ height: '100%', 'box-sizing': 'border-box', paddingTop: '.55rem' }">
                 <article-wrapper
                     class="wrapper"
                     ref="leftWrapperRef"

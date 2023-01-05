@@ -7,12 +7,14 @@ const props = withDefaults(
         maxOutCount?: number,
         fixed?: boolean,
         tooltipDisabled?: boolean,
+        placement?: string
     }>(),
     {
         maxOutCount: 99,
         operators: () => [],
         fixed: false,
-        tooltipDisabled: false
+        tooltipDisabled: false,
+        placement: 'bottom',
     }
 );
 
@@ -57,7 +59,7 @@ function handleClick(opt: ListOperatorOption) {
                 placement="top"
                 :disabled="tooltipDisabled"
             >
-                <el-dropdown>
+                <el-dropdown :placement="(placement as any)">
                     <CircleOptBtn size="lg">
                         <i-ep-more class="ili-more" />
                     </CircleOptBtn>

@@ -66,7 +66,6 @@ const init = () => {
 const handleSelectChange = () => {
     filterStatus.value === ARTICLE_STATUS.ALL && (filterStatus.value = props.tab.filterOption[0].value);
     handleFilterChange({ status: filterStatus.value });
-    console.log('filterStatus: ', filterStatus);
 };
 
 onMounted(() => {

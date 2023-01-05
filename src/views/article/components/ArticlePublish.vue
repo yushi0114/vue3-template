@@ -131,7 +131,6 @@ const uploadOrDeleteThumbnail = async(thumbnail: UploadFile[] = []) => {
     }
     const [file] = thumbnail;
     const fileUrl = file.url!;
-    console.log('fileUrl: ', fileUrl);
     if (!fileUrl.includes('blob')) {
         return state.thumbnailUrl;
     }

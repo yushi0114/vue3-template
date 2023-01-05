@@ -19,6 +19,7 @@ const props = defineProps<{
     platform: PlatformType;
 }>();
 
+const leftWrapperRef = ref<InstanceType<typeof ArticleWrapper> | null>(null);
 let { activeId, tabItem, bindDetailListRef, detailListMap } = useArticleDetail();
 
 if (props.platform !== Number((params.type as unknown as PlatformType))) {
@@ -55,11 +56,11 @@ const { loading: loadingDetail, request: getArticleDetail } = useApi(
     }
 );
 
-const publish = async () => {
+const publish = async() => {
     state.loadingPublish = true;
     try {
         await detailListMap.value
-            .get(tabItem?.value)
+            .get(leftWrapperRef.value?.activeName)
             ._updateNewsStatus({ id: activeId.value, status: ARTICLE_STATUS.PUBLISHED });
         state.loadingPublish = false;
         getArticleDetail();
@@ -92,6 +93,7 @@ onBeforeMount(() => {
                 :body-style="{ height: '100%', 'box-sizing': 'border-box' }">
                 <article-wrapper
                     class="wrapper"
+                    ref="leftWrapperRef"
                     :module="module"
                     tab-position="top"
                     :tab-value="tabItem?.value">

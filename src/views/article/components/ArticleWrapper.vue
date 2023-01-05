@@ -14,6 +14,9 @@ const props = withDefaults(
 );
 
 const activeName = ref(props.tabValue ?? ARTICLE_STATUS.ALL);
+defineExpose({
+    activeName
+});
 </script>
 
 <template>

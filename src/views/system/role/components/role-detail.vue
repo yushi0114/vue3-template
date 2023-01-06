@@ -47,22 +47,22 @@ const handleClose = () => {
     >
         <el-form :model="dataDetail" label-width="135px">
             <el-form-item label="角色名称" prop="name">
-                <span>{{ dataDetail.name }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.name }}</Text>
             </el-form-item>
             <el-form-item v-if="dataDetail.desc" label="描述" prop="desc">
-                <span>{{ dataDetail.desc }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.desc }}</Text>
             </el-form-item>
             <el-form-item label="创建者" prop="createBy">
-                <span>{{ dataDetail.createBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createBy }}</Text>
             </el-form-item>
             <el-form-item label="创建时间" prop="createdTime">
-                <span>{{ dataDetail.createTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.createTime }}</Text>
             </el-form-item>
             <el-form-item label="更新者" prop="updateBy">
-                <span>{{ dataDetail.updateBy }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateBy }}</Text>
             </el-form-item>
             <el-form-item label="更新时间" prop="updatedTime">
-                <span>{{ dataDetail.updateTime }}</span>
+                <Text size="sm" color="regular">{{ dataDetail.updateTime }}</Text>
             </el-form-item>
             <el-form-item label="配置菜单" prop="updatedTime">
                 <div style="margin-top: 10px; width: 100%">

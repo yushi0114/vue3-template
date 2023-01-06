@@ -129,7 +129,7 @@ watch(isCtrlKeep, (newValue) => {
                     color="regular"
                     size="xs"
                 >
-                    <FlexRow class="gap-1">
+                    <FlexRow gap="line">
                         <el-icon>
                             <Brush/>
                         </el-icon

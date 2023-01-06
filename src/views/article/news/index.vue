@@ -14,8 +14,8 @@ function handleTabChange(plat: PlatformType) {
         <Board focus-full>
             <PlatformTab @tab-change="handleTabChange"></PlatformTab>
             <Layout>
-            <article-wrapper class="flex-1 flex flex-col" v-show="platform === PlatformType.LiaoXinTong" tab-position="left" :module="ARTICLE_MODULE.NEWS_LXT"></article-wrapper>
-            <article-wrapper class="flex-1 flex flex-col" v-show="platform === PlatformType.ShiZongFu" tab-position="left" :module="ARTICLE_MODULE.NEWS_ZJFW"></article-wrapper>
+            <article-wrapper class="flex-1 flex flex-col" v-if="platform === PlatformType.LiaoXinTong" tab-position="left" :module="ARTICLE_MODULE.NEWS_LXT"></article-wrapper>
+            <article-wrapper class="flex-1 flex flex-col" v-if="platform === PlatformType.ShiZongFu" tab-position="left" :module="ARTICLE_MODULE.NEWS_ZJFW"></article-wrapper>
             </Layout>
         </Board>
     </PagePanel>

@@ -1,15 +1,15 @@
 import { ref } from 'vue';
 import { type UploadUserFile, ElMessage } from 'element-plus';
 import { FinancePartnerService } from '@/api/finance/finance-partner';
+import { PlatformType } from '@/enums';
 import type {
     FinancePartnerFormType,
     FinancePartnerListItemType,
-    FinancePartnerTabType
 } from '@/types/finance';
 
 
 export const loading = ref(false);
-export const activeName = ref<FinancePartnerTabType>('sjzx');
+export const activeName = ref<PlatformType>(PlatformType.LiaoXinTong);
 export const mode = ref<'form' | 'list'>('list');
 export const currentId = ref();
 export const form = ref<FinancePartnerFormType>({
@@ -75,10 +75,11 @@ export async function handleGoBack() {
 }
 
 export async function getPageList(params: {
-    tab: FinancePartnerTabType,
+    tab: PlatformType,
 }): Promise<void> {
     return new Promise((resolve) => {
         loading.value = true;
+        console.log('gggggg', params.tab);
         new FinancePartnerService(params.tab).getInstance().getList({
             ...params,
             pageIndex: filterObject.value.currentPage,

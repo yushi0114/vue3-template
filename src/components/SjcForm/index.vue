@@ -143,16 +143,18 @@
                                     </el-checkbox>
                                 </el-checkbox-group>
                                 <!-- text展示 -->
-                                <span
+                                <Text
+                                    size="sm"
+                                    color="regular"
                                     v-if="item.type === FormType.TEXT"
-                                    v-text="item.value"
-                                    ></span>
+                                    >{{ item.value }}</Text>
                                 <!-- 计量单位 -->
-                                <span
-                                    class="ml-2"
+                                <Text
+                                    size="sm"
+                                    color="regular"
+                                    style="margin-left: .25rem; margin: .2rem;"
                                     v-if="item.type === FormType.UNIT"
-                                    >{{ item.value }}</span
-                                >
+                                >{{ item.value }}</Text>
                                 <!-- 文件上传 --><!-- 如果对象有值就回显，没有值就为空 -->
                                 <el-upload
                                     v-if="item.type === FormType.UPLOAD"

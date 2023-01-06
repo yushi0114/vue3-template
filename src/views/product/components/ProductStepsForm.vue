@@ -51,7 +51,7 @@ const handleSubmitBaseInfo = (values: any) => {
     }
     goToNext();
 };
-const handleSubmit = async (values: any) => {
+const handleSubmit = async(values: any) => {
     let sortIdArr: any[] = [];
     dynamicForm.value.forEach((item) => {
         if (values[item.keyName] && isArray(values[item.keyName])) {
@@ -74,7 +74,6 @@ defineExpose({
 <template>
     <div class="pdt-steps-form">
         <el-steps
-            class="mb-64px ml-16"
             align-center
             :space="200"
             :active="index"
@@ -133,7 +132,7 @@ defineExpose({
 
 <style lang="scss" scoped>
 .pdt-steps-form {
-    padding-top: 64px;
+    padding-top: 1.75rem;
     align-self: center;
     width: 100%;
     display: flex;
@@ -144,6 +143,11 @@ defineExpose({
         align-self: center;
     }
 }
+
+.pdt-steps-form-step {
+    padding-top: 1.1rem;
+}
+
 .product-success-wrapper {
     margin: 3rem 0;
     gap: $gap-md;

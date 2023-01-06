@@ -2,35 +2,35 @@
     <PagePanel>
         <Board full>
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="辽信通" name="sjzx">
+                <el-tab-pane label="辽信通" :name="PlatformType.LiaoXinTong">
                 </el-tab-pane>
-                <el-tab-pane label="市综服" name="zjfw">
+                <el-tab-pane label="市综服" :name="PlatformType.ShiZongFu">
                 </el-tab-pane>
             </el-tabs>
-            <finance-partner-config v-if="activeName === 'sjzx'"></finance-partner-config>
-            <finance-partner-config v-else-if="activeName === 'zjfw'"></finance-partner-config>
+            <finance-partner-config v-if="activeName === PlatformType.LiaoXinTong"></finance-partner-config>
+            <finance-partner-config v-else-if="activeName === PlatformType.ShiZongFu"></finance-partner-config>
         </Board>
     </PagePanel>
 </template>
 
 <script lang="ts" setup>
-import { activeName, getPageList, filterObject, mode, resetFilterObject } from '@/views/finance/partner/components/finance-partner';
+import { activeName, getPageList, filterObject, mode, resetFilterObject } from './components/finance-partner';
 import type { TabsPaneContext } from 'element-plus';
 import { onMounted } from 'vue';
-import type { FinancePartnerTabType } from '@/types/finance/finance-parnter.type';
+import { PlatformType } from '@/enums';
 import FinancePartnerConfig from './components/finance-partner-config.vue';
 
 async function handleClick(tab: TabsPaneContext) {
     mode.value = 'list';
     filterObject.value.searchInput = '';
     await getPageList({
-        tab: tab.paneName as FinancePartnerTabType
+        tab: tab.paneName as PlatformType
     });
 }
 
 onBeforeMount(() => {
     mode.value = 'list';
-    activeName.value = 'sjzx';
+    activeName.value = PlatformType.LiaoXinTong;
 });
 
 onMounted(async() => {

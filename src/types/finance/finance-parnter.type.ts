@@ -1,6 +1,3 @@
-
-export type FinancePartnerTabType = 'zjfw' | 'sjzx';
-
 export type FinancePartnerFormType = {
     name: string,
     imgUrl: string,

@@ -5,6 +5,7 @@ import type {
 } from '@/types/finance';
 import { api } from '@/api';
 import { DMS_DOMAIN } from '@/api/const';
+import { PlatformType } from '@/enums';
 
 abstract class BaseFinancePartner {
     abstract add(params: AddFinancePartnerType): Promise<void>;
@@ -61,8 +62,8 @@ class FinancePartnerZJFW extends BaseFinancePartner {
 export class FinancePartnerService {
     private readonly strategy: BaseFinancePartner;
 
-    constructor(type: 'zjfw' | 'sjzx') {
-        if (type === 'zjfw'){
+    constructor(type: PlatformType) {
+        if (type === PlatformType.LiaoXinTong){
             this.strategy = new FinancePartner();
         } else {
             this.strategy = new FinancePartnerZJFW();

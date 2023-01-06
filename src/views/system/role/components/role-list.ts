@@ -76,14 +76,11 @@ export async function handleGoBack() {
 
 export async function getTreeData(name?: RoleTabType): Promise<void> {
     return new Promise((resolve) => {
-        loading.value = true;
         getMenuTreeApi(name ? (name as any) : activeName.value).then(data => {
             roleMenuTreeData.value = data as unknown as TreeItemType[];
             resolve();
         }).catch(() => {
             resolve();
-        }).finally(() => {
-            loading.value = false;
         });
     });
 }

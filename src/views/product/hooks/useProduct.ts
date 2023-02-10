@@ -175,13 +175,13 @@ export const useProductForm = (platform: Ref<PlatformType>, id?: Ref<string>) =>
         () => id?.value,
         () => {
             id?.value && requestProduct();
-        }
+        },
+        { immediate: true }
     );
 
     onBeforeMount(() => {
         requestProductFilters();
         requestOrgOptions();
-        id?.value && requestProduct();
     });
     return { PRODUCT_FORM, formValueChange, dynamicForm, PRODUCT_FORM_ALL };
 };

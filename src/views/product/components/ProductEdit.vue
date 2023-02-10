@@ -28,6 +28,7 @@ const productId = ref('');
 const propsRefs = toRefs(props);
 const handleClose = () => {
     close();
+    productId.value = '';
 };
 
 function openCallback({ id }: { id: string }) {

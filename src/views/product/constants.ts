@@ -1,3 +1,4 @@
+import { LoanEndType } from './../../enums/busniess';
 import { validatorLogo } from '@/utils';
 import type { ProductStepsMap } from '@/types';
 import { PlatformType, FormType, PRODUCT_STEPS } from '@/enums';
@@ -965,6 +966,30 @@ export const FILTER_UNIT_MAP = Object.freeze({
     融资额度: '万元',
     贷款期限: '个月',
     融资期限: '个月',
+});
+
+// 产品列表字段处理
+export const PRODUCT_LIST_FIELDS_MAP = Object.freeze({
+    [PlatformType.LiaoXinTong]: {
+        loan: {
+            title: '贷款额度',
+            keyName: 'loanDue',
+        },
+        loanLimit: {
+            title: '贷款期限',
+            keyName: 'loanLimit',
+        },
+    },
+    [PlatformType.ShiZongFu]: {
+        loan: {
+            title: '融资额度',
+            keyName: 'loanDue',
+        },
+        loanLimit: {
+            title: '融资期限',
+            keyName: 'loanLimit',
+        },
+    }
 });
 
 // 表格列配置

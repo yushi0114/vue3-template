@@ -157,6 +157,7 @@ onBeforeMount(() => {
                     <ProductList
                         :loading="loading"
                         :list="list"
+                        :platform="platform"
                         @item-detail="goDetail"
                         @item-req-detail="goReqDetail"
                         @item-edit="handleEdit"

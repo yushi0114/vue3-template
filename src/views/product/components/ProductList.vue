@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import type { ProductEntity } from '@/types';
 import { List, ListField, ListItem, ListProgress, RectLogo, type ListOperatorOption, ItemOperate } from '@/components';
-import { SwitchType, PROCESS_BAR_STATUS } from '@/enums';
+import { SwitchType, PROCESS_BAR_STATUS, PlatformType } from '@/enums';
+import { PRODUCT_LIST_FIELDS_MAP } from '../constants';
+import { useFilterUnit } from '../hooks/useFilterUnit';
 
 withDefaults(
     defineProps<{
         list?: ProductEntity[],
+        platform: PlatformType;
     }>(),
     {
         list: () => [],
@@ -19,6 +22,8 @@ const emits = defineEmits<{
     (e: ItemOperate.online, detail: ProductEntity): void;
     (e: ItemOperate.offline, detail: ProductEntity): void;
 }>();
+
+const { formatterFilterUnit } = useFilterUnit();
 
 function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity) {
     emits(opt.value as any, pdt);
@@ -48,11 +53,11 @@ function handleOperate(opt: ListOperatorOption<ItemOperate>, pdt: ProductEntity)
                                 <ElTag v-if="!isOnline" type="danger" size="small">已下架</ElTag>
                             </FlexRow>
                         </ListField>
-                        <ListField label="贷款额度" type="desc">{{ item.loanDue }}</ListField>
+                        <ListField :label="PRODUCT_LIST_FIELDS_MAP[platform].loan.title" type="desc">{{ formatterFilterUnit(PRODUCT_LIST_FIELDS_MAP[platform].loan.title as any ,item.loanDue) }}</ListField>
                     </div>
                     <div class="pdt-list-item">
                         <ListField label="机构名称">{{ item.orgName }}</ListField>
-                        <ListField label="贷款期限" type="desc">{{ item.loanLimit }}</ListField>
+                        <ListField :label="PRODUCT_LIST_FIELDS_MAP[platform].loanLimit.title" type="desc">{{ formatterFilterUnit(PRODUCT_LIST_FIELDS_MAP[platform].loanLimit.title as any ,item.loanLimit) }}</ListField>
                     </div>
                     <div class="pdt-list-item">
                         <!-- 空格占位 -->

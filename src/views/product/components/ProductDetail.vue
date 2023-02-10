@@ -1,10 +1,15 @@
 <script lang="ts" setup>
 import { getProduct } from '@/api';
-import type { PlatformType } from '@/enums';
+import { PlatformType } from '@/enums';
 import type { ProductEntity, ProductFilterEntity } from '@/types';
 import { useApi } from '@/composables';
+import { useFilterUnit } from '../hooks/useFilterUnit';
 
-const fixFilterTexts = ['贷款额度', '贷款期限', '担保方式'];
+const fixFilterTextsMap = {
+    [PlatformType.LiaoXinTong]: ['贷款额度', '贷款期限', '担保方式'],
+    [PlatformType.ShiZongFu]: ['融资额度', '融资期限', '担保方式']
+};
+const { formatterFilterUnit } = useFilterUnit();
 const props = withDefaults(
     defineProps<{
         content?: ProductEntity | null;
@@ -34,7 +39,7 @@ function handleOpen() {
             detail.value = res;
             fixFilters.value = [];
             filters.value = res.filterList.filter(f => {
-                if (fixFilterTexts.includes(f.typeValue)) {
+                if (fixFilterTextsMap[props.platform].includes(f.typeValue)) {
                     fixFilters.value.push(f);
                     return false;
                 }
@@ -67,7 +72,7 @@ function handleClosed() {
                 <Text truncate size="lg" bold color="primary">{{ detail?.referenceRate }}</Text>
             </ContentBoard>
             <ContentBoard background :label="f.typeValue" v-for="(f, i) in fixFilters" :key="i">
-                <Text truncate size="lg" bold color="primary">{{ f.filterValue }}</Text>
+                <Text truncate size="lg" bold color="primary">{{ formatterFilterUnit(f.typeValue as any, f.filterValue) }}</Text>
             </ContentBoard>
         </FlexRow>
 

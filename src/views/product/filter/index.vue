@@ -7,7 +7,8 @@ import FilterModal from './components/FilterModal.vue';
 import FilterOptionsModal from './components/FilterOptionsModal.vue';
 import type { ProductFilterEntity } from '@/types';
 import { noop } from '@/utils';
-import { CANT_CHANGE_FILTER_MAP, FILTER_UNIT_MAP } from '../constants';
+import { CANT_CHANGE_FILTER_MAP } from '../constants';
+import { useFilterUnit } from '../hooks/useFilterUnit';
 
 const dragging = ref(false);
 
@@ -32,6 +33,8 @@ const {
     FILTERS_OPTIONS_FORM,
 } = useFilter(platform);
 
+const { formatterFilterUnit } = useFilterUnit();
+
 const formatFilters = computed(() => {
     const searchKey = model.value.search || '';
     if (searchKey === '') return filters.value;
@@ -44,12 +47,6 @@ const formatFilters = computed(() => {
 function handleTabChange(plat: PlatformType) {
     platform.value = plat;
 }
-
-const formatterFilterUnit = computed(() => {
-    return (typeValue: keyof typeof FILTER_UNIT_MAP, filterValue: string) => {
-        return FILTER_UNIT_MAP[typeValue] && filterValue !== '不限' ? filterValue + FILTER_UNIT_MAP[typeValue] : filterValue;
-    };
-});
 
 const canFilterChange = computed(() => {
     return (typeValue: string) => {

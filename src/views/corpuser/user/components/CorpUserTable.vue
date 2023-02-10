@@ -55,7 +55,7 @@
                 />
         </LoadingBoard>
 
-        <ShopDetail :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></ShopDetail>
+        <ShopDetail :activeName="$attrs.activeName" :drawerVisible="allToogle.drawerFlag" :userId="userId" @close="handleDrawerClose"></ShopDetail>
     </div>
 
 </template>

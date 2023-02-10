@@ -31,8 +31,8 @@ withDefaults(
                     <div class="clear-both"></div>
                 </div>
                 <div class="bottom-line">
-                    <div class="display-table-title">抵押物</div>
-                    <div class="display-table-content p5">{{ info.commodity }}</div>
+                    <div class="line-title">抵押物</div>
+                    <div class="pl5 line-content">{{ info.commodity }}</div>
                     <div class="clear-both"></div>
                 </div>
                 <div class="bottom-line">

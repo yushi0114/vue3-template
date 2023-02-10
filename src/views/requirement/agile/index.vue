@@ -83,7 +83,6 @@ const handleBatchDelete = async() => {
 };
 
 const handleDelete = async(req: RequirementEntity) => {
-    req.id = '03eab107b8e54bffb0c877df6a558320';
     const idArr = `"${req.id}"`;
     try {
         await ElMessageBox.confirm('确认删除此需求吗？', '删除', {

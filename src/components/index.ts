@@ -7,4 +7,4 @@ export { default as Empty } from './Empty.vue';
 export { default as SearchDropdown } from './SearchDropdown.vue';
 export * from './list';
 export * from './table';
-export * from './scoreResult';
+export * from './ScoreResult';

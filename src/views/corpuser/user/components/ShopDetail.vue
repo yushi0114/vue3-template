@@ -47,14 +47,14 @@
                             <span class="text-ellipsis" :title="scope.row.referenceRate">{{ scope.row.referenceRate }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="loanDue" :label="PRODUCT_LIST_FIELDS_MAP[$attrs.activeName as any].loan.title">
+                    <el-table-column prop="loanDue" :label="(PRODUCT_LIST_FIELDS_MAP as any)[$attrs.activeName as any].loan.title">
                         <template #default="scope">
-                            <span class="text-ellipsis" :title="scope.row.loanDue">{{ formatterFilterUnit(PRODUCT_LIST_FIELDS_MAP[$attrs.activeName as any].loan.title, scope.row.loanDue) }}</span>
+                            <span class="text-ellipsis" :title="scope.row.loanDue">{{ formatterFilterUnit((PRODUCT_LIST_FIELDS_MAP as any)[$attrs.activeName as any].loan.title, scope.row.loanDue) }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="loanLimit" :label="PRODUCT_LIST_FIELDS_MAP[$attrs.activeName as any].loanLimit.title">
+                    <el-table-column prop="loanLimit" :label="(PRODUCT_LIST_FIELDS_MAP as any)[$attrs.activeName as any].loanLimit.title">
                         <template #default="scope">
-                            <span class="text-ellipsis" :title="scope.row.loanLimit">{{ formatterFilterUnit(PRODUCT_LIST_FIELDS_MAP[$attrs.activeName as any].loanLimit.title, scope.row.loanLimit) }}</span>
+                            <span class="text-ellipsis" :title="scope.row.loanLimit">{{ formatterFilterUnit((PRODUCT_LIST_FIELDS_MAP as any)[$attrs.activeName as any].loanLimit.title, scope.row.loanLimit) }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status" label="状态">

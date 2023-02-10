@@ -181,6 +181,10 @@ const mouseoutHandler = () => {
     const labelTooltip = document.getElementById('label-tooltip')!;
     labelTooltip.style.display = 'none';
 };
+
+const isEmpty = computed(() => {
+    return activeName.value === 'lxt' && props.data.countProduct.length === 0 || activeName.value === 'szf' && props.data.countEzjfwProduct.length === 0;
+});
 </script>
 
 <template>
@@ -192,7 +196,12 @@ const mouseoutHandler = () => {
             <el-tab-pane label="辽信通" name="lxt"></el-tab-pane>
             <el-tab-pane label="市综服" name="szf"></el-tab-pane>
         </el-tabs>
-        <Charts :options="options" :height="216" @chart-mousemove="mousemoveHandler" @chart-mouseout="mouseoutHandler" />
+        <template v-if="!isEmpty">
+            <Charts :options="options" :height="216" @chart-mousemove="mousemoveHandler" @chart-mouseout="mouseoutHandler" />
+        </template>
+        <template v-else>
+            <Empty :offsetHeight="440" :offsetWidth="0" defaultStyle="width: 100%" :imageSize="200"></Empty>
+        </template>
         <div id="label-tooltip"></div>
     </Board>
 </template>

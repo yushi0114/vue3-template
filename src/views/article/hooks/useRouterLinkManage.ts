@@ -16,7 +16,7 @@ export const useRouterLinkManage = (module: ARTICLE_MODULE) => {
         const { path: routePath } = useRoute();
         const [root, base, listUrl] = routePath.split('/');
         const path = `${root}/${base}/${listUrl}/${platform}`;
-        return `${path}${type ? type + '/' + platform : ''}`;
+        return `${path}${type ? type + '/' : ''}`;
     };
 
     const LINK_MAP = {

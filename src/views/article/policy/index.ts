@@ -13,21 +13,21 @@ import Detail from './Detail.vue';
 export const routes: RouteRecordRaw[] = [
     {
         component: Create,
-        path: '/create/:type',
+        path: '/create',
         meta: {
             title: '新建新闻',
         },
     },
     {
         component: Create,
-        path: '/edit/:type',
+        path: '/edit',
         meta: {
             title: '编辑新闻',
         },
     },
     {
         component: Detail,
-        path: '/detail/:type',
+        path: '/detail',
         meta: {
             title: '新闻详情',
         },

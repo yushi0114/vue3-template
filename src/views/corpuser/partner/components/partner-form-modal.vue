@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import { ElMessage, type FormInstance, type FormRules, type UploadFile, type UploadRequestOptions } from 'element-plus';
-import { add, fileList, form, formType, update } from '@/views/finance/partner/components/finance-partner';
+import { add, fileList, form, formType, update } from './partner';
 import { blobToDataURL, validateIllegalSymbol } from '@/utils';
 import type { PropType } from 'vue';
 

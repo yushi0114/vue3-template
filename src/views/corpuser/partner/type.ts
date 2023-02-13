@@ -1,23 +1,23 @@
-export type FinancePartnerFormType = {
+export type PartnerFormType = {
     name: string,
     imgUrl: string,
     status: boolean,
 }
 
-export type FinancePartnerListItemType = {
+export type PartnerListItemType = {
     status: number,
     name: string,
     imgUrl: string,
     id: string;
 }
-export type AddFinancePartnerType = {
+export type AddPartnerType = {
     name: string,
     imgUrl: string,
     status: number,
     menuName: string
 }
 
-export type UpdateFinancePartnerType = {
+export type UpdatePartnerType = {
     id: string,
     name: string,
     imgUrl: string,
@@ -25,12 +25,12 @@ export type UpdateFinancePartnerType = {
     menuName: string
 }
 
-export type DeleteFinancePartnerType = {
+export type DeletePartnerType = {
     id: string,
     menuName: string
 }
 
-export type GetFinancePartnerListType = {
+export type GetPartnerListType = {
     sortField: 'updateTime' | 'createTime',
     sortType: 'asc' | 'desc'
     searchInput?: string,

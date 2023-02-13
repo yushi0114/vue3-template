@@ -4,7 +4,6 @@ export * from './finance-code.type';
 export * from './finance-institution.type';
 export * from './finance-logo.type';
 export * from './finance-org-user.type';
-export * from './finance-parnter.type';
 export * from './finance-record.type';
 export * from './finance-score.type';
 

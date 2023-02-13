@@ -2,8 +2,8 @@
     <PagePanel>
         <Board full v-loading="loading">
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="征信端" name="cre"></el-tab-pane>
-                <el-tab-pane label="DMS" name="dms"></el-tab-pane>
+                <el-tab-pane label="业务管理端" name="cre"></el-tab-pane>
+                <el-tab-pane label="数据管理端" name="dms"></el-tab-pane>
             </el-tabs>
             <role-config></role-config>
         </Board>

@@ -196,6 +196,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
+
 .left {
     width: 60%;
     float: left;
@@ -209,6 +210,7 @@ onBeforeUnmount(() => {
     border-collapse: collapse;
     table-layout: fixed;
     width: 100%;
+    $border: 1px solid #d8d5d5;
 }
 
 .header-item {
@@ -219,6 +221,7 @@ onBeforeUnmount(() => {
     font-weight: bold;
     line-height: 24px;
     text-align: center;
+    background-color: #f5f7fa;
 }
 
 .content-item {
@@ -246,6 +249,8 @@ onBeforeUnmount(() => {
     font-weight: bold;
     line-height: 24px;
     text-align: center;
+    background-color: #f5f7fa;
+
 }
 
 .right-content-item {

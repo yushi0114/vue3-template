@@ -138,6 +138,7 @@ watch(listControlModel, () => {
                         class="flex">
                         <list-field
                             truncate
+                            :truncate-tooltip="false"
                             label="摘要"
                             type="desc">
                             {{ props.row.summary }}

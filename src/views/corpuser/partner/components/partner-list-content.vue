@@ -40,10 +40,10 @@
             @current-change="handleCurrentChange">
         </CommonPagination>
     </LoadingBoard>
-    <finance-partner-form-modal
+    <partner-form-modal
         v-if="isDialogShow"
         v-model:dialog-visible="isDialogShow"
-        @close="handleDialogClose"></finance-partner-form-modal>
+        @close="handleDialogClose"></partner-form-modal>
 </template>
 
 <script lang="ts" setup>
@@ -61,11 +61,11 @@ import {
     listData,
     remove,
     resetForm
-} from '@/views/finance/partner/components/finance-partner';
-import type { FinancePartnerListItemType } from '@/types/finance';
+} from './partner';
+import type { PartnerListItemType } from '../type';
 import { dataURLToFile } from '@/utils';
 import { ItemOperate } from '@/components';
-import FinancePartnerFormModal from '@/views/finance/partner/components/finance-partner-form-modal.vue';
+import PartnerFormModal from './partner-form-modal.vue';
 
 const isDialogShow = ref<boolean>(false);
 const dialogType = ref<'create' | 'edit'>('create');
@@ -105,7 +105,7 @@ async function handleSearchList() {
     });
 }
 
-function handleEditItem(item: FinancePartnerListItemType) {
+function handleEditItem(item: PartnerListItemType) {
     formType.value = 'edit';
     form.value.name = item.name;
     form.value.imgUrl = item.imgUrl;
@@ -142,7 +142,7 @@ async function handleSizeChange(item: number) {
     });
 }
 
-function handleRemoveItem(item: FinancePartnerListItemType) {
+function handleRemoveItem(item: PartnerListItemType) {
     ElMessageBox.confirm(
         `确定删除“${item.name}”的合作伙伴吗？`,
         '警告',

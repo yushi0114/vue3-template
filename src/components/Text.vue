@@ -16,8 +16,9 @@ export interface ITextProps {
     bold?: boolean,
     uppercase?: boolean,
     underline?: boolean,
-    content?: string;
-    placement?: Placement;
+    content?: string,
+    placement?: Placement,
+    truncateTooltip?: boolean,
 }
 const isDark = useDark();
 
@@ -36,7 +37,8 @@ const props = withDefaults(
         uppercase: false,
         underline: false,
         content: '',
-        placement: 'top'
+        placement: 'top',
+        truncateTooltip: true,
     }
 );
 
@@ -47,6 +49,7 @@ const effect = computed(() => {
 const isDisabledTooltip = ref(true);
 
 const onMouseEnter = () => {
+    if (!props.truncateTooltip) return;
     const clientWidth = text?.value?.clientWidth ?? 0;
 
     const scrollWidth = text?.value?.scrollWidth ?? 0;

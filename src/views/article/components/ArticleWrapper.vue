@@ -77,7 +77,7 @@ defineExpose({
             padding-left: 0;
             padding-right: $gap-md;
             margin-bottom: $gap-xs;
-            width: 13.75rem;
+            width: 8.75rem;
             height: 2.5rem;
 
             .tab-label {

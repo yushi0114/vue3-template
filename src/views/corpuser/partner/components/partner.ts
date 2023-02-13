@@ -1,18 +1,18 @@
 import { ref } from 'vue';
 import { type UploadUserFile, ElMessage } from 'element-plus';
-import { FinancePartnerService } from '@/api/finance/finance-partner';
+import { PartnerService } from '../api';
 import { PlatformType } from '@/enums';
 import type {
-    FinancePartnerFormType,
-    FinancePartnerListItemType,
-} from '@/types/finance';
+    PartnerFormType,
+    PartnerListItemType,
+} from '../type';
 
 
 export const loading = ref(false);
 export const activeName = ref<PlatformType>(PlatformType.LiaoXinTong);
 export const mode = ref<'form' | 'list'>('list');
 export const currentId = ref();
-export const form = ref<FinancePartnerFormType>({
+export const form = ref<PartnerFormType>({
     name: '',
     imgUrl: '',
     status: true
@@ -21,7 +21,7 @@ export const formType = ref<'create' | 'edit'>('edit');
 export const fileList = ref<UploadUserFile[]>([]);
 export const listData = ref<{
     total: number;
-    list: FinancePartnerListItemType[];
+    list: PartnerListItemType[];
 }>({
     total: 0,
     list: []
@@ -79,8 +79,7 @@ export async function getPageList(params: {
 }): Promise<void> {
     return new Promise((resolve) => {
         loading.value = true;
-        console.log('gggggg', params.tab);
-        new FinancePartnerService(params.tab).getInstance().getList({
+        new PartnerService(params.tab).getInstance().getList({
             ...params,
             pageIndex: filterObject.value.currentPage,
             pageSize: filterObject.value.currentSize,
@@ -102,7 +101,7 @@ export async function getPageList(params: {
 
 export async function add(): Promise<boolean> {
     return new Promise((resolve) => {
-        new FinancePartnerService(activeName.value).getInstance().add({
+        new PartnerService(activeName.value).getInstance().add({
             ...form.value,
             status: form.value.status ? 1 : 0,
             menuName: ''
@@ -121,7 +120,7 @@ export async function add(): Promise<boolean> {
 
 export async function update(): Promise<boolean> {
     return new Promise((resolve) => {
-        new FinancePartnerService(activeName.value).getInstance().update({
+        new PartnerService(activeName.value).getInstance().update({
             id: currentId.value,
             ...form.value,
             status: form.value.status ? 1 : 0,
@@ -142,7 +141,7 @@ export async function update(): Promise<boolean> {
 export async function remove(params: { id: string }): Promise<void> {
     return new Promise((resolve) => {
         loading.value = true;
-        new FinancePartnerService(activeName.value).getInstance().delete({
+        new PartnerService(activeName.value).getInstance().delete({
             id: params.id,
             menuName: ''
         }).then(() => {

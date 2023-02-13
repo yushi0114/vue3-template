@@ -148,7 +148,7 @@ watch(() => props.scoreResult, (val) => {
 .header-item {
     border-bottom: $border;
     border-left: $border;
-    background-color: $bg-color;
+    background-color: $color-info-light-9;
     padding: 3px;
     font-weight: bold;
     line-height: 24px;
@@ -159,7 +159,7 @@ watch(() => props.scoreResult, (val) => {
 .content-item {
     border-bottom: $border;
     border-left: $border;
-    padding: 3px;
+    padding: 0.25rem;
     line-height: 24px;
     text-align: center;
     color: $text-color-regular;
@@ -178,8 +178,8 @@ watch(() => props.scoreResult, (val) => {
 .right-header-item {
     border-bottom: $border;
     border-left: $border;
-    background-color: $bg-color;
-    padding: 10px 0;
+    background-color: $color-info-light-9;
+    padding: 0.25rem;
     font-weight: bold;
     line-height: 24px;
     text-align: center;

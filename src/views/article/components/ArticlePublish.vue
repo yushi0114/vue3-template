@@ -34,7 +34,7 @@ const { loading: loadingCreate, request: createArticle } = useApi(ARTICLE_API_MA
     onSuccess(data, params) {
         ElMessage({
             type: 'success',
-            message: '操作成功',
+            message: '发布成功',
         });
         state.laseUpdateTime = data.updateTime;
         id = data.id;

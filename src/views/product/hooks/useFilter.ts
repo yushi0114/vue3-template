@@ -90,7 +90,7 @@ export const useFilter = (platform: Ref<PlatformType>) => {
             onSuccess() {
                 ElMessage({
                     type: 'success',
-                    message: '操作成功',
+                    message: '删除成功',
                 });
                 requestProductFilters();
             },

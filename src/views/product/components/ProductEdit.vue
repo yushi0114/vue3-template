@@ -18,7 +18,7 @@ const { loading, request } = useApi(updateProduct, {
     onSuccess() {
         ElMessage({
             type: 'success',
-            message: '操作成功',
+            message: '修改成功',
         });
         handleClose();
         emits('success');

@@ -23,7 +23,7 @@ const { request: requestProductStatus } = useApi(updateProductStatus, {
     onSuccess() {
         ElMessage({
             type: 'success',
-            message: '操作成功',
+            message: '修改成功',
         });
         getList();
     },
@@ -33,7 +33,7 @@ const { request: requestDeleteProduct } = useApi(deleteProduct, {
     onSuccess() {
         ElMessage({
             type: 'success',
-            message: '操作成功',
+            message: '删除成功',
         });
         getList();
     },

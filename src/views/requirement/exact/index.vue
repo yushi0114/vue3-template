@@ -42,7 +42,7 @@ const { loading: loadingBatchDelete, request: deleteReps } = useApi((idArr: stri
     onSuccess() {
         ElMessage({
             type: 'success',
-            message: '操作成功',
+            message: '删除成功',
         });
         getList();
     },

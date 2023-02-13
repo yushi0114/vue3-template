@@ -129,7 +129,7 @@ const { loading: loadingBatchDelete, request: deleteUser } = useApi(
         onSuccess() {
             ElMessage({
                 type: 'success',
-                message: '操作成功',
+                message: '删除成功',
             });
             getInfoList();
         },

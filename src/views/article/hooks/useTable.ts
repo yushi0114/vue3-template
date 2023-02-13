@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2023-01-04 14:09:43
+ * @LastEditTime: 2023-02-13 15:07:18
  * @LastEditors: zys
  * @Reference:
  */
@@ -100,7 +100,7 @@ export const useTable = (
         onSuccess(data, params) {
             ElMessage({
                 type: 'success',
-                message: '操作成功',
+                message: '修改成功',
             });
             if (page === ARTICLE_PAGE.DETAIL && params[0].id === activeId!.value) {
                 emit('refresh');
@@ -114,7 +114,7 @@ export const useTable = (
         onSuccess() {
             ElMessage({
                 type: 'success',
-                message: '操作成功',
+                message: '修改成功',
             });
             showArticleSortDialog.value = false;
             fetchTableData();
@@ -126,7 +126,7 @@ export const useTable = (
         onSuccess(data) {
             ElMessage({
                 type: 'success',
-                message: '操作成功',
+                message: '删除成功',
             });
             clearArticleActiveId();
             fetchTableData();

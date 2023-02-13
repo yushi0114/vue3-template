@@ -36,7 +36,7 @@
                         v-model="scope.row.status"
                         :active-value="1"
                         :inactive-value="0"
-                        disabled
+                        @change="changeUserStatus(scope.row, scope.$index)"
                         ></el-switch>
                     </template>
             </el-table-column>
@@ -61,6 +61,7 @@
 
 <script lang="ts" setup>
 import Icon from '@/components/Icon.vue';
+import { updateOrgUserStatus } from '@/api/finance/finance-org-user';
 import { deleteItems, filterObject, getPageList, listData, loading } from './finance-org-user';
 import type { FinanceOrgUserListItemType } from '@/types/finance';
 import { ElMessageBox } from 'element-plus';
@@ -145,6 +146,37 @@ async function handleDeleteItem(item: FinanceOrgUserListItemType) {
         })
         .catch(() => {});
 }
+
+// 变更用户状态
+const changeUserStatus = (row: FinanceOrgUserListItemType, index: number) => {
+    const text = row.status === 1 ? '启用' : '停用';
+    ElMessageBox.confirm(
+        `确定变更用户“${row.account}”的状态为${text}吗？`,
+        '提示',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }
+    ).then(() => {
+        const params = {
+            status: row.status,
+            account: row.account
+        };
+        return updateOrgUserStatus(params)
+            .then( async() => {
+                ElMessage({
+                    type: 'success',
+                    message: '变更用户状态成功',
+                });
+            })
+            .catch(() => {
+                row.status === 1 ? listData.value.list[index].status = 0 : listData.value.list[index].status = 1;
+            });
+    }).catch(() => {
+        row.status === 1 ? listData.value.list[index].status = 0 : listData.value.list[index].status = 1;
+    });
+};
 
 watch(() => filterObject.value.searchInput, handleSearchList);
 </script>

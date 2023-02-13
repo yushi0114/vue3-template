@@ -23,6 +23,7 @@ withDefaults(
 
 <style lang="scss">
 .page-panel {
+    overflow-x: auto;
     box-sizing: border-box;
     padding: $gap-lg;
     min-height: calc(100vh - $nav-height);
@@ -40,6 +41,7 @@ withDefaults(
 }
 
 .page-panel-content {
+    min-width: 960px;
     box-sizing: border-box;
     flex: 1;
 }

@@ -1,9 +1,16 @@
 import { CorpUserService } from '@/api/corpUser';
+import { PlatformType } from '@/enums';
 import { CorpUserTabType, type CorpUserListItemType, type ShopCartTable } from '@/types/corpUser';
 
 export const loading = ref(false);
 export const shopInfoloading = ref(false);
 export const activeName = ref<CorpUserTabType>(CorpUserTabType.lxt);
+export const platformType = computed(() => {
+    if (activeName.value === CorpUserTabType.lxt) {
+        return PlatformType.LiaoXinTong;
+    }
+    return PlatformType.ShiZongFu;
+});
 export const allToogle = reactive({
     loading: true,
     drawerFlag: false,

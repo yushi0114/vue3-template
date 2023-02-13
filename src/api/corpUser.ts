@@ -32,6 +32,7 @@ export type GetShopCartInfoType = {
 };
 
 export interface ShopEntity {
+    id: string;
     guarantyStyle: string,
     loanDue: string,
     loanLimit: string,
@@ -52,6 +53,7 @@ abstract class BaseCorpUser {
         total: number
     }>;
     abstract getInfo(params: GetShopCartInfoType): Promise<GetShopCartInfoResponse>;
+    abstract deleteShopUser(params: { idArr: string }): Promise<void>;
 }
 
 class CorpUser extends BaseCorpUser {
@@ -73,6 +75,10 @@ class CorpUser extends BaseCorpUser {
     getInfo(params:GetShopCartInfoType): Promise<GetShopCartInfoResponse> {
         return api.get(`${DMS_DOMAIN}/v1/Cart/products`, { params });
     }
+
+    deleteShopUser(params: {idArr: string}): Promise<void> {
+        return api.post(`${DMS_DOMAIN}/v1/del/cart`, params);
+    }
 }
 
 class CorpUserZJFW extends BaseCorpUser {
@@ -93,6 +99,10 @@ class CorpUserZJFW extends BaseCorpUser {
 
     getInfo(params:GetShopCartInfoType): Promise<GetShopCartInfoResponse> {
         return api.get(`${DMS_DOMAIN}/v1/zjfw/Cart/products`, { params });
+    }
+
+    deleteShopUser(params: {idArr: string}): Promise<void> {
+        return api.post(`${DMS_DOMAIN}/v1/zjfw/del/cart`, params);
     }
 }
 

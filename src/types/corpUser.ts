@@ -7,6 +7,7 @@ export interface CorpUserTable {
 }
 
 export interface ShopCartTable {
+    id: string;
     guarantyStyle: string,
     loanDue: string,
     loanLimit: string,

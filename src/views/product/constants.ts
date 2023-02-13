@@ -1,4 +1,3 @@
-import { LoanEndType } from './../../enums/busniess';
 import { validatorLogo } from '@/utils';
 import type { ProductStepsMap } from '@/types';
 import { PlatformType, FormType, PRODUCT_STEPS } from '@/enums';
@@ -605,7 +604,7 @@ export const PRODUCT_FORM_MAP: { [key in PlatformType]: DefItem[] } = {
             span: 0.5,
             keyName: 'unit', // 字段名
             isIgnoreKey: true,
-            defaultValue: '%'
+            defaultValue: '%',
         },
         {
             type: FormType.SWITCH,
@@ -969,7 +968,9 @@ export const FILTER_UNIT_MAP = Object.freeze({
 });
 
 // 产品列表字段处理
-export const PRODUCT_LIST_FIELDS_MAP = Object.freeze({
+export const PRODUCT_LIST_FIELDS_MAP: Readonly<{
+    [K in PlatformType]: { [K in string]: { title: string; keyName: string } };
+}> = Object.freeze({
     [PlatformType.LiaoXinTong]: {
         loan: {
             title: '贷款额度',
@@ -989,7 +990,7 @@ export const PRODUCT_LIST_FIELDS_MAP = Object.freeze({
             title: '融资期限',
             keyName: 'loanLimit',
         },
-    }
+    },
 });
 
 // 表格列配置
@@ -1021,20 +1022,20 @@ export const PRODUCT_STEPS_MAP: ProductStepsMap = {
         leftBtnText: '取消',
         rightBtnText: '下一步',
         updateSubmit: new Date().getTime(),
-        processStatus: 'process'
+        processStatus: 'process',
     },
     [PRODUCT_STEPS.FILTERS]: {
         title: PRODUCT_STEPS.FILTERS,
         leftBtnText: '上一步',
         rightBtnText: '发布产品',
         updateSubmit: new Date().getTime(),
-        processStatus: 'process'
+        processStatus: 'process',
     },
     [PRODUCT_STEPS.SUCCESS]: {
         title: PRODUCT_STEPS.SUCCESS,
         leftBtnText: '',
         rightBtnText: '返回产品列表',
         updateSubmit: new Date().getTime(),
-        processStatus: 'success'
+        processStatus: 'success',
     },
 };

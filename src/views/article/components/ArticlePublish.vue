@@ -95,9 +95,9 @@ const publish = (status: ARTICLE_STATUS) => {
 
 const { getArticleTypeLabel } = useArticleModule(props.module);
 
-const ARTICLE_FORM = ref(cloneDeep(ARTICLE_FORM_MAP[getArticleTypeLabel.value]));
+const ARTICLE_FORM = ref(cloneDeep(ARTICLE_FORM_MAP[props.module]));
 
-const handleSubmit = async(values: any) => {
+const handleSubmit = async (values: any) => {
     const queryParams: CreateNewsParams | UpdateNewsParams = {
         ...values,
         status: params.status,
@@ -125,7 +125,7 @@ const handleSubmit = async(values: any) => {
     }
 };
 
-const uploadOrDeleteThumbnail = async(thumbnail: UploadFile[] = []) => {
+const uploadOrDeleteThumbnail = async (thumbnail: UploadFile[] = []) => {
     if (!Array.isArray(thumbnail) || thumbnail.length === 0) {
         return false;
     }
@@ -157,7 +157,9 @@ onMounted(() => {
         class="article-publish"
         v-loading="loadingDetail">
         <FlexRow horizontal="between">
-            <FlexRow horizontal="center" style="gap: 2rem;">
+            <FlexRow
+                horizontal="center"
+                style="gap: 2rem">
                 <el-button
                     :icon="Back"
                     @click="handleToList"

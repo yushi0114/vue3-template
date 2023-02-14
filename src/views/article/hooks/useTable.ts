@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\hooks\useTable.ts
  * @Author: zys
  * @Date: 2022-11-04 14:45:20
- * @LastEditTime: 2023-02-13 15:07:18
+ * @LastEditTime: 2023-02-14 11:50:22
  * @LastEditors: zys
  * @Reference:
  */
@@ -135,11 +135,6 @@ export const useTable = (
         onError: noop,
     });
 
-    const { request: deleteFile } = useApi(ARTICLE_API_MAP[ARTICLE_API.DELETE_FILE], {
-        onSuccess() {},
-        onError() {},
-    });
-
     // 表格配置项
     const tableConfig = reactive({
         showHandler: true,
@@ -196,14 +191,16 @@ export const useTable = (
         handleSearch();
     }, 500);
 
-    // 删除静态服务器的文件
-    const deleteFileOnServer = (params: any) => {
+    // 获取静态服务器的文件id数组
+    const getFileIdList = (params: any) => {
         // 删除新闻成功后清除文件服务器中的静态文件
-        params.thumbnail && deleteFile({ id: getFileIdByUrl(params.thumbnail) });
+        const list = [];
+        params.thumbnail && list.push(getFileIdByUrl(params.thumbnail));
         const deleteList = getUrlListFromText(params.content);
         deleteList.forEach((src: string) => {
-            deleteFile({ id: getFileIdByUrl(src) });
+            list.push(getFileIdByUrl(src));
         });
+        return list;
     };
 
     // 删除操作
@@ -212,8 +209,8 @@ export const useTable = (
             await ElMessageBox.confirm(`确认删除“${row.title}”的${ARTICLE_TYPE_LABEL}？`, '删除', {
                 type: 'warning',
             });
-            await deleteArticle({ id: row.id });
-            deleteFileOnServer(row);
+            const remotePathArray = getFileIdList(row);
+            await deleteArticle({ id: row.id, remotePathArray });
         } catch {
             noop;
         }

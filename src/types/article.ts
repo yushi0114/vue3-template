@@ -61,7 +61,7 @@ export type UploadFileResponse = { imgUrl: string };
 
 export type DeleteFileParams = Pick<NewsItem, 'id'>;
 
-export type DeleteNewsParams = Pick<NewsItem, 'id'>;
+export type DeleteNewsParams = Pick<NewsItem, 'id'> & { remotePathArray: string[]};
 
 export type UpdateNewsSortParams = Pick<NewsItem, 'id' | 'sort'>;
 

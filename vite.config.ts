@@ -11,8 +11,8 @@ import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver as elementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 let proxyHost = '10.0.30.6';
-// proxyHost = '192.168.31.198';
-
+// proxyHost = '192.168.31.198'; // 丁一宁本地
+// proxyHost = '192.168.31.49'; // 全东东本地
 
 // start:local
 if (argv[3] === '--env' && argv[4] === 'local') {

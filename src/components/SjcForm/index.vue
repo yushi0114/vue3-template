@@ -222,6 +222,7 @@
                                         </div>
                                     </template>
                                 </el-image>
+                                {{ item.fileServer }}
                                 <sjc-editor
                                     v-if="item.type === FormType.EDITOR"
                                     :file-server="item.fileServer"

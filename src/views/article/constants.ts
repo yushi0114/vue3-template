@@ -3,7 +3,7 @@
  * @FilePath: \dms-web\src\views\article\constants.ts
  * @Author: zys
  * @Date: 2022-11-14 11:26:22
- * @LastEditTime: 2023-01-04 14:39:58
+ * @LastEditTime: 2023-02-14 16:01:09
  * @LastEditors: zys
  * @Reference:
  */
@@ -46,7 +46,7 @@ export const TAB_LIST = [
                 name: ARTICLE_STATUS_LABEL.MY_PUBLISHED,
                 value: ARTICLE_STATUS.MY_PUBLISHED,
             },
-        ]
+        ],
     },
     {
         title: ARTICLE_STATUS_LABEL.PUBLISHED,
@@ -64,7 +64,7 @@ export const TAB_LIST = [
                 name: ARTICLE_STATUS_LABEL.MY_PUBLISHED,
                 value: ARTICLE_STATUS.MY_PUBLISHED,
             },
-        ]
+        ],
     },
     {
         title: ARTICLE_STATUS_LABEL.OFFLINE,
@@ -82,7 +82,7 @@ export const TAB_LIST = [
                 name: ARTICLE_STATUS_LABEL.MY_OFFLINE,
                 value: ARTICLE_STATUS.MY_OFFLINE,
             },
-        ]
+        ],
     },
     {
         title: ARTICLE_STATUS_LABEL.DRAFT,
@@ -100,7 +100,7 @@ export const TAB_LIST = [
                 name: ARTICLE_STATUS_LABEL.MY_DRAFT,
                 value: ARTICLE_STATUS.MY_DRAFT,
             },
-        ]
+        ],
     },
 ];
 
@@ -187,143 +187,243 @@ export const TABLE_COLUMNS = [
     },
 ];
 
+const NEW_FORM: DefItem[] = [
+    {
+        type: FormType.INPUT,
+        label: '一级标题', // 字段
+        keyName: 'title', // 字段名
+        placeholder: '请填写一级标题', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                required: true,
+                message: '一级标题不能为空',
+                trigger: ['blur', 'change'],
+            },
+            {
+                max: 255,
+                message: '一级标题不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+    {
+        type: FormType.INPUT,
+        label: '二级标题', // 字段
+        keyName: 'subTitle', // 字段名
+        placeholder: '请填写二级标题', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                max: 255,
+                message: '二级标题不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+    {
+        type: FormType.UPLOAD,
+        label: '新闻缩略图',
+        keyName: 'thumbnail',
+        disabled: false,
+        span: 8, // 参考el-col
+        uploadObj: {
+            fileType: FILE_TYPE.IMAGE,
+            limit: 1, // 上传长度限制
+            hideUpload: false, // 是否隐藏上传框
+            listType: 'picture',
+            showFileList: true,
+            tips: '只能上传jpg/jpeg/png文件，且不超过2MB',
+        },
+        rules: [
+            {
+                required: true,
+                message: '新闻缩略图不能为空',
+            },
+        ],
+    },
+    {
+        type: FormType.INPUT,
+        label: '信息来源', // 字段
+        keyName: 'origin', // 字段名
+        placeholder: '请填写信息来源', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                required: true,
+                message: '信息来源不能为空',
+                trigger: ['blur', 'change'],
+            },
+            {
+                max: 255,
+                message: '信息来源不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+    {
+        type: FormType.DATA_PICKER,
+        label: '发布日期',
+        valueFormat: 'YYYY-MM-DD',
+        keyName: 'publishDate',
+        placeholder: '请选择',
+        span: 8, // 参考el-col
+        disabled: false,
+        disabledDate(time: any) {
+            return time.getTime() > Date.now();
+        },
+        rules: [
+            {
+                required: true,
+                message: '发布日期不能为空',
+                trigger: 'blur',
+            },
+        ],
+    },
+    {
+        type: FormType.RADIO,
+        label: '热点新闻',
+        keyName: 'hotNews',
+        placeholder: '请选择',
+        span: 8, // 参考el-col
+        disabled: false,
+        radioOptions: [
+            { label: '是', value: 1 },
+            { label: '否', value: 0 },
+        ],
+        rules: [
+            {
+                required: true,
+                message: '热点新闻不能为空',
+                trigger: ['blur', 'change'],
+            },
+        ],
+    },
+    {
+        type: FormType.TEXTAREA,
+        label: '摘要', // 字段
+        keyName: 'summary', // 字段名
+        placeholder: '请填写摘要', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                required: true,
+                message: '摘要不能为空',
+                trigger: ['blur', 'change'],
+            },
+            {
+                max: 255,
+                message: '摘要不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+];
+
+const POLICE_FORM: DefItem[] = [
+    {
+        type: FormType.INPUT,
+        label: '一级标题', // 字段
+        keyName: 'title', // 字段名
+        placeholder: '请填写一级标题', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                required: true,
+                message: '一级标题不能为空',
+                trigger: ['blur', 'change'],
+            },
+            {
+                max: 255,
+                message: '一级标题不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+    {
+        type: FormType.INPUT,
+        label: '二级标题', // 字段
+        keyName: 'subTitle', // 字段名
+        placeholder: '请填写二级标题', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                max: 255,
+                message: '二级标题不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+    {
+        type: FormType.INPUT,
+        label: '信息来源', // 字段
+        keyName: 'origin', // 字段名
+        placeholder: '请填写信息来源', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                required: true,
+                message: '信息来源不能为空',
+                trigger: ['blur', 'change'],
+            },
+            {
+                max: 255,
+                message: '信息来源不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+    {
+        type: FormType.DATA_PICKER,
+        label: '发布日期',
+        keyName: 'publishDate',
+        placeholder: '请选择',
+        span: 8, // 参考el-col
+        disabled: false,
+        disabledDate(time) {
+            return time.getTime() > Date.now();
+        },
+        rules: [
+            {
+                required: true,
+                message: '发布日期不能为空',
+                trigger: 'blur',
+            },
+        ],
+    },
+    {
+        type: FormType.TEXTAREA,
+        label: '摘要', // 字段
+        keyName: 'summary', // 字段名
+        placeholder: '请填写摘要', // 提示内容
+        span: 8, // 参考el-col
+        disabled: false, // 是否禁用
+        rules: [
+            {
+                required: true,
+                message: '摘要不能为空',
+                trigger: ['blur', 'change'],
+            },
+            {
+                max: 255,
+                message: '摘要不能超过255个字符',
+                trigger: ['blur', 'change'],
+            },
+        ], // 验证
+    },
+];
+
 // 新建表单
-export const ARTICLE_FORM_MAP: { [key in ARTICLE_TYPE_LABEL]: DefItem[] } = {
-    [ARTICLE_TYPE_LABEL.NEWS]: [
-        {
-            type: FormType.INPUT,
-            label: '一级标题', // 字段
-            keyName: 'title', // 字段名
-            placeholder: '请填写一级标题', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
-            rules: [
-                {
-                    required: true,
-                    message: '一级标题不能为空',
-                    trigger: ['blur', 'change'],
-                },
-                {
-                    max: 255,
-                    message: '一级标题不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
-        },
-        {
-            type: FormType.INPUT,
-            label: '二级标题', // 字段
-            keyName: 'subTitle', // 字段名
-            placeholder: '请填写二级标题', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
-            rules: [
-                {
-                    max: 255,
-                    message: '二级标题不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
-        },
-        {
-            type: FormType.UPLOAD,
-            label: '新闻缩略图',
-            keyName: 'thumbnail',
-            disabled: false,
-            span: 8, // 参考el-col
-            uploadObj: {
-                fileType: FILE_TYPE.IMAGE,
-                limit: 1, // 上传长度限制
-                hideUpload: false, // 是否隐藏上传框
-                listType: 'picture',
-                showFileList: true,
-                tips: '只能上传jpg/jpeg/png文件，且不超过2MB',
-            },
-            rules: [
-                {
-                    required: true,
-                    message: '新闻缩略图不能为空',
-                },
-            ],
-        },
-        {
-            type: FormType.INPUT,
-            label: '信息来源', // 字段
-            keyName: 'origin', // 字段名
-            placeholder: '请填写信息来源', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
-            rules: [
-                {
-                    required: true,
-                    message: '信息来源不能为空',
-                    trigger: ['blur', 'change'],
-                },
-                {
-                    max: 255,
-                    message: '信息来源不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
-        },
-        {
-            type: FormType.DATA_PICKER,
-            label: '发布日期',
-            valueFormat: 'YYYY-MM-DD',
-            keyName: 'publishDate',
-            placeholder: '请选择',
-            span: 8, // 参考el-col
-            disabled: false,
-            disabledDate(time) {
-                return time.getTime() > Date.now();
-            },
-            rules: [
-                {
-                    required: true,
-                    message: '发布日期不能为空',
-                    trigger: 'blur',
-                },
-            ],
-        },
-        {
-            type: FormType.RADIO,
-            label: '热点新闻',
-            keyName: 'hotNews',
-            placeholder: '请选择',
-            span: 8, // 参考el-col
-            disabled: false,
-            radioOptions: [
-                { label: '是', value: 1 },
-                { label: '否', value: 0 },
-            ],
-            rules: [
-                {
-                    required: true,
-                    message: '热点新闻不能为空',
-                    trigger: ['blur', 'change'],
-                },
-            ],
-        },
-        {
-            type: FormType.TEXTAREA,
-            label: '摘要', // 字段
-            keyName: 'summary', // 字段名
-            placeholder: '请填写摘要', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
-            rules: [
-                {
-                    required: true,
-                    message: '摘要不能为空',
-                    trigger: ['blur', 'change'],
-                },
-                {
-                    max: 255,
-                    message: '摘要不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
-        },
+export const ARTICLE_FORM_MAP: { [key in ARTICLE_MODULE]: DefItem[] } = {
+    [ARTICLE_MODULE.NEWS_LXT]: [
+        ...NEW_FORM,
         {
             type: FormType.EDITOR,
             fileServer: FILE_SERVER.LXT, // 辽信通
@@ -339,100 +439,42 @@ export const ARTICLE_FORM_MAP: { [key in ARTICLE_TYPE_LABEL]: DefItem[] } = {
             ],
         },
     ],
-    [ARTICLE_TYPE_LABEL.POLICY]: [
+    [ARTICLE_MODULE.NEWS_ZJFW]: [
+        ...NEW_FORM,
         {
-            type: FormType.INPUT,
-            label: '一级标题', // 字段
-            keyName: 'title', // 字段名
-            placeholder: '请填写一级标题', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
-            rules: [
-                {
-                    required: true,
-                    message: '一级标题不能为空',
-                    trigger: ['blur', 'change'],
-                },
-                {
-                    max: 255,
-                    message: '一级标题不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
-        },
-        {
-            type: FormType.INPUT,
-            label: '二级标题', // 字段
-            keyName: 'subTitle', // 字段名
-            placeholder: '请填写二级标题', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
-            rules: [
-                {
-                    max: 255,
-                    message: '二级标题不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
-        },
-        {
-            type: FormType.INPUT,
-            label: '信息来源', // 字段
-            keyName: 'origin', // 字段名
-            placeholder: '请填写信息来源', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
-            rules: [
-                {
-                    required: true,
-                    message: '信息来源不能为空',
-                    trigger: ['blur', 'change'],
-                },
-                {
-                    max: 255,
-                    message: '信息来源不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
-        },
-        {
-            type: FormType.DATA_PICKER,
-            label: '发布日期',
-            keyName: 'publishDate',
-            placeholder: '请选择',
-            span: 8, // 参考el-col
+            type: FormType.EDITOR,
+            fileServer: FILE_SERVER.ZJFW, // 市综服
+            label: '文章内容',
+            keyName: 'content',
             disabled: false,
-            disabledDate(time) {
-                return time.getTime() > Date.now();
-            },
             rules: [
                 {
                     required: true,
-                    message: '发布日期不能为空',
-                    trigger: 'blur',
+                    message: '文章内容不能为空',
+                    trigger: ['blur', 'change'],
                 },
             ],
         },
+    ],
+    [ARTICLE_MODULE.POLICY_LXT]: [
+        ...POLICE_FORM,
         {
-            type: FormType.TEXTAREA,
-            label: '摘要', // 字段
-            keyName: 'summary', // 字段名
-            placeholder: '请填写摘要', // 提示内容
-            span: 8, // 参考el-col
-            disabled: false, // 是否禁用
+            type: FormType.EDITOR,
+            fileServer: FILE_SERVER.LXT, // 辽信通
+            label: '文章内容',
+            keyName: 'content',
+            disabled: false,
             rules: [
                 {
                     required: true,
-                    message: '摘要不能为空',
+                    message: '文章内容不能为空',
                     trigger: ['blur', 'change'],
                 },
-                {
-                    max: 255,
-                    message: '摘要不能超过255个字符',
-                    trigger: ['blur', 'change'],
-                },
-            ], // 验证
+            ],
         },
+    ],
+    [ARTICLE_MODULE.POLICY_ZJFW]: [
+        ...POLICE_FORM,
         {
             type: FormType.EDITOR,
             fileServer: FILE_SERVER.ZJFW, // 市综服

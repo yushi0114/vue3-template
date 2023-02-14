@@ -17,7 +17,7 @@ html {
     src: url('@/assets/fonts/SourceHanSansCN-Regular.otf');
     font-weight: normal;
     font-style: normal;
-    font-display: fallback;
+    font-display: swap;
 }
 
 * {

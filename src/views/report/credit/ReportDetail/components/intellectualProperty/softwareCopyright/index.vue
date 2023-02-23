@@ -81,5 +81,7 @@ withDefaults(
     border-left: 1px solid #d8d5d5;
     padding: 5px 10px;
     width: 230px;
+
+    word-break: break-all;
 }
 </style>
